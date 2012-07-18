@@ -240,6 +240,17 @@ module ApplicationHelper
     end
   end
 
+  def shorten (string, count = 30)
+			if string.length > count 
+				shortened = string[0, count]
+				splitted = shortened.split(/ /)
+				words = splitted.length
+				splitted.join(" ") + '...'
+			else 
+				string
+			end
+		end
+
   # Renders the project quick-jump box
   def render_project_jump_box
     return unless User.current.logged?
@@ -932,6 +943,22 @@ module ApplicationHelper
       valid_languages.collect{|lang| [ ll(lang.to_s, :general_lang_name), lang.to_s]}.sort{|x,y| x.last <=> y.last }
   end
 
+  def gender_options_for_select(blank=true)
+    result = []
+    (::I18n.t('field_salutation_vals')).each do |key, val|
+      result += [[val,key.to_s]]
+    end
+    return result
+  end
+  
+  def title_options_for_select(blank=true)
+    result = (blank ? [["", ""]] : [])
+    (::I18n.t('field_title_vals')).each do |key, val|
+      result += [[val,key.to_s]]
+    end
+    result.sort
+  end
+
   def label_tag_for(name, option_tags = nil, options = {})
     label_text = l(("field_"+field.to_s.gsub(/\_id$/, "")).to_sym) + (options.delete(:required) ? @template.content_tag("span", " *", :class => "required"): "")
     content_tag("label", label_text)
@@ -1173,7 +1200,26 @@ module ApplicationHelper
 
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = javascript_include_tag('prototype', 'effects', 'dragdrop', 'controls', 'rails', 'application')
+    tags = javascript_include_tag(:defaults)
+    tags << "\n".html_safe
+    tags << javascript_include_tag("jquery.min.js")
+    tags << "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
+    tags << "\n".html_safe
+    tags << javascript_include_tag("jquery.jbar.js")
+    tags << "\n".html_safe
+    tags << javascript_include_tag("flash_notification.js")
+    tags << "\n".html_safe
+    tags << javascript_include_tag("jquery.qtip.min.js")
+    tags << "\n".html_safe
+    tags << javascript_include_tag("escience.js")
+    #tags << "\n".html_safe
+    #tags << javascript_include_tag("jquery-ui-1.8.17.custom.min.js")
+    #tags << "\n".html_safe
+    #tags << javascript_include_tag("jquery.tagsinput.min.js")
+    #tags << "\n".html_safe
+    #tags << javascript_include_tag("jquery.jbar.js")
+    tags << "\n".html_safe +  javascript_tag(flash_notifications)
+
     unless User.current.pref.warn_on_leaving_unsaved == '0'
       tags << "\n".html_safe + javascript_tag("Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('#{escape_javascript( l(:text_warn_on_leaving_unsaved) )}'); });")
     end
@@ -1181,7 +1227,7 @@ module ApplicationHelper
   end
 
   def favicon
-    "<link rel='shortcut icon' href='#{image_path('/favicon.ico')}' />".html_safe
+    "<link rel='shortcut icon' href='#{image_path('/logo_e-science_network.ico')}' />".html_safe
   end
 
   def robot_exclusion_tag
@@ -1220,5 +1266,30 @@ module ApplicationHelper
 
   def link_to_content_update(text, url_params = {}, html_options = {})
     link_to(text, url_params, html_options)
+  end
+
+  def flash_notifications
+    message = flash[:error] || flash[:notice] || flash[:warning]
+    if message
+      type = flash.keys[0].to_s
+      %Q{$j(document).ready(function(){
+        $j.notification({ message:"#{message}", type:"#{type}" });
+        });
+      }
+    end
+  end
+
+  def user_messages_names_autocomplete_js(field_id)
+    source = user_messages_index_url
+
+    parameter = {
+      :autocomplete_url => source,
+      :defaultText => 'type in here',
+      :unique => true
+    }
+
+    javascript_tag "$(document).ready(function(){
+      $j(\"\##{field_id}\").tagsInput(#{parameter.to_json});
+    });"
   end
 end

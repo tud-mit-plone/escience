@@ -1,7 +1,9 @@
-<div class="contextual">
-<%= link_to l(:label_document_new), new_project_document_path(@project), :class => 'icon icon-add',
-      :onclick => 'Element.show("add-document"); Form.Element.focus("document_title"); return false;' if User.current.allowed_to?(:manage_documents, @project) %>
-</div>
+<% content_for :sidebar_right do %>
+	<% if User.current.allowed_to?(:manage_documents, @project) %>
+	<li><%= link_to l(:label_document_new), new_project_document_path(@project), :class => 'icon icon-add',
+	      :onclick => 'Element.show("add-document"); Form.Element.focus("document_title"); return false;' %></li>
+	<%end%>
+<%end%>
 
 <div id="add-document" style="display:none;">
 <h2><%=l(:label_document_new)%></h2>

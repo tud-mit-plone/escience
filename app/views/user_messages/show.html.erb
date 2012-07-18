@@ -1,0 +1,28 @@
+
+
+<h1>
+  <% if @user_message.directory == 'sent' %>
+    <%= "#{l(:label_user_messages_to)} #{render :partial => 'sent', :locals => {:user_message => @user_message}}" %>
+  <%else%>
+    <%= "#{l(:label_user_messages_from)} #{render :partial => 'received', :locals => {:user_message => @user_message}}" %>
+  <%end%>
+</h1>
+
+<div id="show_user_message">
+  <span class="subject"><%=h @user_message.subject %></span>
+  
+  <p>
+    <%=h @user_message.body %>
+  </p>
+</div>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'user_message' %>
+<% end %>
+
+<% content_for :sidebar_right do %>
+  	<li><%= link_to(l(:label_back), user_messages_path) %></li>
+  	<li><%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-passwd') %></li>
+  	<li><%= link_to(l(:label_user_messages_reply), {:action => 'new', :id => @user_message.user_id, :reply => @user_message.id}, :class => 'icon icon-passwd') %></li>
+  	<li><%= link_to(l(:label_user_messages_delete), {:action => 'destroy'}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) %></li>
+<%end%>

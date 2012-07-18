@@ -202,8 +202,16 @@ class Setup < ActiveRecord::Migration
     create_table "users", :force => true do |t|
       t.column "login", :string, :limit => 30, :default => "", :null => false
       t.column "hashed_password", :string, :limit => 40, :default => "", :null => false
+      t.column "salutation", :string, :limit => 30, :default => "", :null => false
+      t.column "title", :string, :limit => 30, :default => "", :null => false
       t.column "firstname", :string, :limit => 30, :default => "", :null => false
       t.column "lastname", :string, :limit => 30, :default => "", :null => false
+      t.column "department", :string, :limit => 30, :default => "", :null => false
+      t.column "street", :string, :limit => 30, :default => "", :null => false
+      t.column "city", :string, :limit => 30, :default => "", :null => false
+      t.column "zipcode", :integer
+      t.column "phone", :string, :limit => 30, :default => "", :null => false
+      t.column "fax", :string, :limit => 30, :default => "", :null => false
       t.column "mail", :string, :limit => 60, :default => "", :null => false
       t.column "mail_notification", :boolean, :default => true, :null => false
       t.column "admin", :boolean, :default => false, :null => false
@@ -288,11 +296,11 @@ class Setup < ActiveRecord::Migration
     user = User.create :login => "admin",
                        :hashed_password => "d033e22ae348aeb5660fc2140aec35850c4da997",
                        :admin => true,
-                       :firstname => "Redmine",
+                       :firstname => "eScience",
                        :lastname => "Admin",
                        :mail => "admin@example.net",
                        :mail_notification => true,
-                       :language => "en",
+                       :language => "de",
                        :status => 1
   end
 

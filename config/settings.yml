@@ -20,7 +20,7 @@
 # Settings can be defined through the application in Admin -> Settings
 
 app_title:
-  default: Redmine
+  default: eScience
 app_subtitle:
   default: Project management
 welcome_text:
@@ -56,7 +56,7 @@ activity_days_default:
 per_page_options:
   default: '25,50,100'
 mail_from:
-  default: redmine@example.net
+  default: escience@htwk-leipzig.de
 bcc_recipients:
   default: 1
 plain_text_mail:
@@ -68,7 +68,7 @@ cache_formatted_text:
 wiki_compression:
   default: ""
 default_language:
-  default: en
+  default: de
 host_name:
   default: localhost:3000
 protocol:

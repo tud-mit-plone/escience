@@ -1,13 +1,18 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
+<li>
     <%= link_to l(:label_personalize_page), :action => 'page_layout' %>
-</div>
+</li>
+<% end %>
+
 
 <h2><%=l(:label_my_page)%></h2>
 
 <div id="list-top">
-  <% @blocks['top'].each do |b|
-     next unless MyController::BLOCKS.keys.include? b  %>
-  <div class="mypage-box">
+  <% counter = 0;
+     @blocks['top'].each do |b|
+     next unless MyController::BLOCKS.keys.include? b  
+     %>
+  <div class="mypage-box<%= ((counter+=1) % 3) == 0 ? ' last': '' %>">
     <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
   </div>
   <% end if @blocks['top'] %>

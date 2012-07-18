@@ -1,0 +1,33 @@
+<% if !@allusers.nil?
+    sorted_users = {}
+    @allusers.each do |user|
+       if (sorted_users[user.lastname[0,1]].nil?)
+         sorted_users[user.lastname[0,1]] = [user]
+       else
+         sorted_users[user.lastname[0,1]] = sorted_users[user.lastname[0,1]][0],user
+       end
+     end
+     sorted_users = sorted_users.sort { |a,b| b[1] <=> a[1] }
+   end
+%>
+   
+<% sorted_users.each do |letter, users| %>
+<fieldset>
+  <legend><%= letter %></legend>
+  <table width="100%">
+  <% users.each do |user| %>
+    <tr>
+      <td>
+      <%= (!user.salutation.empty?) ? l("field_salutation_vals.#{user.salutation}")+" " : "" %>
+      <%= (!user.title.empty?) ? l("field_title_vals.#{user.title}") : "" %>
+      <%= user.name %> <%= (!user.department.empty?) ? "(#{user.department})" : "" %>
+      </td>    
+      <td width="50">
+        <% link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
+        <% link_to(:controller => 'user_messages', :action => 'new', :id => user.id) do %><div class="sendMessage"></div><% end %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</fieldset>
+<% end unless sorted_users.nil?%>

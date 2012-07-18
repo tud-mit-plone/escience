@@ -1,0 +1,63 @@
+<%unless User.current.logged? %>
+	<div id="login">
+		<div class="inner">
+			<% form_tag({:controller => 'account',:action=> "login"}) do %>
+				<h2><%= l(:label_login)%></h2>
+				<%= back_url_hidden_field_tag %>
+				<%= text_field_tag 'username', nil, :tabindex => '1', :placeholder => l(:field_login) %><br />
+				<%= password_field_tag 'password', nil, :tabindex => '2', :placeholder => l(:field_password) %>
+				<div class="submit_container">
+			        <input class="submit" type="submit" name="login" value="<%=l(:button_login)%>" tabindex="5"/>
+				</div>
+
+	        <% if Setting.lost_password? %>
+	        	<div class="forgotpw">
+	            <%= link_to l(:label_password_lost), :controller => 'account', :action => 'lost_password' %>
+	            </div>
+	        <% end %>
+			<%= javascript_tag "Form.Element.focus('username');" %>
+			<% end %>
+		</div>
+	</div>
+	
+	<div id="registration">
+		<div class="inner">
+			<h2><%= l(:label_register)%></h2>
+			<% labelled_form_for(@user, :url => {:controller => 'account', :action => 'register'}) do |f|%>
+				<%= error_messages_for 'user' %>
+				
+				<div class="box tabular">
+					<%= f.text_field :firstname, :required => true %><br />
+					<%= f.text_field :lastname, :required => true %><br />
+					<%# if @user.auth_source_id.nil? %>
+					  	<%= f.text_field :login, :size => 25, :required => true %><br />
+					<%# end %>
+					<!--
+					<p><%= f.text_field :mail, :required => true %></p>
+					<p><%= f.select :language, lang_options_for_select %></p>
+					  <em class="info"><%= l(:text_caracters_minimum, :count => Setting.password_min_length) %></em></p>
+					-->
+					  
+					<%= f.password_field :password, :size => 25, :required => true %><br />
+					<%= f.password_field :password_confirmation, :size => 25, :required => true %>
+				  <%= check_box_tag :confirm, true %><span id="confirmation"><%= l(:field_confirmation) %></span>					
+					<!--
+					<%# if Setting.openid? %>
+					  <p><%#= f.text_field :identity_url  %></p>
+					<%# end %>
+					
+					<%# @user.custom_field_values.select {|v| v.editable? || v.required?}.each do |value| %>
+					  <p><%#= custom_field_tag_with_label :user, value %></p>
+					<%# end %>
+					-->
+					
+				</div>
+				<%= submit_tag "Registrieren" %>
+				<div class="clear"></div>
+			<% end %>
+		</div>
+	</div>
+<%else%>
+	<div id="login">
+	</div>
+<%end%>

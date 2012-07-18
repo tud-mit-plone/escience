@@ -1,12 +1,12 @@
 <%= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)) %>
 
-<div class="contextual">
-<%= link_to_if_authorized l(:label_message_new),
+<% content_for :sidebar_right do %>
+	<li><%= link_to_if_authorized l(:label_message_new),
                           {:controller => 'messages', :action => 'new', :board_id => @board},
                           :class => 'icon icon-add',
-                          :onclick => 'Element.show("add-message"); Form.Element.focus("message_subject"); return false;' %>
-<%= watcher_tag(@board, User.current) %>
-</div>
+                          :onclick => 'Element.show("add-message"); Form.Element.focus("message_subject"); return false;' %></li>
+	<li><%= watcher_tag(@board, User.current) %></li>
+<%end%>
 
 <div id="add-message" style="display:none;">
 <% if authorize_for('messages', 'new') %>

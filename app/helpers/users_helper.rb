@@ -60,4 +60,13 @@ module UsersHelper
     end
     tabs
   end
+  
+  def member_tabs
+    tabs = [{:name => 'contact_members', :partial => 'users/contact_members', :label => :label_memberlist_all},
+            {:name => 'contact_membersgrouped', :partial => 'users/contact_membersgrouped', :label => :label_memberlist_grouped},
+            {:name => 'contact_membersearch', :partial => 'users/contact_membersearch', :label => :label_memberlist_search}
+            ]
+    tabs
+  end
+    
 end

@@ -32,7 +32,8 @@ module CalendarsHelper
            end
 
     # \xc2\xab(utf-8) = &#171;
-    link_to_month(("\xc2\xab " + name), target_year, target_month, options)
+#    link_to_month(("\xc2\xab " + name), target_year, target_month, options)
+    link_to_month(name, target_year, target_month, options)
   end
 
   def link_to_next_month(year, month, options={})
@@ -49,7 +50,8 @@ module CalendarsHelper
            end
 
     # \xc2\xbb(utf-8) = &#187;
-    link_to_month((name + " \xc2\xbb"), target_year, target_month, options)
+#    link_to_month((name + " \xc2\xbb"), target_year, target_month, options)
+    link_to_month(name, target_year, target_month, options)
   end
 
   def link_to_month(link_name, year, month, options={})

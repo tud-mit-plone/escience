@@ -1,9 +1,9 @@
-<div class="contextual">
-<% if !@query.new_record? && @query.editable_by?(User.current) %>
-  <%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %>
-  <%= delete_link query_path(@query) %>
-<% end %>
-</div>
+<% content_for :sidebar_right do %>
+  <% if !@query.new_record? && @query.editable_by?(User.current) %>
+  	<li><%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %></li>
+  	<li><%= delete_link query_path(@query) %></li>
+  <% end %>
+<%end%>
 
 <h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
 <% html_title(@query.new_record? ? l(:label_issue_plural) : @query.name) %>
@@ -18,7 +18,7 @@
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
     </fieldset>
-    <fieldset class="collapsible collapsed">
+    <fieldset class="collapsible collapsed" style="display:none;">
       <legend onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
       <div style="display: none;">
         <table>
@@ -56,16 +56,36 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
 <%= render :partial => 'issues/list', :locals => {:issues => @issues, :query => @query} %>
+
+
+
+
+<% assigned_issues = Issue.visible.open.find(:all,
+                                :conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)},
+                                :limit => 10,
+                                :include => [ :status, :project, :tracker, :priority ],
+                                :order => "#{IssuePriority.table_name}.position DESC, #{Issue.table_name}.updated_on DESC") %>
+
+<%#= render :partial => 'issues/list_simple', :locals => { :issues => assigned_issues } %>
+<% if assigned_issues.length > 0 %>
+
+<p class="small"><%= link_to l(:label_issue_view_all), :controller => 'issues',
+                                                       :action => 'index',
+                                                       :set_filter => 1,
+                                                       :assigned_to_id => 'me',
+                                                       :sort => 'priority:desc,updated_on:desc' %></p>
+
+<% end %>
 <p class="pagination"><%= pagination_links_full @issue_pages, @issue_count %></p>
 <% end %>
 
-<% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => params.merge(:key => User.current.rss_key) %>
-  <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
-  <%= f.link_to 'PDF', :url => params %>
-<% end %>
+<%# other_formats_links do |f| %>
+  <%#= f.link_to 'Atom', :url => params.merge(:key => User.current.rss_key) %>
+  <%#= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
+  <%#= f.link_to 'PDF', :url => params %>
+<%# end %>
 
-<div id="csv-export-options" style="display:none;">
+<!--div id="csv-export-options" style="display:none;">
   <h3 class="title"><%= l(:label_export_options, :export_format => 'CSV') %></h3>
   <%= form_tag(params.merge({:format => 'csv',:page=>nil}), :method => :get, :id => 'csv-export-form') do %>
   <p>
@@ -80,7 +100,7 @@
     <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
   </p>
   <% end %>
-</div>
+</div>-->
 
 <% end %>
 <%= call_hook(:view_issues_index_bottom, { :issues => @issues, :project => @project, :query => @query }) %>

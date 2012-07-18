@@ -1,8 +1,33 @@
-<h2><%= l(:label_home) %></h2>
+<% content_for :sidebar_right do %>
+  <%= render :partial => 'sidebar' %>
+<% end %>
+
+<%unless User.current.logged? %>
+<article class="article">
+	<div class="inside">
+		<h1>Das Forschungsnetzwerk Sachsen</h1>
+		<div class="column" style="padding-right:50px">
+		<p><br /><img style="float: right;" title="images/grafik.png" src="images/grafik.png" alt="/images/grafik.png" width="280" height="220" />
+                  Diese Plattform bietet einen virtuellen Raum mit anderen Wissenschaftlern zu kommunizieren, zusammen neue  Erkenntnisse zu gewinnen und gemeinsame Ressourcen für Forschungszwecke zu entwickeln und teilen. Neben Werkzeuge zur Arbeitsorganisation und Koordinierung von Aktivitäten finden Sie hier umfangreiches Wissen, Medieninhalte und Dokumentationen, sowie Software und Daten für wissenschaftliche Experimente. Sie entscheiden selbst, was, womit und mit wem Sie forschen. Eine starke Community ist stets an Ihrer Seite. </p>
+		</div>
+	</div>
+</article>
+
+<%else%>
+	<article class="article">
+		<div class="inside">
+			<h1>Das Forschungsnetzwerk Sachsen</h1>
+		</div>
+	</article>
+	<% content_for :sidebar_left do %>
+		<div id="login">
+		</div>
+	<%end%>	
+<%end%>
 
 <div class="splitcontentleft">
   <%= textilizable Setting.welcome_text %>
-  <% if @news.any? %>
+  <% if @news.any? && User.current.logged? %>
   <div class="news box">
   <h3><%=l(:label_news_latest)%></h3>
     <%= render :partial => 'news/news', :collection => @news %>
@@ -12,6 +37,7 @@
   <%= call_hook(:view_welcome_index_left, :projects => @projects) %>
 </div>
 
+<% if User.current.logged? %>    
 <div class="splitcontentright">
     <% if @projects.any? %>
   <div class="projects box">
@@ -30,6 +56,7 @@
   <% end %>
     <%= call_hook(:view_welcome_index_right, :projects => @projects) %>
 </div>
+<%end%>
 
 <% content_for :header_tags do %>
 <%= stylesheet_link_tag 'scm' %>

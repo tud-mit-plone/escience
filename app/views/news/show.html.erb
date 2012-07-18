@@ -1,12 +1,14 @@
-<div class="contextual">
-<%= watcher_tag(@news, User.current) %>
-<%= link_to(l(:button_edit),
-      edit_news_path(@news),
-      :class => 'icon icon-edit',
-      :accesskey => accesskey(:edit),
-      :onclick => 'Element.show("edit-news"); return false;') if User.current.allowed_to?(:manage_news, @project) %>
-<%= delete_link news_path(@news) if User.current.allowed_to?(:manage_news, @project) %>
-</div>
+<% content_for :sidebar_right do %>
+	<li><%= watcher_tag(@news, User.current) %></li>
+	<% if User.current.allowed_to?(:manage_news, @project) %>
+	<li><%= link_to(l(:button_edit),
+	      edit_news_path(@news),
+	      :class => 'icon icon-edit',
+	      :accesskey => accesskey(:edit),
+	      :onclick => 'Element.show("edit-news"); return false;') %></li>
+	<li><%= delete_link news_path(@news) %></li>
+	<%end%>
+<%end%>
 
 <h2><%= avatar(@news.author, :size => "24") %><%=h @news.title %></h2>
 
@@ -36,6 +38,7 @@
 <%= link_to_attachments @news %>
 <br />
 
+<% if (@comments.any? || @news.commentable?) %>
 <div id="comments" style="margin-bottom:16px;">
 <h3 class="comments"><%= l(:label_comment_plural) %></h3>
 <% @comments.each do |comment| %>
@@ -46,7 +49,7 @@
     </div>
     <h4><%= avatar(comment.author, :size => "24") %><%= authoring comment.created_on, comment.author %></h4>
     <%= textilizable(comment.comments) %>
-<% end if @comments.any? %>
+<% end %>
 </div>
 
 <% if @news.commentable? %>
@@ -59,6 +62,8 @@
 <p><%= submit_tag l(:button_add) %></p>
 <% end %>
 <% end %>
+<% end %>
+
 
 <% html_title @news.title -%>
 

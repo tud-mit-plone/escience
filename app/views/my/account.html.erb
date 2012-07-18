@@ -1,7 +1,10 @@
-<div class="contextual">
-<%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'icon icon-passwd') if @user.change_password_allowed? %>
-<%= call_hook(:view_my_account_contextual, :user => @user)%>
-</div>
+<% content_for :sidebar_right do %>
+	<li>
+	<%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'icon icon-passwd') if @user.change_password_allowed? %>
+	</li>
+	<%= call_hook(:view_my_account_contextual, :user => @user)%>
+	<%#= render :partial => 'sidebar' %>
+<% end %>
 
 <h2><%=l(:label_my_account)%></h2>
 <%= error_messages_for 'user' %>
@@ -10,16 +13,21 @@
                      :url => { :action => "account" },
                      :html => { :id => 'my_account_form',
                                 :method => :post } do |f| %>
-<div class="splitcontentleft">
-<fieldset class="box tabular">
+<div id="profile">
+<fieldset id="information" class="box tabular">
   <legend><%=l(:label_information_plural)%></legend>
-  <p><%= f.text_field :firstname, :required => true %></p>
-  <p><%= f.text_field :lastname, :required => true %></p>
-  <p><%= f.text_field :mail, :required => true %></p>
-  <p><%= f.select :language, lang_options_for_select %></p>
-  <% if Setting.openid? %>
-  <p><%= f.text_field :identity_url  %></p>
-  <% end %>
+  <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
+  <%= f.select :title, title_options_for_select, :required => true %><br />
+  <%= f.text_field :mail, :required => true, :style => "width:450px" %><br />
+  <%= f.text_field :firstname, :required => true %><span class="distanceholder"></span>
+  <%= f.text_field :lastname, :required => true %><br />
+  <%= f.text_field :phone, :required => false %><span class="distanceholder"></span>
+  <%= f.text_field :fax, :required => false %><br />
+  <%= f.text_field :department, :required => false, :style => "width:450px" %><br />
+  <%= f.text_field :street, :required => false, :style => "width:450px" %><br />
+  <%= f.text_field :city, :required => false %><span class="distanceholder"></span>
+  <%= f.text_field :zipcode, :required => false %><br />
+  <%= f.select :language, lang_options_for_select %><br />
 
   <% @user.custom_field_values.select(&:editable?).each do |value| %>
     <p><%= custom_field_tag_with_label :user, value %></p>
@@ -27,25 +35,22 @@
   <%= call_hook(:view_my_account, :user => @user, :form => f) %>
 </fieldset>
 
-<%= submit_tag l(:button_save) %>
-</div>
-
-<div class="splitcontentright">
-<fieldset class="box">
+<fieldset id="mailnews" class="box">
   <legend><%=l(:field_mail_notification)%></legend>
   <%= render :partial => 'users/mail_notifications' %>
 </fieldset>
 
-<fieldset class="box tabular">
+<fieldset id="preferences" class="box tabular">
   <legend><%=l(:label_preferences)%></legend>
   <%= render :partial => 'users/preferences' %>
 </fieldset>
 
+<%= submit_tag l(:button_save) %>
+
 </div>
 <% end %>
 
-<% content_for :sidebar do %>
-<%= render :partial => 'sidebar' %>
-<% end %>
-
 <% html_title(l(:label_my_account)) -%>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'profile' %>
+<% end %>

@@ -1,0 +1,98 @@
+<h1><%= l(:label_user_messages_new) %></h1>
+
+<% form_for(@user_message) do |f| %>
+  <%#= f.error_messages %>
+  <p>
+    <%= f.label l(:label_user_messages_receiver) %><br />
+    <div class="ui-widget" id="recipient_autocomplete">
+    	<div id="log" class="ui-widget-content"></div>
+    	<input id="user_message_receiver_visible" />
+    	<%= f.hidden_field :receiver %>
+    	<%= hidden_field_tag("buffer", @user_message_reply_id) %>
+    	<%= hidden_field_tag("reply_mail", @user_message_reply_mail) %>
+    </div>
+  </p>
+  <p>
+    <%= f.label l(:label_user_messages_subject) %><br />
+    <%= f.text_field :subject %>
+  </p>
+  <p>
+    <%= f.label l(:label_user_messages_body) %><br />
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit l(:label_user_messages_send) %>
+  </p>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'user_message' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.core.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.position.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.widget.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.autocomplete.js' %>
+  <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
+  <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
+  
+  <%= javascript_tag '
+  	$j(function() {
+		function log(message, id) {
+			var element = $j( "<div class=\'name_element element_"+id+"\' />" ).text( message ).prependTo( "#log" );
+			var delete_item = $j( "<div class=\'delete_button element_"+id+"\' />" ).prependTo( element ).click(function(){
+			 var id = $j(this).attr(\'class\').split(\' \')[1].substring(8);
+			 var olddata_arr = $j("#user_message_receiver").val().split(\',\');
+			 if (olddata_arr.length == 0) {
+			   $j("#user_message_receiver").val("");
+			 } else {
+  			 olddata_arr.splice($j.inArray(id, olddata_arr), 1 );
+  			 $j("#user_message_receiver").val(olddata_arr.join(\',\'));
+  			 $j(this).parent().remove();
+			 }
+		  });
+			$j( "#log" ).scrollTop( 0 );
+			var olddata = $j("#user_message_receiver").val();
+			if (olddata != "") olddata = olddata+","+id;
+			else olddata = id;
+			$j("#user_message_receiver").val(olddata);
+			$j("#user_message_receiver_visible").val("");
+		}
+
+		$j( "#user_message_receiver_visible" ).autocomplete({
+			source: function( request, response ) {
+				$j.ajax({
+					url: "'+url_for(:controller => "users", :action => "user_search")+'",
+  				dataType: "json",
+					data: {
+						maxRows: 12,
+						q: request.term
+					},
+					success: function( data ) {
+						response( $j.map( data, function( item ) {
+							return {
+							  id: item.id,
+								label: item.firstname + " " +item.lastname
+							}
+						}));
+					}
+				});
+			},
+			minLength: 2,
+			select: function( event, ui ) {
+				log(ui.item.label, ui.item.id);
+				return false;
+			},
+			open: function() {
+				$j( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			},
+			close: function() {
+				$j( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			}
+		});'+@user_message_reply+
+'});
+	      ' %>
+<% end %>
+
+
+<% content_for :sidebar_right do %>
+  	<li><%= link_to l(:label_back), user_messages_path %></li>
+<%end%>

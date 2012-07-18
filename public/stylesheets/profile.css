@@ -1,0 +1,95 @@
+	/* Style sheet profil */	
+	#profile {
+		width:100%;
+	}
+	
+	#profile label {
+		width:75px;
+		display:inline-block;
+		margin-bottom:10px;
+		text-align:left;
+		padding-right: 0px;
+	}
+	
+	@-moz-document url-prefix(){ 
+		#profile label {
+			width:74px;
+		}
+	}
+		
+	#profile .membership label {
+		width: 500px;
+		display: block;
+		margin: 0px;
+		
+	}
+	
+	#profile .checkbox_container {
+		margin-top:0;
+		margin-bottom:0;
+		padding-top:0;
+		padding-bottom:0;
+		border:0 hidden;
+	}
+	
+	#profile .checkbox_container legend {
+		display:none;
+	}
+	
+	#profile .checkbox_container label {
+		width:90%;
+		margin-bottom:0;
+		text-align:left;
+	}
+	
+	#profile input[type=text] {
+		width:167px;
+	}
+	
+	#profile p {
+		margin: 2px 0 0 0;
+	}
+	
+	#mailnews checkbox, #mailnews label {
+		float: left;
+	}
+	
+	#preferences label {
+		width: 120px;
+		padding-right: 5px;
+		text-align: right;
+	}
+	
+	#mailnews label, #email label, #warn label {
+		width: 500px;
+		text-align: left;
+	}
+	
+	#pref_hide_mail, #pref_warn_on_leaving_unsaved {
+		float: left;
+	}
+	
+	#tab-content-memberships td {
+		vertical-align: top;
+	}
+	
+	#tab-content-memberships td.roles, #tab-content-memberships td.buttons {
+		width: 90px;
+	}
+	
+	#tab-content-memberships td.roles input {
+		float: left;
+	}
+	
+	#tab-content-memberships td.roles p {
+		padding: 0px;
+		margin: 0px;
+	}
+	
+	#tab-content-memberships td.roles label {
+		margin: 0px;
+	}
+	
+	#tab-content-memberships table {
+		width: 98%;
+	}

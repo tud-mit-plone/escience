@@ -411,7 +411,31 @@ module Redmine
       end
 
       def caption(project=nil)
-        if @caption.is_a?(Proc)
+      	if @caption.is_a?(Hash)
+      	  unless @caption["value"].nil?
+  	      	@value = @caption["value"]
+  	        c = @value.call(project).to_i
+  	        plural = (c > 1) ? "_plural" : "";
+  	      end
+          unless @caption["name"].nil?
+  	      	@value = @caption["name"]
+  	        e = @value.call(project).to_s
+          end
+          unless @caption["text"].nil?
+          	@text = @caption["text"]
+          	d = @text.is_a?(Symbol) ? l(:"#{@text}#{plural}") : @text
+          end
+      	  unless @caption["value_behind"].nil?
+  	      	@value_behind = @caption["value_behind"]
+  	      	c = @value_behind.call(project).to_i
+  	      	if (c > 0) 
+    	      	return "#{d} (#{c})"
+  	      	else 
+    	      	return "#{d}"
+    	      end
+  	      end
+          "#{c} #{d} #{e}"
+        elsif @caption.is_a?(Proc)
           c = @caption.call(project).to_s
           c = @name.to_s.humanize if c.blank?
           c

@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  author: MyString
+  subject: MyString
+  body: MyString
+  receiver: MyString
+  state: MyString
+
+two:
+  author: MyString
+  subject: MyString
+  body: MyString
+  receiver: MyString
+  state: MyString

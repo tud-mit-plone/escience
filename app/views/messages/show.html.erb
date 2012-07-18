@@ -1,26 +1,26 @@
 <%= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)),
                link_to(h(@board.name), project_board_path(@project, @board)) %>
 
-<div class="contextual">
-    <%= watcher_tag(@topic, User.current) %>
-    <%= link_to_remote_if_authorized(
+<% content_for :sidebar_right do %>
+  	<li><%= watcher_tag(@topic, User.current) %></li>
+  	<li><%= link_to_remote_if_authorized(
           l(:button_quote),
           { :url => {:action => 'quote', :id => @topic} },
           :class => 'icon icon-comment'
-        ) unless @topic.locked? %>
-    <%= link_to(
+        ) unless @topic.locked? %></li>
+  	<li><%= link_to(
           l(:button_edit),
           {:action => 'edit', :id => @topic},
           :class => 'icon icon-edit'
-        ) if @message.editable_by?(User.current) %>
-    <%= link_to(
+        ) if @message.editable_by?(User.current) %></li>
+  	<li><%= link_to(
           l(:button_delete),
           {:action => 'destroy', :id => @topic},
           :method => :post,
           :data => {:confirm => l(:text_are_you_sure)},
           :class => 'icon icon-del'
-         ) if @message.destroyable_by?(User.current) %>
-</div>
+         ) if @message.destroyable_by?(User.current) %></li>
+<%end%>
 
 <h2><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %></h2>
 

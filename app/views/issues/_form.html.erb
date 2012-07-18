@@ -1,14 +1,14 @@
-<%= labelled_fields_for :issue, @issue do |f| %>
+<% labelled_fields_for :issue, @issue do |f| %>
 <%= call_hook(:view_issues_form_details_top, { :issue => @issue, :form => f }) %>
 
 <% if @issue.safe_attribute? 'is_private' %>
-<p style="float:right; margin-right:1em;">
+<div style="float:right;">
   <label class="inline" for="issue_is_private" id="issue_is_private_label"><%= f.check_box :is_private, :no_label => true %> <%= l(:field_is_private) %></label>
-</p>
+</div>
 <% end %>
 
 <% if @issue.safe_attribute? 'project_id' %>
-<p><%= f.select :project_id, project_tree_options_for_select(@issue.allowed_target_projects, :selected => @issue.project), :required => true %></p>
+<p class="regular"><%= f.select :project_id, project_tree_options_for_select(@issue.allowed_target_projects, :selected => @issue.project), :required => true %></p>
 <%= observe_field :issue_project_id, :url => project_issue_form_path(@project, :id => @issue, :project_change => '1'),
                                      :with => "Form.serialize('issue-form')" %>
 <% end %>
@@ -20,7 +20,7 @@
 <% end %>
 
 <% if @issue.safe_attribute? 'subject' %>
-<p><%= f.text_field :subject, :size => 80, :required => true %></p>
+<p id="subject" class="regular"><%= f.text_field :subject, :size => 80, :required => true %></p>
 <% end %>
 
 <% if @issue.safe_attribute? 'description' %>

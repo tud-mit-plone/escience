@@ -1,0 +1,20 @@
+<h1><%= l(:label_user_messages_new) %></h1>
+
+<% form_for(@user_message,:url => { :action => "send_contact_message" }) do |f| %>
+  <p>
+    <%= label_tag l(:field_mail) %><br />
+    <%= text_field_tag :email %>
+  </p>
+  <p>
+    <%= f.label l(:label_user_messages_subject) %><br />
+    <%= f.text_field :subject %>
+  </p>
+  <p>
+    <%= f.label l(:label_user_messages_body) %><br />
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit l(:label_user_messages_send) %>
+  </p>
+<% end %>
+

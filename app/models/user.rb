@@ -67,7 +67,7 @@ class User < Principal
   LOGIN_LENGTH_LIMIT = 60
   MAIL_LENGTH_LIMIT = 60
 
-  validates_presence_of :login, :firstname, :lastname, :mail, :if => Proc.new { |user| !user.is_a?(AnonymousUser) }
+  validates_presence_of :firstname, :lastname, :mail, :if => Proc.new { |user| !user.is_a?(AnonymousUser) }
   validates_uniqueness_of :login, :if => Proc.new { |user| user.login_changed? && user.login.present? }, :case_sensitive => false
   validates_uniqueness_of :mail, :if => Proc.new { |user| !user.mail.blank? }, :case_sensitive => false
   # Login must contain lettres, numbers, underscores only
@@ -79,10 +79,15 @@ class User < Principal
   validates_confirmation_of :password, :allow_nil => true
   validates_inclusion_of :mail_notification, :in => MAIL_NOTIFICATION_OPTIONS.collect(&:first), :allow_blank => true
   validate :validate_password_length
+  validates_acceptance_of :confirm, :allow_nil => false, :accept => true
+#  validates_confirmation_of :confirm
 
   before_create :set_mail_notification
   before_save   :update_hashed_password
   before_destroy :remove_references_before_destroy
+
+  has_many :user_messages #User.current.user_messages --> sent
+  has_many :receivers, :through => :user_messages
 
   scope :in_group, lambda {|group|
     group_id = group.is_a?(Group) ? group.id : group.to_i
@@ -135,7 +140,7 @@ class User < Principal
 
     # Make sure no one can sign in with an empty password
     return nil if password.empty?
-    user = find_by_login(login)
+    user = find_by_mail(login)
     if user
       # user is already in local database
       return nil if !user.active?
@@ -382,6 +387,22 @@ class User < Principal
     end
   end
 
+  def male
+    if (@current_user.salutation == 'female' || @current_user.salutation != '')
+      return false
+    else 
+      return true
+    end
+  end
+
+  def female
+    if (User.current.salutation == 'male' || User.current.salutation == '')
+      return false
+    else 
+      return true
+    end
+  end
+
   def logged?
     true
   end
@@ -507,6 +528,14 @@ class User < Principal
     'mail',
     'mail_notification',
     'language',
+    'city',
+    'street',
+    'zipcode',
+    'department',
+    'salutation',
+    'title',
+    'phone',
+    'fax',
     'custom_field_values',
     'custom_fields',
     'identity_url'

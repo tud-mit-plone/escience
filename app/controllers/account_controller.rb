@@ -1,5 +1,8 @@
+
+
+
 # Redmine - project management software
-# Copyright (C) 2006-2012  Jean-Philippe Lang
+# Copyright (C) 2006-2011  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,7 +43,7 @@ class AccountController < ApplicationController
     redirect_to home_url
   end
 
-  # Lets user choose a new password
+  # Enable user to choose a new password
   def lost_password
     redirect_to(home_url) && return unless Setting.lost_password?
     if params[:token]
@@ -59,7 +62,7 @@ class AccountController < ApplicationController
         if @user.save
           @token.destroy
           flash[:notice] = l(:notice_account_password_updated)
-          redirect_to signin_path
+          redirect_to :action => 'login'
           return
         end
       end
@@ -83,7 +86,7 @@ class AccountController < ApplicationController
         if token.save
           Mailer.lost_password(token).deliver
           flash[:notice] = l(:notice_account_lost_email_sent)
-          redirect_to signin_path
+          redirect_to :action => 'login'
           return
         end
       end
@@ -99,7 +102,10 @@ class AccountController < ApplicationController
     else
       user_params = params[:user] || {}
       @user = User.new
+      @user.confirm = true if params[:confirm] == "true"
       @user.safe_attributes = user_params
+
+      @user.mail = params[:user][:login];
       @user.admin = false
       @user.register
       if session[:auth_source_registration]
@@ -110,7 +116,7 @@ class AccountController < ApplicationController
           session[:auth_source_registration] = nil
           self.logged_user = @user
           flash[:notice] = l(:notice_account_activated)
-          redirect_to :controller => 'my', :action => 'account'
+          redirect_to(home_url)
         end
       else
         @user.login = params[:user][:login]
@@ -142,7 +148,7 @@ class AccountController < ApplicationController
       token.destroy
       flash[:notice] = l(:notice_account_activated)
     end
-    redirect_to signin_path
+    redirect_to :action => 'login'
   end
 
   private
@@ -161,7 +167,7 @@ class AccountController < ApplicationController
     if user.nil?
       invalid_credentials
     elsif user.new_record?
-      onthefly_creation_failed(user, {:login => user.login, :auth_source_id => user.auth_source_id })
+      onthefly_creation_failed(user, {:username => user.mail, :auth_source_id => user.auth_source_id })
     else
       # Valid user
       successful_authentication(user)
@@ -217,7 +223,11 @@ class AccountController < ApplicationController
       set_autologin_cookie(user)
     end
     call_hook(:controller_account_success_authentication_after, {:user => user })
-    redirect_back_or_default :controller => 'my', :action => 'page'
+    if !(Project.find(:first, :conditions => "name = 'eScience'").nil?)
+	    redirect_to :controller => 'projects', :action => 'show', :id => "escience"
+	else
+		redirect_back_or_default :controller => 'my', :action => 'page'
+	end
   end
 
   def set_autologin_cookie(user)
@@ -242,7 +252,8 @@ class AccountController < ApplicationController
 
   def invalid_credentials
     logger.warn "Failed login for '#{params[:username]}' from #{request.remote_ip} at #{Time.now.utc}"
-    flash.now[:error] = l(:notice_account_invalid_creditentials)
+    flash[:error] = l(:notice_account_invalid_creditentials)
+    redirect_to :controller => 'welcome', :action => 'index'
   end
 
   # Register a user for email activation.
@@ -253,7 +264,7 @@ class AccountController < ApplicationController
     if user.save and token.save
       Mailer.register(token).deliver
       flash[:notice] = l(:notice_account_register_done)
-      redirect_to signin_path
+      redirect_to :action => 'login'
     else
       yield if block_given?
     end
@@ -284,12 +295,17 @@ class AccountController < ApplicationController
       Mailer.account_activation_request(user).deliver
       account_pending
     else
-      yield if block_given?
+      if block_given?
+        yield
+      else
+        session[:user] = user
+        redirect_to :controller => "welcome", :action => "index"
+      end
     end
   end
 
   def account_pending
     flash[:notice] = l(:notice_account_pending)
-    redirect_to signin_path
+    redirect_to :controller => 'welcome', :action => 'index'
   end
 end

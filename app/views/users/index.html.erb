@@ -1,6 +1,6 @@
-<div class="contextual">
-<%= link_to l(:label_user_new), new_user_path, :class => 'icon icon-add' %>
-</div>
+<% content_for :sidebar_right do %>
+	<li><%= link_to l(:label_user_new), new_user_path, :class => 'icon icon-add' %></li>
+<%end%>
 
 <h2><%=l(:label_user_plural)%></h2>
 

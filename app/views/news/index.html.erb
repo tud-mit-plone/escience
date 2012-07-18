@@ -1,9 +1,11 @@
-<div class="contextual">
-<%= link_to(l(:label_news_new),
+<% content_for :sidebar_right do %>
+<% if @project && User.current.allowed_to?(:manage_news, @project) %>
+	<li><%= link_to(l(:label_news_new),
             new_project_news_path(@project),
             :class => 'icon icon-add',
-            :onclick => 'Element.show("add-news"); Form.Element.focus("news_title"); return false;') if @project && User.current.allowed_to?(:manage_news, @project) %>
-</div>
+            :onclick => 'Element.show("add-news"); Form.Element.focus("news_title"); return false;')  %></li>
+<%end%>
+<%end%>
 
 <div id="add-news" style="display:none;">
 <h2><%=l(:label_news_new)%></h2>

@@ -1,7 +1,7 @@
 <% roles = Role.find_all_givable %>
 <% projects = Project.active.find(:all, :order => 'lft') %>
 
-<div class="splitcontentleft">
+<div class="membership">
 <% if @user.memberships.any? %>
 <table class="list memberships">
   <thead><tr>
@@ -56,7 +56,7 @@
 <% end %>
 </div>
 
-<div class="splitcontentright">
+<div class="membership">
 <% if projects.any? %>
 <fieldset><legend><%=l(:label_project_new)%></legend>
 <%= form_for(:membership, :remote => true, :url => user_memberships_path(@user)) do %>

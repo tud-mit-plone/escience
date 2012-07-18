@@ -1,4 +1,6 @@
-<%= render :partial => 'action_menu' %>
+<% content_for :sidebar_right do %>
+	<%= render :partial => 'action_menu' %>
+<%end%>
 
 <h2><%=l(:label_workflow)%></h2>
 

@@ -4,7 +4,7 @@ table.revision-info td {
     padding: 0px;
 }
 
-div.revision-graph { position: absolute; min-width: 1px; }
+div.revision-graph { position: absolute; }
 
 div.changeset-changes ul { margin: 0; padding: 0; }
 div.changeset-changes ul > ul { margin-left: 18px; padding: 0; }
@@ -196,3 +196,11 @@ div.action_A { background: #bfb }
 .syntaxhl .delete .delete { color: #c00; background:transparent; font-weight:bold }
 .syntaxhl .change .change { color: #88f }
 .syntaxhl .head .head { color: #f4f }
+
+.controller-issues.action-new #subject input{ width:490px;}
+.controller-issues.action-new .regular label {display: inline-block; width:50px}
+.controller-issues.action-new .w33 {float: left; display: inline-block; width: 185px; padding-right: 10px}
+.controller-issues.action-new .w33 input {width: 70px;}
+.controller-issues.action-new .w33 select {width: 110px; overflow: hidden;}
+.controller-issues.action-new #estimated_time input {width:30px;}
+.controller-issues.action-new .w33.last {padding-right: 0px;}

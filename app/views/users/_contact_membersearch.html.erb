@@ -1,0 +1,59 @@
+<div class="description">
+  <%= l(:text_member_search) %>
+</div>
+<div style="height:20px;"></div>
+<label><%= l(:label_memberlist_searchit) %>:</label> <input id="member_search" />
+<div id="ausgabe"></div>
+
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.core.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.position.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.widget.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.autocomplete.js' %>
+  <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
+  <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
+  <%= javascript_tag '
+  var $js = jQuery.noConflict();
+	$js(function() {
+		$js( "#member_search" ).autocomplete({
+			source: function( request, response ) {
+				$js.ajax({
+					url: "'+url_for(:controller => "users", :action => "contact_member_search")+'",
+  				dataType: "json",
+					data: {
+						maxRows: 12,
+						q: request.term
+					},
+					success: function( data ) {
+					  $js("#ausgabe").html("");
+						response( $js.map( data, function( item ) {
+						  console.log(item);
+					    var $element = $js("<fieldset class=\'project\' />");
+					    $element.append($js("<legend>").text(item[0]));
+					    var $tbl = $js("<table width=\"100%\">");
+					    for (var i = 0; i < item[1].length; i++) {
+                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0][\'firstname\']+" "+item[1][i][0][\'lastname\']+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0][\'id\']+"\'><div class=\"openUser\"></div></a>","<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0][\'id\']+"\'><div class=\"sendMessage\"></div></a>")));
+              }
+
+              $element.append($tbl);
+  						$js("#ausgabe").append($element);
+  						return false;
+						}));
+					}
+				});
+			},
+			minLength: 2,
+			select: function( event, ui ) {
+				log(ui.item.label);
+				return false;
+			},
+			open: function() {
+				$js( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			},
+			close: function() {
+				$js( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			}
+		});
+});' %>
+<% end %>

@@ -1,0 +1,20 @@
+<% @projects.each do |project| %>
+<fieldset>
+  <legend><%= project[0] %></legend>
+  <table width="100%">
+  <% project[1].each do |user| %>
+    <tr>
+      <td>
+      <%= (!user[0].salutation.empty?) ? l("field_salutation_vals.#{user[0].salutation}")+" " : "" %>
+      <%= (!user[0].title.empty?) ? l("field_title_vals.#{user[0].title}") : "" %>
+      <%= user[0].name %> (<%= user[1] %>)
+      </td>    
+      <td width="50">
+        <% link_to(:controller => 'users', :action => 'show', :id => user[0].id) do %><div class="openUser"></div><% end %>
+        <% link_to(:controller => 'user_messages', :action => 'new', :id => user[0].id) do %><div class="sendMessage"></div><% end %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</fieldset>
+<% end unless @projects.nil?%>

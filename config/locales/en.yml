@@ -80,7 +80,7 @@ en:
     human:
       format:
         delimiter: ""
-        precision: 3
+        precision: 1
       storage_units:
         format: "%n %u"
         units:
@@ -176,8 +176,7 @@ en:
   notice_gantt_chart_truncated: "The chart was truncated because it exceeds the maximum number of items that can be displayed (%{max})"
   notice_issue_successful_create: "Issue %{id} created."
   notice_issue_update_conflict: "The issue has been updated by an other user while you were editing it."
-  notice_account_deleted: "Your account has been permanently deleted."
-  notice_user_successful_create: "User %{id} created."
+  notice_no_search_result: No results found for the search request.
 
   error_can_t_load_default_data: "Default configuration could not be loaded: %{value}"
   error_scm_not_found: "The entry or revision was not found in the repository."
@@ -223,9 +222,29 @@ en:
   field_description: Description
   field_summary: Summary
   field_is_required: Required
+  field_salutation: Salutation
+  field_salutation_vals:
+    male: Mr.
+    female: Mrs.
+  field_title: Title
+  field_title_vals:
+    bachelor: B.A.
+    master: M.A.
+    diploma: Dipl.
+    professor: Prof.
+    doctor: Dr.
   field_firstname: First name
   field_lastname: Last name
+  field_phone: Phone
+  field_fax: Fax  
   field_mail: Email
+  field_department: Institution
+  field_street: Street/No.
+  field_city: City  
+  field_zipcode: Zipcode 
+  field_adress: address
+  field_confirm: Terms & Privacy
+  field_confirmation: I accept the <a href="/static/datenschutz.html">Privacy Policy</a> and <a href="/static/agb.html">Terms and Conditions</a> of eScience – Research Network Sachsen
   field_filename: File
   field_filesize: Size
   field_downloads: Downloads
@@ -289,6 +308,7 @@ en:
   field_start_page: Start page
   field_subproject: Subproject
   field_hours: Hours
+  field_hours_short: h
   field_activity: Activity
   field_spent_on: Date
   field_identifier: Identifier
@@ -468,6 +488,21 @@ en:
   project_module_calendar: Calendar
   project_module_gantt: Gantt
 
+  label_events: Events
+  label_organisation: Organize
+  label_hello: Hello
+  label_specific: Site specific
+  label_specific_none: no specific links
+  label_usermessage: Messages
+  label_usermessage_announce: new message
+  label_usermessage_announce_plural: new messages
+  label_mymessage: Operating instruction
+  label_mymessage_plural: operating instructions
+  label_projectspec: Project specific
+  label_knowledge: Knowledgebase
+  label_communication: Communication
+  label_description: Description
+  label_forproject: for the project
   label_user: User
   label_user_plural: Users
   label_user_new: New user
@@ -526,10 +561,35 @@ en:
   label_login_with_open_id_option: or login with OpenID
   label_password_lost: Lost password
   label_home: Home
-  label_my_page: My page
+  label_home_logged: Activities
+  label_my_page: My account
+  label_meta_information: Meta informationen
+  label_meta_information_description: Enter keywords for search
+  label_my: Overview
   label_my_account: My account
   label_my_projects: My projects
-  label_my_page_block: My page block
+  label_my_page_block: Displayed items
+  label_my_members: Contact list
+  label_my_inbox: Inbox
+  label_user_messages: Own messages
+  label_user_messages_new: New message
+  label_user_messages_reply: Answer message
+  label_user_messages_emptytrash: Delete messages
+  label_user_messages_delete: Delete message
+  label_user_messages_trash: deleted
+  label_user_messages_sent: sent
+  label_user_messages_archive: archived
+  label_user_messages_receiver: Receiver
+  label_user_messages_subject: Subject
+  label_user_messages_body: Content (max. of 2000 characters)
+  label_user_messages_send: Send message
+  label_user_messages_from: message from
+  label_user_messages_to: message sent to
+  label_privatearea: Private area
+  label_memberlist_all: entire list
+  label_memberlist_grouped: grouped by projects
+  label_memberlist_search: Search
+  label_memberlist_searchit: Search
   label_administration: Administration
   label_login: Sign in
   label_logout: Sign out
@@ -700,6 +760,7 @@ en:
   label_roadmap_overdue: "%{value} late"
   label_roadmap_no_issues: No issues for this version
   label_search: Search
+  label_search_plural: Search
   label_result_plural: Results
   label_all_words: All words
   label_wiki: Wiki
@@ -928,6 +989,7 @@ en:
 
   field_active: Active
 
+  text_personalize_account: Here you have the ability to adjust your overview page. Select to display items and change their order.
   text_select_mail_notifications: Select actions for which email notifications should be sent.
   text_regexp_info: eg. ^[A-Z0-9]+$
   text_min_max_length_info: 0 means no restriction

@@ -3,17 +3,17 @@
 <div class="splitcontent">
 <div class="splitcontentleft">
 <% if @issue.safe_attribute? 'status_id'  %>
-<p><%= f.select :status_id, (@allowed_statuses.collect {|p| [p.name, p.id]}), :required => true %></p>
+<div class="w33"><%= f.select :status_id, (@allowed_statuses.collect {|p| [p.name, p.id]}), :required => true %></div>
 <% else %>
-<p><label><%= l(:field_status) %></label> <%= h(@issue.status.name) %></p>
+<div class="floatleft"><label><%= l(:field_status) %></label> <%= h(@issue.status.name) %></div>
 <% end %>
 
 <% if @issue.safe_attribute? 'priority_id' %>
-<p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
+<div class="w33"><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></div>
 <% end %>
 
 <% if @issue.safe_attribute? 'assigned_to_id' %>
-<p><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true %></p>
+<div class="w33 last"><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true %></div>
 <% end %>
 
 <% if @issue.safe_attribute?('category_id') && @issue.project.issue_categories.any? %>
@@ -33,31 +33,43 @@
 </p>
 <% end %>
 </div>
+<div style="clear:both; height:5px;"></div>
 
 <div class="splitcontentright">
+
+<!--
 <% if @issue.safe_attribute? 'parent_issue_id' %>
 <p id="parent_issue"><%= f.text_field :parent_issue_id, :size => 10 %></p>
 <div id="parent_issue_candidates" class="autocomplete"></div>
 <%= javascript_tag "observeParentIssueField('#{auto_complete_issues_path(:id => @issue, :project_id => @issue.project) }')" %>
 <% end %>
+-->
 
 <% if @issue.safe_attribute? 'start_date' %>
-<p><%= f.text_field :start_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_start_date') if @issue.leaf? %></p>
+<div class="w33">
+<%= f.text_field :start_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_start_date') if @issue.leaf? %>
+</div>
 <% end %>
 
 <% if @issue.safe_attribute? 'due_date' %>
-<p><%= f.text_field :due_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_due_date') if @issue.leaf? %></p>
+<div class="w33">
+<%= f.text_field :due_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_due_date') if @issue.leaf? %>
+</div>
 <% end %>
+<div style="clear:both; height:5px;"></div>
 
 <% if @issue.safe_attribute? 'estimated_hours' %>
-<p><%= f.text_field :estimated_hours, :size => 3, :disabled => !@issue.leaf? %> <%= l(:field_hours) %></p>
+<div id="estimated_time" class="w33">
+<%= f.text_field :estimated_hours, :size => 3, :disabled => !@issue.leaf? %> <%= l(:field_hours_short) %>
+</div>
 <% end %>
 
 <% if @issue.safe_attribute?('done_ratio') && @issue.leaf? && Issue.use_field_for_done_ratio? %>
-<p><%= f.select :done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }) %></p>
+<div class="w33 last"><%= f.select :done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }) %></div>
 <% end %>
 </div>
 </div>
+<div style="clear:both; height:5px;"></div>
 
 <% if @issue.safe_attribute? 'custom_field_values' %>
 <%= render :partial => 'issues/form_custom_fields' %>

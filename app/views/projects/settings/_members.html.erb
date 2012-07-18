@@ -58,7 +58,7 @@
 
 <% principals = Principal.active.not_member_of(@project).all(:limit => 100, :order => 'type, login, lastname ASC') %>
 
-<div class="splitcontentright">
+<div class="splitcontentright" id="profile">
 <% if roles.any? && principals.any? %>
   <%= form_for(@member, {:as => :membership, :remote => true, 
                      :url => project_memberships_path(@project), :method => :post,
@@ -67,7 +67,7 @@
                   } ) do |f| %>
     <fieldset><legend><%=l(:label_member_new)%></legend>
 
-    <p><%= label_tag "principal_search", l(:label_principal_search) %><%= text_field_tag 'principal_search', nil %></p>
+    <p class="membership"><%= label_tag "principal_search", l(:label_principal_search) %><%= text_field_tag 'principal_search', nil %></p>
     <%= observe_field(:principal_search,
                  :frequency => 0.5,
                  :update => :principals,
@@ -78,11 +78,11 @@
                  :with => 'q')
                   %>
 
-    <div id="principals">
+    <div id="principals" class="membership">
       <%= principals_check_box_tags 'membership[user_ids][]', principals %>
     </div>
 
-    <p><%= l(:label_role_plural) %>:
+    <p class="membership"><%= l(:label_role_plural) %>:
     <% roles.each do |role| %>
       <label><%= check_box_tag 'membership[role_ids][]', role.id %> <%=h role %></label>
      <% end %></p>
@@ -92,3 +92,8 @@
   <% end %>
 <% end %>
 </div>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'profile' %>
+<% end %>
+

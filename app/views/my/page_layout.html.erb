@@ -34,7 +34,12 @@ function removeBlock(block) {
 //]]>
 </script>
 
-<div class="contextual">
+
+<div class="contextual"><%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-cancel' %>
+</div>
+<h2><%=l(:label_my_page)%></h2>
+<p><%=l(:text_personalize_account)%></p>
+<div>
 <%= form_tag({:action => "add_block"}, :id => "block-form") do %>
 <%= label_tag('block-select', l(:label_my_page_block)) %>:
 <%= select_tag 'block',
@@ -49,7 +54,6 @@ function removeBlock(block) {
            }, :class => 'icon icon-add'
              %>
 <% end %>
-<%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-cancel' %>
 </div>
 
 <h2><%=l(:label_my_page)%></h2>

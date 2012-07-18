@@ -1,0 +1,3 @@
+<h3><%=l(:label_my_inbox)%> <%= (UserMessage.get_number_of_messages > 0) ? "(#{UserMessage.get_number_of_messages})" : "" %></h3>
+
+<%= render_usermessage_inbox %>

@@ -1,31 +1,16 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
-    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
+    <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %></li>
   <% end %>
-  <% if User.current.allowed_to?(:close_project, @project) %>
-    <% if @project.active? %>
-      <%= link_to l(:button_close), close_project_path(@project), :data => {:confirm => l(:text_are_you_sure)}, :method => :post, :class => 'icon icon-lock' %>
-    <% else %>
-      <%= link_to l(:button_reopen), reopen_project_path(@project), :data => {:confirm => l(:text_are_you_sure)}, :method => :post, :class => 'icon icon-unlock' %>
-    <% end %>
-  <% end %>
-</div>
+<%end%>
 
-<h2><%=l(:label_overview)%></h2>
+<h2><%=l(:label_overview)%> <%= l(:label_forproject) %> <%= @project.name %></h2>
 
-<% unless @project.active? %>
-  <p class="warning"><span class="icon icon-lock"><%= l(:text_project_closed) %></span></p>
-<% end %>
-
-<div class="splitcontentleft">
-  <% if @project.description.present? %>
-  <div class="wiki">
-    <%= textilizable @project.description %>
-  </div>
-  <% end %>
+<div class="wiki">
+  <%= textilizable @project.description %>
   <ul>
   <% unless @project.homepage.blank? %>
-    <li><%=l(:field_homepage)%>: <%= link_to h(@project.homepage), @project.homepage %></li>
+    <li><%=l(:field_homepage)%>: <%= auto_link(h(@project.homepage)).html_safe %></li>
   <% end %>
   <% if @subprojects.any? %>
     <li><%=l(:label_subproject_plural)%>:
@@ -37,10 +22,11 @@
   <% end %>
   <% end %>
   </ul>
+</div>
 
-  <% if User.current.allowed_to?(:view_issues, @project) %>
-  <div class="issues box">
-    <h3><%=l(:label_issue_tracking)%></h3>
+<% if User.current.allowed_to?(:view_issues, @project) %>
+<fieldset>
+  <legend><%=l(:label_issue_tracking)%></legend>
     <ul>
     <% for tracker in @trackers %>
       <li><%= link_to h(tracker.name), :controller => 'issues', :action => 'index', :project_id => @project,
@@ -60,34 +46,27 @@
         | <%= link_to(l(:label_gantt), :controller => 'gantts', :action => 'show', :project_id => @project) %>
       <% end %>
     </p>
-  </div>
-  <% end %>
-  <%= call_hook(:view_projects_show_left, :project => @project) %>
-</div>
+</fieldset>
+<% end %>
+<%= call_hook(:view_projects_show_left, :project => @project) %>
 
-<div class="splitcontentright">
   <%= render :partial => 'members_box' %>
 
   <% if @news.any? && authorize_for('news', 'index') %>
-  <div class="news box">
-    <h3><%=l(:label_news_latest)%></h3>
+<fieldset>
+  <legend><%=l(:label_news_latest)%></legend>
     <%= render :partial => 'news/news', :collection => @news %>
     <p><%= link_to l(:label_news_view_all), :controller => 'news', :action => 'index', :project_id => @project %></p>
-  </div>
+</fieldset>
   <% end %>
   <%= call_hook(:view_projects_show_right, :project => @project) %>
-</div>
 
 <% content_for :sidebar do %>
     <% if @total_hours.present? %>
     <h3><%= l(:label_spent_time) %></h3>
     <p><span class="icon icon-time"><%= l_hours(@total_hours) %></span></p>
-    <p>
-    <% if User.current.allowed_to?(:log_time, @project) %>
-      <%= link_to l(:button_log_time), new_project_time_entry_path(@project) %> |
-    <% end %>
-    <%= link_to(l(:label_details), project_time_entries_path(@project)) %> |
-    <%= link_to(l(:label_report), report_project_time_entries_path(@project)) %></p>
+    <p><%= link_to(l(:label_details), {:controller => 'timelog', :action => 'index', :project_id => @project}) %> |
+    <%= link_to(l(:label_report), {:controller => 'timelog', :action => 'report', :project_id => @project}) %></p>
     <% end %>
     <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
 <% end %>
@@ -95,5 +74,4 @@
 <% content_for :header_tags do %>
 <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
 <% end %>
-
 <% html_title(l(:label_overview)) -%>

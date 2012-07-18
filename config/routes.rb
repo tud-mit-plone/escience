@@ -61,7 +61,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:id/issues/report/:detail', :to => 'reports#issue_report_details', :via => :get
 
   match 'my/account', :controller => 'my', :action => 'account', :via => [:get, :post]
-  match 'my/account/destroy', :controller => 'my', :action => 'destroy', :via => [:get, :post]
+  #match 'my/account/destroy', :controller => 'my', :action => 'destroy', :via => [:get, :post]
+  match 'my/members', :controller => 'my', :action => 'members', :via => [:get, :post]
   match 'my/page', :controller => 'my', :action => 'page', :via => :get
   match 'my', :controller => 'my', :action => 'index', :via => :get # Redirects to my/page
   match 'my/reset_rss_key', :controller => 'my', :action => 'reset_rss_key', :via => :post
@@ -73,6 +74,8 @@ RedmineApp::Application.routes.draw do
   match 'my/order_blocks', :controller => 'my', :action => 'order_blocks', :via => :post
 
   resources :users
+  match 'usersearch', :controller => 'users', :action => 'user_search'
+  match 'contact_membersearch', :controller => 'users', :action => 'contact_member_search'
   match 'users/:id/memberships/:membership_id', :to => 'users#edit_membership', :via => :put, :as => 'user_membership'
   match 'users/:id/memberships/:membership_id', :to => 'users#destroy_membership', :via => :delete
   match 'users/:id/memberships', :to => 'users#edit_membership', :via => :post, :as => 'user_memberships'
@@ -296,7 +299,22 @@ RedmineApp::Application.routes.draw do
   get 'search', :controller => 'search', :action => 'index'
 
   match 'mail_handler', :controller => 'mail_handler', :action => 'index', :via => :post
-
+  
+  match 'user_message/contact_message', :controller => 'user_messages', :action => 'contact_message', :via => :get
+  match 'user_message/send_contact_message', :controller => 'user_messages', :action => 'send_contact_message', :via => :post
+  match 'user_messages/emptytrash', :controller => 'user_messages', :action => 'emptytrash', :via => :get
+  match 'user_messages/reply', :controller => 'user_messages', :action => 'reply', :via => :get
+  resources :user_messages
+  match 'user_messages/:id/search', :controller => 'search', :action => 'index', :id => /\d+/, :via => :get 
+  match 'user_messages/:id/archive', :controller => 'user_messages', :action => 'archive', :id => /\d+/, :via => :get
+  
+  match 'info/news', :controller => 'welcome', :action => 'news', :via => :get
+  match 'info/events', :controller => 'welcome', :action => 'events', :via => :get
+  match 'knowledge', :controller => 'wiki', :action => 'show_all', :via => :get
+  match 'knowledge/show', :controller => 'wiki', :action => 'show', :via => :get
+  match 'knowledge/index', :controller => 'wiki', :action => 'index', :via => :get
+  match 'knowledge/date_index', :controller => 'wiki', :action => 'date_index', :via => :get
+  
   match 'admin', :controller => 'admin', :action => 'index', :via => :get
   match 'admin/projects', :controller => 'admin', :action => 'projects', :via => :get
   match 'admin/plugins', :controller => 'admin', :action => 'plugins', :via => :get
@@ -320,6 +338,8 @@ RedmineApp::Application.routes.draw do
   match 'sys/projects', :to => 'sys#projects', :via => :get
   match 'sys/projects/:id/repository', :to => 'sys#create_project_repository', :via => :post
   match 'sys/fetch_changesets', :to => 'sys#fetch_changesets', :via => :get
+
+  map.connect 'static/:id', :controller => 'pages', :action => 'show', :via => :get, :id => /.+/
 
   match 'uploads', :to => 'attachments#upload', :via => :post
 

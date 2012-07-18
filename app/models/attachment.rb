@@ -52,6 +52,15 @@ class Attachment < ActiveRecord::Base
   before_save :files_to_final_location
   after_destroy :delete_from_disk
 
+  def container_with_blank_type_check
+    if container_type.blank?
+      nil
+    else
+      container_without_blank_type_check
+    end
+  end
+  alias_method_chain :container, :blank_type_check unless method_defined?(:container_without_blank_type_check)
+
   # Returns an unsaved copy of the attachment
   def copy(attributes=nil)
     copy = self.class.new
@@ -219,8 +228,27 @@ class Attachment < ActiveRecord::Base
   # :files => array of the attached files
   # :unsaved => array of the files that could not be attached
   def self.attach_files(obj, attachments)
-    result = obj.save_attachments(attachments, User.current)
+    saveable = {}
+    len = attachments.length
+
+    for count in 1..len
+      next if attachments.nil?
+      next if attachments[count.to_s].nil?
+      next if attachments[count.to_s]["meta_information"].nil? || attachments[count.to_s]["meta_information"] == ''
+      saveable[count.to_s] = attachments[count.to_s]
+    end
+
+    result = obj.save_attachments(saveable, User.current)
     obj.attach_saved_attachments
+
+    result[:files].each_with_index do |att,count|
+      meta = MetaInformation.new
+      
+      meta.meta_information = result[:meta_informations][count]
+      meta.attachment = att
+      meta.user = User.current
+      meta.save!
+    end if !(result[:files].nil?)
     result
   end
 
