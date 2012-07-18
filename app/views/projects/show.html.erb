@@ -10,7 +10,7 @@
   <%= textilizable @project.description %>
   <ul>
   <% unless @project.homepage.blank? %>
-    <li><%=l(:field_homepage)%>: <%= auto_link(h(@project.homepage)).html_safe %></li>
+    <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage)).html_safe %></li>
   <% end %>
   <% if @subprojects.any? %>
     <li><%=l(:label_subproject_plural)%>:
