@@ -221,7 +221,6 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :documents, { :controller => 'documents', :action => 'index' }, :param => :project_id, :caption => :label_document_plural
   menu.push :wiki, { :controller => 'wiki', :action => 'show', :id => nil }, :param => :project_id,
               :if => Proc.new { |p| p.wiki && !p.wiki.new_record? }
-  menu.push :documents, { :controller => 'documents', :action => 'index' }, :param => :project_id, :caption => :label_document_plural
   menu.push :boards, { :controller => 'boards', :action => 'index', :id => nil }, :param => :project_id,
               :if => Proc.new { |p| p.boards.any? }, :caption => :label_board_plural
   menu.push :files, { :controller => 'files', :action => 'index' }, :caption => :label_file_plural, :param => :project_id

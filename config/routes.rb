@@ -339,7 +339,7 @@ RedmineApp::Application.routes.draw do
   match 'sys/projects/:id/repository', :to => 'sys#create_project_repository', :via => :post
   match 'sys/fetch_changesets', :to => 'sys#fetch_changesets', :via => :get
 
-  map.connect 'static/:id', :controller => 'pages', :action => 'show', :via => :get, :id => /.+/
+  match 'static/:id', :controller => 'pages', :action => 'show', :via => :get, :id => /.+/
 
   match 'uploads', :to => 'attachments#upload', :via => :post
 

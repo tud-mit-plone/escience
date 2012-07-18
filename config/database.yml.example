@@ -11,7 +11,7 @@ production:
   encoding: utf8
 
 development:
-  adapter: mysql
+  adapter: sqlite3
   database: redmine_development
   host: localhost
   username: root
