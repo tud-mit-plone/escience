@@ -84,7 +84,7 @@ $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'
 	<div id="header_bg_bar"></div>
 	<div class="inside container_16">
 		<div id="logo" class="grid_3 <%= (!User.current.logged?)? 'prefix_12' : 'prefix_13' %>">
-			<%link_to({:controller => 'welcome'}) do %>
+			<%= link_to({:controller => 'welcome'}) do %>
 				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
 			<%end%>
 		</div>
