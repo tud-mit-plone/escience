@@ -1201,7 +1201,7 @@ module ApplicationHelper
 
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = javascript_include_tag("application")
+    tags = javascript_include_tag('prototype', 'effects', 'dragdrop', 'controls', 'rails', 'application')
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.min.js")
     tags << "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
