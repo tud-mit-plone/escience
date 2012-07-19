@@ -1036,6 +1036,7 @@ module ApplicationHelper
 
   def progress_bar(pcts, options={})
     pcts = [pcts, pcts] unless pcts.is_a?(Array)
+
     pcts = pcts.collect(&:round)
     pcts[1] = pcts[1] - pcts[0]
     pcts << (100 - pcts[1] - pcts[0])
@@ -1200,7 +1201,7 @@ module ApplicationHelper
 
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = javascript_include_tag(:defaults)
+    tags = javascript_include_tag("application")
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.min.js")
     tags << "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
