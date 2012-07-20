@@ -256,15 +256,26 @@ module ApplicationHelper
     return unless User.current.logged?
     projects = User.current.memberships.collect(&:project).compact.select(&:active?).uniq
     if projects.any?
-      options =
-        ("<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
-         '<option value="" disabled="disabled">---</option>').html_safe
-
-      options << project_tree_options_for_select(projects, :selected => @project) do |p|
-        { :value => project_path(:id => p, :jump => current_menu_item) }
+      if @project.nil?
+        project_name = l(:label_projectspec)
+      else 
+        project_name = "#{@project}"
       end
-
-      select_tag('project_quick_jump_box', options, :onchange => 'if (this.value != \'\') { window.location = this.value; }')
+            
+      project_name = shorten(project_name,17)
+      
+      s = '<div class="splitter">' +
+          '<div id="projects_styled" class="styled_select "><span>'+project_name+'</span><b><i></i></b></div>' +
+          '<select onchange="if (this.value != \'\') { window.location = this.value; }" style="opacity: 0; margin-bottom: 4px; ">' +
+            "<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
+            '<option value="" disabled="disabled">---</option>'
+            
+      s << project_tree_options_for_select(projects, :selected => @project) do |p|
+        { :value => url_for(:controller => 'projects', :action => 'show', :id => p, :jump => current_menu_item) }
+      end
+      s << '</select>'+
+           '</div>'
+      s.html_safe
     end
   end
 
@@ -1219,7 +1230,7 @@ module ApplicationHelper
     #tags << javascript_include_tag("jquery.tagsinput.min.js")
     #tags << "\n".html_safe
     #tags << javascript_include_tag("jquery.jbar.js")
-    tags << "\n".html_safe +  javascript_tag(flash_notifications)
+    #tags << "\n".html_safe +  javascript_tag(flash_notifications)
 
     unless User.current.pref.warn_on_leaving_unsaved == '0'
       tags << "\n".html_safe + javascript_tag("Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('#{escape_javascript( l(:text_warn_on_leaving_unsaved) )}'); });")

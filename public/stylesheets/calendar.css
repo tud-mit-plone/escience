@@ -1,92 +1,5 @@
 /* The main calendar widget.  DIV containing a table. */
 
-.controller-calendars .filter label, .controller-calendars .add-filter label{
-  display: inline-block;
-  width: auto;
-}
-
-.controller-calendars select.values_project_id {
-  max-width: 200px;
-}
-
-.controller-calendars .selectors {
-  float: left;
-  margin-top: 10px;
-}
-
-.controller-calendars .selectors label {
-  width: auto;
-}
-
-.controller-calendars .buttons {
-  margin-top: 8px;
-  float: right;
-}
-
-.controller-calendars .buttons div {
-  float: right;
-  padding: 5px 15px;
-  margin-left: 10px;
-  background-color: #7DB414;
-  border: 0;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.controller-calendars table.cal td {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -khtml-border-radius: 5px;
-  border-radius: 5px;
-  border: 1px solid #F0F0F0;
-}
-
-.controller-calendars table.cal td div.td_box {
-  height: 60px;
-  overflow: hidden;
-}
-
-.controller-calendars table.cal td.event {
-  background-color: #7DB414;
-  color: #ffffff;
-}
-
-.controller-calendars table.cal td.week-number {
-  font-weight: bold;
-  border: none;
-}
-
-.controller-calendars table.cal td.weekend {
-  background-color: #FAFAFA;  
-}
-
-.controller-calendars table.cal td.today {
-  border-color: #7DB414;  
-}
-
-.controller-calendars table.cal td:hover {
-  border-color: #7DB414;  
-}
-
-.controller-calendars table.cal td p {
-  margin: 2px;
-  padding: 2px 0;
-}
-
-.controller-calendars .buttons div:hover {
-  background: linear-gradient(90,#7DB414,#759B68);
-  background: -moz-linear-gradient(90,#7DB414,#759B68);
-  background: -webkit-gradient(linear,50% 100%,50% 0%,color-stop(0,#759B68),color-stop(1,#7DB414));
-  background: -o-linear-gradient(90,#7DB414,#759B68);
-}
-
-.controller-calendars .buttons a {
-  color: white;
-  text-decoration: none;
-}
-
 #changeMonth .prev, #changeMonth .next {
   background-color: #FAFAFA;
   background-image: -moz-linear-gradient(top, #a3a3a3 0%, #EFEFEF 30%);
@@ -143,6 +56,54 @@
   margin-bottom: 10px;
 }
 
+.controller-calendars .buttons {
+  margin-top: 10px;
+}
+
+.controller-calendars table.cal td {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #F0F0F0;
+}
+
+.controller-calendars table.cal td div.td_box {
+  height: 60px;
+  overflow: hidden;
+}
+
+.controller-calendars table.cal td.event {
+  background-color: #7DB414;
+  color: #ffffff;
+}
+
+.controller-calendars table.cal td.week-number {
+  font-weight: bold;
+  border: none;
+}
+
+.controller-calendars table.cal td.weekend {
+  background-color: #FAFAFA;  
+}
+
+.controller-calendars table.cal td.today {
+  border-color: #7DB414;
+}
+
+.controller-calendars table.cal td.today p.day-num {
+  color: #7DB414;
+}
+
+.controller-calendars table.cal td:hover {
+  border-color: #d0d0d0;  
+}
+
+.controller-calendars table.cal td p {
+  margin: 2px;
+  padding: 2px 0;
+}
+
 .controller-calendars .infobox {
   visibility: hidden;
   position: absolute;
@@ -157,22 +118,23 @@
   border: 1px solid #DADADA;
   color: #7D7D7D;
   height: auto !important;
-  margin: 10px 0 0 10px;
+  margin: 11px 0 0 11px;
 }
 
 .controller-calendars .linkToInfo.box {
-  background-image: url("../images/cal_element.png");
-  background-repeat: no-repeat;
   float:left; 
-  margin-left:2px;
-  width:15px; 
-  height:15px;  
+  margin-left:3px;
+  width:14px; 
+  height:14px;  
 }
 
-.controller-calendars .infobox .tip.notlast {
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid #ADADAD;
+.controller-calendars div.linkToInfo a {
+  display: block;
+  text-decoration: none;
+}
+
+.controller-calendars p.linkToInfo a {
+  color: white;
 }
 
 .controller-calendars .infobox td {
@@ -197,7 +159,7 @@
 }
 
 .controller-calendars .infobox h2 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0px;
   padding: 0px;
 }
@@ -209,15 +171,6 @@ img.calendar-trigger {
 }
 
 div.calendar { position: relative; z-index: 60;}
-
-div.calendar, div.calendar table {
-  border: 1px solid #556;
-  font-size: 11px;
-  color: #000;
-  cursor: default;
-  background: #fafbfc;
-  font-family: tahoma,verdana,sans-serif;
-}
 
 /* Header part -- contains navigation buttons and day names. */
 
@@ -255,7 +208,7 @@ div.calendar thead .name { /* Cells <TD> containing the day names */
 }
 
 div.calendar thead .weekend { /* How a weekend day name shows in header */
-  color: #a66;
+  color: #7D7D7D;
 }
 
 div.calendar thead .hilite { /* How do the buttons in header appear when hover */
@@ -273,7 +226,7 @@ div.calendar thead .active { /* Active (pressed) buttons in header */
 
 div.calendar tbody .day { /* Cells <TD> containing month days dates */
   width: 2em;
-  color: #456;
+  color: #7D7D7D;
   text-align: right;
   padding: 2px 4px 2px 2px;
 }
@@ -316,10 +269,6 @@ div.calendar tbody td.selected { /* Cell showing today date */
   padding: 1px 3px 1px 1px;
   background: #fff;
   color: #000;
-}
-
-div.calendar tbody td.weekend { /* Cells showing weekend days */
-  color: #a66;
 }
 
 div.calendar tbody td.today { /* Cell showing selected date */
@@ -436,4 +385,56 @@ div.calendar td.time span.active {
   border-color: #f00;
   background-color: #000;
   color: #0f0;
+}
+
+.mypage-box.calendar {
+  width: 360px !important;
+}
+
+div.mypage-box div.calendar {
+  border: none;
+}
+
+div.mypage-box .cal {
+//  font-size: 10px;
+  border: none;
+}
+
+.cal #small h2 {
+//  font-size: 11px;
+}
+
+.cal #small td {
+  border: none;
+  background-color: #ffffff;
+  color: #7D7D7D;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  border-bottom: 1px solid #F0F0F0
+}
+
+.cal #small a {
+  color: #06C;
+}
+
+.cal #small .event div div {
+  padding-left: 10px;
+}
+
+.cal #small .today .day-num {
+  font-weight: normal;
+}
+
+.cal #small .today {
+  border-color: #F0F0F0;
+}
+
+.cal #small .today:hover {
+  border-color: #d0d0d0;
+}
+
+.cal #small .td_box {
+  height: auto;
 }

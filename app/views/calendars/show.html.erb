@@ -29,7 +29,7 @@
 
 <%= error_messages_for 'query' %>
 <% if @query.valid? %>
-<%= render :partial => 'common/calendar', :locals => {:calendar => @calendar} %>
+<%= render :partial => 'common/calendar', :locals => {:calendar => @calendar, :small => false} %>
 
 <p class="legend cal">
   <span class="starting"><%= l(:text_tip_issue_begin_day) %></span>

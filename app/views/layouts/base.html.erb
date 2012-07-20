@@ -131,7 +131,7 @@ $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'
 		    	<div class="headline"><%= l(:label_communication) %></div>
 		        <%= render_menu :private_menu %>
 		        <%# if display_main_menu?(@project) %>
-		          <div class="splitter"><%= render_project_jump_box %></div>
+		          <%= render_project_jump_box %>
 		        <%# end %>
 		          <%= render_main_menu(@project) %>
 		        <% if User.current.admin? %>
@@ -157,7 +157,7 @@ $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'
 	    <div id="right" class="grid_3">
 	    	<% if User.current.logged? %>
 		    <div id="quick-search">
-		        <% form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
+		        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
 		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
 		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
 		        <%= submit_tag "" %>
