@@ -85,6 +85,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.xml { render :xml => @users }
+#      format.html { render :xml => @users }
       format.js # user_search.js.erb
       format.json { render :json => @users }
     end

@@ -10,8 +10,8 @@
       <%= user[0].name %> (<%= user[1] %>)
       </td>    
       <td width="50">
-        <% link_to(:controller => 'users', :action => 'show', :id => user[0].id) do %><div class="openUser"></div><% end %>
-        <% link_to(:controller => 'user_messages', :action => 'new', :id => user[0].id) do %><div class="sendMessage"></div><% end %>
+        <%= link_to(:controller => 'users', :action => 'show', :id => user[0].id) do %><div class="openUser"></div><% end %>
+        <%= link_to(:controller => 'user_messages', :action => 'new', :id => user[0].id) do %><div class="sendMessage"></div><% end %>
       </td>
     </tr>
   <% end %>

@@ -27,6 +27,9 @@ class UserMessagesController < ApplicationController
       @user_messages = msgs
     end
 
+p "--------------"
+p @user_messages[0]
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @user_messages }
@@ -148,12 +151,15 @@ class UserMessagesController < ApplicationController
           @user_message.receiver_id = recv.id
           @user_message.state = 3
           @user_message.directory = UserMessage.sent_directory
+          noerror &= @user_message.save
 
-          @user_message_clone = @user_message.clone
+          @user_message_clone = UserMessage.new()
+          @user_message_clone.body = params[:user_message]["body"]
+          @user_message_clone.subject = params[:user_message]["subject"]
+          @user_message_clone.user = User.current
           @user_message_clone.state = 1
           @user_message_clone.author = recv.id
           @user_message_clone.directory = UserMessage.received_directory
-          noerror &= @user_message.save
           noerror &= @user_message_clone.save
         end
       end

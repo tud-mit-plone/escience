@@ -1,37 +1,49 @@
-<h1 class="user_message_headline"><%= l(:label_user_messages) %><%= (@directory.nil?)? "" : " (#{l('label_user_messages_'+@directory)})" %></h1>
-<% if @directory != "trash" %>
-<div id="new_user_message_link"><% link_to(new_user_message_path) do %><div></div><%end %></div>
-<% elsif !@user_messages.empty? %>
-<div id="emptytrash_user_message_link"><% link_to({:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) do %><div></div><%end %></div>
+<% content_for :header_tags do %>
+<%= javascript_tag '
+  $j(function() {addToolTip(".inbox .user_message_links div.delete, .archive .user_message_links div.delete, .sent .user_message_links div.delete","'+l(:tooltip_user_message_delete)+'","left")});
+  $j(function() {addToolTip(".trash .user_message_links div.delete","'+l(:tooltip_user_message_deleteFin)+'","left")});
+  $j(function() {addToolTip(".user_message_links div.archive","'+l(:tooltip_user_message_archive)+'","left")});
+  $j(function() {addToolTip("#emptytrash_user_message_link","'+l(:tooltip_user_message_emptyTrash)+'","left")});
+  $j(function() {addToolTip("#new_user_message_link","'+l(:tooltip_user_message_newMessage)+'","left")});
+'%>
 <% end %>
 
-<% @user_messages.each do |user_message| %>
-  <% link_to(user_message, :class => "link_to_message") do %>
-    <div class="user_message<%= (user_message.state == 1)? " unread" : "" %><%= (user_message.state == 4)? " answered" : "" %>">
-
-    <div class="author">
-      <% if(@directory == 'sent') %>
-        <%= render :partial => 'sent', :locals => { :user_message => user_message } %>
-      <% else %>
-        <%= render :partial => 'received', :locals => { :user_message => user_message } %>
+<div class="<%= !@directory.nil? ? @directory : 'inbox'%>">
+  <h1 class="user_message_headline"><%= l(:label_user_messages) %><%= (@directory.nil?)? "" : " (#{l('label_user_messages_'+@directory)})" %></h1>
+  <% if @directory != "trash" %>
+  <div id="new_user_message_link"><%= link_to(new_user_message_path) do %><div></div><%end %></div>
+  <% elsif !@user_messages.empty? %>
+  <div id="emptytrash_user_message_link"><%= link_to({:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) do %><div></div><%end %></div>
+  <% end %>
+   
+  <% @user_messages.each do |user_message| %>
+    <%= link_to(user_message, :class => "link_to_message") do %>
+      <div class="user_message<%= (user_message.state == 1)? " unread" : "" %><%= (user_message.state == 4)? " answered" : "" %>">
+  
+      <div class="author">
+        <% if(@directory == 'sent') %>
+          <%= render :partial => 'sent', :locals => { :user_message => user_message } %>
+        <% else %>
+          <%= render :partial => 'received', :locals => { :user_message => user_message } %>
+        <% end %>
+      </div>
+      <div class="date"><%= user_message.created_at.strftime("%d.%m.%y %H:%M") %></div>
+      <div class="subject"><%= user_message.subject %></div>
+      <div class="message"><%=h user_message.body %></div>
+    </div>
+    <% end %>
+    <div class="user_message_links">
+      <%= link_to({:controller => "user_messages", :action => "destroy", :id => user_message.id, :directory => @directory}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) do %>
+      <div class="delete"></div>
+      <% end %>
+      <% if @directory != "archive" && @directory != "sent" %>
+        <%= link_to({:controller => "user_messages", :action => "archive", :id => user_message.id}, :confirm => self.l(:text_message_archive_confirmation)) do %>
+        <div class="archive"></div>
+        <% end %>
       <% end %>
     </div>
-    <div class="date"><%= user_message.created_at.strftime("%d.%m.%y %H:%M") %></div>
-    <div class="subject"><%= user_message.subject %></div>
-    <div class="message"><%=h user_message.body %></div>
-  </div>
-  <% end %>
-  <div class="user_message_links">
-    <% link_to({:controller => "user_messages", :action => "destroy", :id => user_message.id, :directory => @directory}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) do %>
-    <div class="delete"></div>
-    <% end %>
-    <% if @directory != "archive" && @directory != "sent" %>
-      <% link_to({:controller => "user_messages", :action => "archive", :id => user_message.id}, :confirm => self.l(:text_message_archive_confirmation)) do %>
-      <div class="archive"></div>
-      <% end %>
-    <% end %>
-  </div>
-<% end unless @user_messages.nil? %>
+  <% end unless @user_messages.nil? %>
+</div>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'user_message' %>
@@ -39,7 +51,7 @@
 
 <% content_for :sidebar_right do %>
   	<li><%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-passwd') %></li>
-<% if !@user_messages.empty? && @directory == "trash" %>
+  	<% if !@user_messages.empty? && @directory == "trash" %>
   	<li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
-<% end %>
+  	<% end %>
 <% end %>

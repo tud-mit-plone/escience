@@ -2,6 +2,7 @@ class UserMessage < ActiveRecord::Base
     belongs_to :user
     belongs_to :receiver, :class_name => "User", :foreign_key => "receiver_id"
 
+    
     # State:    0 read message
     #           1 new message
     #           2 deleted message

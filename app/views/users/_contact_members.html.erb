@@ -23,8 +23,8 @@
       <%= user.name %> <%= (!user.department.empty?) ? "(#{user.department})" : "" %>
       </td>    
       <td width="50">
-        <% link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
-        <% link_to(:controller => 'user_messages', :action => 'new', :id => user.id) do %><div class="sendMessage"></div><% end %>
+        <%= link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
+        <%= link_to(:controller => 'user_messages', :action => 'new', :id => user.id) do %><div class="sendMessage"></div><% end %>
       </td>
     </tr>
   <% end %>

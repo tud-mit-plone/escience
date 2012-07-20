@@ -52,9 +52,6 @@ de:
       about_x_hours:
         one: 'etwa 1 Stunde'
         other: 'etwa %{count} Stunden'
-      x_hours:
-        one:   "1 Stunde"
-        other: "%{count} Stunden"
       x_days:
         one: '1 Tag'
         other: '%{count} Tagen'
@@ -146,7 +143,7 @@ de:
         greater_than_start_date: "muss größer als Anfangsdatum sein"
         not_same_project: "gehört nicht zum selben Projekt"
         circular_dependency: "Diese Beziehung würde eine zyklische Abhängigkeit erzeugen"
-        cant_link_an_issue_with_a_descendant: "Ein Ticket kann nicht mit einer ihrer Unteraufgaben verlinkt werden"
+        cant_link_an_issue_with_a_descendant: "Eine Aufgabe kann nicht mit einer ihrer Unteraufgaben verlinkt werden"
 
   actionview_instancetag_blank_option: Bitte auswählen
 
@@ -183,30 +180,30 @@ de:
   notice_api_access_key_reseted: Ihr API-Zugriffsschlüssel wurde zurückgesetzt.
   notice_failed_to_save_issues: "%{count} von %{total} ausgewählten Arbeitsansweisungen konnte(n) nicht gespeichert werden: %{ids}."
   notice_failed_to_save_members: "Benutzer konnte nicht gespeichert werden: %{errors}."
-  notice_no_issue_selected: "Kein Ticket ausgewählt! Bitte wählen Sie die Arbeitsansweisungen, die Sie bearbeiten möchten."
+  notice_no_issue_selected: "Kein Aufgaben ausgewählt! Bitte wählen Sie die Arbeitsansweisungen, die Sie bearbeiten möchten."
   notice_account_pending: "Ihr Konto wurde erstellt und wartet jetzt auf die Genehmigung des Administrators."
   notice_default_data_loaded: Die Standard-Konfiguration wurde erfolgreich geladen.
   notice_unable_delete_version: Die Version konnte nicht gelöscht werden.
   notice_unable_delete_time_entry: Der Zeiterfassungseintrag konnte nicht gelöscht werden.
-  notice_issue_done_ratios_updated: Der Ticket-Fortschritt wurde aktualisiert.
+  notice_issue_done_ratios_updated: Der Aufgaben-Fortschritt wurde aktualisiert.
   notice_no_search_result: Keine Ergebnisse für die Suchanfrage gefunden.
 
   error_can_t_load_default_data: "Die Standard-Konfiguration konnte nicht geladen werden: %{value}"
   error_scm_not_found: Eintrag und/oder Revision existiert nicht im Projektarchiv.
   error_scm_command_failed: "Beim Zugriff auf das Projektarchiv ist ein Fehler aufgetreten: %{value}"
   error_scm_annotate: "Der Eintrag existiert nicht oder kann nicht annotiert werden."
-  error_issue_not_found_in_project: 'Das Ticket wurde nicht gefunden oder gehört nicht zu diesem Projekt.'
+  error_issue_not_found_in_project: 'Die Aufgabe wurde nicht gefunden oder gehört nicht zu diesem Projekt.'
   error_no_tracker_in_project: Diesem Projekt ist keine Aufgabenart zugeordnet. Bitte überprüfen Sie die Projekteinstellungen.
-  error_no_default_issue_status: Es ist kein Status als Standard definiert. Bitte überprüfen Sie Ihre Konfiguration (unter "Administration -> Ticket-Status").
+  error_no_default_issue_status: Es ist kein Status als Standard definiert. Bitte überprüfen Sie Ihre Konfiguration (unter "Administration -> Aufgaben-Status").
   error_can_not_delete_custom_field: Kann das benutzerdefinierte Feld nicht löschen.
   error_can_not_delete_tracker: Diese Aufgabenart enthält Arbeitsansweisungen und kann nicht gelöscht werden.
   error_can_not_remove_role: Diese Rolle wird verwendet und kann nicht gelöscht werden.
-  error_can_not_reopen_issue_on_closed_version: Das Ticket ist einer abgeschlossenen Version zugeordnet und kann daher nicht wieder geöffnet werden.
+  error_can_not_reopen_issue_on_closed_version: Die Aufgabe ist einer abgeschlossenen Version zugeordnet und kann daher nicht wieder geöffnet werden.
   error_can_not_archive_project: Dieses Projekt kann nicht archiviert werden.
-  error_issue_done_ratios_not_updated: Der Ticket-Fortschritt wurde nicht aktualisiert.
+  error_issue_done_ratios_not_updated: Der Aufgaben-Fortschritt wurde nicht aktualisiert.
   error_workflow_copy_source: Bitte wählen Sie eine Quell-Aufgabenart und eine Quell-Rolle.
   error_workflow_copy_target: Bitte wählen Sie die Ziel-Aufgabenart und -Rollen.
-  error_unable_delete_issue_status: "Der Ticket-Status konnte nicht gelöscht werden."
+  error_unable_delete_issue_status: "Der Aufgaben-Status konnte nicht gelöscht werden."
   error_unable_to_connect: Fehler beim Verbinden (%{value})
   error_empty_message: Bitte befüllen Sie die nötigen Eingabefelder.
   
@@ -273,15 +270,15 @@ de:
   field_category: Kategorie
   field_title: Titel
   field_project: Projekt
-  field_issue: Ticket
+  field_issue: Aufgabe
   field_status: Status
   field_notes: Kommentare
-  field_is_closed: Ticket geschlossen
+  field_is_closed: Aufgabe geschlossen
   field_is_default: Standardeinstellung
   field_tracker: Aufgabenart
   field_subject: Thema
   field_due_date: Abgabedatum
-  field_assigned_to: Senden an
+  field_assigned_to: Zugewiesen
   field_priority: Priorität
   field_fixed_version: Zielversion
   field_user: Benutzer
@@ -326,7 +323,7 @@ de:
   field_spent_on: Datum
   field_identifier: Kennung
   field_is_filter: Als Filter benutzen
-  field_issue_to: Zugehöriges Ticket
+  field_issue_to: Zugehörige Aufgabe
   field_delay: Pufferzeit
   field_assignable: Arbeitsansweisungen können dieser Rolle zugewiesen werden
   field_redirect_existing_links: Existierende Links umleiten
@@ -369,8 +366,8 @@ de:
   setting_autologin: Automatische Anmeldung
   setting_date_format: Datumsformat
   setting_time_format: Zeitformat
-  setting_cross_project_issue_relations: Ticket-Beziehungen zwischen Projekten erlauben
-  setting_issue_list_default_columns: Default-Spalten in der Ticket-Auflistung
+  setting_cross_project_issue_relations: Aufgaben-Beziehungen zwischen Projekten erlauben
+  setting_issue_list_default_columns: Default-Spalten in der Aufgaben-Auflistung
   setting_emails_footer: E-Mail-Fußzeile
   setting_protocol: Protokoll
   setting_per_page_options: Objekte pro Seite
@@ -391,9 +388,9 @@ de:
   setting_password_min_length: Mindestlänge des Kennworts
   setting_new_project_user_role_id: Rolle, die einem Nicht-Administrator zugeordnet wird, der ein Projekt erstellt
   setting_default_projects_modules: Standardmäßig aktivierte Module für neue Projekte
-  setting_issue_done_ratio: Berechne den Ticket-Fortschritt mittels
-  setting_issue_done_ratio_issue_field: Ticket-Feld %-erledigt
-  setting_issue_done_ratio_issue_status: Ticket-Status
+  setting_issue_done_ratio: Berechne den Aufgaben-Fortschritt mittels
+  setting_issue_done_ratio_issue_field: Aufgaben-Feld %-erledigt
+  setting_issue_done_ratio_issue_status: Aufgaben-Status
   setting_start_of_week: Wochenanfang
   setting_rest_api_enabled: REST-Schnittstelle aktivieren
   setting_cache_formatted_text: Formatierten Text im Cache speichern
@@ -405,11 +402,11 @@ de:
   permission_manage_members: Mitglieder verwalten
   permission_manage_project_activities: Aktivitäten (Zeiterfassung) verwalten
   permission_manage_versions: Versionen verwalten
-  permission_manage_categories: Ticket-Kategorien verwalten
+  permission_manage_categories: Aufgaben-Kategorien verwalten
   permission_view_issues: Anweisung anzeigen
   permission_add_issues: Anweisung hinzufügen
   permission_edit_issues: Anweisung bearbeiten
-  permission_manage_issue_relations: Ticket-Beziehungen verwalten
+  permission_manage_issue_relations: Aufgaben-Beziehungen verwalten
   permission_add_issue_notes: Kommentare hinzufügen
   permission_edit_issue_notes: Kommentare bearbeiten
   permission_edit_own_issue_notes: Eigene Kommentare bearbeiten
@@ -454,7 +451,7 @@ de:
   permission_export_wiki_pages: Wiki-Seiten exportieren
   permission_manage_subtasks: Unteraufgaben verwalten
 
-  project_module_issue_tracking: Ticket-Verfolgung
+  project_module_issue_tracking: Aufgaben-Verfolgung
   project_module_time_tracking: Zeiterfassung
   project_module_news: News
   project_module_documents: Content
@@ -472,7 +469,7 @@ de:
   label_usermessage: Nachrichten
   label_usermessage_announce: neue Nachricht
   label_usermessage_announce_plural: neue Nachrichten
-  label_mymessage: Arbeitsanweisung
+  label_mymessage: Arbeitsanweisungen
   label_mymessage_plural: Arbeitsanweisungen
   label_projectspec: Projektspezifisch
   label_knowledge: Wissensräume
@@ -499,6 +496,7 @@ de:
   label_issues_by: "Arbeitsanweisungen von %{value}"
   label_issue_added: Arbeitsanweisung hinzugefügt
   label_issue_updated: Arbeitsanweisung aktualisiert
+  label_issue_parent: Übergeordnete Arbeitsanweisung
   label_document: Dokument
   label_document_new: Neues Dokument
   label_document_plural: Dokumente
@@ -514,11 +512,11 @@ de:
   label_tracker_plural: Aufgabenarten
   label_tracker_new: Neue Aufgabenart
   label_workflow: Workflow
-  label_issue_status: Ticket-Status
-  label_issue_status_plural: Ticket-Status
+  label_issue_status: Aufgaben-Status
+  label_issue_status_plural: Aufgaben-Status
   label_issue_status_new: Neuer Status
-  label_issue_category: Ticket-Kategorie
-  label_issue_category_plural: Ticket-Kategorien
+  label_issue_category: Aufgaben-Kategorie
+  label_issue_category_plural: Aufgaben-Kategorien
   label_issue_category_new: Neue Kategorie
   label_custom_field: Benutzerdefiniertes Feld
   label_custom_field_plural: Benutzerdef. Felder
@@ -739,7 +737,7 @@ de:
   label_preview: Vorschau
   label_feed_plural: Feeds
   label_changes_details: Details aller Änderungen
-  label_issue_tracking: Arbeitsanweisung
+  label_issue_tracking: Arbeitsanweisungen
   label_spent_time: Aufgewendete Zeit
   label_overall_spent_time: Aufgewendete Zeit aller Projekte anzeigen
   label_f_hour: "%{value} Stunde"
@@ -853,7 +851,7 @@ de:
   label_version_sharing_hierarchy: Mit Projekthierarchie
   label_version_sharing_tree: Mit Projektbaum
   label_version_sharing_system: Mit allen Projekten
-  label_update_issue_done_ratios: Ticket-Fortschritt aktualisieren
+  label_update_issue_done_ratios: Aufgaben-Fortschritt aktualisieren
   label_copy_source: Quelle
   label_copy_target: Ziel
   label_copy_same_as_target: So wie das Ziel
@@ -888,7 +886,7 @@ de:
   button_list: Liste
   button_view: Anzeigen
   button_move: Verschieben
-  button_move_and_follow: Verschieben und Ticket anzeigen
+  button_move_and_follow: Verschieben und Aufgabe anzeigen
   button_back: Zurück
   button_cancel: Abbrechen
   button_activate: Aktivieren
@@ -904,7 +902,7 @@ de:
   button_rename: Umbenennen
   button_change_password: Kennwort ändern
   button_copy: Kopieren
-  button_copy_and_follow: Kopieren und Ticket anzeigen
+  button_copy_and_follow: Kopieren und Aufgabe anzeigen
   button_annotate: Annotieren
   button_update: Bearbeiten
   button_configure: Konfigurieren
@@ -956,9 +954,9 @@ de:
   text_unallowed_characters: Nicht erlaubte Zeichen
   text_comma_separated: Mehrere Werte erlaubt (durch Komma getrennt).
   text_line_separated: Mehrere Werte sind erlaubt (eine Zeile pro Wert).
-  text_issues_ref_in_commit_messages: Ticket-Beziehungen und -Status in Commit-Log-Meldungen
-  text_issue_added: "Ticket %{id} wurde erstellt von %{author}."
-  text_issue_updated: "Ticket %{id} wurde aktualisiert von %{author}."
+  text_issues_ref_in_commit_messages: Aufgaben-Beziehungen und -Status in Commit-Log-Meldungen
+  text_issue_added: "Aufgabe %{id} wurde erstellt von %{author}."
+  text_issue_updated: "Aufgabe %{id} wurde aktualisiert von %{author}."
   text_wiki_destroy_confirmation: Sind Sie sicher, dass Sie dieses Wiki mit sämtlichem Inhalt löschen möchten?
   text_issue_category_destroy_question: "Einige Arbeitsanweisungen (%{count}) sind dieser Kategorie zugeodnet. Was möchten Sie tun?"
   text_issue_category_destroy_assignments: Kategorie-Zuordnung entfernen
@@ -973,10 +971,10 @@ de:
   text_file_repository_writable: Verzeichnis für Dateien beschreibbar
   text_plugin_assets_writable: Verzeichnis für Plugin-Assets beschreibbar
   text_rmagick_available: RMagick verfügbar (optional)
-  text_destroy_time_entries_question: Es wurden bereits %{hours} Stunden auf dieses Ticket gebucht. Was soll mit den Aufwänden geschehen?
+  text_destroy_time_entries_question: Es wurden bereits %{hours} Stunden auf diese Aufgabe gebucht. Was soll mit den Aufwänden geschehen?
   text_destroy_time_entries: Gebuchte Aufwände löschen
   text_assign_time_entries_to_project: Gebuchte Aufwände dem Projekt zuweisen
-  text_reassign_time_entries: 'Gebuchte Aufwände diesem Ticket zuweisen:'
+  text_reassign_time_entries: 'Gebuchte Aufwände dieser Aufgabe zuweisen:'
   text_user_wrote: "%{value} schrieb:"
   text_enumeration_destroy_question: "%{count} Objekt(e) sind diesem Wert zugeordnet."
   text_enumeration_category_reassign_to: 'Die Objekte stattdessen diesem Wert zuordnen:'
@@ -1052,7 +1050,7 @@ de:
   label_issue_status_updated: Status aktualisiert
   label_issue_priority_updated: Priorität aktualisiert
   label_issues_visibility_own: Arbeitsansweisungen die folgender User erstellt hat oder die ihm zugewiesen sind
-  field_issues_visibility: Ticket Sichtbarkeit
+  field_issues_visibility: Aufgaben-Sichtbarkeit
   label_issues_visibility_all: Alle Arbeitsansweisungen
   permission_set_own_issues_private: Eigene Arbeitsansweisungen privat oder öffentlich markieren
   field_is_private: Privat
@@ -1073,6 +1071,7 @@ de:
   text_scm_config: Die SCM-Kommandos können in der in config/configuration.yml konfiguriert werden. Redmine muss anschließend neu gestartet werden.
   text_scm_command_not_available: Scm Kommando ist nicht verfügbar. Bitte prüfen Sie die Einstellungen im Administrationspanel.
 
+  notice_project_alreadyexists: Es existiert bereits ein Projekt mit diesem Namen.
   notice_issue_successful_create: Issue %{id} created.
   label_between: between
   setting_issue_group_assignment: Allow issue assignment to groups
@@ -1121,7 +1120,7 @@ de:
   setting_commit_cross_project_ref: Erlauben auf Arbeitsansweisungen aller anderen Projekte zu referenzieren
   text_issue_conflict_resolution_add_notes: Meine Änderungen übernehmen und alle anderen Änderungen verwerfen
   text_issue_conflict_resolution_overwrite: Meine Änderungen trotzdem übernehmen (vorherige Notizen bleiben erhalten aber manche können überschrieben werden)
-  notice_issue_update_conflict: Das Ticket wurde von einem anderen Nutzer überarbeitet während Ihrer Bearbeitung.
+  notice_issue_update_conflict: Die Aufgabe wurde von einem anderen Nutzer überarbeitet während Ihrer Bearbeitung.
   text_issue_conflict_resolution_cancel: Meine Änderungen verwerfen und %{link} neu anzeigen
   permission_manage_related_issues: Zugehörige Arbeitsansweisungen verwalten
   field_ldap_filter: LDAP Filter
@@ -1136,5 +1135,11 @@ de:
   tooltip_sidebar_archive: Alle wichtigen Nachrichten, die Sie für archivierungswürdig halten.
   tooltip_sidebar_trash: Der Papierkorb für Ihre internen Nachrichten auf der eScience-Plattform
   tooltip_sidebar_issues: Sehen Sie die Arbeitsanweisungen, die Ihnen in den einzelnen Projekt zugeordnet wurden.
-  tooltip_sidebar_issues_explain: "Die %{position} in Klammern teilt Ihnen mit, dass Sie %{position} Arbeitsanweisungen noch nicht angesehen haben."
+  tooltip_sidebar_issues_explain: "Die (%{position}) teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
   tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen.
+  
+  tooltip_user_message_archive: Archivieren Sie diese Nachricht.
+  tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Ordner <i>gelöscht</i> verschoben.)
+  tooltip_user_message_deleteFin: Löschen Sie diese Nachricht entgültig.
+  tooltip_user_message_emptyTrash: Leeren Sie den <i>gelöscht</i> Ordner. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
+  tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.

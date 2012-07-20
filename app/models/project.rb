@@ -20,7 +20,6 @@ class Project < ActiveRecord::Base
 
   # Project statuses
   STATUS_ACTIVE     = 1
-  STATUS_CLOSED     = 5
   STATUS_ARCHIVED   = 9
 
   # Maximum length for project identifiers
@@ -122,7 +121,7 @@ class Project < ActiveRecord::Base
       self.enabled_module_names = Setting.default_projects_modules
     end
     if !initialized.key?('trackers') && !initialized.key?('tracker_ids')
-      self.trackers = Tracker.sorted.all
+      self.trackers = Tracker.all
     end
   end
 
@@ -162,11 +161,12 @@ class Project < ActiveRecord::Base
   # * :with_subprojects => limit the condition to project and its subprojects
   # * :member => limit the condition to the user projects
   def self.allowed_to_condition(user, permission, options={})
-    perm = Redmine::AccessControl.permission(permission)
-    base_statement = (perm && perm.read? ? "#{Project.table_name}.status <> #{Project::STATUS_ARCHIVED}" : "#{Project.table_name}.status = #{Project::STATUS_ACTIVE}")
-    if perm && perm.project_module
-      # If the permission belongs to a project module, make sure the module is enabled
-      base_statement << " AND #{Project.table_name}.id IN (SELECT em.project_id FROM #{EnabledModule.table_name} em WHERE em.name='#{perm.project_module}')"
+    base_statement = "#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"
+    if perm = Redmine::AccessControl.permission(permission)
+      unless perm.project_module.nil?
+        # If the permission belongs to a project module, make sure the module is enabled
+        base_statement << " AND #{Project.table_name}.id IN (SELECT em.project_id FROM #{EnabledModule.table_name} em WHERE em.name='#{perm.project_module}')"
+      end
     end
     if options[:project]
       project_statement = "#{Project.table_name}.id = #{options[:project].id}"
@@ -325,14 +325,6 @@ class Project < ActiveRecord::Base
     update_attribute :status, STATUS_ACTIVE
   end
 
-  def close
-    self_and_descendants.status(STATUS_ACTIVE).update_all :status => STATUS_CLOSED
-  end
-
-  def reopen
-    self_and_descendants.status(STATUS_CLOSED).update_all :status => STATUS_ACTIVE
-  end
-
   # Returns an array of projects the project can be moved to
   # by the current user
   def allowed_parents
@@ -412,7 +404,7 @@ class Project < ActiveRecord::Base
     @rolled_up_trackers ||=
       Tracker.find(:all, :joins => :projects,
                          :select => "DISTINCT #{Tracker.table_name}.*",
-                         :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status <> #{STATUS_ARCHIVED}", lft, rgt],
+                         :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status = #{STATUS_ACTIVE}", lft, rgt],
                          :order => "#{Tracker.table_name}.position")
   end
 
@@ -431,20 +423,20 @@ class Project < ActiveRecord::Base
   def rolled_up_versions
     @rolled_up_versions ||=
       Version.scoped(:include => :project,
-                     :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status <> #{STATUS_ARCHIVED}", lft, rgt])
+                     :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status = #{STATUS_ACTIVE}", lft, rgt])
   end
 
   # Returns a scope of the Versions used by the project
   def shared_versions
     if new_record?
       Version.scoped(:include => :project,
-                     :conditions => "#{Project.table_name}.status <> #{Project::STATUS_ARCHIVED} AND #{Version.table_name}.sharing = 'system'")
+                     :conditions => "#{Project.table_name}.status = #{Project::STATUS_ACTIVE} AND #{Version.table_name}.sharing = 'system'")
     else
       @shared_versions ||= begin
         r = root? ? self : root
         Version.scoped(:include => :project,
                        :conditions => "#{Project.table_name}.id = #{id}" +
-                                      " OR (#{Project.table_name}.status <> #{Project::STATUS_ARCHIVED} AND (" +
+                                      " OR (#{Project.table_name}.status = #{Project::STATUS_ACTIVE} AND (" +
                                           " #{Version.table_name}.sharing = 'system'" +
                                           " OR (#{Project.table_name}.lft >= #{r.lft} AND #{Project.table_name}.rgt <= #{r.rgt} AND #{Version.table_name}.sharing = 'tree')" +
                                           " OR (#{Project.table_name}.lft < #{lft} AND #{Project.table_name}.rgt > #{rgt} AND #{Version.table_name}.sharing IN ('hierarchy', 'descendants'))" +
@@ -523,13 +515,6 @@ class Project < ActiveRecord::Base
     s << ' root' if root?
     s << ' child' if child?
     s << (leaf? ? ' leaf' : ' parent')
-    unless active?
-      if archived?
-        s << ' archived'
-      else
-        s << ' closed'
-      end
-    end
     s
   end
 
@@ -573,20 +558,11 @@ class Project < ActiveRecord::Base
     end
   end
 
-  # Return true if this project allows to do the specified action.
+  # Return true if this project is allowed to do the specified action.
   # action can be:
   # * a parameter-like Hash (eg. :controller => 'projects', :action => 'edit')
   # * a permission Symbol (eg. :edit_project)
   def allows_to?(action)
-    if archived?
-      # No action allowed on archived projects
-      return false
-    end
-    unless active? || Redmine::AccessControl.read_action?(action)
-      # No write action allowed on closed projects
-      return false
-    end
-    # No action allowed on disabled modules
     if action.is_a? Hash
       allowed_actions.include? "#{action[:controller]}/#{action[:action]}"
     else
