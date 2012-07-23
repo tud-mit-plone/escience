@@ -1230,7 +1230,8 @@ module ApplicationHelper
     #tags << javascript_include_tag("jquery.tagsinput.min.js")
     #tags << "\n".html_safe
     #tags << javascript_include_tag("jquery.jbar.js")
-    #tags << "\n".html_safe +  javascript_tag(flash_notifications)
+    tags << javascript_tag(flash_notifications)
+    tags << "\n".html_safe
 
     unless User.current.pref.warn_on_leaving_unsaved == '0'
       tags << "\n".html_safe + javascript_tag("Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('#{escape_javascript( l(:text_warn_on_leaving_unsaved) )}'); });")
