@@ -462,6 +462,10 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_contact: Kontakt
+  label_privacypolicy: Datenschutz
+  label_imprint: Impressum
+  label_termsconditions: Nutzungsbedingungen
   label_organisation: Organisieren
   label_hello: Hallo
   label_specific: Seitenspezifisch
@@ -990,9 +994,9 @@ de:
   text_zoom_in: Zoom in
   text_zoom_out: Zoom out
 
-  default_role_manager: ManagerIn
-  default_role_developer: EntwicklerIn
-  default_role_reporter: ReporterIn
+  default_role_manager: ProjektleiterIn
+  default_role_developer: ForscherIn
+  default_role_reporter: DokumentatorIn
   default_tracker_bug: Fehler
   default_tracker_feature: Feature
   default_tracker_support: Unterstützung

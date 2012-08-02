@@ -195,10 +195,10 @@ $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'
 		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
 		<div id="miscellaneous">
 		   <ul>
-		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %>Kontakt<%end%></li>
-		      <li class="withborder"><a href="/static/agb.html" title="Nutzungsbedingungen">Nutzungsbedingungen</a></li>
-		      <li class="withborder"><a href="/static/datenschutz.html" title="Datenschutz">Datenschutz</a></li>
-		      <li><a href="/static/impressum.html" title="Impressum">Impressum</a></li>
+		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+		      <li class="withborder"><a href="/static/agb.html" title="Nutzungsbedingungen"><%= l(:label_termsconditions) %></a></li>
+		      <li class="withborder"><a href="/static/datenschutz.html" title="Datenschutz"><%= l(:label_privacypolicy) %></a></li>
+		      <li><a href="/static/impressum.html" title="Impressum"><%= l(:label_imprint) %></a></li>
 		   </ul>
 		</div> 
 	</div>
