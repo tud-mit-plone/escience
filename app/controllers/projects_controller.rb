@@ -78,7 +78,19 @@ class ProjectsController < ApplicationController
     @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @trackers = Tracker.sorted.all
     @project = Project.new
+    if Setting.sequential_project_identifiers?
+      identifier_words = params[:project][:name].downcase.split
+      word_nr = 0
+      identifier = identifier_words[word_nr]
+      word_nr = word_nr + 1
+      while !Project.find_by_identifier(identifier).nil? && word_nr<identifier_words.length
+        identifier += "_"+ identifier_words[word_nr]
+        word_nr = word_nr + 1
+      end
+      params[:project][:identifier] = identifier
+    end
     @project.safe_attributes = params[:project]
+    
 
     if validate_parent_id && @project.save
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')

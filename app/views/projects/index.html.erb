@@ -10,7 +10,7 @@
 	    <li><%= link_to(l(:label_issue_view_all), issues_path) %></li>
     <% end %>
 	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-	    <li><%= link_to(l(:label_overall_spent_time), time_entries_path) + ' |' if User.current.allowed_to?(:view_time_entries, nil, :global => true) %></li>
+	    <li><%= link_to(l(:label_overall_spent_time), time_entries_path) %></li>
 	<% end %>
     <li><%= link_to l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil } %></li>
 <% end %>
@@ -20,10 +20,13 @@
 <%= render_project_hierarchy(@projects)%>
 
 <% if User.current.logged? %>
+<!--
 <p style="text-align:right;">
 <span class="my-project"><%= l(:label_my_projects) %></span>
 </p>
+-->
 <% end %>
+
 
 <% other_formats_links do |f| %>
   <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>

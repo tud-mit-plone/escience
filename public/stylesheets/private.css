@@ -629,6 +629,10 @@
 	  margin-left: 0px;
 	  padding-left: 0px;
 	}
+	
+	.controller-projects.action-new #main input[type=submit] {
+  	float: right;
+	}
 
 	.controller-users.action-show .user_information_main {
 	  float: left;
@@ -657,6 +661,22 @@
 	   padding-left: 20px !important;
 	}
 	
+	.controller-projects.action-index #main ul {
+  	margin: 0;
+  	padding: 0;
+	}  
+
+	.controller-projects.action-index #main div {
+  	margin-left: 20px;
+	}
+	
+	.controller-projects.action-index #main div.root {
+  	margin-left: 0px;
+	}  
+	
+	.controller-projects.action-index #main div.description {
+  	margin: 0 0 20px 20px;
+	}
 	
 	.controller-issues.action-show #issue_project_id {
   	max-width: 527px;
