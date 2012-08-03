@@ -12,10 +12,6 @@
   <% unless @project.homepage.blank? %>
     <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage)).html_safe %></li>
   <% end %>
-  <% if @subprojects.any? %>
-    <li><%=l(:label_subproject_plural)%>:
-      <%= @subprojects.collect{|p| link_to(h(p), :action => 'show', :id => p)}.join(", ").html_safe %></li>
-  <% end %>
   <% @project.visible_custom_field_values.each do |custom_value| %>
   <% if !custom_value.value.blank? %>
      <li><%=h custom_value.custom_field.name %>: <%=h show_value(custom_value) %></li>
@@ -23,6 +19,13 @@
   <% end %>
   </ul>
 </div>
+
+<% if @subprojects.any? %>
+<fieldset>
+  <legend><%=l(:label_subproject_plural)%></legend>
+  <p><%= @subprojects.collect{|p| link_to(h(p), :action => 'show', :id => p)}.join(", ").html_safe %></p>
+</fieldset>
+<% end %>
 
 <% if User.current.allowed_to?(:view_issues, @project) %>
 <fieldset>

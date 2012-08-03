@@ -112,9 +112,14 @@
 	
 	.sidebar ul {
 		padding: 5px 10px 0px 10px;
-		margin:0px;
+		margin: 0 0 0 10px;
 		list-style-position:inside;
 		list-style-type:disc;
+		text-indent: -10px;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 	}
 	
 	#admin-menu ul ul {
@@ -173,10 +178,11 @@
 	
 	.sidebar .menu-children {
   	padding: 1px 10px 0 10px;
+  	margin: 0;
 	}
 	
 	.sidebar .menu-children li {
-  	padding: 1px 5px;
+  	padding: 0px 5px;
 	}
 	
 	
@@ -525,12 +531,16 @@
 	}	
 	
 	#new_project label.floating {
-		width:100px;
+		width:170px;
 		display: inline-block;
 	}
 	
-	#new_project input[type=text] {
-		width:300px;
+	#new_project #project_name {
+  	width: 520px;
+	}
+	
+	#new_project #project_homepage {
+		width: 460px;
 	}
 	
 	#new_project textarea {
@@ -637,6 +647,11 @@
 	.controller-users.action-show .user_information_main {
 	  float: left;
 	  margin-left: 30px;
+	}
+
+	.controller-projects.action-show #subprojects {
+  	margin-top: 10px;
+  	font-size: 16px;
 	}
 
 	.controller-users.action-show h4 {

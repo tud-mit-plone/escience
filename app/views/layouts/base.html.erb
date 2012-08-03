@@ -157,28 +157,25 @@ $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'
 	    <div id="right" class="grid_3">
 	    	<% if User.current.logged? %>
 		    <div id="quick-search">
-		        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
+	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
 		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
 		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
 		        <%= submit_tag "" %>
-		        <% end %>
+	        <% end %>
 		    </div>
 		    <div id="sidebar_right" class="sidebar">
 		    	<%= render_menu :sidebarright_menu %>
+		    	<% unless (yield :sidebar_right) == "" %>
 		    	<div class="splitter"><%= l(:label_specific) %></div>
 		    	<ul>
-	        <%end%>
-	        	<% unless (yield :sidebar_right).nil? %>
-		        	<%= yield :sidebar_right %>
-		        <%else%>
-		        	<%= l(:label_specific_none) %>
-		        <%end%>
-		    <% if User.current.logged? %>    
+	        	<%= yield :sidebar_right %>
 		    	</ul>
-	        </div>
-	        <%end%>		    	
-
-	        <%#= call_hook :view_layouts_base_sidebar %>
+		      <% end %>
+        </div>
+        <% else %>		    	
+		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>
+		    <% end %>
+        <%#= call_hook :view_layouts_base_sidebar %>
 	    </div>
 		<div class="clear"></div>
 	</div>

@@ -260,9 +260,11 @@ module ApplicationHelper
         project_name = l(:label_projectspec)
       else 
         project_name = "#{@project}"
-      end
-            
-      project_name = shorten(project_name,17)
+        if project_name == ""
+          project_name = l(:label_projectnew)
+        end
+        project_name = shorten(project_name,15)
+      end    
       
       s = '<div class="splitter">' +
           '<div id="projects_styled" class="styled_select "><span>'+project_name+'</span><b><i></i></b></div>' +
