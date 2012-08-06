@@ -48,12 +48,12 @@ module IssuesHelper
     @cached_label_priority ||= l(:field_priority)
     @cached_label_project ||= l(:field_project)
 
-    "<h2>".html_safe + link_to_issue(issue, {:link_text => false}) + "</h2><br />".html_safe +
+    link_to_issue(issue) + "<br /><br />".html_safe +
       "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />".html_safe +
       "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />".html_safe +
-      "<strong>#{@cached_label_start_date}</strong>: #{format_date(issue.start_date)}&nbsp;&nbsp;&nbsp;".html_safe +
+      "<strong>#{@cached_label_start_date}</strong>: #{format_date(issue.start_date)}<br />".html_safe +
       "<strong>#{@cached_label_due_date}</strong>: #{format_date(issue.due_date)}<br />".html_safe +
-#      "<strong>#{@cached_label_assigned_to}</strong>: #{h(issue.assigned_to)}<br />".html_safe +
+      "<strong>#{@cached_label_assigned_to}</strong>: #{h(issue.assigned_to)}<br />".html_safe +
       "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}".html_safe
   end
 
@@ -90,48 +90,6 @@ module IssuesHelper
     end
     s << '</table></form>'
     s.html_safe
-  end
-
-  class IssueFieldsRows
-    include ActionView::Helpers::TagHelper
-
-    def initialize
-      @left = []
-      @right = []
-    end
-
-    def left(*args)
-      args.any? ? @left << cells(*args) : @left
-    end
-
-    def right(*args)
-      args.any? ? @right << cells(*args) : @right
-    end
-
-    def size
-      @left.size > @right.size ? @left.size : @right.size
-    end
-
-    def to_html
-      html = ''.html_safe
-      blank = content_tag('th', '') + content_tag('td', '')
-      size.times do |i|
-        left = @left[i] || blank
-        right = @right[i] || blank
-        html << content_tag('tr', left + right)
-      end
-      html
-    end
-
-    def cells(label, text, options={})
-      content_tag('th', "#{label}:", options) + content_tag('td', text, options)
-    end
-  end
-
-  def issue_fields_rows
-    r = IssueFieldsRows.new
-    yield r
-    r.to_html
   end
 
   def render_custom_fields_rows(issue)
