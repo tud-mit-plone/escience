@@ -206,6 +206,7 @@ de:
   error_unable_delete_issue_status: "Der Aufgaben-Status konnte nicht gelöscht werden."
   error_unable_to_connect: Fehler beim Verbinden (%{value})
   error_empty_message: Bitte befüllen Sie die nötigen Eingabefelder.
+  error_projectname_exists: Der Projektname existiert bereits. Bitte wählen Sie einen anderen.
   
   warning_attachments_not_saved: "%{count} Datei(en) konnten nicht gespeichert werden."
 
@@ -462,6 +463,7 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_subprojectof: Übergeordnetes Projekt
   label_contact: Kontakt
   label_privacypolicy: Datenschutz
   label_imprint: Impressum

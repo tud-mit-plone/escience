@@ -6,6 +6,17 @@
 
 <h2><%=l(:label_overview)%> <%= l(:label_forproject) %> <%= @project.name %></h2>
 
+<% unless @topproject.nil? %>
+<p id="subprojectof">
+  <%= l(:label_subprojectof) %>:
+  <% if User.current.allowed_to?(:view_project, @topproject) %>
+  <%= link_to(h(@topproject.name), :action => 'show', :id => @topproject.id).html_safe %>
+  <% else %>
+  <%= h(@topproject.name) %>
+  <% end %>
+</p>
+<% end %>
+
 <div class="wiki">
   <%= textilizable @project.description %>
   <ul>

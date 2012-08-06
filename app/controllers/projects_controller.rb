@@ -87,12 +87,13 @@ class ProjectsController < ApplicationController
         identifier += "_"+ identifier_words[word_nr]
         word_nr = word_nr + 1
       end
+      valid_projectname = !Project.find_by_identifier(identifier).nil?
       params[:project][:identifier] = identifier
     end
     @project.safe_attributes = params[:project]
     
 
-    if validate_parent_id && @project.save
+    if validate_parent_id && @project.save && valid_projectname
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
       # Add current user as a project member if he is not admin
       unless User.current.admin?
@@ -112,6 +113,9 @@ class ProjectsController < ApplicationController
       end
     else
       respond_to do |format|
+        if valid_projectname
+          flash[:notice] = l(:error_projectname_exists)
+        end
         format.html { render :action => 'new' }
         format.api  { render_validation_errors(@project) }
       end
@@ -163,6 +167,7 @@ class ProjectsController < ApplicationController
 
     @users_by_role = @project.users_by_role
     @subprojects = @project.children.visible.all
+    @topproject = @project.parent
     @news = @project.news.find(:all, :limit => 5, :include => [ :author, :project ], :order => "#{News.table_name}.created_on DESC")
     @trackers = @project.rolled_up_trackers
 
@@ -187,7 +192,7 @@ class ProjectsController < ApplicationController
     @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @issue_category ||= IssueCategory.new
     @member ||= @project.members.new
-    @trackers = Tracker.sorted.all
+    @trackers = Tracker.all
     @wiki ||= @project.wiki
   end
 
