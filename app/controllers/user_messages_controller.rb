@@ -27,9 +27,6 @@ class UserMessagesController < ApplicationController
       @user_messages = msgs
     end
 
-p "--------------"
-p @user_messages[0]
-
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @user_messages }
@@ -159,6 +156,7 @@ p @user_messages[0]
           @user_message_clone.user = User.current
           @user_message_clone.state = 1
           @user_message_clone.author = recv.id
+          @user_message_clone.receiver_id = recv.id
           @user_message_clone.directory = UserMessage.received_directory
           noerror &= @user_message_clone.save
         end
