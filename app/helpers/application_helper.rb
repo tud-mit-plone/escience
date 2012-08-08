@@ -82,10 +82,24 @@ module ApplicationHelper
         subject = truncate(subject, :length => options[:truncate])
       end
     end
-    s = link_to "#{h(issue.tracker)} ##{issue.id}", {:controller => "issues", :action => "show", :id => issue},
+    if options[:title] == false
+      title = nil
+    end
+    if options[:link_text].nil?
+      link_text = "#{h(issue.tracker)} ##{issue.id}"
+    else
+      link_text = options[:link_text]
+    end
+
+    if options[:link_text] != false
+      s = link_to(link_text, {:controller => "issues", :action => "show", :id => issue},
                                                  :class => issue.css_classes,
-                                                 :title => title
-    s << h(": #{subject}") if subject
+                                                 :title => title)
+    else 
+      s = ""
+    end
+    
+    s << h("#{subject}") if subject
     s = h("#{issue.project} - ") + s if options[:project]
     s
   end
