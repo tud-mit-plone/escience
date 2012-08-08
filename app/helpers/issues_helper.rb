@@ -58,7 +58,8 @@ module IssuesHelper
   end
 
   def issue_heading(issue)
-    h("#{issue.tracker} ##{issue.id}")
+    h("#{issue.subject}")
+#    h("#{issue.tracker} ##{issue.id}")
   end
 
   def render_issue_subject_with_tree(issue)
