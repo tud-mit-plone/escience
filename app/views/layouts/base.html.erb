@@ -1,205 +1,182 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><%=h html_title %></title>
-<meta name="description" content="<%= Redmine::Info.app_name %>" />
-<meta name="keywords" content="issue,bug,tracker" />
-<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
-<%= csrf_meta_tag %>
-<%= favicon %>
-<%= stylesheet_link_tag 'application', :media => 'all' %>
-<%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
-<%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
-<%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
-<%= javascript_heads %>
-
-<% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})>0 ?  l(:tooltip_sidebar_issues_explain, :position => Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})) : "" %>
-<%= javascript_tag '
-// Jquery Funtion um alle Externen Links zu selektieren
-function externalLinks() {
-  return $j(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');
-}
-
-// Alle selektierten Externen Links werden mit den Attribute \'_blank\' erweitert und mit einem Title-Tag versehen.
-$j(document).ready(function() { 
-  externalLinks().attr({target: "_blank"})
-});
-$j(function() {addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'")});
-$j(function() {addToolTip(".sidebar .projects","'+l(:tooltip_sidebar_projects)+'")});
-$j(function() {addToolTip(".sidebar .user-messages","'+l(:tooltip_sidebar_user_messages)+'")});
-$j(function() {addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'")});
-$j(function() {addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'")});
-$j(function() {addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'")});
-$j(function() {addToolTip(".sidebar .issues","'+l(:tooltip_sidebar_issues)+'<br/>' + "#{issues}" + '")});
-$j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'")});
-'
-
-%>
-<%= heads_for_theme %>
-<!--[if IE 6]>
-    <style type="text/css">
-      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
-      body {behavior: url(<%= stylesheet_path "csshover.htc" %>);}
-    </style>
-<![endif]-->
-<%= call_hook :view_layouts_base_html_head %>
-<!-- page specific tags -->
-<%= yield :header_tags -%>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title><%=h html_title %></title>
+  <meta name="description" content="<%= Redmine::Info.app_name %>" />
+  <meta name="keywords" content="issue,bug,tracker" />
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+  <%= csrf_meta_tag %>
+  <%= favicon %>
+  <%= stylesheet_link_tag 'application', :media => 'all' %>
+  <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
+  <%= stylesheet_link_tag 'public', :media => 'all' unless User.current.logged?%>
+  <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
+  <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
+  <%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
+  <%= javascript_heads %>
+  
+  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})>0 ?  l(:tooltip_sidebar_issues_explain, :position => Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})) : "" %>
+  <%= javascript_tag '
+  // Jquery Funtion um alle Externen Links zu selektieren
+  function externalLinks() {
+    return $j(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');
+  }
+  
+  // Alle selektierten Externen Links werden mit den Attribute \'_blank\' erweitert und mit einem Title-Tag versehen.
+  $j(document).ready(function() {externalLinks().attr({target: "_blank"})});
+  $j(function() {addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'")});
+  $j(function() {addToolTip(".sidebar .projects","'+l(:tooltip_sidebar_projects)+'")});
+  $j(function() {addToolTip(".sidebar .user-messages","'+l(:tooltip_sidebar_user_messages)+'")});
+  $j(function() {addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'")});
+  $j(function() {addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'")});
+  $j(function() {addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'")});
+  $j(function() {addToolTip(".sidebar .issues","'+l(:tooltip_sidebar_issues)+'<br/>' + "#{issues}" + '")});
+  $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'")});
+  '
+  %>
+  <%= heads_for_theme %>
+  <!--[if IE 6]>
+      <style type="text/css">
+        * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+        body {behavior: url(<%= stylesheet_path "csshover.htc" %>);}
+      </style>
+  <![endif]-->
+  <%= call_hook :view_layouts_base_html_head %>
+  <!-- page specific tags -->
+  <%= yield :header_tags -%>
 </head>
+
 <body class="<%=h body_css_classes %>">
-<div id="wrapper">
-<div id="separate_footer">
-<!--
-<div id="top-menu">
-    <div id="account">
-        <%#= render_menu :account_menu -%>
-    </div>
-    <%#= content_tag(
-           'div',
-           "#{l(:label_logged_as)} #{link_to_user(User.current, :format => :username)}".html_safe,
-           :id => 'loggedas') if User.current.logged? %>
-    <%#= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
-</div>
--->
-
-<header id="header">
-	<div class="bar"></div>
-    <% if User.current.logged? || !Setting.login_required? %>
-        <!--
-    <div id="quick-search">
-        <%#= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
-        <%#= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
-        <label for='q'>
-          <%#= link_to l(:label_search), {:controller => 'search', :action => 'index', :id => @project}, :accesskey => accesskey(:search) %>:
-        </label>
-
-        <%#= text_field_tag 'q', @question, :size => 20, :class => 'small', :accesskey => accesskey(:quick_search) %>
-        <%# end %>
-        <%#= render_project_jump_box %>
-    </div>
-    <h1><%#= page_header_title %></h1>
-        -->
-    <% end %>
-	<div id="header_bg_bar"></div>
-	<div class="inside container_16">
-		<div id="logo" class="grid_3 <%= (!User.current.logged?)? 'prefix_12' : 'prefix_13' %>">
-			<%= link_to({:controller => 'welcome'}) do %>
-				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
-			<%end%>
-		</div>
-		<div class="clear"></div>
-	</div>
-	
-	<div id="main_navigation">
-		<% if User.current.logged? %>
-		<div class="inside container_16">
-			<div class="grid_13 prefix_3 account_menu">
-				<%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
-		    </div>
-		    <div class="clear"></div>
-		</div>
-		<%end%>
-	</div>
-	<div id="navigation">
-		<div class="inside container_16">
-		<% unless User.current.logged? %>
-			<div class="grid_10 prefix_6">
-			<%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
-		<% else %>
-			<div class="grid_13 prefix_3">
-	    <%= render_menu :account_menu -%>
-	    <%end%>
-		    </div>
-		    <div class="clear"></div>
-	    </div>
-	</div>
-	<div class="container_16">
-		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %>">
-			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>"></div>
-			<div id="group"></div>
-			<div id="community"></div>
-		</div>
-	</div>	    
-</header>
-
-<%= tag('div', {:id => 'container', :class => ((has_content?(:sidebar_left) || has_content?(:sidebar_right)) ? '' : 'nosidebar')}, true) %>
-	<div class="container_inner container_16">
-	    <div id="left" class="<%= (User.current.logged?) ? 'grid_3' : 'grid_2' %>">
-	    	<div id="sidebar_left" class="sidebar">
-	    	  <% if User.current.logged? %>
-		    	<div class="headline"><%= l(:label_communication) %></div>
-		        <%= render_menu :private_menu %>
-		        <%# if display_main_menu?(@project) %>
-		          <%= render_project_jump_box %>
-		        <%# end %>
-		          <%= render_main_menu(@project) %>
-		        <% if User.current.admin? %>
-              <div class="splitter">
-                <%= l :label_administration %>
-              </div>
-              <%= render_menu :admin_menu %>
-      			<% end %>
-			    	    
-		        <%= yield :sidebar_left %>
-		        <%= call_hook :view_layouts_base_sidebar %>
-		        <% end %>
-		        &nbsp;
-	    	</div>
-	    </div>
-	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
+  <div id="wrapper">
+    <div id="separate_footer">
+      <header id="header">
+        <!-- backgrounds for the top-navigations -->
+      	<div class="bar"></div>
+      	<div id="header_bg_bar"></div>
+      	
+      	<!-- logo -->
+      	<div class="inside container_16">
+      		<div id="logo" class="grid_3 <%= (!User.current.logged?)? 'prefix_12' : 'prefix_13' %>">
+      			<%= link_to({:controller => 'welcome'}) do %>
+      				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
+      			<%end%>
+      		</div>
+      		<div class="clear"></div>
+      	</div>
+      	
+      	<!-- Navigation with green background -->
+      	<div id="main_navigation">
+      		<% if User.current.logged? %>
+      		<div class="inside container_16">
+      			<div class="grid_13 prefix_3 account_menu">
+      				<%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+      		  </div>
+      		  <div class="clear"></div>
+      		</div>
+      		<% end %>
+      	</div>
+      
+      	<!-- Navigation with gray background -->
+      	<div id="navigation">
+      		<div class="inside container_16">
+      		<% unless User.current.logged? %>
+      			<div class="grid_10 prefix_6">
+      			  <%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+      			</div>
+      		<% else %>
+      			<div class="grid_13 prefix_3">
+      	      <%= render_menu :account_menu -%>
+      	    </div>
+      	  <% end %>
+      		  <div class="clear"></div>
+      	  </div>
+      	</div>
+      	
+      	<!-- Navigation for Team/Community/Private -->
+      	<div class="container_16">
+      		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %>">
+      			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>"></div>
+      			<div id="group"></div>
+      			<div id="community"></div>
+      		</div>
+      	</div>	    
+      </header>
+      
+    <%= tag('div', {:id => 'container', :class => ((has_content?(:sidebar_left) || has_content?(:sidebar_right)) ? '' : 'nosidebar')}, true) %>
+    	<div class="container_inner container_16">
+  	    <div id="left" class="<%= (User.current.logged?) ? 'grid_3' : 'grid_2' %>">
+  	    	<div id="sidebar_left" class="sidebar">
+  	    	  <% if User.current.logged? %>
+  		    	  <div class="headline"><%= l(:label_communication) %></div>
+  		        <%= render_menu :private_menu %>
+  	          <%= render_project_jump_box %>
+  		        <%= render_main_menu(@project) %>
+  		        <% if User.current.admin? %>
+                <div class="splitter">
+                  <%= l :label_administration %>
+                </div>
+                <%= render_menu :admin_menu %>
+        		  <% end %>
+  			    	    
+  		        <%#= yield :sidebar_left %>
+  		        <%#= call_hook :view_layouts_base_sidebar %>
+  		      <% else %>
+  		        &nbsp;
+  		      <% end %>
+  	    	</div>
+  	    </div>
+  	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
 	        <%= render_flash_messages %>
 	        <%= yield %>
 	        <%= call_hook :view_layouts_base_content %>
 	        <div style="clear:both;"></div>
-	       <div id="ajax-modal" style="display:none;"></div>
-	    </div>
-	    <div id="right" class="grid_3">
-	    	<% if User.current.logged? %>
-		    <div id="quick-search">
-	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
-		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
-		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
-		        <%= submit_tag "" %>
-	        <% end %>
-		    </div>
-		    <div id="sidebar_right" class="sidebar">
-		    	<%= render_menu :sidebarright_menu %>
-		    	<% unless (yield :sidebar_right) == "" %>
-		    	<div class="splitter"><%= l(:label_specific) %></div>
-		    	<ul>
-	        	<%= yield :sidebar_right %>
-		    	</ul>
-		      <% end %>
-        </div>
-        <% else %>		    	
-		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>
-		    <% end %>
-        <%#= call_hook :view_layouts_base_sidebar %>
-	    </div>
-		<div class="clear"></div>
-	</div>
-</div>
-<div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
-<div id="ajax-modal" style="display:none;"></div>
-
-</div>
-</div>
-</div>
+          <div id="ajax-modal" style="display:none;"></div>
+  	    </div>
+  	    <div id="right" class="grid_3">
+  	    	<% if User.current.logged? %>
+  		    <div id="quick-search">
+  	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
+  		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
+  		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
+  		        <%= submit_tag "" %>
+  	        <% end %>
+  		    </div>
+  		    <div id="sidebar_right" class="sidebar">
+  		    	<%= render_menu :sidebarright_menu %>
+  		    	<% unless (yield :sidebar_right) == "" %>
+  		    	<div class="splitter"><%= l(:label_specific) %></div>
+  		    	<ul>
+  	        	<%= yield :sidebar_right %>
+  		    	</ul>
+  		      <% end %>
+          </div>
+          <% else %>		    	
+  		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>
+  		    <% end %>
+          <%#= call_hook :view_layouts_base_sidebar %>
+  	    </div>
+  	    <div class="clear"></div>
+      </div>
+    </div>
+    <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
+    <div id="ajax-modal" style="display:none;"></div>
+  </div>
+  </div>
   <div id="footer">
-	<div style="background-color:#fff; height:3px; width:100%"></div>
-	<div class="inside">
-		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
-		<div id="miscellaneous">
-		   <ul>
-		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
-		      <li class="withborder"><a href="/static/agb.html" title="Nutzungsbedingungen"><%= l(:label_termsconditions) %></a></li>
-		      <li class="withborder"><a href="/static/datenschutz.html" title="Datenschutz"><%= l(:label_privacypolicy) %></a></li>
-		      <li><a href="/static/impressum.html" title="Impressum"><%= l(:label_imprint) %></a></li>
-		   </ul>
-		</div> 
-	</div>
-</div>
-<%= call_hook :view_layouts_base_body_bottom %>
+  	<div style="background-color:#fff; height:3px; width:100%"></div>
+  	<div class="inside">
+  		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
+  		<div id="miscellaneous">
+  		   <ul>
+  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+  		      <li class="withborder"><a href="/static/agb.html" title="Nutzungsbedingungen"><%= l(:label_termsconditions) %></a></li>
+  		      <li class="withborder"><a href="/static/datenschutz.html" title="Datenschutz"><%= l(:label_privacypolicy) %></a></li>
+  		      <li><a href="/static/impressum.html" title="Impressum"><%= l(:label_imprint) %></a></li>
+  		   </ul>
+  		</div> 
+  	</div>
+  </div>
+  <%= call_hook :view_layouts_base_body_bottom %>
 </body>
 </html>

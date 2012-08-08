@@ -1,0 +1,254 @@
+/* navigation */	
+#navigation {
+	margin-bottom:3px;
+	background-color:#E9E9E9;
+}
+
+#navigation .inside {
+	height: 25px;
+}
+
+#navigation ul {
+	padding-left: 0px;
+	margin-top:3px;
+	margin-bottom:5px;
+}
+
+#navigation li {
+	float:left;
+	padding-right:20px;
+	list-style-type:none;
+}
+
+#navigation a {
+	font-size:15px;
+	font-weight:bold;
+	text-decoration:none;
+	color:#7D7D7D;
+}
+
+#navigation a:hover, #navigation a.selected, #navigation .newmessage {
+	color:#7DB414;
+}
+
+#navigation_group {
+	position: absolute;
+	top:135px;
+}
+
+#navigation_group #private {
+	width:150px;
+	height:93px;
+	position: absolute;
+	margin-left: 35px;
+	text-align:right;
+	vertical-align:bottom;
+	background:#7DB414 url(../images/gast_gruen.png) center bottom no-repeat;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	font-size:18pt;
+	font-weight:bold;
+	color:#fff;
+	z-index:10;
+	background-position-x:30%;
+}
+
+#navigation_group #group {
+	width:100px;
+	height:62px;
+	float: left;
+	margin-top:-25px;
+	background:#7D7D7D url(../images/team_grau.png) center bottom no-repeat;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	background-size:100px;
+	z-index:5;
+}
+
+#navigation_group #community {
+	width:100px;
+	height:62px;
+	float: right;
+	margin-top:-62px;
+	margin-left:180px;
+	background:#7D7D7D url(../images/community_grau.png) center bottom no-repeat;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	background-size:100px;
+	z-index:5;
+}
+	
+
+/* Style sheet login */
+#login .inner{
+	margin-bottom:20px;
+	padding:5px 10px;
+	background-color:#7DB414;
+	border:1px solid #7D7D7D;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	font-size:11px;
+	color:#fff;
+}
+
+#login h2 {
+	margin-top:0;
+	margin-bottom:10px;
+	font-size:14px;
+}
+	
+#login input[type=text],#login input[type=password] {
+	width:85px;
+	height:12px;
+	margin-bottom:2px;
+	margin-left:0;
+	font:11px 'Helvetica Neue',Helvetica,'Nimbus Sans L',Arial,Verdana,sans-serif;
+}
+
+#login .forgotpw {
+	font-size: 9px;
+	margin-top:5px;
+}
+
+#login .forgotpw a {
+	color:#fff;
+}
+
+#login .submit_container {
+	float:right;
+}
+
+#login .submit_container input {
+	margin-top:3px;
+	padding:0 10px 2px 0;
+	background:#7DB414 url(../images/login_submit.png) right center no-repeat;
+	border:0;
+	font-size:11px;
+	color:#fff;
+	cursor:pointer;
+	background-size: 5px;
+}
+
+#login a:hover,#login input[type=submit]:hover {
+	text-decoration:underline;
+}
+
+#login p.error {
+	display:block;
+	margin-top:0;
+	margin-bottom:2px;
+	color:#B61634;
+}
+
+
+/* Style sheet registration */
+#registration .inner{
+  margin-bottom:20px;
+	padding:10px 0 10px 10px;
+	background-color:#E4E4E4;
+	border:1px solid #7D7D7D;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	font-size:11px;
+}
+
+#registration h2 {
+	margin-top:0;
+	margin-bottom:10px;
+	font-size:1.14em;
+	color:#7DB414;
+}
+
+#registration #new_user {
+  padding-right: 10px;
+}
+
+#registration span.required {
+	display:none;
+}
+
+#registration label {
+	width: 60px;
+	display: inline-block;
+}
+	
+#registration input[type=submit] {
+	width:100%;
+	margin-top: 10px;
+	padding:4px 10px;
+	background-color:#7DB414;
+	border:0;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	font-size: 11px;
+	font-weight: bold;
+	color:#fff;
+}
+
+#registration input[type=text],#registration input[type=password] {
+	width:70px;
+	height: 10px;
+	font-size:11px;
+	margin-bottom: 3px;
+}
+
+#registration a {
+	text-decoration:none;
+	color:#7DB414;
+}
+
+#registration a:hover {
+	color:#7D7D7D;
+}
+
+#confirmation {
+  font-size: 8px;
+}	
+
+#confirm {
+	float:left;
+	margin-right:3px;
+	margin-bottom:20px;
+	margin-left:0;
+}
+		
+#registration #user_password_confirmation {
+  margin-bottom: 10px;
+}
+
+input.error {
+	border:1px solid #B61634;
+}
+
+.controller-welcome.action-index #errorExplanation {
+	font-size: 9px;
+	color: #ad8383;
+}
+
+.controller-welcome.action-index #errorExplanation li {
+	display: block;
+	line-height: 9px;
+	padding-bottom: 3px;
+}
+
+.controller-welcome.action-news #main .wiki h1 {
+	margin-top:0;
+	font-size:22px;
+	color: #7D7D7D;
+}
+
+
+/* lost password*/
+#lostpassword label{
+	padding-right: 5px;
+}
+
+#lostpassword input[type=text] {
+	width: 300px;
+}	
