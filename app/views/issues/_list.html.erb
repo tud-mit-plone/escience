@@ -10,21 +10,20 @@
           <%= check_box_tag("ids[]", issue.id, false, :style => 'display:none;', :id => nil) %>
           <%= link_to(h(issue.id), :controller => 'issues', :action => 'show', :id => issue) %>
         </td -->
-        <th style="padding-top:5px;"><%=l(:field_project)%>:</th>
-        <td><%= link_to h(truncate(issue.subject, :length => 60)), :controller => 'issues', :action => 'show', :id => issue %>
+        <th><%=l(:field_project)%>:</th>
+        <th style="font-weight: normal"><%= link_to h(truncate(issue.subject, :length => 60)), :controller => 'issues', :action => 'show', :id => issue %>
 </td>
       </tr>
       <tr>
         <td valign="top">
-          <%=l(:field_tracker)%>: <%=h issue.tracker %><br/>
-          <%=l(:field_status)%>: <%=h issue.status %>
+          <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
+          <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span>
         </td>
-        <td width="70%">
-          <span style="overflow:hidden; height:40px; display:block; font-style:italic"><%= issue.description %></span>
+        <td width="70%" valign="top">
+          <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= issue.description %></span>
         </td>        
       </tr>
     <% end %>
-  
     </tbody>
   </table>
   

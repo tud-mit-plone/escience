@@ -1,4 +1,5 @@
 <% content_for :sidebar_right do %>
+  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
 	<% if authorize_for("issues", "edit") %>
 		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :onclick => 'showAndScrollTo("update", "notes"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %></li>
 	<%end%>
@@ -11,5 +12,5 @@
 	<%end%>
 	<% if User.current.allowed_to?(:delete_issues, @project) %>
 		<li><%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-del') %></li>
-	<%end%>
+	<%end%>	
 <%end%>

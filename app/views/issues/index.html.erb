@@ -3,6 +3,7 @@
   	<li><%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %></li>
   	<li><%= delete_link query_path(@query) %></li>
   <% end %>
+  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
 <%end%>
 
 <h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
@@ -17,6 +18,17 @@
       <div style="<%= @query.new_record? ? "" : "display: none;" %>">
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
+      <div class="buttons hide-when-print">
+        <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'icon icon-checked' %></div>
+        <div><%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload'  %></div>
+        <% if @query.new_record? && User.current.allowed_to?(:save_queries, @project, :global => true) %>
+        <div><%= link_to_function l(:button_save),
+                             "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')",
+                             :class => 'icon icon-save' %>
+        </div>
+        <% end %>
+      </div>
+      
     </fieldset>
     <fieldset class="collapsible collapsed" style="display:none;">
       <legend onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
@@ -38,45 +50,30 @@
       </div>
     </fieldset>
     </div>
-    <p class="buttons hide-when-print">
-
-    <%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'icon icon-checked' %>
-    <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload'  %>
-    <% if @query.new_record? && User.current.allowed_to?(:save_queries, @project, :global => true) %>
-        <%= link_to_function l(:button_save),
-                             "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')",
-                             :class => 'icon icon-save' %>
-    <% end %>
-    </p>
 <% end %>
 
 <%= error_messages_for 'query' %>
 <% if @query.valid? %>
-<% if @issues.empty? %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% else %>
-<%= render :partial => 'issues/list', :locals => {:issues => @issues, :query => @query} %>
-
-
-
-
-<% assigned_issues = Issue.visible.open.find(:all,
+  <% if @issues.empty? %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+  <%= render :partial => 'issues/list', :locals => {:issues => @issues, :query => @query} %>
+  <% assigned_issues = Issue.visible.open.find(:all,
                                 :conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)},
                                 :limit => 10,
                                 :include => [ :status, :project, :tracker, :priority ],
                                 :order => "#{IssuePriority.table_name}.position DESC, #{Issue.table_name}.updated_on DESC") %>
 
-<%#= render :partial => 'issues/list_simple', :locals => { :issues => assigned_issues } %>
-<% if assigned_issues.length > 0 %>
+  <%#= render :partial => 'issues/list_simple', :locals => { :issues => assigned_issues } %>
+  <% if assigned_issues.length > 0 %>
+    <p class="small"><%= link_to l(:label_issue_view_all), :controller => 'issues',
+                                                           :action => 'index',
+                                                           :set_filter => 1,
+                                                           :assigned_to_id => 'me',
+                                                           :sort => 'priority:desc,updated_on:desc' %></p>
 
-<p class="small"><%= link_to l(:label_issue_view_all), :controller => 'issues',
-                                                       :action => 'index',
-                                                       :set_filter => 1,
-                                                       :assigned_to_id => 'me',
-                                                       :sort => 'priority:desc,updated_on:desc' %></p>
-
-<% end %>
-<p class="pagination"><%= pagination_links_full @issue_pages, @issue_count %></p>
+  <% end %>
+  <p class="pagination"><%= pagination_links_full @issue_pages, @issue_count %></p>
 <% end %>
 
 <%# other_formats_links do |f| %>
