@@ -281,7 +281,17 @@ select#membership_project_id {
 	.controller-projects.action-index #main div {
   	margin-left: 20px;
 	}
+
+	.controller-projects.action-index ul.projects a.project {
+  	margin-bottom: 1em;
+  	display: block;	
+	}
 	
+	.controller-projects.action-index ul.projects a.project::before {
+  	content:"\2022";
+  	padding-right: 5px;
+  }
+		
 	.controller-projects.action-index #main div.root {
   	margin-left: 0px;
 	}  
@@ -290,9 +300,11 @@ select#membership_project_id {
   	margin: 0 0 20px 20px;
 	}
 	
+
 	.controller-issues.action-show #issue_project_id {
   	max-width: 527px;
 	}
+	
 	
 	
 	/* Issues */
@@ -319,20 +331,45 @@ select#time_entry_project_id, select#project_parent_id {
   width: auto;
 }
 
-.issue .status {
+.issue .tracker {
+  padding-top: 10px;
+  margin-top: 30px;
+  font-size: 15px;
+  color: #7DB414;
+  border-top: 1px solid #D3D3D3;
+}
+
+#history {
+  padding: 1em 20px 1.5em 20px;
+}
+
+#history legend {
+  color: #7DB414;
+}
+
+#history ul {
+  margin: 0 0 3px 10px;
+  padding: 0 0 3px 10px;
+}
+
+.contextual {
+  float: right;
+}
+
+.issues .status {
   width: 200px;
+}
+
+.issues label {
+  font-weight: 600;
 }
 
 .issues a {
   text-decoration: none;
-  color: #7D7D7D;
+#  color: #7D7D7D;
 }
 
-.issues table a {
-  color: #06C;
-}
-
-.issues table a:hover {
+.issues a:hover {
   text-decoration: underline;
 }
 
@@ -358,6 +395,25 @@ select#time_entry_project_id, select#project_parent_id {
 .issues .assigned-to-me {
   background-color: #FAFAFA;
 }
+
+.progress {
+  margin-right:10px;
+}
+
+.progress div {
+  margin-top: 1px;
+  height: 10px;
+  display: inline-block;
+}
+
+.progress div.todo {
+  background-color: #fad9d9;
+}
+
+.progress div.closed, .progress div.done {
+  background-color: #7DB414;
+}
+
 
 .issue #issue_tree td {
   padding-right: 10px;
@@ -439,7 +495,7 @@ select#time_entry_project_id, select#project_parent_id {
 }
 	
 .next-prev-links {
-  margin-top: -30px;
+  margin-top: -23px;
   float: right;
 }
 
