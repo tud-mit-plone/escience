@@ -3,23 +3,29 @@
 
 <% content_for :sidebar_right do %>
   	<li><%= watcher_tag(@topic, User.current) %></li>
+  	<% if authorize_for(params[:controller], 'quote') %>
   	<li><%= link_to_remote_if_authorized(
           l(:button_quote),
           { :url => {:action => 'quote', :id => @topic} },
           :class => 'icon icon-comment'
         ) unless @topic.locked? %></li>
+    <% end %>
+    <% if @message.editable_by?(User.current) %>
   	<li><%= link_to(
           l(:button_edit),
           {:action => 'edit', :id => @topic},
           :class => 'icon icon-edit'
-        ) if @message.editable_by?(User.current) %></li>
+        ) %></li>
+    <% end %>
+    <% if @message.destroyable_by?(User.current) %>
   	<li><%= link_to(
           l(:button_delete),
           {:action => 'destroy', :id => @topic},
           :method => :post,
           :data => {:confirm => l(:text_are_you_sure)},
           :class => 'icon icon-del'
-         ) if @message.destroyable_by?(User.current) %></li>
+         ) %></li>
+    <% end %>
 <%end%>
 
 <h2><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %></h2>
