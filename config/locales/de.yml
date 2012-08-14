@@ -463,6 +463,7 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_issue_id: Aufgabe Nr.
   label_subprojectof: Übergeordnetes Projekt
   label_contact: Kontakt
   label_privacypolicy: Datenschutz
@@ -869,6 +870,7 @@ de:
   label_profile: Profil
   label_subtask_plural: Unteraufgaben
   label_project_copy_notifications: Sende Mailbenachrichtigungen beim Kopieren des Projekts.
+  label_project_delete: Projekt löschen.
   label_principal_search: "Nach Benutzer oder Gruppe suchen:"
   label_user_search: "Nach Benutzer suchen:"
 
@@ -1076,10 +1078,10 @@ de:
   text_scm_command_version: Version
   label_git_report_last_commit: Bericht des letzten Commits für Dateien und Verzeichnisse
   text_scm_config: Die SCM-Kommandos können in der in config/configuration.yml konfiguriert werden. Redmine muss anschließend neu gestartet werden.
-  text_scm_command_not_available: Scm Kommando ist nicht verfügbar. Bitte prüfen Sie die Einstellungen im Administrationspanel.
+  text_scm_command_not_available: SCM-Kommando ist nicht verfügbar. Bitte prüfen Sie die Einstellungen im Administrationspanel.
 
   notice_project_alreadyexists: Es existiert bereits ein Projekt mit diesem Namen.
-  notice_issue_successful_create: Issue %{id} created.
+  notice_issue_successful_create: Anweisung %{id} erfolgreich erstellt.
   label_between: between
   setting_issue_group_assignment: Allow issue assignment to groups
   label_diff: diff
