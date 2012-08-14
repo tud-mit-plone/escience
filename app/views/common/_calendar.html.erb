@@ -59,9 +59,9 @@
          <% calendar.events_on(day).each do |i| %>
          <div style="float:left">        
            <% if (calendar.events_on(day).size < 2) %>
-            <p class="linkToInfo" id="linkToInfo_<%= i.id %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(12)}) %></p>
+            <p class="linkToInfo" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(12)}) %></p>
            <% else %>
-            <div class="linkToInfo box" id="linkToInfo_<%= i.id %>" style="background-color: #<%= (16777215-(h(i.project).size)*419820).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => '&nbsp;', :title => false}) %></div>
+            <div class="linkToInfo box" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #<%= (16777215-(h(i.project).size)*419820).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
            <% end %>
            <% if i.is_a? Issue %>
            <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>
