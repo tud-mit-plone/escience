@@ -10,7 +10,7 @@
           <%= check_box_tag("ids[]", issue.id, false, :style => 'display:none;', :id => nil) %>
           <%= link_to(h(issue.id), :controller => 'issues', :action => 'show', :id => issue) %>
         </td -->
-        <th><%=l(:field_project)%>:</th>
+        <th><%=l(:label_issue_id)%>: <%=h(issue.id)%></th>
         <th style="font-weight: normal"><%= link_to h(truncate(issue.subject, :length => 60)), :controller => 'issues', :action => 'show', :id => issue %>
 </td>
       </tr>
@@ -19,7 +19,7 @@
           <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
           <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span>
         </td>
-        <td width="70%" valign="top">
+        <td width="60%" valign="top">
           <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= issue.description %></span>
         </td>        
       </tr>

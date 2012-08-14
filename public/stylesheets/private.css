@@ -147,45 +147,6 @@ select#membership_project_id {
 	#new_project em.info {
 		display: block;
 	}
-
-	#projects_styled {
-  	width: 150px;
-  	margin-top: -0px;
-	}
-	
-  .styled_select {
-    display: inline;
-    margin-top: 1px;
-    position: absolute;
-    font-family: "Trebuchet MS",Verdana,sans-serif;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: left;
-    line-height: 20px;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-	.styled_select b {
-    display: block;
-    width: 15px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-left: 1px solid #B8B8B8;
-    -moz-border-radius: 0 3px 3px 0;
-    -webkit-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-	  background: url('../images/select_down.png');
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-  }
-
-	#sidebar_left select {
-  	width: 150px;
-  	font-size: 12px;
-	}
 	
 	.controller-my.action-page .mypage-box p {
   	max-height: 55px;
@@ -298,13 +259,7 @@ select#membership_project_id {
 	
 	.controller-projects.action-index #main div.description {
   	margin: 0 0 20px 20px;
-	}
-	
-
-	.controller-issues.action-show #issue_project_id {
-  	max-width: 527px;
-	}
-	
+	}	
 	
 	
 	/* Issues */
@@ -366,7 +321,7 @@ select#time_entry_project_id, select#project_parent_id {
 
 .issues a {
   text-decoration: none;
-#  color: #7D7D7D;
+//  color: #7D7D7D;
 }
 
 .issues a:hover {
@@ -414,6 +369,9 @@ select#time_entry_project_id, select#project_parent_id {
   background-color: #7DB414;
 }
 
+#issue_project_id {
+	max-width: 327px;
+}
 
 .issue #issue_tree td {
   padding-right: 10px;
@@ -422,6 +380,10 @@ select#time_entry_project_id, select#project_parent_id {
 #issue_is_private {
   float: right;
   padding: 5px 3px;
+}
+
+#issue_is_private_label {
+  width: 60px;
 }
 
 .edit_issue fieldset label {

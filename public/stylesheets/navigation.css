@@ -248,6 +248,15 @@
   hyphens: auto;
 }
 
+@-moz-document url-prefix(){ 
+	.sidebar ul {
+  	list-style-position:outside;
+  	text-indent: 0px;
+  	-moz-hyphens: auto;
+  	padding: 5px 10px 5px 15px;
+	}
+}
+
 .sidebar li.active, .sidebar li:hover, .sidebar .selected {
 	background-color:#DEDEDE;
 	-moz-border-radius:10px;
@@ -325,7 +334,6 @@
   display: inline;
   margin-top: 1px;
   position: absolute;
-  font-family: "Trebuchet MS",Verdana,sans-serif;
   font-size: 15px;
   font-weight: bold;
   text-align: left;
