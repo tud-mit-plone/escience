@@ -1,5 +1,5 @@
 <% content_for :sidebar_right do %>
-  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
+  <li><%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }) %></li>
 	<% if authorize_for("issues", "edit") %>
 		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :onclick => 'showAndScrollTo("update", "notes"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %></li>
 	<%end%>
