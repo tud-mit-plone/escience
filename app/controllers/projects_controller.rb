@@ -22,6 +22,7 @@ class ProjectsController < ApplicationController
 
   before_filter :find_project, :except => [ :index, :list, :new, :create, :copy ]
   before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy]
+#  before_filter :authorize
   before_filter :authorize_global, :only => [:new, :create]
   before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy ]
   accept_rss_auth :index
@@ -76,54 +77,57 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    if !Project.find_by_name(params[:project][:name]).nil?
-      @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
-      @trackers = Tracker.all
-      @project = Project.new
-      if Setting.sequential_project_identifiers?
-        identifier_words = params[:project][:name].downcase.split
-        word_nr = 0
-        identifier = identifier_words[word_nr]
+    @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
+    @trackers = Tracker.all
+    @project = Project.new
+    if Setting.sequential_project_identifiers?
+      identifier_words = params[:project][:name].downcase.split
+      word_nr = 0
+      identifier = identifier_words[word_nr]
+      word_nr = word_nr + 1
+      while !Project.find_by_identifier(identifier).nil? && word_nr<identifier_words.length
+        identifier += "_"+ identifier_words[word_nr]
         word_nr = word_nr + 1
-        while !Project.find_by_identifier(identifier).nil? && word_nr<identifier_words.length
-          identifier += "_"+ identifier_words[word_nr]
-          word_nr = word_nr + 1
-        end
-        valid_projectname = !Project.find_by_identifier(identifier).nil?
-        params[:project][:identifier] = identifier
       end
-      params[:project][:author] = User.current.id
-      @project.safe_attributes = params[:project]
-      
-  
-      if validate_parent_id && @project.save && valid_projectname
-        @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
-        # Add current user as a project member if he is not admin
-        unless User.current.admin?
-          r = Role.givable.find_by_id(Setting.new_project_user_role_id.to_i) || Role.givable.first
-          m = Member.new(:user => User.current, :roles => [r])
-          @project.members << m
-        end
-        respond_to do |format|
-          format.html {
-            flash[:notice] = l(:notice_successful_create)
-            redirect_to(params[:continue] ?
-              {:controller => 'projects', :action => 'new', :project => {:parent_id => @project.parent_id}.reject {|k,v| v.nil?}} :
-              {:controller => 'projects', :action => 'settings', :id => @project}
-            )
-          }
-          format.api  { render :action => 'show', :status => :created, :location => url_for(:controller => 'projects', :action => 'show', :id => @project.id) }
-        end
+      params[:project][:identifier] = identifier
+    end
+    params[:project][:author] = User.current.id
+    @project.safe_attributes = params[:project]
+    
+    if Project.find_by_name(params[:project][:name]).nil? && params[:project][:name].length<51 && validate_parent_id && @project.save
+      @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
+      # Add current user as a project member if he is not admin
+      unless User.current.admin?
+        r = Role.givable.find_by_id(Setting.new_project_user_role_id.to_i) || Role.givable.first
+        m = Member.new(:user => User.current, :roles => [r])
+        @project.members << m
+      end
+      respond_to do |format|
+        format.html {
+          flash[:notice] = l(:notice_successful_create)
+          redirect_to(params[:continue] ?
+            {:controller => 'projects', :action => 'new', :project => {:parent_id => @project.parent_id}.reject {|k,v| v.nil?}} :
+            {:controller => 'projects', :action => 'settings', :id => @project}
+          )
+        }
+        format.api  { render :action => 'show', :status => :created, :location => url_for(:controller => 'projects', :action => 'show', :id => @project.id) }
       end
     else
       respond_to do |format|
-        if valid_projectname
-          flash[:notice] = l(:error_projectname_exists)
-        end
-        format.html { render :action => 'new' }
+        format.html { 
+          if params[:project][:name].length>50
+            flash[:notice] = l(:error_projectname_tolong)
+          elsif Project.find_by_name(params[:project][:name]).nil?
+            flash[:notice] = l(:error_projectname_exists)
+          else 
+            flash[:notice] = l(:error_projectname_exists)
+          end 
+          render :action => 'new' 
+        }
         format.api  { render_validation_errors(@project) }
       end
     end
+
   end
 
   def copy

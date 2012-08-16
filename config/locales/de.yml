@@ -207,6 +207,8 @@ de:
   error_unable_to_connect: Fehler beim Verbinden (%{value})
   error_empty_message: Bitte befüllen Sie die nötigen Eingabefelder.
   error_projectname_exists: Der Projektname existiert bereits. Bitte wählen Sie einen anderen.
+  error_projectname_tolong: Der Projektname ist zu lang. (Maximal 50 Zeichen.)
+  error_project_crate: Es trat ein Fehler beim Erstellen des Projekts auf.
   
   warning_attachments_not_saved: "%{count} Datei(en) konnten nicht gespeichert werden."
 
@@ -868,7 +870,7 @@ de:
   label_missing_api_access_key: Der API-Zugriffsschlüssel fehlt.
   label_api_access_key_created_on: Der API-Zugriffsschlüssel wurde vor %{value} erstellt
   label_profile: Profil
-  label_subtask_plural: Unteraufgaben
+  label_subtask_plural: Arbeitsanweisung unterteilt sich in Teilanweisungen
   label_project_copy_notifications: Sende Mailbenachrichtigungen beim Kopieren des Projekts.
   label_project_delete: Projekt löschen.
   label_principal_search: "Nach Benutzer oder Gruppe suchen:"
