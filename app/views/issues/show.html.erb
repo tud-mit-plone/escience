@@ -37,7 +37,7 @@
   </p>
 
 <fieldset>
-  <legend><%= l(:label_attribute_plural) %></legend>
+  <legend><%= l(:label_attribute_plural)%></legend>
   <table class="attributes" width="100%">
     <tr>
       <td class="status" width="50%"><label><%=l(:field_status)%>:</label><%= h(@issue.status.name) %></td>
@@ -47,7 +47,7 @@
       <td class="priority"><label><%=l(:field_priority)%>:</label><%= h(@issue.priority.name) %></td>
       <td class="due-date"><label><%=l(:field_due_date)%>:</label><%= format_date(@issue.due_date) %></td>
     </tr>
-    <tr><td colspan="2"></td>&nbsp;</tr>
+    <tr><td colspan="2">&nbsp;</td></tr>
     <tr>
       <td class="assigned-to"><label><%=l(:field_assigned_to)%>:</label>
         <%#= avatar(@issue.assigned_to, :size => "14") %>
@@ -93,6 +93,7 @@
   <% end %>
   <%= link_to_attachments @issue %>
   </fieldset>
+  </div>
 <% end -%>
 
 <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
@@ -101,10 +102,10 @@
 <fieldset id="issue_tree">
   <legend><%=l(:label_subtask_plural)%></legend>
   <div class="contextual">
-    <%= link_to(l(:button_add), {:controller => 'issues', :action => 'new', :project_id => @project, :issue => {:parent_issue_id => @issue}}) if User.current.allowed_to?(:manage_subtasks, @project) %>
+    <%= link_to(l(:button_add), {:controller => 'issues', :action => 'new', :project_id => @project, :parent_issue_id => @issue}) if User.current.allowed_to?(:manage_subtasks, @project) %>
   </div>
-  <%= render_descendants_tree(@issue) unless @issue.leaf? %>
-</div>
+  <%= render_descendants_tree(@issue) unless @issue.leaf?%>
+</fieldset>
 <% end %>
 
 <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>

@@ -145,6 +145,7 @@ class IssuesController < ApplicationController
   def create
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    @issue.parent_issue_id = params[:parent_id]
     if @issue.save
       call_hook(:controller_issues_new_after_save, { :params => params, :issue => @issue})
       respond_to do |format|

@@ -6,6 +6,7 @@
                              :html => {:id => 'issue-form', :multipart => true} do |f| %>
   <%= error_messages_for 'issue' %>
   <%= hidden_field_tag 'copy_from', params[:copy_from] if params[:copy_from] %>
+  <%= hidden_field_tag 'parent_id', params[:parent_issue_id] if params[:parent_issue_id] %>
   <div class="box tabular">
     <div id="all_attributes">
     <%= render :partial => 'issues/form', :locals => {:f => f} %>
