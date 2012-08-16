@@ -16,13 +16,15 @@
   <% end if @project %>
 </div>
 <div id="preview">
-  <%= link_to_remote l(:label_preview),
+  <!--
+  <%#= link_to_remote l(:label_preview),
                      { :url => preview_news_path(:project_id => @project),
                        :method => 'get',
                        :update => 'preview',
                        :with => "Form.serialize('news-form')"
                      }, :accesskey => accesskey(:preview) %> |
-  <%= link_to l(:button_cancel), "#", :onclick => 'Element.hide("add-news")' %>
+  <%#= link_to l(:button_cancel), "#", :onclick => 'Element.hide("add-news")' %>
+  -->
   <h2><%=l(:label_news_plural)%></h2>
   
   <% if @newss.empty? %>
