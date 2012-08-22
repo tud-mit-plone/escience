@@ -91,4 +91,4 @@ end
 
 gem "thin"
 gem "SyslogLogger"  # in production mode log to syslog
-
+gem "acts-as-taggable-on"

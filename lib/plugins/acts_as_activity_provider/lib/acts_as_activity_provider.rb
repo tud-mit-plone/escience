@@ -29,7 +29,7 @@ module Redmine
             send :include, Redmine::Acts::ActivityProvider::InstanceMethods
           end
 
-          options.assert_valid_keys(:type, :permission, :timestamp, :author_key, :find_options)
+          options.assert_valid_keys(:type, :permission, :timestamp, :author_key, :find_options,:no_project)
           self.activity_provider_options ||= {}
 
           # One model can provide different event types
@@ -71,7 +71,9 @@ module Redmine
             end
 
             if provider_options.has_key?(:permission)
-              scope = scope.scoped(:conditions => Project.allowed_to_condition(user, provider_options[:permission] || :view_project, options))
+              if !(provider_options.has_key?(:no_project))
+                  scope = scope.scoped(:conditions => Project.allowed_to_condition(user, provider_options[:permission] || :view_project, options))
+              end
             elsif respond_to?(:visible)
               scope = scope.visible(user, options)
             else
