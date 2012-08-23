@@ -1,60 +1,36 @@
 require 'redmine'
+require 'acts-as-taggable-on'
 
-Dir[File.join(Rails.root,'plugins','*')].each do |dir|
-  path = File.join(dir, 'lib')
-  $LOAD_PATH << path
-  #ActiveSupport::Dependencies.load_paths << path
-  #ActiveSupport::Dependencies.load_once_paths.delete(path)
-  ActiveSupport::Dependencies.autoload_paths << path
-  ActiveSupport::Dependencies.autoload_once_paths.delete(path)
-end
+require 'application_helper_global_patch'
+require 'comment_patch'
+require 'view_account_left_middle_hook'
 
 # Patches to the Redmine core.
-if Rails::VERSION::MAJOR >= 3
-    require_dependency 'comment'
-    Comment.send(:include, RedmineBlogs::Patches::CommentPatch)
+Rails.configuration.to_prepare do
+  require_dependency 'comment'
+  Comment.send(:include, RedmineBlogs::CommentPatch)
 
-    require_dependency 'application_controller'
-    ApplicationController.send(:include, RedmineBlogs::Patches::ApplicationControllerPatch)
-
-    #require_dependency 'acts_as_taggable'
-else
-  require 'dispatcher'
-
-  Dispatcher.to_prepare :redmine_blogs do
-
-    require_dependency 'comment'
-    Comment.send(:include, RedmineBlogs::Patches::CommentPatch)
-
-    require_dependency 'application_controller'
-    ApplicationController.send(:include, RedmineBlogs::Patches::ApplicationControllerPatch)
-
-    require_dependency 'acts_as_taggable'
-  end
+  require_dependency 'application_helper'
+  ApplicationHelper.send(:include, RedmineBlogs::ApplicationHelperGlobalPatch)
 end
-
-
 
 Redmine::Plugin.register :redmine_blogs do
   name 'Redmine Blogs plugin'
   author 'A. Chaika, Kyanh, Eric Davis'
   description 'Redmine Blog plugin'
-  version '0.2.0-edavis10'
+  version '0.3.0'
+  requires_redmine :version_or_higher => '2.0.0'
 
-  permission :manage_blogs, :blogs => [:new, :edit, :destroy_comment, :destroy]
-  permission :comment_blogs, :blogs => :add_comment
-  permission :view_blogs, :blogs => [:index, :show]
+  project_module :blogs do
+    permission :manage_blogs, {:blogs => [:new, :edit, :destroy_comment, :destroy]}, :require => :member
+    permission :comment_blogs, {:blogs => :add_comment}
+    permission :view_blogs, {:blogs => [:index, :preview, :show, :history]}
+  end
 
-  menu :top_menu, :blogs, { :controller => 'blogs', :action => 'index' }, :caption => 'Blogs', :if => Proc.new {
-    User.current.allowed_to?({:controller => 'blogs', :action => 'index'}, nil, {:global => true})
-  }
+  menu :project_menu, :blogs, {:controller => 'blogs', :action => 'index'},
+       :caption => 'Blogs', :after => :news, :param => :project_id
 
+  activity_provider :blogs
+
+  Redmine::Search.register :blogs
 end
-Redmine::Activity.map do |activity|
-  activity.register(:blogs,{:class_name => 'Blog'})
-end
-
-class RedmineBlogsHookListener < Redmine::Hook::ViewListener
-  render_on :view_layouts_base_html_head, :inline => "<%= stylesheet_link_tag 'stylesheet', :plugin => 'redmine_blogs' %>"
-end 
-require 'redmine_blogs/hooks/view_account_left_middle_hook'

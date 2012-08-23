@@ -12,5 +12,5 @@ div.tags a, .icon22-tags {
 .css3 { font-size: 1.4em; }
 .css4 { font-size: 1.6em; }
 
-dt.blog-post { /*background-image: url(../images/balloon.png);*/ }
+dt.blog-post { background-image: url(../images/balloon.png); }
 dt.blog-comment { background-image: url(../images/balloons.png); }

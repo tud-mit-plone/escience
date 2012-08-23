@@ -1,0 +1,22 @@
+class CreateBlogs < ActiveRecord::Migration
+  def self.up
+    if !(ActiveRecord::Base.connection.table_exists? :blogs)
+
+	    create_table :blogs do |t|
+	      t.column :summary, :string
+	      t.column :description, :text, {:null => false, :default => ''}
+	      t.column :title, :string, {:null => false, :default => ''}
+	      t.column :comments_count, :integer, {:null => true, :default => 0}
+	      t.column :created_on, :datetime
+	      t.column :project_id, :integer, {:null => false, :default => 0}
+	      t.column :author_id, :integer, {:null => false, :default => 0}
+	    end
+	    add_index :blogs, :project_id
+	    add_index :blogs, :author_id
+    end
+  end
+
+  def self.down
+    drop_table :blogs
+  end
+end
