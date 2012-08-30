@@ -1,3 +1,7 @@
+*.svn
+/changed_files
+/backup
+/nbproject
 /.project
 /.loadpath
 /config/additional_environment.rb

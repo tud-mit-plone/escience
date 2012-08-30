@@ -1228,12 +1228,14 @@ module ApplicationHelper
     anchor.gsub(%r{[^\w\s\-]}, '').gsub(%r{\s+(\-+\s*)?}, '-')
   end
 
+  def jquery_heads
+    tags = javascript_include_tag("jquery.min.js")
+    return tags
+  end
+
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = javascript_include_tag('prototype', 'effects', 'dragdrop', 'controls', 'rails', 'application')
-    tags << "\n".html_safe
-    tags << javascript_include_tag("jquery.min.js")
-    tags << "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
+    tags = "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.jbar.js")
     tags << "\n".html_safe
@@ -1242,13 +1244,16 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.qtip.min.js")
     tags << "\n".html_safe
     tags << javascript_include_tag("escience.js")
+    tags << javascript_tag(flash_notifications)
+
+    tags << javascript_include_tag('prototype', 'effects', 'dragdrop', 'controls', 'rails', 'application')
+    tags << "\n".html_safe
     #tags << "\n".html_safe
     #tags << javascript_include_tag("jquery-ui-1.8.17.custom.min.js")
     #tags << "\n".html_safe
     #tags << javascript_include_tag("jquery.tagsinput.min.js")
     #tags << "\n".html_safe
     #tags << javascript_include_tag("jquery.jbar.js")
-    tags << javascript_tag(flash_notifications)
     tags << "\n".html_safe
 
     unless User.current.pref.warn_on_leaving_unsaved == '0'
