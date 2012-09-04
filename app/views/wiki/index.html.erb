@@ -32,4 +32,5 @@
       :atom, :controller => 'activities', :action => 'index',
       :id => @project, :show_wiki_edits => 1, :format => 'atom',
       :key => User.current.rss_key) %>
+  <%= stylesheet_link_tag 'wiki' %>
 <% end %>
