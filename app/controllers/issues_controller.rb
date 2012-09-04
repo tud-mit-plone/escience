@@ -56,7 +56,7 @@ class IssuesController < ApplicationController
   def index
     retrieve_query
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
-    sort_update(@query.sortable_columns)
+    sort_update(@query.sortable_columns)    
 
     if @query.valid?
       case params[:format]
@@ -78,7 +78,20 @@ class IssuesController < ApplicationController
                               :offset => @offset,
                               :limit => @limit)
       @issue_count_by_group = @query.issue_count_by_group
-
+      
+      if !(params[:group_by].nil? || params[:group_by].empty?)
+        @query.group_by = params[:group_by].to_sym
+      else
+        params[:group_by] = 'project'
+        @query.group_by = params[:group_by].to_sym
+      end
+      if !@query.group_by.nil?
+        @issues_by_group = @issues.group_by {|i| column_plain_content(@query.group_by, i) }.sort()
+      else
+        @issues_by_group = { "" => @issues }
+      end
+      
+      
       respond_to do |format|
         format.html { render :template => 'issues/index', :layout => !request.xhr? }
         format.api  {
@@ -112,6 +125,7 @@ class IssuesController < ApplicationController
     @edit_allowed = User.current.allowed_to?(:edit_issues, @project)
     @priorities = IssuePriority.active
     @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
+    @subissue = @issue.parent_id.nil? ? nil : Issue.find(@issue.parent_id)
     respond_to do |format|
       format.html {
         retrieve_previous_and_next_issue_ids
@@ -314,6 +328,30 @@ class IssuesController < ApplicationController
   end
 
 private
+  # Retrieve query from session or build a new query
+  def column_plain_content(column_name, issue)
+    column = @query.columns.find{|c| c.name == column_name}
+		if column.nil?
+			issue.project.parent ? issue.project.parent.name : issue.project.name if column_name == :main_project
+		else
+			if column.is_a?(QueryCustomFieldColumn)
+				cv = issue.custom_values.detect {|v| v.custom_field_id == column.custom_field.id}
+				show_value(cv)
+			else
+				value = issue.send(column.name.to_s)
+				if value.is_a?(Date)
+					format_date(value)
+				elsif value.is_a?(Time)
+					format_time(value)
+				elsif column.name == :done_ratio
+          value.to_s.rjust(3) << '%'
+				else
+					value.to_s
+				end
+			end
+		end
+  end
+  
   def find_issue
     # Issue.visible.find(...) can not be used to redirect user to the login form
     # if the issue actually exists but requires authentication

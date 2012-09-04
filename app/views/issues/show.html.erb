@@ -1,6 +1,12 @@
 <%#= render :partial => 'action_menu' %>
 
-<h2><%= @issue.subject %><%#= issue_heading(@issue) %></h2>
+<h2>
+  <% unless @subissue.nil? %>
+    <span style="font-weight: 300"><%= l(:label_subissue)%> <%= link_to(@subissue.subject, issue_path(@subissue)) %></span>
+    <br/>
+  <% end %>
+  <%= @issue.subject %><%#= issue_heading(@issue) %>
+</h2>
 
 <div class="<%= @issue.css_classes %> details">
   <% if @prev_issue_id || @next_issue_id %>
@@ -161,6 +167,7 @@
 <% content_for :header_tags do %>
     <%= auto_discovery_link_tag(:atom, {:format => 'atom', :key => User.current.rss_key}, :title => "#{@issue.project} - #{@issue.tracker} ##{@issue.id}: #{@issue.subject}") %>
     <%= stylesheet_link_tag 'scm' %>
+    <%= stylesheet_link_tag 'issues' %>
 <% end %>
 
 <%= context_menu issues_context_menu_path %>

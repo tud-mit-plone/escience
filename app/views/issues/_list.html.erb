@@ -1,65 +1,60 @@
 <%= form_tag({}) do -%>
 <%= hidden_field_tag 'back_url', url_for(params), :id => nil %>
 <div class="autoscroll">
+  <div class="list issues" id="content" width="97%" cellpadding="0" cellspacing="0">
+    <div class="sort_buttons">
+      <%= content_tag('div', l(:label_sortby)+" :", :style => 'float:left', :class => 'sortby') %>
+      <%#= content_tag('div', sort_link('id', 'ID', 'desc'), :style => 'float:left', :class => 'first') %>
+      <%= content_tag('div', sort_link('subject', l(:field_subject), 'desc'), :style => 'float:left', :class => 'first') %>
+      <%= content_tag('div', sort_link('tracker', l(:label_tracker), 'desc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('status', l(:label_issue_status), 'desc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('priority', l(:field_priority), 'desc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('created_on', l(:field_created_on), 'desc'), :style => 'float:left') %>
+    </div>
+    <div class="clear"></div>
+    <% previous_group = false %>
+    
+  <% col_nums = @query.columns.size %>
+  <% group_num = 0 %>
+    <% @issues_by_group.each do |key, issue_list| -%>
+  <% group_num = group_num+1 %>
 
-  <table class="list issues" width="100%">
-    <tbody>
-    <% issue_list(issues) do |issue, level| -%>
-      <tr id="issue-<%= h(issue.id) %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
-        <!--td class="id">
-          <%= check_box_tag("ids[]", issue.id, false, :style => 'display:none;', :id => nil) %>
-          <%= link_to(h(issue.id), :controller => 'issues', :action => 'show', :id => issue) %>
-        </td -->
-        <th><%=l(:label_issue_id)%>: <%=h(issue.id)%></th>
-        <th style="font-weight: normal"><%= link_to h(truncate(issue.subject, :length => 60)), :controller => 'issues', :action => 'show', :id => issue %>
-</td>
-      </tr>
-      <tr>
-        <td valign="top">
-          <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
-          <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span>
-        </td>
-        <td width="60%" valign="top">
-          <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= issue.description %></span>
-        </td>        
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-  
-<!--  
-<table class="list issues">
-    <thead><tr>
-        <th class="checkbox hide-when-print"><%= link_to image_tag('toggle_check.png'), {}, :onclick => 'toggleIssuesSelection(Element.up(this, "form")); return false;',
-                                                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
-        </th>
-    <%= sort_header_tag('id', :caption => '#', :default_order => 'desc') %>
-        <% query.columns.each do |column| %>
-          <%= column_header(column) %>
-        <% end %>
-  </tr></thead>
-  <% previous_group = false %>
-  <tbody>
-  <% issue_list(issues) do |issue, level| -%>
-  <% if @query.grouped? && (group = @query.group_by_column.value(issue)) != previous_group %>
-    <% reset_cycle %>
-    <tr class="group open">
-      <td colspan="<%= query.columns.size + 2 %>">
-        <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
-        <%= group.blank? ? 'None' : column_content(@query.group_by_column, issue) %> <span class="count">(<%= @issue_count_by_group[group] %>)</span>
-        <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}", "toggleAllRowGroups(this)", :class => 'toggle-all') %>
-      </td>
-    </tr>
-    <% previous_group = group %>
+        <% if (@issues_by_group.size>1) || (!key.empty?) %> 
+
+      <div class="group open" valign="top">
+          <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
+          <div class="headline">[<%= key.strip %>] (<%= issue_list.size %>)</div>
+      </div>
+      <div class="clear"></div>
   <% end %>
-  <tr id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-    <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", issue.id, false, :id => nil) %></td>
-    <td class="id"><%= link_to issue.id, issue_path(issue) %></td>
-        <%= raw query.columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, issue)}</td>"}.join %>
-  </tr>
-  <% end -%>
-  </tbody>
-</table>
--->
+    
+    <%# issue_list(issues) do |issue, level| -%>
+    <% issue_list.each do |issue| -%>
+      <% if @query.grouped? && (group = @query.group_by_column.value(issue)) != previous_group %>
+      <% reset_cycle %>
+      <div class="group open" valign="top">
+          <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
+          <div class="headline"><%= group.blank? ? 'None' : column_content(@query.group_by_column, issue) %> <span class="count">(<%= @issue_count_by_group[group] %>)</span></div>
+      </div>
+      <div class="clear"></div>
+      <% previous_group = group %>
+      <% end %>
+      <%= link_to(issue_path(issue)) do %>
+      <div id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>" valign="top" style="width:560px;">
+        <div class="id" style="font-size:14px;"><%= issue.subject+' (ID '+issue.id.to_s+')' %></div>
+        <div class="clear"></div>
+        <div style="width:250px; float:left;">
+          <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
+          <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span><br/>
+          <label><%=l(:field_created_on)%>:</label> <span class="info"><%= format_time(issue.created_on) %></span>
+        </div>
+        <div style="width:300px; float:left;">
+          <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= strip_tags(textilizable issue, :description) %></span>
+        </div>
+      </div>
+      <% end %>
+    <% end -%>
+    <% end -%>
+  </div>
 </div>
 <% end -%>
