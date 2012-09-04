@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
 
   before_filter :find_project, :except => [ :index, :list, :new, :create, :copy ]
   before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy]
-#  before_filter :authorize
+  before_filter :require_login, :only => [:show]
   before_filter :authorize_global, :only => [:new, :create]
   before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy ]
   accept_rss_auth :index
@@ -172,7 +172,7 @@ class ProjectsController < ApplicationController
       redirect_to_project_menu_item(@project, params[:jump]) && return
     end
 
-    @users_by_role = @project.users_by_role
+    @users_by_role = @project.users_by_role 
     @subprojects = @project.children.visible.all
     @topproject = @project.parent
     @news = @project.news.find(:all, :limit => 5, :include => [ :author, :project ], :order => "#{News.table_name}.created_on DESC")

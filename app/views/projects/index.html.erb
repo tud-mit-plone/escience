@@ -3,6 +3,7 @@
 <% end %>
 
 <% content_for :sidebar_right do %>
+<% if User.current.logged? %>
 	<% if User.current.allowed_to?(:add_project, nil, :global => true) %>
 		<li><%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new'}, :class => 'icon icon-add')%></li>
 	<% end %>
@@ -12,7 +13,13 @@
 	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
 	    <li><%= link_to(l(:label_overall_spent_time), time_entries_path) %></li>
 	<% end %>
+	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
     <li><%= link_to l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil } %></li>
+	<% end %>
+<% else %>
+  <%  @user = session[:user].nil? ? User.new : session[:user] %>
+  <%= render :partial => 'welcome/sidebar' %>
+<% end%>
 <% end %>
 
 <h2><%=l(:label_project_plural)%></h2>

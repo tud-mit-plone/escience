@@ -192,8 +192,7 @@ class ApplicationController < ActionController::Base
   end
 
   def deny_access
-
-    raise if User.current.logged? == false
+#    render_403 if User.current.logged? == false
     User.current.logged? ? render_403 : require_login
   end
 

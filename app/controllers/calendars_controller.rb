@@ -18,6 +18,7 @@
 class CalendarsController < ApplicationController
   menu_item :calendar
   before_filter :find_optional_project
+  before_filter :require_login, :only => [:show, :index]
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
