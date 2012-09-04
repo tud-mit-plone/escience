@@ -989,6 +989,7 @@ en:
 
   field_active: Active
 
+  text_user_messages_empty: There is no message.
   text_personalize_account: Here you have the ability to adjust your overview page. Select to display items and change their order.
   text_select_mail_notifications: Select actions for which email notifications should be sent.
   text_regexp_info: eg. ^[A-Z0-9]+$

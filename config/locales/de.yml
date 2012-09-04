@@ -465,6 +465,8 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_sortby: Sortieren nach
+  label_subissue: Unteraufgabe von
   label_issue_id: Aufgabe Nr.
   label_subprojectof: Übergeordnetes Projekt
   label_contact: Kontakt
@@ -607,7 +609,7 @@ de:
   label_change_status: Statuswechsel
   label_history: Historie
   label_attachment: Datei
-  label_attachment_new: Neue Datei
+  label_attachment_new: Neue Datei hinzufügen
   label_attachment_delete: Anhang löschen
   label_attachment_plural: Dateien
   label_file_added: Datei hinzugefügt
@@ -931,6 +933,7 @@ de:
 
   field_active: Aktiv
 
+  text_user_messages_empty: Keine Nachrichten vorhanden.
   text_personalize_account: Hier haben Sie die Möglichkeit Ihre Übersichtsseite anzupassen. Wählen Sie anzuzeigende Elemente aus und verändern Sie deren Reihenfolge.
   text_member_search: Bitte geben Sie das zu suchende Mitglied in das Eingabefeld ein. Es wird automatisch anhand der Eingabe (mindestens 3 Zeichen) das Ergebnis generiert.
   text_message_destroy_confirmation: Sind Sie sicher, dass sie diese Nachricht löschen wollen?
@@ -1085,7 +1088,7 @@ de:
   notice_project_alreadyexists: Es existiert bereits ein Projekt mit diesem Namen.
   notice_issue_successful_create: Anweisung %{id} erfolgreich erstellt.
   label_between: between
-  setting_issue_group_assignment: Allow issue assignment to groups
+  setting_issue_group_assignment: Erlaube Anweisung Gruppen zuzuweisen
   label_diff: diff
   text_git_repository_note: Repository is bare and local (e.g. /gitrepo, c:\gitrepo)
 

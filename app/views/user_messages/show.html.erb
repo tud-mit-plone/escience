@@ -1,5 +1,3 @@
-
-
 <h1>
   <% if @user_message.directory == 'sent' %>
     <%= "#{l(:label_user_messages_to)} #{render :partial => 'sent', :locals => {:user_message => @user_message}}" %>
@@ -9,11 +7,16 @@
 </h1>
 
 <div id="show_user_message">
+  <div class="date"><%= @user_message.created_at.strftime("%d.%m.%y %H:%M") %></div>
+  <div class="author">
+    <% if(@directory == 'sent') %>
+      <%= render :partial => 'sent', :locals => { :user_message => @user_message } %>
+    <% else %>
+      <%= render :partial => 'received', :locals => { :user_message => @user_message } %>
+    <% end %>
+  </div>
   <span class="subject"><%=h @user_message.subject %></span>
-  
-  <p>
-    <%=h @user_message.body %>
-  </p>
+  <p><%=h @user_message.body %></p>
 </div>
 
 <% content_for :header_tags do %>

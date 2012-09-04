@@ -4,13 +4,14 @@
   <%#= f.error_messages %>
   <p>
     <%= f.label l(:label_user_messages_receiver) %><br />
-    <div class="ui-widget" id="recipient_autocomplete">
-    	<div id="log" class="ui-widget-content"></div>
+    <div class="ui-widget ui-widget-content" id="recipient_autocomplete">
     	<input id="user_message_receiver_visible" />
     	<%= f.hidden_field :receiver %>
     	<%= hidden_field_tag("buffer", @user_message_reply_id) %>
     	<%= hidden_field_tag("reply_mail", @user_message_reply_mail) %>
+    	<div class="clear">&nbsp;</div>
     </div>
+  	<div class="clear"></div>
   </p>
   <p>
     <%= f.label l(:label_user_messages_subject) %><br />
@@ -37,7 +38,10 @@
   <%= javascript_tag '
   	$j(function() {
 		function log(message, id) {
-			var element = $j( "<div class=\'name_element element_"+id+"\' />" ).text( message ).prependTo( "#log" );
+			var element = $j( "<div class=\'name_element element_"+id+"\' />" ).text( message );
+			var oldelements = $j("#recipient_autocomplete").find(".name_element");
+			if (oldelements.length < 1) element.prependTo( "#recipient_autocomplete" );
+			else element = oldelements.last().after(element);
 			var delete_item = $j( "<div class=\'delete_button element_"+id+"\' />" ).prependTo( element ).click(function(){
 			 var id = $j(this).attr(\'class\').split(\' \')[1].substring(8);
 			 var olddata_arr = $j("#user_message_receiver").val().split(\',\');
@@ -49,7 +53,7 @@
   			 $j(this).parent().remove();
 			 }
 		  });
-			$j( "#log" ).scrollTop( 0 );
+			$j( "#recipient_autocomplete" ).scrollTop( 0 );
 			var olddata = $j("#user_message_receiver").val();
 			if (olddata != "") olddata = olddata+","+id;
 			else olddata = id;
@@ -57,6 +61,10 @@
 			$j("#user_message_receiver_visible").val("");
 		}
 
+		$j( "#recipient_autocomplete" ).click(function() {
+		  user_message_receiver_visible.focus();
+		});
+		
 		$j( "#user_message_receiver_visible" ).autocomplete({
 			source: function( request, response ) {
 				$j.ajax({

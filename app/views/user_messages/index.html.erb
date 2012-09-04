@@ -43,6 +43,11 @@
       <% end %>
     </div>
   <% end unless @user_messages.nil? %>
+  <% if !@user_messages.nil? && @user_messages.empty? %>
+    <div class="user_message">
+      <div class="subject"><%= l(:text_user_messages_empty) %></div>
+    </div>
+  <% end %>
 </div>
 
 <% content_for :header_tags do %>
