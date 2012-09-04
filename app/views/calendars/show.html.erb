@@ -31,11 +31,13 @@
 <% if @query.valid? %>
 <%= render :partial => 'common/calendar', :locals => {:calendar => @calendar, :small => false} %>
 
-<p class="legend cal">
-  <span class="starting"><%= l(:text_tip_issue_begin_day) %></span>
-  <span class="ending"><%= l(:text_tip_issue_end_day) %></span>
-  <span class="starting ending"><%= l(:text_tip_issue_begin_end_day) %></span>
-</p>
+<div class="legend cal">
+  <div class="starting"><div class="box">&nbsp;</div><%= l(:text_tip_issue_begin_day) %></div>
+  <div class="clear"></div>
+  <div class="ending"><div class="box">&nbsp;</div><%= l(:text_tip_issue_end_day) %></div>
+  <div class="clear"></div>
+  <div class="starting ending"><div class="box">&nbsp;</div><%= l(:text_tip_issue_begin_end_day) %></div>
+</div>
 <% end %>
 
 <% content_for :sidebar do %>

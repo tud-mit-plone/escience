@@ -74,7 +74,7 @@
 }
 
 .controller-calendars table.cal td.event {
-  background-color: #7DB414;
+  background-color: #7DB414 !important;
   color: #ffffff;
 }
 
@@ -121,11 +121,34 @@
   margin: 11px 0 0 11px;
 }
 
-.controller-calendars .linkToInfo.box {
+.controller-calendars .linkToInfo.box, .controller-calendars .legend div.box {
   float:left; 
   margin-left:3px;
   width:14px; 
-  height:14px;  
+  height:15px; 
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px; 
+}
+
+.controller-calendars .legend {
+  margin: 10px 25px;  
+}
+
+.controller-calendars .legend div.box {
+  background-color: #a8db4a;
+  margin: 0 5px 2px 0;
+}
+
+.controller-calendars .linkToInfo.box.starting, .controller-calendars .legend .starting div {
+  border-left: 1px solid #4d4d4d;
+  border-top: 1px solid #4d4d4d;
+}
+
+.controller-calendars .linkToInfo.box.ending, .controller-calendars .legend .ending div {
+  border-right: 1px solid #4d4d4d;
+  border-bottom: 1px solid #4d4d4d;
 }
 
 .controller-calendars div.linkToInfo a {
