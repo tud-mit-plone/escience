@@ -253,7 +253,7 @@
   	list-style-position:outside;
   	text-indent: 0px;
   	-moz-hyphens: auto;
-  	padding: 5px 10px 5px 15px;
+  	padding: 5px 10px 5px 10px;
 	}
 }
 
@@ -286,6 +286,7 @@
 
 .sidebar .splitter, .sidebar .headline {
 	background-color:#7DB414;
+// background-color:#b05001;
 	font-size: 15px;
 	font-weight: bold;
 	color: #F4F4F4;

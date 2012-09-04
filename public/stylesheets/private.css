@@ -262,7 +262,7 @@ select#membership_project_id {
 	}	
 	
 	
-	/* Issues */
+/* Filter */
 	
 .filter label, .add-filter label{
   display: inline-block;
@@ -273,10 +273,6 @@ select.values_project_id {
   max-width: 200px;
 }
 
-select#time_entry_project_id, select#project_parent_id {
-  max-width: 400px;
-}
-
 .selectors {
   float: left;
   margin-top: 10px;
@@ -284,14 +280,6 @@ select#time_entry_project_id, select#project_parent_id {
 
 .selectors label {
   width: auto;
-}
-
-.issue .tracker {
-  padding-top: 10px;
-  margin-top: 30px;
-  font-size: 15px;
-  color: #7DB414;
-  border-top: 1px solid #D3D3D3;
 }
 
 #history {
@@ -307,192 +295,27 @@ select#time_entry_project_id, select#project_parent_id {
   padding: 0 0 3px 10px;
 }
 
-.contextual {
-  float: right;
-}
-
-.issues .status {
-  width: 200px;
-}
-
-.issues label {
-  font-weight: 600;
-}
-
-.issues a {
-  text-decoration: none;
-//  color: #7D7D7D;
-}
-
-.issues a:hover {
-  text-decoration: underline;
-}
-
-.issues li {
-  margin-bottom: 10px;
-  border: 2px solid #F0F0F0;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  padding: 3px 10px 3px 10px;  
-}
-
-.issues li:hover {
-  border-color: #d0d0d0;
-}
-
-.issues .childissue {
-  background-image: url('../images/issue_child.png');
-  padding-left: 20px;
-  background-repeat: no-repeat;
-}
-
-.issues .assigned-to-me {
-  background-color: #FAFAFA;
-}
-
-.progress {
-  margin-right:10px;
-}
-
-.progress div {
-  margin-top: 1px;
-  height: 10px;
-  display: inline-block;
-}
-
-.progress div.todo {
-  background-color: #fad9d9;
-}
-
-.progress div.closed, .progress div.done {
-  background-color: #7DB414;
-}
-
-#issue_project_id {
-	max-width: 327px;
-}
-
-.issue #issue_tree td {
-  padding-right: 10px;
-}
-
-#issue_is_private {
-  float: right;
-  padding: 5px 3px;
-}
-
-#issue_is_private_label {
-  width: 60px;
-}
-
-.edit_issue fieldset label {
-  width: 120px;
-}
-
-.edit_issue #issue_estimated_hours, .edit_issue #time_entry_hours {
-  width: 30px;
-}
-
-.edit_issue #issue_subject, .edit_issue #time_entry_comments {
-  width: 400px;
-}
-
-.next-prev-links .prev, .next-prev-links .next {
-  background-color: #FAFAFA;
-  float: left;
-  border: 2px solid #D3D3D3;
-  font-size: 12px;
-}
-
-.next-prev-links .position {
-  background-color: #FAFAFA;
-  float: left;
-  border: solid #D3D3D3;
-  font-size: 14px;
-  border-top-width: 2px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-  border-left-width: 0px;
-  color: #7D7D7D;
-  padding:  1px 20px;
-}
-
-.next-prev-links .prev {
-  -moz-border-radius: 5px 0 0 0;
-  -webkit-border-radius: 5px 0 0 0;
-  -khtml-border-radius: 5px 0 0 0;
-  border-radius: 5px 0 0 0;
-  border-bottom-width: 0px;
-}
-
-.next-prev-links .next {
-  -moz-border-radius: 0 5px 0 0;
-  -webkit-border-radius: 0 5px 0 0;
-  -khtml-border-radius: 0 5px 0 0;
-  border-radius: 0 5px 0 0;
-  border-bottom-width: 0px;
-}
-
-.next-prev-links .prev:hover, .next-prev-links .next:hover {
-  background-color: #DEDEDE;
-}
-
-.next-prev-links .first:hover, .next-prev-links .last:hover {
-  background-color: #FAFAFA;
-}
-
-.next-prev-links a {
-  color: #7D7D7D;
-}
-
-.next-prev-links .first, .next-prev-links .last {
-  color: #a9a9a9;
-}
-
-.next-prev-links a, .next-prev-links .first, .next-prev-links .last {
-  text-decoration: none;
-  display: block;
-  padding: 3px 15px;
-}
-	
-.next-prev-links {
-  margin-top: -23px;
-  float: right;
-}
-
-.next-prev-links div, .next-prev-links span, .buttons div {
-  float: left;
-}
-
 .buttons {
   float: right;
 }
 
-.icon-lock {
-  height: 20px;
-  width: 35px;
-  display: inline-block;
-  background: url(../images/lock_unlock.png);
-  background-repeat: no-repeat;
-  background-position: 50% -20%;
+.buttons div {
+  float: left;
 }
 
-.icon-lock:hover {
-  background-position: 50% 100%;
-  text-decoration: none;
+/* fileupload */
+
+input.file {
+  position: relative;
+  -moz-opacity:0;
+  filter:alpha(opacity: 0);
+  opacity: 0;
+  z-index: 2;
 }
 
-.icon-unlock {
-  height: 20px;
-  width: 35px;
-  display: inline-block;
-  background: url(../images/lock_unlock.png);
-  background-repeat: no-repeat;
-  background-position: 50% 120%
-}
-
-.icon-unlock:hover {
-  background-position: 50% 0%;
-  text-decoration: none;
+.faux {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
 }

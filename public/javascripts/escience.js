@@ -16,3 +16,13 @@ function addToolTip() {
   
   $j($selector).qtip({content: {text: $tooltip}, style: {classes: 'ui-tooltip-shadow ui-tooltip-green'}, position: {at:''+$position+' center', my:''+$direction+' center'}});
 }
+
+function toggleDivGroup(el) {
+  var div = Element.up(el, 'div.group');
+  var n = Element.next(div);
+  div.toggleClassName('open');
+  while (n != undefined && !n.hasClassName('group')) {
+    Element.toggle(n);
+    n = Element.next(n);
+  }
+}
