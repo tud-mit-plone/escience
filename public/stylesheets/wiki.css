@@ -1,0 +1,26 @@
+.wiki-page h1, h2, h3, h4, h5 {
+  color: #7D7D7D;
+  margin: 0px;
+  padding-bottom: 0px;
+  padding-top: 10px;
+}
+
+.wiki-page h1 {
+  font-size: 24px;
+}
+
+.wiki-page h2 {
+  font-size: 20px;
+}
+
+.wiki-page h3 {
+  font-size: 18px;
+}
+
+.wiki-page h4 {
+  font-size: 16px;
+}
+
+.wiki-page.new {
+  color:#b00000;
+}
