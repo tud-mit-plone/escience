@@ -102,7 +102,7 @@ class UserMessagesController < ApplicationController
       user = User.find(params[:id])
       if !user.nil?
         @user_message_reply_id = user.id
-        @user_message_reply = " log('#{user.firstname} #{user.lastname}');"
+        @user_message_reply = " log('#{user.firstname} #{user.lastname}', '#{user.id}');"
       end
     end
     respond_to do |format|
