@@ -465,6 +465,7 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_fileupload: Datei auswählen
   label_sortby: Sortieren nach
   label_subissue: Unteraufgabe von
   label_issue_id: Aufgabe Nr.

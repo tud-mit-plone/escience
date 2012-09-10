@@ -183,38 +183,84 @@ function apply_filters_observer() {
 
 var fileFieldCount = 1;
 
-function addFileField() {
+function addFileField(message) {
+  jQuery(document).ready(function($) {
+    var fields = $('#attachments_fields');
+    if (fields.children().length >= 10) return false;
+    var elements = fields.children().first().children();
+    $('.add_attachment').addClass('disabled');
+    var s = $('<fieldset>');
+    fileFieldCount++;
+    elements.each(function(index, el) {
+      newElement = el.clone(true, true);
+      if (typeof(newElement.name) != 'undefined') {
+        newElement.name = "attachments[" + fileFieldCount + newElement.name.slice(newElement.name.indexOf(']['));
+        $(newElement).val('');
+      }
+      $(newElement).find('.fileupload').html(message);
+      s.append(newElement);
+    });
+    s.find('legend').html(message);
+    fields.append(s);
+  });  
+
+/*
   var fields = $('attachments_fields');
   if (fields.childElements().length >= 10) return false;
   fileFieldCount++;
   var s = new Element('span');
-  s.update(fields.down('span').innerHTML);
+  console.log("sdfdsf"+fields);
+  s.update(fields.down(0).innerHTML);
+  s.down('fieldset');
   s.down('input.file').name = "attachments[" + fileFieldCount + "][file]";
   s.down('input.description').name = "attachments[" + fileFieldCount + "][description]";
-  s.down('input.meta_information').name = "attachments[" + fileFieldCount + "][meta_information]";
   fields.appendChild(s);
+*/
 }
 
 function removeFileField(el) {
   var fields = $('attachments_fields');
-  var s = Element.up(el, 'span');
+  var s = Element.up(el, 'fieldset');
   if (fields.childElements().length > 1) {
     s.remove();
+    jQuery('.add_attachment').removeClass('disabled');
   } else {
     s.update(s.innerHTML);
+    jQuery('#attachments_fields legend').html('Datei auswählen');
+    jQuery('#attachments_fields .fileupload').html('Datei auswählen');
+    jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
+    jQuery('.add_attachment').addClass('disabled');
   }
 }
 
 function checkFileSize(el, maxSize, message) {
   var files = el.files;
   if (files) {
-    for (var i=0; i<files.length; i++) {
-      if (files[i].size > maxSize) {
-        alert(message);
-        el.value = "";
+    jQuery(document).ready(function($) {
+      for (var i=0; i<files.length; i++) {
+        if (files[i].size < maxSize) {
+          $(el).parent().find('.fileupload').html(files[i].name + " ("+ format_fileSize(files[i].size) + ")");
+          $(el).parent().addClass('fileselected');
+          $(el).parent().find('legend').html(files[i].name + " ("+ format_fileSize(files[i].size) + ")");
+          $('.add_attachment').removeClass('disabled');
+        } else {
+          alert(message);
+          el.value = "";
+        }
       }
-    }
+    });
   }
+}
+
+function format_fileSize(size) {
+  var iSize = (size / 1024); 
+  if ((iSize / 1024) > 1) { 
+    iSize = iSize / 1024;
+    return ( iSize.toFixed(2) + " MB"); 
+  } else {
+    iSize = iSize.toFixed(2)
+    return iSize + " KB"; 
+  }    
 }
 
 function showTab(name) {

@@ -42,7 +42,7 @@ textarea {
 	height: 0px !important;
 }
 	
-/* profile layout */	
+/* /* !---------- profile layout ------------ */	
 	.block-receiver .mypage-box{
 		border-radius:10px;
 		-moz-border-radius:10px;
@@ -117,7 +117,7 @@ textarea {
 	}
 	
 	
-/* projects */
+/* /* !---------- projects ---------- */
 select#membership_project_id {
 	max-width: 550px;
 }
@@ -262,7 +262,7 @@ select#membership_project_id {
 	}	
 	
 	
-/* Filter */
+/* /* !---------- Filter ------------ */
 	
 .filter label, .add-filter label{
   display: inline-block;
@@ -303,19 +303,137 @@ select.values_project_id {
   float: left;
 }
 
-/* fileupload */
+/* !---------- fileupload ---------- */
 
-input.file {
+#attachments_fields legend {
+  color: #A1A1A1;
+}
+
+#attachments_fields .fileselected legend {
+  color: #7D7D7D;
+}
+
+#attachments_fields input[type=text], #attachments_fields textarea {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #e3e2e2;
+}
+
+#attachments_fields input.file {
   position: relative;
   -moz-opacity:0;
   filter:alpha(opacity: 0);
   opacity: 0;
   z-index: 2;
+  width: 250px;
+  height: 25px;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
-.faux {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
+#attachments_fields .cover_input {
+  position: relative;
+  top: -25px;
+  z-index: 1;
+}
+
+#attachments_fields .fileupload {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  background-image: -moz-linear-gradient(90deg,#7DB414,#759B68);
+  background-image: linear-gradient(90deg,#7DB414,#759B68);
+  background-image: -webkit-gradient(linear,50% 100%,50% 0%,color-stop(0,#759B68),color-stop(1,#7DB414));
+  background-image: -o-linear-gradient(90deg,#7DB414,#759B68);
+  color: #ffffff;
+  width: 240px;
+  padding: 5px;
+  text-align: center;
+  float: left;
+}
+
+#attachments_fields .fileupload hover {
+  background-color: #E9E9E9;
+}
+
+#attachments_fields .fileselected .fileupload  {
+  background-image: -moz-linear-gradient(90deg,#E9E9E9,#F1F1F1);
+  background-image: linear-gradient(90deg,#E9E9E9,#F1F1F1);
+  background-image: -webkit-gradient(linear,50% 100%,50% 0%,color-stop(0,#E9E9E9),color-stop(1,#F1F1F1));
+  background-image: -o-linear-gradient(90deg,#E9E9E9,#F1F1F1);
+  color: #7D7D7D;
+}
+
+#attachments_fields .deleteButton {
+  position: absolute;
+  margin-left: 530px;
+  margin-top: -30px;
+}
+
+#attachments_fields .deleteButton a {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  background-image: url(../images/close.png);
+}
+
+#attachments_fields .deleteButton a:hover {
+  background-image: url(../images/close_hl.png);
+}
+
+#attachments_fields .descr {
+  float: right;
+  margin-left: 10px;
+  margin-top: -25px;
+}
+
+#attachments_fields .description {
+  width: 253px;
+}
+
+#attachments_fields .meta {
+  margin-top: -22px;
+  width: 240px;
+}
+
+#attachments_fields .meta_information {
+  width: 240px;
+}
+
+.add_attachment.disabled {
+  display: none;
+  visibility: hidden;
+}
+
+.add_attachment a {
+  display: block !important;
+  height: 30px;
+  width: 60px;
+}
+
+div.add_attachment {
+  display: block;
+  margin-left:25px;
+  background-color: #7DB414;
+  color: #ffffff;
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  margin-top: -25px;
+  background-image: url(../images/plus.png);
+  background-repeat: no-repeat;
+  background-position: 50% 40%;
+  text-decoration: none;
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -khtml-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+div .add_attachment:hover {
+  text-decoration: none;
+  background-color: #E9E9E9;
 }

@@ -1,6 +1,6 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
 <%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-add') if User.current.allowed_to?(:manage_files, @project) %>
-</div>
+<% end %>
 
 <h2><%=l(:label_attachment_plural)%></h2>
 
