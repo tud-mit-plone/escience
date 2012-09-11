@@ -195,27 +195,14 @@ function addFileField(message) {
       newElement = el.clone(true, true);
       if (typeof(newElement.name) != 'undefined') {
         newElement.name = "attachments[" + fileFieldCount + newElement.name.slice(newElement.name.indexOf(']['));
-        $(newElement).val('');
       }
+      $(newElement).find('input').val('');
       $(newElement).find('.fileupload').html(message);
       s.append(newElement);
     });
     s.find('legend').html(message);
     fields.append(s);
-  });  
-
-/*
-  var fields = $('attachments_fields');
-  if (fields.childElements().length >= 10) return false;
-  fileFieldCount++;
-  var s = new Element('span');
-  console.log("sdfdsf"+fields);
-  s.update(fields.down(0).innerHTML);
-  s.down('fieldset');
-  s.down('input.file').name = "attachments[" + fileFieldCount + "][file]";
-  s.down('input.description').name = "attachments[" + fileFieldCount + "][description]";
-  fields.appendChild(s);
-*/
+  });
 }
 
 function removeFileField(el) {
@@ -230,6 +217,7 @@ function removeFileField(el) {
     jQuery('#attachments_fields .fileupload').html('Datei auswählen');
     jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
     jQuery('.add_attachment').addClass('disabled');
+    jQuery('.deleteButton').addClass('disabled');
   }
 }
 
@@ -243,6 +231,7 @@ function checkFileSize(el, maxSize, message) {
           $(el).parent().addClass('fileselected');
           $(el).parent().find('legend').html(files[i].name + " ("+ format_fileSize(files[i].size) + ")");
           $('.add_attachment').removeClass('disabled');
+          $('.deleteButton').removeClass('disabled');
         } else {
           alert(message);
           el.value = "";

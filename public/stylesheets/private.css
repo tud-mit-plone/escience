@@ -392,18 +392,19 @@ select.values_project_id {
 
 #attachments_fields .description {
   width: 253px;
+  height: 50px;
 }
 
 #attachments_fields .meta {
   margin-top: -22px;
-  width: 240px;
+  width: 245px;
 }
 
 #attachments_fields .meta_information {
-  width: 240px;
+  width: 245px;
 }
 
-.add_attachment.disabled {
+.add_attachment.disabled, .deleteButton.disabled {
   display: none;
   visibility: hidden;
 }

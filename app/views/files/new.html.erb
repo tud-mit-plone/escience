@@ -10,10 +10,8 @@
                                  options_from_collection_for_select(@versions, "id", "name") %>
   </p>
   <% end %>
-
-  <p><!--label><%=l(:label_attachment_plural)%></label -->
-    <%= render :partial => 'attachments/form' %>
-  </p>
+<!--label><%=l(:label_attachment_plural)%></label -->
+  <%= render :partial => 'attachments/form' %>
 </div>
 <%= submit_tag l(:button_add) %>
 <% end %>
