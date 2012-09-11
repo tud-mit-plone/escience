@@ -6,14 +6,14 @@
     </span>
   <% end %>
 <% end %>
-<div id="attachments_fields">
+<div id="attachments_fields" style="width:100%">
   <fieldset>
+    <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
     <legend><%= l(:label_fileupload) %></legend>
     <%= file_field_tag 'attachments[1][file]', :size => 30, :id => nil, :class => 'file',
           :onchange => "checkFileSize(this, #{Setting.attachment_max_size.to_i.kilobytes}, '#{escape_javascript(l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)))}');"  -%>
     <div class="cover_input">
-      <div class="fileupload"><%= l(:label_fileupload) %></div>
-      <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
+      <div class="fileupload" onclick="jQuery(this).parent().parent().find('.file').click()"><%= l(:label_fileupload) %></div>
     </div>
     <div class="descr"><%= text_area_tag 'attachments[1][description]', '', :id => nil, :class => 'description', :rows => 3, :placeholder => l(:label_optional_description) %></div>
     <div class="clear"></div>

@@ -218,6 +218,7 @@ function removeFileField(el) {
     jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
     jQuery('.add_attachment').addClass('disabled');
     jQuery('.deleteButton').addClass('disabled');
+    jQuery(s).removeClass('fileselected');
   }
 }
 

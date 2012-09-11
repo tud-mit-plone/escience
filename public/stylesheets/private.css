@@ -322,24 +322,25 @@ select.values_project_id {
 }
 
 #attachments_fields input.file {
-  position: relative;
+  position: absolute;
   -moz-opacity:0;
   filter:alpha(opacity: 0);
   opacity: 0;
   z-index: 2;
-  width: 250px;
+  width: 230px;
   height: 25px;
-  margin-top: 10px;
   cursor: pointer;
+  z-index: 4;
 }
 
 #attachments_fields .cover_input {
   position: relative;
-  top: -25px;
-  z-index: 1;
+  z-index: 10;
+  width: 45%;
 }
 
 #attachments_fields .fileupload {
+  z-index: 10;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
@@ -349,10 +350,11 @@ select.values_project_id {
   background-image: -webkit-gradient(linear,50% 100%,50% 0%,color-stop(0,#759B68),color-stop(1,#7DB414));
   background-image: -o-linear-gradient(90deg,#7DB414,#759B68);
   color: #ffffff;
-  width: 240px;
+  width: 100%;
   padding: 5px;
   text-align: center;
   float: left;
+  cursor: pointer;
 }
 
 #attachments_fields .fileupload hover {
@@ -368,9 +370,10 @@ select.values_project_id {
 }
 
 #attachments_fields .deleteButton {
-  position: absolute;
-  margin-left: 530px;
-  margin-top: -30px;
+  position: relative;
+  float: right;
+  margin-right: -15px;
+  margin-top: -20px;
 }
 
 #attachments_fields .deleteButton a {
@@ -386,22 +389,21 @@ select.values_project_id {
 
 #attachments_fields .descr {
   float: right;
+  width: 50%;
   margin-left: 10px;
-  margin-top: -25px;
 }
 
 #attachments_fields .description {
-  width: 253px;
   height: 50px;
 }
 
 #attachments_fields .meta {
   margin-top: -22px;
-  width: 245px;
+  width: 46%;
 }
 
 #attachments_fields .meta_information {
-  width: 245px;
+  width: 100%;
 }
 
 .add_attachment.disabled, .deleteButton.disabled {
