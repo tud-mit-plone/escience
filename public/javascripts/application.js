@@ -193,6 +193,9 @@ function addFileField(message) {
     fileFieldCount++;
     elements.each(function(index, el) {
       newElement = el.clone(true, true);
+      if ($(newElement).hasClass("meta")) {
+        $(newElement).html("<ul class = 'meta_information'></ul>");
+      }
       if (typeof(newElement.name) != 'undefined') {
         newElement.name = "attachments[" + fileFieldCount + newElement.name.slice(newElement.name.indexOf(']['));
       }
@@ -201,6 +204,8 @@ function addFileField(message) {
       s.append(newElement);
     });
     s.find('legend').html(message);
+    s.find('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments["+fileFieldCount+"][meta_information]" });
+
     fields.append(s);
   });
 }
@@ -216,6 +221,8 @@ function removeFileField(el) {
     jQuery('#attachments_fields legend').html('Datei auswählen');
     jQuery('#attachments_fields .fileupload').html('Datei auswählen');
     jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
+    jQuery('#attachments_fields .meta').html("<ul class = 'meta_information'></ul>");
+    jQuery('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments[1][meta_information]" });
     jQuery('.add_attachment').addClass('disabled');
     jQuery('.deleteButton').addClass('disabled');
     jQuery(s).removeClass('fileselected');

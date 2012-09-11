@@ -305,6 +305,10 @@ select.values_project_id {
 
 /* !---------- fileupload ---------- */
 
+#attachments_fields fieldset {
+  padding-top: 10px;
+}
+
 #attachments_fields legend {
   color: #A1A1A1;
 }
@@ -373,7 +377,7 @@ select.values_project_id {
   position: relative;
   float: right;
   margin-right: -15px;
-  margin-top: -20px;
+  margin-top: -27px;
 }
 
 #attachments_fields .deleteButton a {
@@ -394,11 +398,11 @@ select.values_project_id {
 }
 
 #attachments_fields .description {
-  height: 50px;
+  height: 60px;
 }
 
 #attachments_fields .meta {
-  margin-top: -22px;
+  margin-top: -32px;
   width: 46%;
 }
 

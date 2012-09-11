@@ -17,7 +17,7 @@
     </div>
     <div class="descr"><%= text_area_tag 'attachments[1][description]', '', :id => nil, :class => 'description', :rows => 3, :placeholder => l(:label_optional_description) %></div>
     <div class="clear"></div>
-    <div class="meta"><%= text_field_tag 'attachments[1][meta_information]', '', :id => nil, :class => 'meta_information', :placeholder => l(:label_meta_information_description) %></div>
+    <div class="meta"><ul class = 'meta_information' placeholder = <% l(:label_meta_information_description) %>></ul></div>
   </fieldset>
 </div>
 <br />
