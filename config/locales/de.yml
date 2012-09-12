@@ -164,6 +164,7 @@ de:
   notice_account_wrong_password: Falsches Kennwort.
   notice_account_register_done: Konto wurde erfolgreich angelegt.
   notice_account_unknown_email: Unbekannter Benutzer.
+  notice_attachment_upload_successful: Datei(en) erfolgreich hochgeladen.
   notice_can_t_change_password: Dieses Konto verwendet eine externe Authentifizierungs-Quelle. Unmöglich, das Kennwort zu ändern.
   notice_account_lost_email_sent: Eine E-Mail mit Anweisungen, ein neues Kennwort zu wählen, wurde Ihnen geschickt.
   notice_account_activated: Ihr Konto ist aktiviert. Sie können sich jetzt anmelden.
@@ -211,6 +212,7 @@ de:
   error_project_crate: Es trat ein Fehler beim Erstellen des Projekts auf.
   
   warning_attachments_not_saved: "%{count} Datei(en) konnten nicht gespeichert werden."
+  warning_attachments_error: Datei(en) konnten nicht gespeichert werden.
 
   mail_subject_lost_password: "Ihr %{value} Kennwort"
   mail_body_lost_password: 'Benutzen Sie den folgenden Link, um Ihr Kennwort zu ändern:'

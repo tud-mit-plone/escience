@@ -228,6 +228,8 @@ class WikiController < ApplicationController
     if !@page.new_record? && params[:content].present? && @content.text == params[:content][:text]
       attachments = Attachment.attach_files(@page, params[:attachments])
       render_attachment_warning_if_needed(@page)
+      render_attachment_notice_if_upload_failed(attachments)
+      
       # don't save content if text wasn't changed
       @page.save
       redirect_to :action => 'show', :project_id => @project, :id => @page.title
@@ -249,6 +251,9 @@ class WikiController < ApplicationController
     if @page.save
       attachments = Attachment.attach_files(@page, params[:attachments])
       render_attachment_warning_if_needed(@page)
+
+      render_attachment_notice_if_upload_failed(attachments)
+
       call_hook(:controller_wiki_edit_after_save, { :params => params, :page => @page})
       redirect_to :action => 'show', :project_id => @project, :id => @page.title
     else
@@ -363,6 +368,7 @@ class WikiController < ApplicationController
     return render_403 unless editable?
     attachments = Attachment.attach_files(@page, params[:attachments])
     render_attachment_warning_if_needed(@page)
+    render_attachment_notice_if_upload_failed(attachments)
     redirect_to :action => 'show', :id => @page.title, :project_id => @project
   end
 

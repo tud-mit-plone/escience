@@ -500,6 +500,14 @@ class ApplicationController < ActionController::Base
     flash[:warning] = l(:warning_attachments_not_saved, obj.unsaved_attachments.size) if obj.unsaved_attachments.present?
   end
 
+  def render_attachment_notice_if_upload_failed(attachments)
+    if !attachments.empty? && !attachments[:files].blank?
+      flash[:notice] = l(:notice_attachment_upload_successful)
+    else
+      flash[:notice] = l(:warning_attachments_error)
+    end
+  end
+
   # Sets the `flash` notice or error based the number of issues that did not save
   #
   # @param [Array, Issue] issues all of the saved and unsaved Issues

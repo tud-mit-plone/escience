@@ -60,6 +60,10 @@ module Redmine
           @unsaved_attachments ||= []
         end
 
+        def saved_meta_informations
+          @saved_meta_informations ||=[]
+        end
+
         def save_attachments(attachments, author=User.current)
           if attachments.is_a?(Hash)
             attachments = attachments.values
@@ -82,10 +86,11 @@ module Redmine
                 unsaved_attachments << a
               else
                 saved_attachments << a
+                saved_meta_informations << attachment["meta_information"].to_s.strip
               end
             end
           end
-          {:files => saved_attachments, :unsaved => unsaved_attachments}
+          {:files => saved_attachments, :unsaved => unsaved_attachments, :meta_informations => saved_meta_informations}
         end
 
         def attach_saved_attachments

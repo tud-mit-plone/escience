@@ -18,6 +18,7 @@
 require "digest/md5"
 
 class Attachment < ActiveRecord::Base
+
   belongs_to :container, :polymorphic => true
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
 
@@ -242,14 +243,18 @@ class Attachment < ActiveRecord::Base
     obj.attach_saved_attachments
 
     result[:files].each_with_index do |att,count|
-      meta = MetaInformation.new
       
-      meta.meta_information = result[:meta_informations][count]
-      meta.attachment = att
-      meta.user = User.current
-      meta.save!
+
+      result[:meta_informations].each do |tag|
+        meta = MetaInformation.new
+        meta.meta_information = tag
+        meta.attachment = att
+        meta.user = User.current
+        meta.save!
+      end
     end if !(result[:files].nil?)
-    result
+
+    return result
   end
 
   def self.latest_attach(attachments, filename)

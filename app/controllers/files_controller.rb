@@ -44,6 +44,7 @@ class FilesController < ApplicationController
     container = (params[:version_id].blank? ? @project : @project.versions.find_by_id(params[:version_id]))
     attachments = Attachment.attach_files(container, params[:attachments])
     render_attachment_warning_if_needed(container)
+    render_attachment_notice_if_upload_failed(attachments)
 
     if !attachments.empty? && !attachments[:files].blank? && Setting.notified_events.include?('file_added')
       Mailer.attachments_added(attachments[:files]).deliver

@@ -149,6 +149,7 @@ en:
   notice_account_wrong_password: Wrong password
   notice_account_register_done: Account was successfully created. To activate your account, click on the link that was emailed to you.
   notice_account_unknown_email: Unknown user.
+  notice_attachment_upload_successful: File uploaded successfully
   notice_can_t_change_password: This account uses an external authentication source. Impossible to change the password.
   notice_account_lost_email_sent: An email with instructions to choose a new password has been sent to you.
   notice_account_activated: Your account has been activated. You can now log in.
@@ -199,6 +200,7 @@ en:
   error_attachment_too_big: "This file cannot be uploaded because it exceeds the maximum allowed file size (%{max_size})"
   error_session_expired: "Your session has expired. Please login again."
   warning_attachments_not_saved: "%{count} file(s) could not be saved."
+  warning_attachments_error: "file(s) could not be saved."
 
   mail_subject_lost_password: "Your %{value} password"
   mail_body_lost_password: 'To change your password, click on the following link:'
