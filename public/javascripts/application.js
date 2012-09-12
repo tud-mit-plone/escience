@@ -204,7 +204,7 @@ function addFileField(message) {
       s.append(newElement);
     });
     s.find('legend').html(message);
-    s.find('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments["+fileFieldCount+"][meta_information]" });
+    s.find('.meta_information').tagit({select:true, sortable:true, itemName: "attachments",fieldName: "["+fileFieldCount+"][meta_information]" });
 
     fields.append(s);
   });
