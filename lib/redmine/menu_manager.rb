@@ -345,6 +345,7 @@ module Redmine
 
       # Adds a child at given position
       def add_at(child, position)
+        return nil if find {|node| node.name == child.name}
         raise "Child already added" if find {|node| node.name == child.name}
 
         @children = @children.insert(position, child)
