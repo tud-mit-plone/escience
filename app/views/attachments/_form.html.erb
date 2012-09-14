@@ -8,6 +8,7 @@
 <% end %>
 <div id="attachments_fields" style="width:100%">
   <fieldset>
+      <div class="toggleButton"><%= link_to_function('', 'toggleFieldsetNew(jQuery(this).parent().parent())', :title => (l(:button_toggle))) %></div>
       <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
       <legend><%= l(:label_fileupload) %></legend>
     <div class="toToggle">
@@ -42,27 +43,10 @@
     <%= javascript_include_tag 'tag-it.js' %>
     <%= stylesheet_link_tag 'tagit-simple-green' %>
     <%= javascript_tag '
-    jQuery(function () {
-  	  jQuery(".meta_information").tagit({
-  	     tagSource: function(request, response) {
-           jQuery.ajax({
-              url:        "/metatagssearch.json",
-              dataType:   "json",
-              data:       { q: request.term },
-              success: function(data) {
-    						response(jQuery.map( data, function( item ) {
-                   return item.meta_information.meta_information;
-    						}));
-              }
-           });
-         },
-  	     allowSpaces: true, 
-  	     select:true, 
-  	     sortable:true, 
-  	     itemName: "attachments",
-  	     fieldName: "[1][meta_information]", 
-  	     placeholderText:"'+ l(:label_meta_information_description)+'" 
-  	  });
-	  });
-	  ' %>
+    var label_meta_information_description = "'+l(:label_meta_information_description)+'";
+    jQuery(function ($) {
+      tagItForUs($(".meta_information"),label_meta_information_description);
+      $(".userinput").keydown(function(event) {if (event.which == 13) return false;});
+    });
+    ' %>
 <% end %>

@@ -190,6 +190,7 @@ function toggleFieldsetNew(fieldset) {
 
 function addFileField(message) {
   jQuery(document).ready(function($) {
+    if (!$("fieldset.fileselected:last").hasClass('collapsed')) toggleFieldsetNew($("fieldset.fileselected:last"));
     var fields = $('#attachments_fields');
     if (fields.children().length >= 10) return false;
     var elements = fields.children().first().children();
@@ -198,8 +199,9 @@ function addFileField(message) {
     fileFieldCount++;
     elements.each(function(index, el) {
       newElement = el.clone(true, true);
-      if ($(newElement).hasClass("meta")) {
-        $(newElement).html("<ul class = 'meta_information'></ul>");
+      if ($(newElement).hasClass('toToggle')) $(newElement).attr('style','');
+      if ($(newElement).find('.meta') != 'undefinded') {
+        $(newElement).find('.meta').html("<ul class = 'meta_information'></ul>");
       }
       $(newElement).find('.fileupload').html(message);
       s.append(newElement);
@@ -209,9 +211,7 @@ function addFileField(message) {
       el.name = "attachments[" + fileFieldCount + el.name.slice(el.name.indexOf(']['));
     });
     s.find('input').val('');
-    s.find('.meta_information').tagit({select:true, sortable:true, itemName: "attachments",fieldName: "["+fileFieldCount+"][meta_information]" });
-
-    toggleFieldsetNew($("fieldset"));
+    tagItForUs(s.find('.meta_information'),label_meta_information_description);
     fields.append(s);
   });
 }
@@ -225,7 +225,6 @@ function removeFileField(el) {
   } else {
     s.update(s.innerHTML);
     jQuery(s).removeClass('fileselected');
-    toggleFieldsetNew(s);
     jQuery('#attachments_fields legend').html('Datei auswählen');
     jQuery('#attachments_fields .fileupload').html('Datei auswählen');
     jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
@@ -233,11 +232,13 @@ function removeFileField(el) {
     jQuery('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments[1][meta_information]" });
     jQuery('.add_attachment').addClass('disabled');
     jQuery('.deleteButton').addClass('disabled');
+    if (jQuery(s).hasClass('collapsed')) toggleFieldsetNew($(s));
   }
 }
 
 function checkFileSize(el, maxSize, message) {
   var files = el.files;
+  console.log(maxSize);
   if (files) {
     jQuery(document).ready(function($) {
       for (var i=0; i<files.length; i++) {
@@ -247,11 +248,12 @@ function checkFileSize(el, maxSize, message) {
           var filesuffix = files[i].name.substr(files[i].name.lastIndexOf('.'));
           inputfilename.val(filename);
           inputfilename.focusout(function() {
-            if ($(this).val() != "") {
+            console.log($(this).val().indexOf('<'));
+            if ($(this).val() != "" && $(this).val().indexOf('<') == -1) {
               var newfilename = $(this).val()
               var newfilesuffix = $(this).parent().find('span').html();
               $(this).parent().find('input.hiddenname').val(newfilename+newfilesuffix);
-              if (newfilename.length > 20) newfilename = newfilename.substring(0,newfilename.length-10) + "... ";
+              if (newfilename.length > 37) newfilename = newfilename.substring(0,37) + "... ";
               $(this).closest('fieldset').find('legend').html(newfilename+newfilesuffix);
             } else {
               var oldfilename = $(this).parent().find('input.hiddenname').val();
@@ -261,7 +263,7 @@ function checkFileSize(el, maxSize, message) {
 
           $(el).parent().find('.editfilename span').html(filesuffix);
           $(el).parent().find('.editfilename .hiddenname').val(files[i].name);
-          if (filename.length > 20) filename = filename.substring(0,filename.length-10) + "... ";
+          if (filename.length > 37) filename = filename.substring(0,37) + "... ";
           $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ format_fileSize(files[i].size) + ")");
           $(el).parent().parent().addClass('fileselected');          
           

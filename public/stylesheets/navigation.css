@@ -156,7 +156,7 @@
 	font-size:15px;
 	font-weight:bold;
 	text-decoration:none;
-	color:#7D7D7D;
+	color: #707070;
 }
 
 #navigation a:hover, #navigation a.selected, #navigation .newmessage {
@@ -168,7 +168,7 @@
 }
 
 #navigation li a {
-	color: #7D7D7D;
+	color: #707070;
 	font-size: 12px;
 	font-weight: normal;
 	display: block;
@@ -268,7 +268,7 @@
 
 .sidebar a {
 	text-decoration:none;
-	color:#7D7D7D;
+	color: #707070;
 	display: block;
 	padding: 3px 2px;
 }

@@ -26,3 +26,27 @@ function toggleDivGroup(el) {
     n = Element.next(n);
   }
 }
+
+function tagItForUs(el,text) {
+  jQuery(el).tagit({
+     tagSource: function(request, response) {
+       jQuery.ajax({
+          url:        "/metatagssearch.json",
+          dataType:   "json",
+          data:       { q: request.term },
+          success: function(data) {
+						response(jQuery.map( data, function( item ) {
+               return item.meta_information.meta_information;
+						}));
+          }
+       });
+     },
+     allowSpaces: false, 
+     select:true, 
+     sortable:true, 
+     itemName: "attachments",
+     fieldName: "[1][meta_information]", 
+     maxLength: 400,
+     placeholderText: text
+  });
+}

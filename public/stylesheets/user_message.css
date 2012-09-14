@@ -50,7 +50,7 @@
 
 a.link_to_message {
   text-decoration: none;
-  color: #7D7D7D;
+  color: #707070;
 }
 
 .user_message, .user_message_links {
@@ -215,7 +215,7 @@ div.name_element {
 .ui-autocomplete li a {
 	padding: 5px 10px;
 	display: block;
-  color: #7D7D7D;
+  color: #707070;
   font-size: 12px;
   text-decoration: none;
 }

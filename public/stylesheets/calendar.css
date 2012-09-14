@@ -42,7 +42,7 @@
 }
 
 #changeMonth a {
-  color: #7D7D7D;
+  color: #707070;
   text-decoration: none;
   display: block;
   padding: 3px 20px;
@@ -116,7 +116,7 @@
   -khtml-border-radius: 10px;
   border-radius: 10px;
   border: 1px solid #DADADA;
-  color: #7D7D7D;
+  color: #707070;
   height: auto !important;
   margin: 11px 0 0 11px;
 }
@@ -231,7 +231,7 @@ div.calendar thead .name { /* Cells <TD> containing the day names */
 }
 
 div.calendar thead .weekend { /* How a weekend day name shows in header */
-  color: #7D7D7D;
+  color: #707070;
 }
 
 div.calendar thead .hilite { /* How do the buttons in header appear when hover */
@@ -249,7 +249,7 @@ div.calendar thead .active { /* Active (pressed) buttons in header */
 
 div.calendar tbody .day { /* Cells <TD> containing month days dates */
   width: 2em;
-  color: #7D7D7D;
+  color: #707070;
   text-align: right;
   padding: 2px 4px 2px 2px;
 }
@@ -430,7 +430,7 @@ div.mypage-box .cal {
 .cal #small td {
   border: none;
   background-color: #ffffff;
-  color: #7D7D7D;
+  color: #707070;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;

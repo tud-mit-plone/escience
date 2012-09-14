@@ -24,7 +24,7 @@
 	font-size:15px;
 	font-weight:bold;
 	text-decoration:none;
-	color:#7D7D7D;
+	color: #707070;
 }
 
 #navigation a:hover, #navigation a.selected, #navigation .newmessage {
@@ -204,7 +204,7 @@
 }
 
 #registration a:hover {
-	color:#7D7D7D;
+	color: #707070;
 }
 
 #confirmation {
@@ -240,7 +240,7 @@ input.error {
 .controller-welcome.action-news #main .wiki h1 {
 	margin-top:0;
 	font-size:22px;
-	color: #7D7D7D;
+	color: #707070;
 }
 
 
