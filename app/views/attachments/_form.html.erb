@@ -8,16 +8,23 @@
 <% end %>
 <div id="attachments_fields" style="width:100%">
   <fieldset>
-    <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
-    <legend><%= l(:label_fileupload) %></legend>
-    <%= file_field_tag 'attachments[1][file]', :size => 30, :id => nil, :class => 'file',
-          :onchange => "checkFileSize(this, #{Setting.attachment_max_size.to_i.kilobytes}, '#{escape_javascript(l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)))}');"  -%>
-    <div class="cover_input">
-      <div class="fileupload" onclick="jQuery(this).parent().parent().find('.file').click()"><%= l(:label_fileupload) %></div>
+      <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
+      <legend><%= l(:label_fileupload) %></legend>
+    <div class="toToggle">
+      <%= file_field_tag 'attachments[1][file]', :size => 30, :id => nil, :class => 'file',
+            :onchange => "checkFileSize(this, #{Setting.attachment_max_size.to_i.kilobytes}, '#{escape_javascript(l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)))}');"  -%>
+      <div class="cover_input">
+        <div class="fileupload" onclick="jQuery(this).parent().parent().find('.file').click()"><%= l(:label_fileupload) %></div>
+        <div class="editfilename">
+          <input class="userinput" size="10">
+          <span></span>
+          <%= hidden_field_tag 'attachments[1][filename]', '', :id => nil, :class => 'hiddenname' %>
+        </div>
+      </div>
+      <div class="descr"><%= text_area_tag 'attachments[1][description]', '', :id => nil, :class => 'description', :rows => 3, :placeholder => l(:label_optional_description) %></div>
+      <div class="clear"></div>
+      <div class="meta"><ul class = 'meta_information'></ul></div>
     </div>
-    <div class="descr"><%= text_area_tag 'attachments[1][description]', '', :id => nil, :class => 'description', :rows => 3, :placeholder => l(:label_optional_description) %></div>
-    <div class="clear"></div>
-    <div class="meta"><ul class = 'meta_information' placeholder = <% l(:label_meta_information_description) %>></ul></div>
   </fieldset>
 </div>
 <br />
@@ -36,33 +43,26 @@
     <%= stylesheet_link_tag 'tagit-simple-green' %>
     <%= javascript_tag '
     jQuery(function () {
-	  var availableTags = [
-		"ActionScript",
-		"AppleScript",
-		"Asp",
-		"BASIC",
-		"C",
-		"C++",
-		"Clojure",
-		"COBOL",
-		"ColdFusion",
-		"Erlang",
-		"Fortran",
-		"Groovy",
-		"Haskell",
-		"Java",
-		"JavaScript",
-		"Lisp",
-		"Perl",
-		"PHP",
-		"Python",
-		"Ruby",
-		"Scala",
-		"Scheme"
-	  ];
-
-	  jQuery(".meta_information").tagit({tagSource:availableTags, select:true, sortable:true, itemName: "attachments",fieldName: "[1][meta_information]" });
+  	  jQuery(".meta_information").tagit({
+  	     tagSource: function(request, response) {
+           jQuery.ajax({
+              url:        "/metatagssearch.json",
+              dataType:   "json",
+              data:       { q: request.term },
+              success: function(data) {
+    						response(jQuery.map( data, function( item ) {
+                   return item.meta_information.meta_information;
+    						}));
+              }
+           });
+         },
+  	     allowSpaces: true, 
+  	     select:true, 
+  	     sortable:true, 
+  	     itemName: "attachments",
+  	     fieldName: "[1][meta_information]", 
+  	     placeholderText:"'+ l(:label_meta_information_description)+'" 
+  	  });
 	  });
-
 	  ' %>
 <% end %>

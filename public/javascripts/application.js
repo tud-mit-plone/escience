@@ -183,6 +183,11 @@ function apply_filters_observer() {
 
 var fileFieldCount = 1;
 
+function toggleFieldsetNew(fieldset) {
+  jQuery(fieldset).toggleClass('collapsed');
+  jQuery(fieldset).find('div.toToggle').slideToggle('slow');
+}
+
 function addFileField(message) {
   jQuery(document).ready(function($) {
     var fields = $('#attachments_fields');
@@ -196,16 +201,17 @@ function addFileField(message) {
       if ($(newElement).hasClass("meta")) {
         $(newElement).html("<ul class = 'meta_information'></ul>");
       }
-      if (typeof(newElement.name) != 'undefined') {
-        newElement.name = "attachments[" + fileFieldCount + newElement.name.slice(newElement.name.indexOf(']['));
-      }
-      $(newElement).find('input').val('');
       $(newElement).find('.fileupload').html(message);
       s.append(newElement);
     });
     s.find('legend').html(message);
+    s.find('input').each(function(nr,el) {
+      el.name = "attachments[" + fileFieldCount + el.name.slice(el.name.indexOf(']['));
+    });
+    s.find('input').val('');
     s.find('.meta_information').tagit({select:true, sortable:true, itemName: "attachments",fieldName: "["+fileFieldCount+"][meta_information]" });
 
+    toggleFieldsetNew($("fieldset"));
     fields.append(s);
   });
 }
@@ -218,6 +224,8 @@ function removeFileField(el) {
     jQuery('.add_attachment').removeClass('disabled');
   } else {
     s.update(s.innerHTML);
+    jQuery(s).removeClass('fileselected');
+    toggleFieldsetNew(s);
     jQuery('#attachments_fields legend').html('Datei auswählen');
     jQuery('#attachments_fields .fileupload').html('Datei auswählen');
     jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
@@ -225,7 +233,6 @@ function removeFileField(el) {
     jQuery('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments[1][meta_information]" });
     jQuery('.add_attachment').addClass('disabled');
     jQuery('.deleteButton').addClass('disabled');
-    jQuery(s).removeClass('fileselected');
   }
 }
 
@@ -235,11 +242,32 @@ function checkFileSize(el, maxSize, message) {
     jQuery(document).ready(function($) {
       for (var i=0; i<files.length; i++) {
         if (files[i].size < maxSize) {
-          $(el).parent().find('.fileupload').html(files[i].name + " ("+ format_fileSize(files[i].size) + ")");
-          $(el).parent().addClass('fileselected');
-          $(el).parent().find('legend').html(files[i].name + " ("+ format_fileSize(files[i].size) + ")");
+          var inputfilename = $(el).parent().find('.editfilename input.userinput');
+          var filename = files[i].name.substr(0,files[i].name.lastIndexOf('.'));
+          var filesuffix = files[i].name.substr(files[i].name.lastIndexOf('.'));
+          inputfilename.val(filename);
+          inputfilename.focusout(function() {
+            if ($(this).val() != "") {
+              var newfilename = $(this).val()
+              var newfilesuffix = $(this).parent().find('span').html();
+              $(this).parent().find('input.hiddenname').val(newfilename+newfilesuffix);
+              if (newfilename.length > 20) newfilename = newfilename.substring(0,newfilename.length-10) + "... ";
+              $(this).closest('fieldset').find('legend').html(newfilename+newfilesuffix);
+            } else {
+              var oldfilename = $(this).parent().find('input.hiddenname').val();
+              $(this).val(oldfilename.substr(0,oldfilename.lastIndexOf('.')));
+            }
+          });
+
+          $(el).parent().find('.editfilename span').html(filesuffix);
+          $(el).parent().find('.editfilename .hiddenname').val(files[i].name);
+          if (filename.length > 20) filename = filename.substring(0,filename.length-10) + "... ";
+          $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ format_fileSize(files[i].size) + ")");
+          $(el).parent().parent().addClass('fileselected');          
+          
           $('.add_attachment').removeClass('disabled');
           $('.deleteButton').removeClass('disabled');
+          $(el).parent().find('input.ui-widget-content').focus();
         } else {
           alert(message);
           el.value = "";

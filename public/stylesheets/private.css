@@ -313,6 +313,11 @@ select.values_project_id {
   color: #A1A1A1;
 }
 
+#attachments_fields .fileselected input.file {
+  display: none;
+  visibility: hidden;
+}
+
 #attachments_fields .fileselected legend {
   color: #7D7D7D;
 }
@@ -361,16 +366,44 @@ select.values_project_id {
   cursor: pointer;
 }
 
+#attachments_fields .editfilename {
+  visibility: hidden;
+  display: none;
+}
+
+#attachments_fields .fileselected .editfilename {
+  float: left;
+  width: 100%;
+  display: inline-block;
+  visibility: visible;
+}
+
+#attachments_fields .editfilename span {
+  padding-top: 6px;
+  display: inline-block;
+}
+
+#attachments_fields .editfilename input.userinput {
+  float: left;
+  width: 85%;
+  padding: 5px;
+  z-index: 10;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;  
+  border: 1px solid #e3e2e2;
+  margin-top: 0px;
+  text-align: right;
+}
+
 #attachments_fields .fileupload hover {
   background-color: #E9E9E9;
 }
 
 #attachments_fields .fileselected .fileupload  {
-  background-image: -moz-linear-gradient(90deg,#E9E9E9,#F1F1F1);
-  background-image: linear-gradient(90deg,#E9E9E9,#F1F1F1);
-  background-image: -webkit-gradient(linear,50% 100%,50% 0%,color-stop(0,#E9E9E9),color-stop(1,#F1F1F1));
-  background-image: -o-linear-gradient(90deg,#E9E9E9,#F1F1F1);
-  color: #7D7D7D;
+  visibility: hidden;
+  display: none;
 }
 
 #attachments_fields .deleteButton {

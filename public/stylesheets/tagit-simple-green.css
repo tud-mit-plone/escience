@@ -79,7 +79,7 @@ ul.tagit li.tagit-choice {
     background-color: #7DB414;
     color: #ffffff;
     border: 0px solid #caf3cd;
-    padding: 2px 13px 3px 4px;
+    padding: 1px 13px 2px 4px;
 }
 
 ul.tagit li.tagit-choice.selected {
@@ -110,17 +110,16 @@ ul.tagit li.tagit-choice a.tagit-close {
     font-size: 12px;
     font-weight: bold;
     outline: medium none;
-    padding: 2px 0 2px 3px;
+    padding: 1px 0 1px 3px;
     text-decoration: none;
     position: absolute;
     display: block;
     top: 0;
     right: 3px;
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 ul.tagit li.tagit-choice a.tagit-close:hover {
-    color: #7DB414;
+    color: #000000;
 }
 
 ul.tagit input[type="text"] {
