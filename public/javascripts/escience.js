@@ -27,7 +27,7 @@ function toggleDivGroup(el) {
   }
 }
 
-function tagItForUs(el,text) {
+function tagItForUs(el,text,id) {
   jQuery(el).tagit({
      tagSource: function(request, response) {
        jQuery.ajax({
@@ -45,7 +45,7 @@ function tagItForUs(el,text) {
      select:true, 
      sortable:true, 
      itemName: "attachments",
-     fieldName: "[1][meta_information]", 
+     fieldName: id+"][meta_information", 
      maxLength: 400,
      placeholderText: text
   });

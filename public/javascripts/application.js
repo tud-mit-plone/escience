@@ -207,11 +207,11 @@ function addFileField(message) {
       s.append(newElement);
     });
     s.find('legend').html(message);
-    s.find('input').each(function(nr,el) {
+    s.find('input[type=text], input[type=file], textarea').each(function(nr,el) {
       el.name = "attachments[" + fileFieldCount + el.name.slice(el.name.indexOf(']['));
     });
     s.find('input').val('');
-    tagItForUs(s.find('.meta_information'),label_meta_information_description);
+    tagItForUs(s.find('.meta_information'),label_meta_information_description,fileFieldCount);
     fields.append(s);
   });
 }
