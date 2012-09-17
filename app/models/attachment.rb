@@ -245,12 +245,14 @@ class Attachment < ActiveRecord::Base
     result[:files].each_with_index do |att,count|
       
 
-      result[:meta_informations].each do |tag|
-        meta = MetaInformation.new
-        meta.meta_information = tag
-        meta.attachment = att
-        meta.user = User.current
-        meta.save!
+      result[:meta_informations].each do |tags|
+        JSON.parse(tags).each do |tag|
+          meta = MetaInformation.new
+          meta.meta_information = tag
+          meta.attachment = att
+          meta.user = User.current
+          meta.save!
+        end
       end
     end if !(result[:files].nil?)
 
