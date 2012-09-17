@@ -268,6 +268,7 @@ module ApplicationHelper
   # Renders the project quick-jump box
   def render_project_jump_box
     return unless User.current.logged?
+    @project = Project.find(session[:selected_project]) if (@project.nil? && (!session[:selected_project].nil?))
     projects = User.current.memberships.collect(&:project).compact.select(&:active?).uniq
     if projects.any?
       if @project.nil?

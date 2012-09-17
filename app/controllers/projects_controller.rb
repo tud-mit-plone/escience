@@ -167,6 +167,8 @@ class ProjectsController < ApplicationController
 	
   # Show @project
   def show
+    session[:selected_project] = @project.id 
+
     if params[:jump]
       # try to redirect to the requested menu item
       redirect_to_project_menu_item(@project, params[:jump]) && return

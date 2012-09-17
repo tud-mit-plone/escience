@@ -77,6 +77,7 @@ module Redmine
 
       # Renders the application main menu
       def render_main_menu(project)
+        project = Project.find(session[:selected_project]) if (project.nil? && (!session[:selected_project].nil?))
         render_menu((project && !project.new_record?) ? :project_menu : :application_menu, project)
       end
 
