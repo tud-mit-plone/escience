@@ -5,11 +5,11 @@
     <div class="sort_buttons">
       <%= content_tag('div', l(:label_sortby)+" :", :style => 'float:left', :class => 'sortby') %>
       <%#= content_tag('div', sort_link('id', 'ID', 'desc'), :style => 'float:left', :class => 'first') %>
-      <%= content_tag('div', sort_link('subject', l(:field_subject), 'desc'), :style => 'float:left', :class => 'first') %>
-      <%= content_tag('div', sort_link('tracker', l(:label_tracker), 'desc'), :style => 'float:left') %>
-      <%= content_tag('div', sort_link('status', l(:label_issue_status), 'desc'), :style => 'float:left') %>
-      <%= content_tag('div', sort_link('priority', l(:field_priority), 'desc'), :style => 'float:left') %>
-      <%= content_tag('div', sort_link('created_on', l(:field_created_on), 'desc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('subject', l(:field_subject), 'asc'), :style => 'float:left', :class => 'first') %>
+      <%= content_tag('div', sort_link('tracker', l(:label_tracker), 'asc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('status', l(:label_issue_status), 'asc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('priority', l(:field_priority), 'asc'), :style => 'float:left') %>
+      <%= content_tag('div', sort_link('created_on', l(:field_created_on), 'asc'), :style => 'float:left') %>
     </div>
     <div class="clear"></div>
     <% previous_group = false %>
@@ -19,26 +19,16 @@
     <% @issues_by_group.each do |key, issue_list| -%>
   <% group_num = group_num+1 %>
 
-        <% if (@issues_by_group.size>1) || (!key.empty?) %> 
-
+  <% if (@issues_by_group.size>1) || (!key.nil? && !key.empty?) %> 
       <div class="group open" valign="top">
           <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
-          <div class="headline">[<%= key.strip %>] (<%= issue_list.size %>)</div>
+          <div class="headline"><%= key.strip %> (<%= issue_list.size %>)</div>
       </div>
       <div class="clear"></div>
   <% end %>
     
     <%# issue_list(issues) do |issue, level| -%>
     <% issue_list.each do |issue| -%>
-      <% if @query.grouped? && (group = @query.group_by_column.value(issue)) != previous_group %>
-      <% reset_cycle %>
-      <div class="group open" valign="top">
-          <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
-          <div class="headline"><%= group.blank? ? 'None' : column_content(@query.group_by_column, issue) %> <span class="count">(<%= @issue_count_by_group[group] %>)</span></div>
-      </div>
-      <div class="clear"></div>
-      <% previous_group = group %>
-      <% end %>
       <%= link_to(issue_path(issue)) do %>
       <div id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>" valign="top" style="width:560px;">
         <div class="id" style="font-size:14px;"><%= issue.subject+' (ID '+issue.id.to_s+')' %></div>
@@ -46,7 +36,7 @@
         <div style="width:250px; float:left;">
           <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
           <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span><br/>
-          <label><%=l(:field_created_on)%>:</label> <span class="info"><%= format_time(issue.created_on) %></span>
+          <label><%=l(:field_created_on)%>:</label> <span class="info"><%= issue.created_on.strftime("%m.%d.%Y %H:%M") %></span>
         </div>
         <div style="width:300px; float:left;">
           <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= strip_tags(textilizable issue, :description) %></span>

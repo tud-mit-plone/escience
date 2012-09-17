@@ -52,9 +52,18 @@ class IssuesController < ApplicationController
   helper :timelog
   helper :gantt
   include Redmine::Export::PDF
-
+  
   def index
+    unless (@project.nil? || params['show'].nil?)
+      bufferProjectId = @project
+      session[:query][:project_id] = nil
+      @project = nil
+    end
     retrieve_query
+    unless (bufferProjectId.nil?)
+      @project = bufferProjectId
+      session[:query][:project_id] = @project.id
+    end
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
     sort_update(@query.sortable_columns)    
 
