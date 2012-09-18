@@ -20,8 +20,10 @@
 <div class="wiki">
   <%= textilizable @project.description %>
   <ul>
-  <% unless @project.homepage.blank? %>
-    <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage)).html_safe %></li>
+  <% unless @project.homepage.blank? 
+    p @project.homepage
+  %>
+    <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage), @project.homepage).html_safe %></li>
   <% end %>
   <% @project.visible_custom_field_values.each do |custom_value| %>
   <% if !custom_value.value.blank? %>
