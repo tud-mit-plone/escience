@@ -54,7 +54,7 @@ class IssuesController < ApplicationController
   include Redmine::Export::PDF
   
   def index
-    unless (@project.nil? || params['show'].nil?)
+    unless (@project.nil? || params['sub'].nil?)
       bufferProjectId = @project
       session[:query][:project_id] = nil
       @project = nil

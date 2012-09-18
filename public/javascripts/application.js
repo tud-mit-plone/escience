@@ -246,15 +246,15 @@ function checkFileSize(el, maxSize, message) {
           var inputfilename = $(el).parent().find('.editfilename input.userinput');
           var filename = files[i].name.substr(0,files[i].name.lastIndexOf('.'));
           var filesuffix = files[i].name.substr(files[i].name.lastIndexOf('.'));
+          var filesize = format_fileSize(files[i].size);
           inputfilename.val(filename);
           inputfilename.focusout(function() {
-            console.log($(this).val().indexOf('<'));
             if ($(this).val() != "" && $(this).val().indexOf('<') == -1) {
               var newfilename = $(this).val()
               var newfilesuffix = $(this).parent().find('span').html();
               $(this).parent().find('input.hiddenname').val(newfilename+newfilesuffix);
               if (newfilename.length > 37) newfilename = newfilename.substring(0,37) + "... ";
-              $(this).closest('fieldset').find('legend').html(newfilename+newfilesuffix);
+              $(this).closest('fieldset').find('legend').html(newfilename+newfilesuffix+" ("+filesize+")");
             } else {
               var oldfilename = $(this).parent().find('input.hiddenname').val();
               $(this).val(oldfilename.substr(0,oldfilename.lastIndexOf('.')));
@@ -264,7 +264,7 @@ function checkFileSize(el, maxSize, message) {
           $(el).parent().find('.editfilename span').html(filesuffix);
           $(el).parent().find('.editfilename .hiddenname').val(files[i].name);
           if (filename.length > 37) filename = filename.substring(0,37) + "... ";
-          $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ format_fileSize(files[i].size) + ")");
+          $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ filesize + ")");
           $(el).parent().parent().addClass('fileselected');          
           
           $('.add_attachment').removeClass('disabled');

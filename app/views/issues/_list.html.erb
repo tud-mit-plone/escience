@@ -36,7 +36,7 @@
         <div style="width:250px; float:left;">
           <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
           <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span><br/>
-          <label><%=l(:field_created_on)%>:</label> <span class="info"><%= issue.created_on.strftime("%m.%d.%Y %H:%M") %></span>
+          <label><%=l(:field_created_on)%>:</label> <span class="info"><%= format_date(issue.created_on) %></span>
         </div>
         <div style="width:300px; float:left;">
           <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= strip_tags(textilizable issue, :description) %></span>

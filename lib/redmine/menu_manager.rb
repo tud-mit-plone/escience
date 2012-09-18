@@ -186,7 +186,11 @@ module Redmine
           item.url
         end
         caption = item.caption(project)
-        return [caption, url, (current_menu_item == item.name)]
+        unless params['sub'].nil?
+          return [caption, url, ("#{current_menu_item}_all" == "#{item.name}")]
+        else
+          return [caption, url, (current_menu_item == item.name)]
+        end
       end
 
       # Checks if a user is allowed to access the menu item by:
