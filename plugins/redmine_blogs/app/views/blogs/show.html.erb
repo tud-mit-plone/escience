@@ -24,7 +24,9 @@
 <%= labelled_form_for :blog, @blog, :url => { :action => "edit", :id => @blog },
                                     :html => { :id => 'blog-form', 
                                                :class => nil,
-                                               :multipart => true } do |f| %>
+                                               :multipart => true,
+                                               :method => :post,
+                                             } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_save) %>
 <%= link_to_remote l(:label_preview),
