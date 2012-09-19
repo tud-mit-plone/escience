@@ -40,7 +40,16 @@ class CalendarsController < ApplicationController
     @month ||= Date.today.month
 
     @calendar = Redmine::Helpers::Calendar.new(Date.civil(@year, @month, 1), current_language, :month)
+    unless (@project.nil? || params['sub'].nil?)
+      bufferProjectId = @project
+      session[:query][:project_id] = nil
+      @project = nil
+    end
     retrieve_query
+    unless (bufferProjectId.nil?)
+      @project = bufferProjectId
+      session[:query][:project_id] = @project.id
+    end
     @query.group_by = nil
     if @query.valid?
       events = []

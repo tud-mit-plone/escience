@@ -232,6 +232,7 @@ de:
   gui_validation_error: 1 Fehler
   gui_validation_error_plural: "%{count} Fehler"
 
+  field_date: Datum
   field_name: Name
   field_description: Beschreibung
   field_summary: Zusammenfassung

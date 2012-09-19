@@ -136,7 +136,7 @@ select#membership_project_id {
   	width: 520px;
 	}
 	
-	#new_project #project_homepage {
+	#new_project #project_homepage, #project_parent_id {
 		width: 460px;
 	}
 	
