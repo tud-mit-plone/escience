@@ -44,17 +44,24 @@ module IssuesHelper
     @cached_label_status ||= l(:field_status)
     @cached_label_start_date ||= l(:field_start_date)
     @cached_label_due_date ||= l(:field_due_date)
+    @cached_label_date ||= l(:field_date)
     @cached_label_assigned_to ||= l(:field_assigned_to)
     @cached_label_priority ||= l(:field_priority)
     @cached_label_project ||= l(:field_project)
+    @cached_label_tracker ||= l(:field_tracker)
 
-    link_to_issue(issue, {:subject => false, :link_text => issue.subject}) + "<br /><br />".html_safe +
-      "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />".html_safe +
-      "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />".html_safe +
-      "<strong>#{@cached_label_start_date}</strong>: #{issue.start_date.strftime("%d.%m.%Y")}<br />".html_safe +
-      "<strong>#{@cached_label_due_date}</strong>: #{issue.due_date.strftime("%d.%m.%Y")}<br />".html_safe +
-      "<strong>#{@cached_label_assigned_to}</strong>: #{h(issue.assigned_to)}<br />".html_safe +
-      "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}".html_safe
+    out = link_to_issue(issue, {:subject => false, :link_text => issue.subject}) + "<br /><br />".html_safe
+    out << "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />".html_safe unless (params['sub'].nil?)
+    out << "<strong>#{@cached_label_tracker}</strong>: #{issue.tracker}<br />".html_safe
+    out << "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />".html_safe
+    if (issue.due_date == issue.start_date)
+      out << "<strong>#{@cached_label_date}</strong>: #{format_date(issue.start_date)}<br />".html_safe
+    else
+      out << "<strong>#{@cached_label_start_date}</strong>: #{format_date(issue.start_date)}".html_safe +
+      "&nbsp;&nbsp;&nbsp;<strong>#{@cached_label_due_date}</strong>: #{format_date(issue.due_date)}<br />".html_safe
+    end
+    out << "<strong>#{@cached_label_assigned_to}</strong>: #{h(issue.assigned_to)}<br />".html_safe unless (issue.assigned_to.nil?)
+    out << "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}".html_safe
   end
 
   def issue_heading(issue)
