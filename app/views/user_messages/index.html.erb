@@ -27,7 +27,7 @@
           <%= render :partial => 'received', :locals => { :user_message => user_message } %>
         <% end %>
       </div>
-      <div class="date"><%= user_message.created_at.strftime("%d.%m.%y %H:%M") %></div>
+      <div class="date"><%= format_time(user_message.created_at) %></div>
       <div class="subject"><%= user_message.subject %></div>
       <div class="message"><%=h user_message.body %></div>
     </div>
