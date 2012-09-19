@@ -47,7 +47,8 @@ module Redmine
     def format_time(time, include_date = true)
       return nil unless time
       options = {}
-      options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
+#      options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
+      options[:format] = t("time.formats.time")
       options[:locale] = User.current.language unless User.current.language.blank?
       time = time.to_time if time.is_a?(String)
       zone = User.current.time_zone
