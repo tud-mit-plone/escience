@@ -262,6 +262,7 @@ class ProjectsController < ApplicationController
 
   # Delete @project
   def destroy
+    session[:selected_project] = nil if session[:selected_project] == @project.id 
     @project_to_destroy = @project
     if api_request? || params[:confirm]
       @project_to_destroy.destroy
