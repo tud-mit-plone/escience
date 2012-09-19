@@ -1,0 +1,8 @@
+<article class="article">
+  <a name="top"></a>
+  <% 
+    wiki = Project.find('escience').wiki
+    page = wiki.find_or_new_page('hilfe')
+  %>
+  <%= render :partial => "wiki/content", :locals => {:page => page, :content => page.content} unless (page.nil? || page.content.nil?)%>
+</article>
