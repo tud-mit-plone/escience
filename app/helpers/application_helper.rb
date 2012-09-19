@@ -727,7 +727,7 @@ module ApplicationHelper
   #     identifier:version:1.0.0
   #     identifier:source:some/file
   def parse_redmine_links(text, project, obj, attr, only_path, options)
-    text.gsub!(%r{([\s\(,\-\[\>]|^)(!)?(([a-z0-9\-_]+):)?(attachment|document|version|forum|news|message|project|commit|source|export)?(((#)|((([a-z0-9\-]+)\|)?(r)))((\d+)((#note)?-(\d+))?)|(:)([^"\s<>][^\s<>]*?|"[^"]+?"))(?=(?=[[:punct:]][^A-Za-z0-9_/])|,|\s|\]|<|$)}) do |m|
+    text.gsub!(%r{([\s\(,\-\[\>]|^)(!)?(([a-z0-9\-_]+):)?(top_link|attachment|document|version|forum|news|message|project|commit|source|export)?(((#)|((([a-z0-9\-]+)\|)?(r)))((\d+)((#note)?-(\d+))?)|(:)([^"\s<>][^\s<>]*?|"[^"]+?"))(?=(?=[[:punct:]][^A-Za-z0-9_/])|,|\s|\]|<|$)}) do |m|
       leading, esc, project_prefix, project_identifier, prefix, repo_prefix, repo_identifier, sep, identifier, comment_suffix, comment_id = $1, $2, $3, $4, $5, $10, $11, $8 || $12 || $18, $14 || $19, $15, $17
       link = nil
       if project_identifier
@@ -797,6 +797,13 @@ module ApplicationHelper
               link = link_to h(document.title), {:only_path => only_path, :controller => 'documents', :action => 'show', :id => document},
                                                 :class => 'document'
             end
+          when 'top_link'
+              p params["id"]
+              if params["id"].nil?
+                params["id"] = 'hilfe.html'
+              end
+              link = link_to h(name), {:only_path => only_path, :controller => 'pages', :action => 'show', :id => params["id"], :anchor => 'top'}, :class => 'top_link'
+                            
           when 'version'
             if project && version = project.versions.visible.find_by_name(name)
               link = link_to h(version.name), {:only_path => only_path, :controller => 'versions', :action => 'show', :id => version},
@@ -925,7 +932,7 @@ module ApplicationHelper
     end
   end
 
-  TOC_RE = /<p>\{\{([<>]?)toc\}\}<\/p>/i unless const_defined?(:TOC_RE)
+  TOC_RE = /<p>\{\{([<>]?)toc(\(([^\}]*)\))?\}\}<\/p>/i unless const_defined?(:TOC_RE)
 
   # Renders the TOC with given headings
   def replace_toc(text, headings)
@@ -936,13 +943,14 @@ module ApplicationHelper
         div_class = 'toc'
         div_class << ' right' if $1 == '>'
         div_class << ' left' if $1 == '<'
-        out = "<ul class=\"#{div_class}\"><li>"
+        out = "<h2 class=\"#{div_class}\">"+$2.strip[1..$2.strip.length-2]+"</h2>" unless $2.nil?
+        out << "<ul class=\"#{div_class}\"><li>"
         root = headings.map(&:first).min
         current = root
         started = false
         headings.each do |level, anchor, item|
           if level > current
-            out << '<ul><li>' * (level - current)
+            out << '<ul class="sub_toc level_'+level.to_s+'"><li>' * (level - current)
           elsif level < current
             out << "</li></ul>\n" * (current - level) + "</li><li>"
           elsif started
