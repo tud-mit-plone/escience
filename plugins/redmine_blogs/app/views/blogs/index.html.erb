@@ -1,27 +1,22 @@
 <% if @project %>
-<div class="contextual">
-<%= link_to_if_authorized l(:label_post_new),
-                          { :controller => 'blogs',
-                            :action => 'new',
-                            :project_id => @project,
-                            :global => true },
-                          :class => 'icon icon-add',
-                          :onclick => 'Element.show("add-blog"); return false;' %>
-</div>
-
-<div id="add-blog" style="display:none;">
-  <%= render :partial => 'post' %>
-</div>
-<% end %>
-
-<h2><%=l(:label_blog_plural)%></h2>
+<% content_for :sidebar_right do 
+    if authorize_for "blogs", "new", true %>
+<li>
+<%= link_to l(:label_post_new),
+            { :controller => 'blogs',
+              :action => 'new',
+              :project_id => @project,
+              :global => true },
+            :class => 'icon icon-add' %>
+<%  end %> 
+</li>
 
 <div class="splitcontentleft25">
   <% @blog_users = Blog.find(:all, :conditions => ["project_id = ?", @project]).collect{|b| b.author}.uniq.sort %>
   <% if @blog_users.any? %>
     <div class="box">
       <h3 class="icon22 icon22-users"><%=l(:label_users_blogs)%></h3>
-    <table class="blogs list" width="300">
+    <table class="blogs list">
     <tbody>
       <% @blog_users.each do |user| %>
         <% if user.status == 1 %>
@@ -38,7 +33,17 @@
   </div>
 </div>
 
-<div class="splitcontentright75">
+
+<% end %>
+
+<div id="add-blog" style="display:none;">
+  <%= render :partial => 'post' %>
+</div>
+<% end %>
+
+<h2><%=l(:label_blog_plural)%></h2>
+
+<div>
 <%= render :partial => 'list', :locals => {:blogs => @blogs} %>
 <p class="pagination"><%= pagination_links_full @blogs_pages %></p>
 

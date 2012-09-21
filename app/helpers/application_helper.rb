@@ -943,7 +943,8 @@ module ApplicationHelper
         div_class = 'toc'
         div_class << ' right' if $1 == '>'
         div_class << ' left' if $1 == '<'
-        out = "<h2 class=\"#{div_class}\">"+$2.strip[1..$2.strip.length-2]+"</h2>" unless $2.nil?
+        out = ""
+        out << "<h2 class=\"#{div_class}\">"+$2.strip[1..$2.strip.length-2]+"</h2>" unless $2.nil?
         out << "<ul class=\"#{div_class}\"><li>"
         root = headings.map(&:first).min
         current = root

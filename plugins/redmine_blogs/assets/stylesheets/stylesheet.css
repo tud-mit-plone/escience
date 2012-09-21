@@ -1,6 +1,4 @@
 /* Split 25/75 */
-.splitcontentleft25{float:left; width:24%;}
-.splitcontentright75{float:right; width:74%;} 
 div.tags a, .icon22-tags {
 	padding-left: 20px;
 	background-image: url(../images/tag_label.png);
@@ -14,3 +12,10 @@ div.tags a, .icon22-tags {
 
 dt.blog-post { background-image: url(../images/balloon.png); }
 dt.blog-comment { background-image: url(../images/balloons.png); }
+
+#blog_title, #blog_tag_list {
+  width: 98%;
+}
+#blogs img {
+  max-width: 98%;
+}

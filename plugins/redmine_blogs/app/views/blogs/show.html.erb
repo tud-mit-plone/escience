@@ -1,24 +1,31 @@
 <h2><%=h @blog.title %></h2>
 
 <% if (User.current == @blog.author) %>
-<div class="contextual">
-<%= link_to_if_authorized l(:button_edit),
+<% content_for :sidebar_right do 
+    if authorize_for "blogs", "edit", true %>
+<li>    
+<%= link_to l(:button_edit),
                           { :controller => 'blogs',
                             :action => 'edit',
-                            :id => @blog,
-                            :global => true },
+                            :id => @blog},
                           :class => 'icon icon-edit',
                           :accesskey => accesskey(:edit),
-                          :onclick => 'Element.show("edit-blog"); return false;' %>
-<%= link_to_if_authorized l(:button_delete),
+                          :onclick => 'Element.show("edit-blog");Element.hide("original"); return false;' %>
+</li>
+<% end %>
+<% if authorize_for "blogs", "edit", true %>
+<li>
+<%= link_to l(:button_delete),
                           { :controller => 'blogs',
                             :action => 'destroy',
-                            :id => @blog,
-                            :global => true },
+                            :id => @blog},
                           :confirm => l(:text_are_you_sure),
                           :method => :post,
                           :class => 'icon icon-del' %>
-</div>
+</li>
+<li><%= link_to l(:button_back), { :controller => 'blogs', :action => 'index', :project_id => @project.id} %></li>
+<% end %>
+<% end %>
 
 <div id="edit-blog" style="display:none;">
 <%= labelled_form_for :blog, @blog, :url => { :action => "edit", :id => @blog },
@@ -29,26 +36,27 @@
                                              } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_save) %>
+<%= link_to l(:button_cancel), "#", :onclick => 'Element.hide("edit-blog"); Element.show("original")', :class => 'button' %>
 <%= link_to_remote l(:label_preview),
                    { :url => { :controller => 'blogs', :action => 'preview', :id => @blog },
                      :method => 'post',
                      :update => 'preview',
                      :with => "Form.serialize('blog-form')"
-                   }, :accesskey => accesskey(:preview) %> |
-<%= link_to l(:button_cancel), "#", :onclick => 'Element.hide("edit-blog")' %>
+                   }, :accesskey => accesskey(:preview) %>
 <% end %>
+<div class="clear"></div>
 <div id="preview" class="wiki"></div>
 </div>
 <% end %>
+<!--
 <p><em><% unless @blog.summary.blank? %><%=h @blog.summary %><br /><% end %>
+-->
+<div id="original">
 <span class="author"><%= authoring @blog.created_on, @blog.author %></span></em></p>
 <%= render :partial => 'tag_cloud', :locals => {:tag_counts => @blog.tag_counts} %>
 <div class="wiki">
 <%= textilizable(@blog, :full_description) %>
 </div>
-<br />
-
-<%= link_to_attachments @blog %>
 
 <div id="comments" style="margin-bottom:16px;">
 <h3 class="icon22 icon22-comment"><%= l(:label_comment_plural) %></h3>
@@ -81,5 +89,9 @@
 <p><%= submit_tag l(:button_add) %></p>
 <% end %>
 <% end %>
+</div>
+<br />
+
+<%= link_to_attachments @blog %>
 
 <% html_title @blog.title -%>

@@ -62,21 +62,10 @@ table.issues {
   margin-top: 10px;
 }
 
-.list .group .expander {
-  clear: both;
-  float: left;
-  width: 15px;
-  height: 15px;
-  background-image: url(../images/expand.png);
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  margin-top: 2px;
-}
-
 .list .group .headline {
   font-size: 16px;
   float: left;
-  width: 550px;
+  width: 530px;
 }
 
 .issues .issue {
@@ -96,6 +85,18 @@ table.issues {
   cursor: pointer;
 }
 
+.list .group .expander {
+  clear: both;
+  float: left;
+  width: 15px;
+  height: 15px;
+  margin-left: 20px;
+  background-image: url(../images/contract.png);
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  margin-top: 2px;
+}
+
 .list.issues .expander:hover {
   background-image: url(../images/expand_hover.png);
 }
@@ -104,7 +105,7 @@ table.issues {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-image: url(../images/contract.png);
+  background-image: url(../images/expand.png);
 }
 
 .list.issues .open .expander:hover {
@@ -294,6 +295,14 @@ table.issues {
 
 .next-prev-links div, .next-prev-links span {
   float: left;
+}
+
+#watchers_form {
+  margin-left: 20px;
+}
+#watchers_inputs label {
+  width: 160px;
+  display: inline-block;
 }
 
 .icon-lock {
