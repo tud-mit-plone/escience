@@ -552,7 +552,7 @@ de:
   label_meta_information_description: Verschlagwortung
   label_my: Übersicht
   label_my_account: Mein Konto
-  label_my_page: Mein Konto
+  label_my_page: Übersichtsseite
   label_my_projects: Meine Projekte
   label_my_page_block: Angezeigte Elemente
   label_my_members: Kontaktliste
@@ -580,7 +580,7 @@ de:
   label_login: Anmelden
   label_logout: Abmelden
   label_help: Hilfe
-  label_reported_issues: Gemeldete Arbeitsanweisungen
+  label_reported_issues: Eigene Anweisungen
   label_assigned_to_me_issues: Mir zugewiesen
   label_last_login: Letzte Anmeldung
   label_registered_on: Angemeldet am
@@ -620,12 +620,12 @@ de:
   label_report: Bericht
   label_report_plural: Berichte
   label_events: Termine
-  label_news: Neuigkeiten
-  label_news_new: Neuigkeit hinzufügen
-  label_news_plural: Neuigkeiten
-  label_news_latest: Letzte Neuigkeiten
-  label_news_view_all: Alle Neuigkeiten anzeigen
-  label_news_added: Neuigkeit hinzugefügt
+  label_news: Pinnwand
+  label_news_new: Mitteilung hinzufügen
+  label_news_plural: Pinnwand
+  label_news_latest: Letzte Mitteilung
+  label_news_view_all: Alle Mitteilungen anzeigen
+  label_news_added: Mitteilung hinzugefügt
   label_settings: Konfiguration
   label_overview: Übersicht
   label_version: Version
@@ -671,7 +671,7 @@ de:
   label_internal: Intern
   label_last_changes: "%{count} letzte Änderungen"
   label_change_view_all: Alle Änderungen anzeigen
-  label_personalize_page: Diese Seite anpassen
+  label_personalize_page: Übersicht anpassen
   label_comment: Kommentar
   label_comment_plural: Kommentare
   label_x_comments:

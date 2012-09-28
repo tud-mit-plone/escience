@@ -1,4 +1,6 @@
+<h1><%= l(:label_news) %></h1>
 <% content_for :sidebar_right do %>
+  <li><%= link_to l(:button_back), {:action => 'index', :project_id => @project}, :class => 'icon icon-cancel' %></li>
 	<li><%= watcher_tag(@news, User.current) %></li>
 	<% if User.current.allowed_to?(:manage_news, @project) %>
 	<li><%= link_to(l(:button_edit),
@@ -10,12 +12,14 @@
 	<%end%>
 <%end%>
 
+<!-- div style="background-image: url('http://141.57.9.94:3000/images/notice.jpg'); background-repeat: no-repeat; padding: 25px 10px; border-left: solid 2px #F0F0F0; border-right: solid 2px #F0F0F0; border-bottom: solid 2px #F0F0F0;" -->
+<div class="news_wrapper">
 <h2><%= avatar(@news.author, :size => "24") %><%=h @news.title %></h2>
 
 <% if authorize_for('news', 'edit') %>
 <div id="edit-news" style="display:none;">
 <%= labelled_form_for :news, @news, :url => news_path(@news),
-                                           :html => { :id => 'news-form', :multipart => true, :method => :put } do |f| %>
+                                    :html => { :id => 'news-form', :multipart => true, :method => :put } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_save) %>
 <%= link_to_remote l(:label_preview),
@@ -29,9 +33,9 @@
 <div id="preview" class="wiki"></div>
 </div>
 <% end %>
+<span class="author"><%= authoring @news.created_on, @news.author %></span></p>
 
 <p><% unless @news.summary.blank? %><em><%=h @news.summary %></em><br /><% end %>
-<span class="author"><%= authoring @news.created_on, @news.author %></span></p>
 <div class="wiki">
 <%= textilizable(@news, :description) %>
 </div>
@@ -40,20 +44,22 @@
 
 <% if (@comments.any? || @news.commentable?) %>
 <div id="comments" style="margin-bottom:16px;">
-<h3 class="comments"><%= l(:label_comment_plural) %></h3>
+<h3 class="comments"><%= l(:label_comment_plural) if @comments.any? %></h3>
 <% @comments.each do |comment| %>
     <% next if comment.new_record? %>
-    <div class="contextual">
-    <%= link_to_if_authorized image_tag('delete.png'), {:controller => 'comments', :action => 'destroy', :id => @news, :comment_id => comment},
-                                                       :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:button_delete) %>
-    </div>
-    <h4><%= avatar(comment.author, :size => "24") %><%= authoring comment.created_on, comment.author %></h4>
-    <%= textilizable(comment.comments) %>
+    <fieldset class="comment">
+      <div class="contextual">
+      <%= link_to_if_authorized image_tag('delete.png'), {:controller => 'comments', :action => 'destroy', :id => @news, :comment_id => comment},
+                                                         :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:button_delete) %>
+      </div>
+      <legend><%= avatar(comment.author, :size => "24") %><%= authoring comment.created_on, comment.author %></legend>
+      <%= textilizable(comment.comments) %>
+    </fieldset>
 <% end %>
 </div>
 
 <% if @news.commentable? %>
-<p><%= toggle_link l(:label_comment_add), "add_comment_form", :focus => "comment_comments" %></p>
+<p><%= toggle_link l(:label_comment_add), "add_comment_form", :class => "button", :style => "float:left; margin-bottom: 15px;", :focus => "comment_comments" %></p>
 <%= form_tag({:controller => 'comments', :action => 'create', :id => @news}, :id => "add_comment_form", :style => "display:none;") do %>
 <div class="box">
     <%= text_area 'comment', 'comments', :cols => 80, :rows => 15, :class => 'wiki-edit' %>
@@ -63,7 +69,8 @@
 <% end %>
 <% end %>
 <% end %>
-
+<div class="clear"></div>
+</div>
 
 <% html_title @news.title -%>
 
