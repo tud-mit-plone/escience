@@ -64,6 +64,30 @@ module IssuesHelper
     out << "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}".html_safe
   end
 
+  def render_issue_tooltip_small(issue)
+    @cached_label_status ||= l(:field_status)
+    @cached_label_start_date ||= l(:field_start_date)
+    @cached_label_due_date ||= l(:field_due_date)
+    @cached_label_date ||= l(:field_date)
+    @cached_label_assigned_to ||= l(:field_assigned_to)
+    @cached_label_priority ||= l(:field_priority)
+    @cached_label_project ||= l(:field_project)
+    @cached_label_tracker ||= l(:field_tracker)
+
+    out = "".html_safe
+    out << "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />".html_safe unless (params['sub'].nil?)
+    out << "<strong>#{@cached_label_tracker}</strong>: #{issue.tracker}<br />".html_safe
+    out << "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />".html_safe
+    if (issue.due_date == issue.start_date)
+      out << "<strong>#{@cached_label_date}</strong>: #{format_date(issue.start_date)}<br />".html_safe
+    else
+      out << "<strong>#{@cached_label_start_date}</strong>: #{format_date(issue.start_date)}".html_safe +
+      "<br /><strong>#{@cached_label_due_date}</strong>: #{format_date(issue.due_date)}<br />".html_safe
+    end
+    out << "<strong>#{@cached_label_assigned_to}</strong>:<br /> #{h(issue.assigned_to)}<br />".html_safe unless (issue.assigned_to.nil?)
+    out << "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}".html_safe
+  end
+
   def issue_heading(issue)
     h("#{issue.subject}")
 #    h("#{issue.tracker} ##{issue.id}")

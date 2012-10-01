@@ -19,9 +19,9 @@
         <p class="day-num"><%= format_date(day)[0..5] %> <%= day_name(day.wday%7) %></p>
          <% calendar.events_on(day).each do |i| %>
           <div>
-            <p class="linkToInfo" id="linkToInfo_<%= i.id %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(40)}) %></p>
+            <p class="linkToInfo" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(40)}) %></p>
            <% if i.is_a? Issue %>
-           <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>
+           <div class="infobox" id="info_<%= i.id %>_<%= day %>" style="position:absolute;"><%= render_issue_tooltip_small i %></div>
             <% end %>
           </div>
         <% end %>
