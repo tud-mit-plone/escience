@@ -18,6 +18,10 @@ table.issues {
   margin-left: 10px;  
 }
 
+.mypage-box table.issues {
+  margin-left: 0px;
+}
+
 .issues .status {
   width: 200px;
 }
@@ -76,6 +80,11 @@ table.issues {
   color: #707070; 
 }
 
+.mypage-box .issues .issue {
+  margin-left: 0;
+  padding: 0;
+}
+
 .issues .issue:hover {
   background-color: #F0F0F0;
   -moz-border-radius: 5px;
@@ -83,6 +92,10 @@ table.issues {
   -khtml-border-radius: 5px;
   border-radius: 5px; 
   cursor: pointer;
+}
+
+.mypage-box .issues .issue:hover {
+  background-color: inherit;
 }
 
 .list .group .expander {
@@ -331,4 +344,32 @@ table.issues {
 .icon-unlock:hover {
   background-position: 50% 0%;
   text-decoration: none;
+}
+
+.own_issue:hover .issue_preview {
+  visibility: visible;
+  display: block;
+}
+
+.own_issue {
+  border-bottom: 1px solid #F0F0F0; 
+  padding-bottom: 5px;
+  width: 180px;
+}
+
+.issue_preview {
+  visibility: hidden;
+  display: none;
+  position: absolute;
+  margin-left: 20px;
+  margin-top: -5px;
+  width: 140px;
+  border: 1px solid #DADADA;
+  color: #707070;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 10px;
 }

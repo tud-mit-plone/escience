@@ -4,22 +4,17 @@
     <tbody>
     <% for issue in issues %>
       <tr id="issue-<%= h(issue.id) %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
+        <td class="own_issue"><%= link_to ({:controller => 'issues', :action => 'show', :id => issue}) do %>
+          <%= h(truncate(issue.subject, :length => 60)) %>
+          <div class="issue_preview" >
         <!--td class="id">
           <%= check_box_tag("ids[]", issue.id, false, :style => 'display:none;', :id => nil) %>
           <%= link_to(h(issue.id), :controller => 'issues', :action => 'show', :id => issue) %>
         </td -->
-        <th style="padding-top:5px;"><%=l(:field_project)%>: <%= link_to_project(issue.project) %></th>
-        <td><%= link_to h(truncate(issue.subject, :length => 60)), :controller => 'issues', :action => 'show', :id => issue %>
-</td>
-      </tr>
-      <tr>
-        <td valign="top">
-          <%=l(:field_tracker)%>: <%=h issue.tracker %><br/>
-          <%=l(:field_status)%>: <%=h issue.status %>
+            <%= render_issue_tooltip_small(issue) %>
+          </div>
+          <% end %>
         </td>
-        <td width="70%">
-          <span style="overflow:hidden; height:40px; display:block; font-style:italic"><%= issue.description %></span>
-        </td>        
       </tr>
     <% end %>  
     </tbody>
@@ -27,4 +22,7 @@
 <% end %>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'issues' %>
 <% end %>

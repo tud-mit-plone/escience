@@ -147,8 +147,14 @@ textarea {
 		display: inline-block;
 	}
 	
-	
-/* /* !---------- projects ---------- */
+
+/* !---------- projects ---------- */
+
+#time_entry_project_id {
+  width: 100%;
+  
+}
+
 select#membership_project_id {
 	max-width: 550px;
 }

@@ -1,9 +1,9 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
 <% if User.current.allowed_to?(:manage_documents, @project) %>
-<%= link_to l(:button_edit), edit_document_path(@document), :class => 'icon icon-edit', :accesskey => accesskey(:edit) %>
-<%= delete_link document_path(@document) %>
+<li><%= link_to l(:button_edit), edit_document_path(@document), :class => 'icon icon-edit', :accesskey => accesskey(:edit) %></li>
+<li><%= delete_link document_path(@document) %></li>
 <% end %>
-</div>
+<%end%>
 
 <h2><%=h @document.title %></h2>
 
