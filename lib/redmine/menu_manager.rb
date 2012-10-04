@@ -185,10 +185,6 @@ module Redmine
         else
           item.url
         end
-        p "-------------------------"
-        p "#{current_menu_item}" 
-        p "#{item.name}"
-        p "#{params['sub']}\n"
         caption = item.caption(project)
         unless params['sub'].nil?
           return [caption, url, ("#{params['sub']}" == "#{item.name}")]
