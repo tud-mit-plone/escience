@@ -347,11 +347,22 @@ module ApplicationHelper
     s.html_safe
   end
 
-  def principals_check_box_tags(name, principals)
-    s = ''
+  def principals_check_box_tags(name, principals, options = {})
+    s = '<table>'
+    rows = options[:rows].nil? ? 2 : options[:rows]
+    currrow = 1
     principals.sort.each do |principal|
-      s << "<label>#{ check_box_tag name, principal.id, false } #{h principal}</label>\n"
+      if currrow == 1
+        s << "<tr>"
+      end
+        s << "<td><label>#{ check_box_tag name, principal.id, false } #{h principal}</label></td>"
+      if currrow == rows
+        s << "</tr>"
+        currrow = 0
+      end
+      currrow += 1
     end
+    s << "</table>"
     s.html_safe
   end
 
