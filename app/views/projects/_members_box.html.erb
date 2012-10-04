@@ -2,7 +2,13 @@
 <fieldset>
   <legend><%=l(:label_member_plural)%></legend>
     <p><% @users_by_role.keys.sort.each do |role| %>
-    <%=h role %>: <%= @users_by_role[role].sort.collect{|u| link_to_user u}.join(", ").html_safe %><br />
+    <%=h role %>: 
+    <%#= @users_by_role[role].sort.collect{|u| link_to_user u}.join(", ").html_safe %>
+    <% if (@project.name == 'eScience' || @project.is_public) && !User.current.admin? %>
+    <%= @users_by_role[role].sort.collect{|u| u}.join(", ").html_safe %><br />
+    <% else %>
+    <%= @users_by_role[role].sort.collect{|u| link_to_user u}.join(", ").html_safe %><br />
+    <% end %>
     <% end %></p>
 </fieldset>
   <% end %>
