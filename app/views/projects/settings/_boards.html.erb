@@ -1,5 +1,5 @@
 <% if @project.boards.any? %>
-<table class="list">
+<table class="list" width="100%">
   <thead><tr>
     <th><%= l(:label_board) %></th>
     <th><%= l(:field_description) %></th>
@@ -12,15 +12,15 @@
   <tr class="<%= cycle 'odd', 'even' %>">
     <td><%=h board.name %></td>
     <td><%=h board.description %></td>
-    <td align="center">
+    <td style="width:70px">
     <% if authorize_for("boards", "edit") %>
       <%= reorder_links('board', {:controller => 'boards', :action => 'update', :project_id => @project, :id => board}, :put) %>
     <% end %>
     </td>
-    <td class="buttons">
+    <td class="buttons" style="width:180px">
     <% if User.current.allowed_to?(:manage_boards, @project) %>
-      <%= link_to l(:button_edit), edit_project_board_path(@project, board), :class => 'icon icon-edit' %>
-      <%= delete_link project_board_path(@project, board) %>
+      <%= link_to l(:button_edit), edit_project_board_path(@project, board), :class => 'icon icon-edit button' %>
+      <%= delete_link project_board_path(@project, board), :class => 'button' %>
 		<% end %>
     </td>
   </tr>

@@ -468,6 +468,9 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_eu: Europäische Union
+  label_esf: Europäische Sozialfond
+  label_smwk: Staatsministerium für Wissenschaft und Kunst
   label_fileupload: Datei auswählen
   label_sortby: Sortieren nach
   label_subissue: Unteraufgabe von
