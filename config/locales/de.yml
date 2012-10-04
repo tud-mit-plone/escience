@@ -429,8 +429,8 @@ de:
   permission_view_time_entries: Gebuchte Aufwände ansehen
   permission_edit_time_entries: Gebuchte Aufwände bearbeiten
   permission_edit_own_time_entries: Selbst gebuchte Aufwände bearbeiten
-  permission_manage_news: News verwalten
-  permission_comment_news: News kommentieren
+  permission_manage_news: Mitteilungen verwalten
+  permission_comment_news: Mitteilung kommentieren
   permission_manage_documents: Dokumente verwalten
   permission_view_documents: Dokumente ansehen
   permission_manage_files: Dateien verwalten
@@ -459,10 +459,10 @@ de:
 
   project_module_issue_tracking: Aufgaben-Verfolgung
   project_module_time_tracking: Zeiterfassung
-  project_module_news: News
-  project_module_documents: Content
-  project_module_files: Resourcen
-  project_module_wiki: Wissensräume
+  project_module_news: Pinnwand
+  project_module_documents: Dokumente
+  project_module_files: Dateien
+  project_module_wiki: Wiki
   project_module_repository: Projektarchiv
   project_module_boards: Foren
   project_module_calendar: Kalender
