@@ -201,13 +201,13 @@ end
 
 Redmine::MenuManager.map :private_menu do |menu|
   menu.push :my, { :controller => 'my', :action => 'page' },:caption => :label_organisation, :if => Proc.new { User.current.logged? }
-  menu.push :projects, { :controller => 'projects', :action => 'index' }, :caption => :label_project_plural
+  menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :caption => :label_project_plural
   menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {"value_behind"=>Proc.new {"#{UserMessage.get_number_of_messages}"},"text" => :label_usermessage }, :html => {:class => "newmessage"}
   menu.push :sent, { :controller => 'user_messages', :action => 'index', :directory => "sent" }, :caption => {"text" => :label_user_messages_sent }, :parent => :user_messages
   menu.push :archive, { :controller => 'user_messages', :action => 'index', :directory => "archive"}, :caption => {"text" => :label_user_messages_archive }, :parent => :user_messages
   menu.push :trash, { :controller => 'user_messages', :action => 'index', :directory => "trash" }, :caption => {"text" => :label_user_messages_trash }, :parent => :user_messages
-  menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'all' } , :caption => {"value_behind"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}
-  menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'all'}, :caption => :label_calendar
+  menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => {"value_behind"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}
+  menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => :label_calendar
 end
 
 Redmine::MenuManager.map :project_menu do |menu|
