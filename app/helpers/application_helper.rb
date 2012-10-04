@@ -306,8 +306,12 @@ module ApplicationHelper
       else
         tag_options[:selected] = nil
       end
-      tag_options.merge!(yield(project)) if block_given?
-      s << content_tag('option', name_prefix + h(project), tag_options)
+      tag_options.merge!(yield(project)) if block_given? 
+      if options[:truncate].nil?
+        s <<  content_tag('option', name_prefix + h(project), tag_options)
+      else
+        s << content_tag('option', name_prefix + h(project)[0..options[:truncate]], tag_options)
+      end
     end
     s.html_safe
   end
