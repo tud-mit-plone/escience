@@ -332,7 +332,7 @@ select.values_project_id {
   padding: 0 0 3px 10px;
 }
 
-.buttons {
+.buttons, .buttons a {
   float: right;
 }
 

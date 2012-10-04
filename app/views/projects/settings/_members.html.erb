@@ -16,7 +16,7 @@
   <% next if member.new_record? %>
   <tr id="member-<%= member.id %>" class="<%= cycle 'odd', 'even' %> member">
   <td class="<%= member.principal.class.name.downcase %>"><%= link_to_user member.principal %></td>
-  <td class="roles">
+  <td class="roles" style="width: 80px;">
     <span id="member-<%= member.id %>-roles"><%=h member.roles.sort.collect(&:to_s).join(', ') %></span>
       <%= form_for(member, {:as => :membership, :remote => true, :url => membership_path(member),
                                           :method => :put,
@@ -33,17 +33,17 @@
              %></p>
       <% end %>
   </td>
-  <td class="buttons">
+  <td class="buttons" style="width:180px;">
       <%= link_to_function l(:button_edit),
                            "$('member-#{member.id}-roles').hide(); $('member-#{member.id}-roles-form').show(); return false;",
-                           :class => 'icon icon-edit' %>
+                           :class => 'icon icon-edit button' %>
       <%= link_to_remote(
             l(:button_delete),
             { :url => membership_path(member),
               :method => :delete,
               :data => {:confirm => (!User.current.admin? && member.include?(User.current) ? l(:text_own_membership_delete_confirmation) : nil)} },
             :title => l(:button_delete),
-            :class => 'icon icon-del'
+            :class => 'icon icon-del button'
           ) if member.deletable? %>
   </td>
   <%= call_hook(:view_projects_settings_members_table_row, { :project => @project, :member => member}) %>
