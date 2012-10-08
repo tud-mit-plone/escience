@@ -1,9 +1,13 @@
 <% content_for :sidebar_right do %>
+  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
   <% if !@query.new_record? && @query.editable_by?(User.current) %>
+    <!--
+    <h4 style="margin:3px 0;">Abfrage</h4>
+    <li><%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload' %></li>
   	<li><%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %></li>
   	<li><%= delete_link query_path(@query) %></li>
+  	-->
   <% end %>
-  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
 <%end%>
 
 <h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
@@ -12,19 +16,25 @@
 <%= form_tag({ :controller => 'issues', :action => 'index', :project_id => @project },
             :method => :get, :id => 'query_form') do %>
     <%= hidden_field_tag 'set_filter', '1' %>
+    <%= hidden_field_tag 'sub', 'issues_all' unless params['sub'].nil? %>
     <div id="query_form_content" class="hide-when-print">
-    <fieldset id="filters" class="collapsible <%= @query.new_record? ? "" : "collapsed" %>">
+    <fieldset id="filters" class="collapsible <%#= @query.new_record? ? "" : "collapsed" %>">
       <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
-      <div style="<%= @query.new_record? ? "" : "display: none;" %>">
+      <div>
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
       <div class="buttons hide-when-print">
         <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'icon icon-checked' %></div>
-        <div><%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload'  %></div>
+        <div>
+          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project, :sub => 'issues_all' }, :class => 'icon icon-reload' if (!params.nil? && !params['issues_all'].nil?)  %>
+          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload' if (params.nil? || (!params.nil? && params['issues_all'].nil?))  %>
+        </div>
+          <% if !@query.new_record? && @query.editable_by?(User.current) %>
+          	<div><%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %></div>
+          	<div><%= delete_link query_path(@query) %></div>
+          <% end %>
         <% if @query.new_record? && User.current.allowed_to?(:save_queries, @project, :global => true) %>
-        <div><%= link_to_function l(:button_save),
-                 "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')",
-                 :class => 'icon icon-save' %>
+        <div><%= link_to_function l(:button_save), "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')", :class => 'icon icon-save' %>
         </div>
         <% end %>
       </div>
@@ -57,7 +67,7 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
 <%= render :partial => 'issues/list', :locals => {:issues => @issues, :query => @query} %>
-<p class="pagination"><%= pagination_links_full @issue_pages, @issue_count %></p>
+<!-- p class="pagination"><%#= pagination_links_full @issue_pages, @issue_count %></p -->
 <% end %>
 
 <% other_formats_links do |f| %>
@@ -86,8 +96,9 @@
 <% end %>
 <%= call_hook(:view_issues_index_bottom, { :issues => @issues, :project => @project, :query => @query }) %>
 
-<% content_for :sidebar do %>
-    <%= render :partial => 'issues/sidebar' %>
+<% content_for :sidebar_right do %>
+  <%= render_sidebar_queries %>
+  <%#= render :partial => 'issues/sidebar' %>
 <% end %>
 
 <% content_for :header_tags do %>

@@ -54,15 +54,27 @@ class IssuesController < ApplicationController
   include Redmine::Export::PDF
   
   def index
-    unless (@project.nil? || params['sub'].nil?)
+    unless (params['sub'].nil? || !params['set_filter'].nil?) 
       bufferProjectId = @project
-      session[:query][:project_id] = nil
+      unless session[:query].nil? 
+        session[:query][:project_id] = nil
+      end
       @project = nil
+      params["f"] = !params['f'].nil? && !params['f'].include?('project_id') ? params['f'] : ["status_id", "project_id"]
+      params["f"][2] = "assigned_to_id" if params['show'] == 'new'
+      params["op"] = !params['op'].nil? && !params['op'][:project_id].nil? ? params['op'] : {"status_id"=>"o", "project_id"=>"="}
+      params['op'][:assigned_to_id] = '=' if params['show'] == 'new'
+      params["v"] = !params['v'].nil? && !params['v'][:project_id].nil? ? params['v'] : {"project_id"=>["mine"]}
+      params['v'][:assigned_to_id] = ["me"] if params['show'] == 'new'
     end
+    params["c"] = ["project", "tracker", "status", "priority", "subject", "assigned_to", "updated_on"]
+    params["group_by"] = "project"
+    params["per_page"] = "150"
+    params["set_filter"] = "1"
+
     retrieve_query
     unless (bufferProjectId.nil?)
       @project = bufferProjectId
-      session[:query][:project_id] = @project.id
     end
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
     sort_update(@query.sortable_columns)    
@@ -86,6 +98,7 @@ class IssuesController < ApplicationController
                               :order => sort_clause,
                               :offset => @offset,
                               :limit => @limit)
+
       @issue_count_by_group = @query.issue_count_by_group
       
       if !(params[:group_by].nil? || params[:group_by].empty?)

@@ -177,20 +177,21 @@ module IssuesHelper
     # links to #index on issues/show
     url_params = controller_name == 'issues' ? {:controller => 'issues', :action => 'index', :project_id => @project} : params
 
-    content_tag('h3', h(title)) +
+    content_tag('h4', h(title), :style=>"margin:3px 0;") +
       queries.collect {|query|
           css = 'query'
           css << ' selected' if query == @query
+          "<li>" +
           link_to(h(query.name), url_params.merge(:query_id => query), :class => css)
-        }.join('<br />').html_safe
+        }.join('</li>').html_safe
   end
 
   def render_sidebar_queries
     out = ''.html_safe
     queries = sidebar_queries.select {|q| !q.is_public?}
     out << query_links(l(:label_my_queries), queries) if queries.any?
-    queries = sidebar_queries.select {|q| q.is_public?}
-    out << query_links(l(:label_query_plural), queries) if queries.any?
+#    queries = sidebar_queries.select {|q| q.is_public?}
+#    out << query_links(l(:label_query_plural), queries) if queries.any?
     out
   end
 

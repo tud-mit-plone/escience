@@ -28,13 +28,14 @@
   // Alle selektierten Externen Links werden mit den Attribute \'_blank\' erweitert und mit einem Title-Tag versehen.
   $j(document).ready(function() {externalLinks().attr({target: "_blank"})});
   $j(function() {addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'")});
-  $j(function() {addToolTip(".sidebar .projects","'+l(:tooltip_sidebar_projects)+'")});
+  $j(function() {addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'")});
   $j(function() {addToolTip(".sidebar .user-messages","'+l(:tooltip_sidebar_user_messages)+'")});
   $j(function() {addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'")});
   $j(function() {addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'")});
   $j(function() {addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'")});
-  $j(function() {addToolTip(".sidebar .issues","'+l(:tooltip_sidebar_issues)+'<br/>' + "#{issues}" + '")});
-  $j(function() {addToolTip(".sidebar .calendar","'+l(:tooltip_sidebar_calendar)+'")});
+  $j(function() {addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues) + '")});
+  $j(function() {addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar)+'")});
+  $j(function() {addToolTip("#navigation .newmessage","'+l(:tooltip_sidebar_issues_count)+'<br/>' + "#{issues}"+'", "bottom")});
   '
   %>
   <%= heads_for_theme %>

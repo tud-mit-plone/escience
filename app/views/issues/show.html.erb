@@ -83,7 +83,7 @@
     <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
   </table>
 </fieldset>
-<% if @issue.description? || @issue.attachments.any? -%>
+<% if @issue.description? || @issue.attachments.any? %>
   <fieldset>
     <legend><%=l(:field_description)%></legend>
   <% if @issue.description? %>
@@ -99,8 +99,8 @@
   <% end %>
   <%= link_to_attachments @issue %>
   </fieldset>
-  </div>
-<% end -%>
+<% end %>
+</div>
 
 <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
 

@@ -20,8 +20,10 @@
   <% group_num = group_num+1 %>
 
   <% if (@issues_by_group.size>1) || (!key.nil? && !key.empty?) %> 
-      <div class="group open" valign="top">
-          <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
+      <div class="group" valign="top">
+          <% unless @issues_by_group.size==1 %>
+            <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
+          <% end %>
           <div class="headline"><%= key.strip %> (<%= issue_list.size %>)</div>
       </div>
       <div class="clear"></div>
@@ -29,7 +31,8 @@
     
     <%# issue_list(issues) do |issue, level| -%>
     <% issue_list.each do |issue| -%>
-      <%= link_to(issue_path(issue)) do %>
+      <% style = 'display:none' unless @issues_by_group.size==1 %>
+      <%= link_to(issue_path(issue), :style => "#{style}") do %>
       <div id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>" valign="top" style="width:560px;">
         <div class="id" style="font-size:14px;"><%= issue.subject+' (ID '+issue.id.to_s+')' %></div>
         <div class="clear"></div>

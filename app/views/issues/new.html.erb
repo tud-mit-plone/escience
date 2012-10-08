@@ -22,7 +22,8 @@
     <p id="attachments_form"><%= label_tag('attachments[1][file]', l(:label_attachment_plural))%><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
 
     <% if @issue.safe_attribute? 'watcher_user_ids' -%>
-      <p id="watchers_form"><label><%= l(:label_issue_watchers) %></label>
+    <label><%= l(:label_issue_watchers) %></label><br />
+      <p id="watchers_form">
       <span id="watchers_inputs">
         <%= watchers_checkboxes(@issue, @available_watchers) %>
       </span>
@@ -35,6 +36,7 @@
     <% end %>
   </div>
 
+  <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'index'}, :class => 'button', :style => '60px' %>
   <%= submit_tag l(:button_create) %>
   <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
   <%= link_to_remote l(:label_preview),
@@ -51,6 +53,7 @@
 <div id="preview" class="wiki"></div>
 
 <% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'issues' %>
     <%= stylesheet_link_tag 'scm' %>
     <%= robot_exclusion_tag %>
 <% end %>
