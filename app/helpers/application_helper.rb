@@ -1131,7 +1131,7 @@ module ApplicationHelper
   def calendar_for(field_id)
     include_calendar_headers_tags
     image_tag("calendar.png", {:id => "#{field_id}_trigger",:class => "calendar-trigger"}) +
-    javascript_tag("Calendar.setup({inputField : '#{field_id}', ifFormat : '%Y-%m-%d', button : '#{field_id}_trigger' });")
+    javascript_tag("Calendar.setup({inputField : '#{field_id}', ifFormat : '#{t("date.formats.default")}', button : '#{field_id}_trigger' });")
   end
 
   def include_calendar_headers_tags

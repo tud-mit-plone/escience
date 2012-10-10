@@ -549,3 +549,52 @@ div .add_attachment:hover {
   text-decoration: none;
   background-color: #E9E9E9;
 }
+
+
+/* !-------------- doodle ---------------- */
+
+.doodle a.link_to_doodle h3, .doodle.details h2 {
+  margin-bottom: 3px;  
+  color: #707070;
+}
+
+.doodle a.link_to_doodle .author, .doodle.details .author {
+  margin-top: 0px;
+  color: #9D9D9D;
+}
+.doodle a.link_to_doodle {
+  text-decoration: none;
+  color: #707070;
+}
+
+.doodle fieldset {
+  padding: 3px 15px;
+}
+
+.doodle fieldset:hover {
+  background-color: #F4F4F4;
+}
+
+.doodle .info {
+  float: right;
+  margin-top: 5px;
+  margin-rigth: -10px;
+  font-size: .9em;
+}
+
+.doodle.details .description {
+  border-top: 1px solid #aaaaaa;
+  padding-top: 10px;
+}
+
+.list.doodle .current td {
+  border-top: 1px solid #e2dfdf;
+  border-bottom: 1px solid #e2dfdf;
+  background-color: #ffffff;
+}
+
+.list.doodle {
+  width: 530px;
+  overflow: auto;
+  padding-bottom: 20px;
+}

@@ -47,13 +47,13 @@
 
 <% if @issue.safe_attribute? 'start_date' %>
 <div class="w33">
-<%= f.text_field :start_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_start_date') if @issue.leaf? %>
+<%= f.text_field :start_date, :value => format_date(@issue[:start_date]), :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_start_date') if @issue.leaf? %>
 </div>
 <% end %>
 
 <% if @issue.safe_attribute? 'due_date' %>
 <div class="w33">
-<%= f.text_field :due_date, :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_due_date') if @issue.leaf? %>
+<%= f.text_field :due_date, :value => format_date(@issue[:due_date]), :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_due_date') if @issue.leaf? %>
 </div>
 <% end %>
 <div style="clear:both; height:5px;"></div>

@@ -22,7 +22,20 @@ class Doodle < ActiveRecord::Base
   after_create :add_author_as_watcher, :send_mails
   
   def results
-    @results ||= responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
+    old_answers = responses.map(&:answers)[0]
+    new_answers = responses.map(&:answers)[1]
+    answers = nil
+    unless old_answers.nil? || (old_answers.length == new_answers.length)
+      temp = Array.new(new_answers.length, false)
+      temp2 = old_answers.length < new_answers.length ? old_answers : new_answers
+      temp2.each_with_index do |el,i|
+        temp[i] = old_answers[i]
+      end
+      answers = [temp,new_answers]
+      responses.map(&:answers)[0] = temp
+    end
+    @results ||= responses.empty? ? Array.new(options.length, 0) : answers.transpose.map { |x| x.select { |v| v }.length }
+#    @results ||= responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
   end
   
   def active?

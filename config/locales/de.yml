@@ -1160,6 +1160,7 @@ de:
   tooltip_sidebar_issues: Sehen Sie die Arbeitsanweisungen der einzelnen Projekte an, bei denen Sei Mitglied sind.
   tooltip_sidebar_issues_explain: "Die (%{position}) teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
   tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen.
+  tooltip_sidebar_doodles: Erstellen Sie eine kleine Umfrage und lassen Sie bestimmte Gruppenmitglieder abstimmen.
   
   tooltip_user_message_archive: Archivieren Sie diese Nachricht.
   tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Ordner <i>gelöscht</i> verschoben.)
