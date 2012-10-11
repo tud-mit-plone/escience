@@ -224,6 +224,10 @@
 
 
 /* sidebar-definitions */
+.sidebar #sitespecivic {
+  padding: 5px 0; 
+}
+
 .sidebar {
 	background-color:#F4F4F4;
 	-moz-border-radius-bottomright:10px;
@@ -257,7 +261,11 @@
 	}
 }
 
-.sidebar li.active, .sidebar li:hover, .sidebar .selected {
+#sitespecivic a.icon-add:hover {
+  margin-right: 10px;
+}
+
+.sidebar li.active, .sidebar li:hover, .sidebar .selected, #sitespecivic a.icon-add:hover {
 	background-color:#DEDEDE;
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
@@ -285,7 +293,6 @@
 }
 
 .sidebar .splitter, .sidebar .headline {
-//	background-color:#7DB414;
   background-color:#7DB414;
 	font-size: 15px;
 	font-weight: bold;
@@ -302,6 +309,10 @@
 	-webkit-border-top-right-radius:10px;
 	border-top-right-radius:10px;
 
+}
+
+.sidebar h4 {
+  margin:5px 0 3px 10px
 }
 
 .sidebar .menu-children {

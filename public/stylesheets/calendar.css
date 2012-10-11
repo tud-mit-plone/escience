@@ -267,7 +267,8 @@ div.calendar thead tr:first-child .button:hover {
   -moz-border-radius: 5px 5px 0 0;
   -webkit-border-radius: 5px 5px 0 0;
   -khtml-border-radius: 5px 5px 0 0;
-  border-radius: 5px 5px 0 0;}
+  border-radius: 5px 5px 0 0;
+}
 
 div.calendar thead .active { /* Active (pressed) buttons in header */
   background-image: -moz-linear-gradient(90deg,#7DB414,#759B68);
@@ -472,8 +473,8 @@ div.mypage-box .cal {
   color: #06C;
 }
 
-.cal #small .event div div {
-  padding-left: 10px;
+.cal #small .event div div div {
+  padding: 10px;
 }
 
 .cal #small .today .day-num {

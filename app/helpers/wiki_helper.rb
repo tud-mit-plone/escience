@@ -67,12 +67,14 @@ module WikiHelper
     l("label_#{t.singularize}_plural", :default => t.to_s.humanize)
   end
 
-  def project_select_tag
+  def project_select_tag(options = {})
+    length = options[:truncate].nil? ? 98 : options[:truncate]
+    p length
     options = [[l(:label_project_all), 'all']]
     options << [l(:label_my_projects), 'my_projects'] unless User.current.memberships.empty?
     options << [l(:label_and_its_subprojects, @project.name), 'subprojects'] unless @project.nil? || @project.descendants.active.empty?
-    options << [@project.name, ''] unless @project.nil?
-    label_tag("scope", l(:description_project_scope), :class => "hidden-for-sighted") +
+    name = truncate(@project.name,:length => length)
+    options << [name, ''] unless @project.nil?
     select_tag('scope', options_for_select(options, params[:scope].to_s)) if options.size > 1
   end
 

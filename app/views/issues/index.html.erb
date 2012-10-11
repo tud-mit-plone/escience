@@ -1,5 +1,7 @@
 <% content_for :sidebar_right do %>
-  <li><%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id %></li>
+  <% if params['sub'].nil? && User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
+    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
+  <% end %>
   <% if !@query.new_record? && @query.editable_by?(User.current) %>
     <!--
     <h4 style="margin:3px 0;">Abfrage</h4>
@@ -8,6 +10,8 @@
   	<li><%= delete_link query_path(@query) %></li>
   	-->
   <% end %>
+  <%= render_sidebar_queries %>
+  <%#= render :partial => 'issues/sidebar' %>
 <%end%>
 
 <h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
@@ -24,17 +28,17 @@
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
       <div class="buttons hide-when-print">
-        <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'icon icon-checked' %></div>
+        <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")' %></div>
         <div>
           <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project, :sub => 'issues_all' }, :class => 'icon icon-reload' if (!params.nil? && !params['issues_all'].nil?)  %>
-          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload' if (params.nil? || (!params.nil? && params['issues_all'].nil?))  %>
+          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project } if (params.nil? || (!params.nil? && params['issues_all'].nil?))  %>
         </div>
           <% if !@query.new_record? && @query.editable_by?(User.current) %>
-          	<div><%= link_to l(:button_edit), edit_query_path(@query), :class => 'icon icon-edit' %></div>
+          	<div><%= link_to l(:button_edit), edit_query_path(@query) %></div>
           	<div><%= delete_link query_path(@query) %></div>
           <% end %>
         <% if @query.new_record? && User.current.allowed_to?(:save_queries, @project, :global => true) %>
-        <div><%= link_to_function l(:button_save), "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')", :class => 'icon icon-save' %>
+        <div><%= link_to_function l(:button_save), "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')" %>
         </div>
         <% end %>
       </div>
@@ -95,11 +99,6 @@
 
 <% end %>
 <%= call_hook(:view_issues_index_bottom, { :issues => @issues, :project => @project, :query => @query }) %>
-
-<% content_for :sidebar_right do %>
-  <%= render_sidebar_queries %>
-  <%#= render :partial => 'issues/sidebar' %>
-<% end %>
 
 <% content_for :header_tags do %>
     <%= auto_discovery_link_tag(:atom,

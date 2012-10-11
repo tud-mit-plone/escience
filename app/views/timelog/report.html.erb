@@ -1,8 +1,13 @@
-<div class="contextual">
-<%= link_to_if_authorized l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'icon icon-time-add' %>
-</div>
+<% content_for :sidebar_right do %>
+  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+  <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
+    <ul>
+      <li><%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'icon icon-time-add' %></li>
+    </ul>
+  <% end %>
+<% end %>
 
-<%= render_timelog_breadcrumb %>
+<%#= render_timelog_breadcrumb %>
 
 <h2><%= l(:label_spent_time) %></h2>
 
@@ -25,7 +30,7 @@
                                                           :style => 'width: 200px',
                                                           :id => nil,
                                                           :disabled => (@report.criteria.length >= 3), :id => "criterias") %>
-     <%= link_to l(:button_clear), {:project_id => @project, :issue_id => @issue, :period_type => params[:period_type], :period => params[:period], :from => @from, :to => @to, :columns => @report.columns}, :class => 'icon icon-reload' %></p>
+     <%= link_to l(:button_clear), {:project_id => @project, :issue_id => @issue, :period_type => params[:period_type], :period => params[:period], :from => @from, :to => @to, :columns => @report.columns}, :class => 'button' %></p>
 <% end %>
 
 <% unless @report.criteria.empty? %>

@@ -1,16 +1,19 @@
 <% content_for :sidebar_right do %>
-  <li><%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }) %></li>
+  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+  <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add') %>
+  <ul>
 	<% if authorize_for("issues", "edit") %>
-		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :onclick => 'showAndScrollTo("update", "notes"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %></li>
+		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :onclick => 'showAndScrollTo("update", "notes"); return false;', :accesskey => accesskey(:edit)) %></li>
 	<%end%>
 	<% if authorize_for("timelog", "new") %>
-		<li><%= link_to(l(:button_log_time), new_issue_time_entry_path(@issue), :class => 'icon icon-time-add') %></li>
+		<li><%= link_to(l(:button_log_time), new_issue_time_entry_path(@issue)) %></li>
 	<%end%>
 	<li><%= watcher_tag(@issue, User.current) %></li>
 	<% if authorize_for("issues", "new") %>
-		<li><%= link_to(l(:button_copy), {:controller => 'issues', :action => 'new', :project_id => @project, :copy_from => @issue}, :class => 'icon icon-copy') %></li>
+		<li><%= link_to(l(:button_copy), {:controller => 'issues', :action => 'new', :project_id => @project, :copy_from => @issue}) %></li>
 	<%end%>
 	<% if User.current.allowed_to?(:delete_issues, @project) %>
-		<li><%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-del') %></li>
+		<li><%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete) %></li>
 	<%end%>	
+  </ul>
 <%end%>

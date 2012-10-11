@@ -1,5 +1,5 @@
 <% content_for :sidebar_right do %>
-	<li><%= link_to l(:button_back), {:controller => 'wiki', :action => 'index'}, :class => 'icon icon-cancel' %></li>
+	<%= link_to l(:button_back), {:controller => 'wiki', :action => 'index'}, :class => 'icon icon-history' %>
 <%end%>
 
 <%= wiki_page_breadcrumb(@page) %>

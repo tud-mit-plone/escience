@@ -11,7 +11,7 @@
 
 <div class="contextual">
 <%= link_to(l(:button_delete), {:controller => 'wikis', :action => 'destroy', :id => @project},
-            :class => 'icon icon-del button') if @wiki && !@wiki.new_record? %>
+            :class => 'button') if @wiki && !@wiki.new_record? %>
 </div>
 
 <%= submit_tag((@wiki.nil? || @wiki.new_record?) ? l(:button_create) : l(:button_save)) %>

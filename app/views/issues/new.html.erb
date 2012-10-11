@@ -1,3 +1,7 @@
+<% content_for :sidebar_right do %>
+  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+<% end %>
+
 <h2><%=l(:label_issue_new)%></h2>
 
 <%= call_hook(:view_issues_new_top, {:issue => @issue}) %>

@@ -1,6 +1,6 @@
 <% content_for :sidebar_right do %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
-    <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %></li>
+    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
   <% end %>
 <%end%>
 

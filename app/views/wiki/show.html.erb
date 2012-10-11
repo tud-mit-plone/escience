@@ -1,28 +1,31 @@
 <% content_for :sidebar_right do %>
-<% if @editable %>
-	<% if (authorize_for("wiki", "edit") && @content.current_version?) %>
-		<li><%= link_to(l(:button_edit), {:action => 'edit', :id => @page.title}, :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %></li>
-	<%end%>
-	<li><%= watcher_tag(@page, User.current) %></li>
-	<% if (authorize_for("wiki", "protect") && !@page.protected?) %>
-		<li><%= link_to(l(:button_lock), {:action => 'protect', :id => @page.title, :protected => 1}, :method => :post, :class => 'icon') %></li>
-	<%end%>
-	<% if (authorize_for("wiki", "protect") && @page.protected?) %>
-		<li><%= link_to(l(:button_unlock), {:action => 'protect', :id => @page.title, :protected => 0}, :method => :post, :class => 'icon') %></li>
-	<%end%>
-	<% if (authorize_for("wiki", "rename") && @content.current_version?) %>
-		<li><%= link_to(l(:button_rename), {:action => 'edit', :id => @page.title}, :class => 'icon icon-move') %></li>
-	<%end%>
-	<% if (authorize_for("wiki", "destroy")) %>
-		<li><%= link_to(l(:button_delete), {:action => 'edit', :id => @page.title}, :method => :destroy, :confirm => l(:text_are_you_sure), :class => 'icon icon-del') %></li>
-	<%end%>
-	<% if (authorize_for("wiki", "edit") && !@content.current_version?) %>
-		<li><%= link_to(l(:button_rollback), {:action => 'edit', :id => @page.title, :version => @content.version }, :class => 'icon icon-cancel') %></li>
-	<%end%>
-	<% if (authorize_for("wiki", "history") && @content.current_version?) %>
-		<li><%= link_to(l(:label_history), {:action => 'history', :id => @page.title}, :class => 'icon icon-history') %></li>
-	<%end%>
-<%end%>
+  <% if @editable %>
+    <ul>
+  	<% if (authorize_for("wiki", "edit") && @content.current_version?) %>
+  		<li><%= link_to(l(:button_edit), {:action => 'edit', :id => @page.title}, :accesskey => accesskey(:edit)) %></li>
+  	<%end%>
+  	<li><%= watcher_tag(@page, User.current) %></li>
+  	<% if (authorize_for("wiki", "protect") && !@page.protected?) %>
+  		<li><%= link_to(l(:button_lock), {:action => 'protect', :id => @page.title, :protected => 1}, :method => :post) %></li>
+  	<%end%>
+  	<% if (authorize_for("wiki", "protect") && @page.protected?) %>
+  		<li><%= link_to(l(:button_unlock), {:action => 'protect', :id => @page.title, :protected => 0}, :method => :post) %></li>
+  	<%end%>
+  	<% if (authorize_for("wiki", "rename") && @content.current_version?) %>
+  		<li><%= link_to(l(:button_rename), {:action => 'edit', :id => @page.title}) %></li>
+  	<%end%>
+  	<% if (authorize_for("wiki", "destroy")) %>
+  		<li><%= link_to(l(:button_delete), {:action => 'edit', :id => @page.title}, :method => :destroy, :confirm => l(:text_are_you_sure)) %></li>
+  	<%end%>
+  	<% if (authorize_for("wiki", "edit") && !@content.current_version?) %>
+  		<li><%= link_to(l(:button_rollback), {:action => 'edit', :id => @page.title, :version => @content.version }) %></li>
+  	<%end%>
+  	<% if (authorize_for("wiki", "history") && @content.current_version?) %>
+  		<li><%= link_to(l(:label_history), {:action => 'history', :id => @page.title}) %></li>
+  	<%end%>
+    </ul>
+  <%end%>
+  <%= render :partial => 'sidebar' %>
 <%end%>
 
 <% content_for :header_tags do %>
@@ -82,10 +85,6 @@
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
-<% end %>
-
-<% content_for :sidebar_right do %>
-  <%= render :partial => 'sidebar' %>
 <% end %>
 
 <% html_title @page.pretty_title %>

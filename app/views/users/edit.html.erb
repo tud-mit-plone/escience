@@ -1,11 +1,13 @@
 <% content_for :sidebar_right do %>
-	<li><%= link_to l(:label_profile), user_path(@user), :class => 'icon icon-user' %></li>
-	<li><%= change_status_link(@user) %></li>
-	<% if User.current != @user %>
-		<li>
-          <%= delete_link user_path(@user) %>
-        </li>
-	<%end%>
+  <ul>
+  	<li><%= link_to l(:label_profile), user_path(@user), :class => 'icon icon-user' %></li>
+  	<li><%= change_status_link(@user) %></li>
+  	<% if User.current != @user %>
+  		<li>
+        <%= delete_link user_path(@user) %>
+      </li>
+  	<%end%>
+  </ul>
 <%end%>
 
 <h2><%= link_to l(:label_user_plural), users_path %> &#187; <%=h @user.login %></h2>

@@ -21,7 +21,7 @@
           <div>
             <p class="linkToInfo" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(40)}) %></p>
            <% if i.is_a? Issue %>
-           <div class="infobox" id="info_<%= i.id %>_<%= day %>" style="position:absolute;"><%= render_issue_tooltip_small i %></div>
+           <div class="infobox" id="info_<%= i.id %>_<%= day %>" style="position:absolute;"><%= render_issue_tooltip i %></div>
             <% end %>
           </div>
         <% end %>
@@ -61,7 +61,7 @@
            <% if (calendar.events_on(day).size < 0) %>
             <p class="linkToInfo <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(12)}) %></p>
            <% else %>
-            <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #<%= (16777215-(h(i.project).size)*(h(i.project).truncate(30).size)*2000).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
+            <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
            <% end %>
            <% if i.is_a? Issue %>
            <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>

@@ -176,14 +176,16 @@ module IssuesHelper
   def query_links(title, queries)
     # links to #index on issues/show
     url_params = controller_name == 'issues' ? {:controller => 'issues', :action => 'index', :project_id => @project} : params
-
-    content_tag('h4', h(title), :style=>"margin:3px 0;") +
+    out = "</ul>"
+    out << content_tag('h4', h(title), :style=>"margin:3px 0 0 10px;") +
+      content_tag('ul',
       queries.collect {|query|
           css = 'query'
           css << ' selected' if query == @query
           "<li>" +
           link_to(h(query.name), url_params.merge(:query_id => query), :class => css)
-        }.join('</li>').html_safe
+        }.join('</li>').html_safe)
+    out.html_safe
   end
 
   def render_sidebar_queries

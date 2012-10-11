@@ -1,19 +1,18 @@
 <% content_for :sidebar_right do %>
-<%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-add') if User.current.allowed_to?(:manage_files, @project) %>
+  <%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-add') if User.current.allowed_to?(:manage_files, @project) %>
 <% end %>
 
 <h2><%=l(:label_attachment_plural)%></h2>
 
 <% delete_allowed = User.current.allowed_to?(:manage_files, @project) %>
 
-<table class="list files">
+<table class="list files" width="100%">
   <thead><tr>
     <%= sort_header_tag('filename', :caption => l(:field_filename)) %>
     <%= sort_header_tag('created_on', :caption => l(:label_date), :default_order => 'desc') %>
     <%= sort_header_tag('size', :caption => l(:field_filesize), :default_order => 'desc') %>
     <%= sort_header_tag('downloads', :caption => l(:label_downloads_abbr), :default_order => 'desc') %>
-    <th>MD5</th>
-    <th></th>
+    <th width="60"></th>
   </tr></thead>
   <tbody>
 <% @containers.each do |container| %>
@@ -31,8 +30,7 @@
     <td class="created_on"><%= format_time(file.created_on) %></td>
     <td class="filesize"><%= number_to_human_size(file.filesize) %></td>
     <td class="downloads"><%= file.downloads %></td>
-    <td class="digest"><%= file.digest %></td>
-    <td align="center">
+    <td align="right">
     <%= link_to(image_tag('delete.png'), attachment_path(file),
                                          :data => {:confirm => l(:text_are_you_sure)}, :method => :delete) if delete_allowed %>
     </td>

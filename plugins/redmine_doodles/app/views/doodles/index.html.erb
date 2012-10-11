@@ -1,9 +1,9 @@
 <% content_for :sidebar_right do %>
-  <% if @project %>
-  <li><%= link_to_if_authorized(l(:label_doodle_new),
-                          {:controller => 'doodles', :action => 'new', :project_id => @project},
-                          :class => 'icon icon-add',
-                          :onclick => 'Element.show("add-doodle"); Form.Element.focus("doodle_title"); Element.hide("preview"); return false;') %></li>
+  <% if @project && User.current.allowed_to?({:controller => 'doodles', :action => 'new'}, @project) %>
+    <%= link_to l(:label_doodle_new),
+                            {:controller => 'doodles', :action => 'new', :project_id => @project},
+                            :class => 'icon icon-add',
+                            :onclick => 'Element.show("add-doodle"); Form.Element.focus("doodle_title"); Element.hide("preview"); return false;' %>
   <% end %>
 <%end%>
 

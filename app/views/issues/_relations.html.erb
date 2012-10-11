@@ -5,10 +5,10 @@
   <%= toggle_link l(:button_add), 'new-relation-form', {:focus => 'relation_issue_to_id'} %>
 <% end %>
 </div>
-
+<div class="clear"></div>
 <% if @relations.present? %>
 <form>
-<table class="list issues" width="100%">
+<table class="list issues" width="100%" cellspacing="0" cellpadding="2" style="margin-left:0px">
 <% @relations.each do |relation| %>
 <tr class="issue hascontextmenu" id="relation-<%= relation.id %>">
 <td class="subject"><%= l(relation.label_for(@issue)) %> <%= "(#{l('datetime.distance_in_words.x_days', :count => relation.delay)})" if relation.delay && relation.delay != 0 %>

@@ -2,12 +2,14 @@
 
 <% content_for :sidebar_right do %>
   <% if authorize_for('messages', 'new') %>
-  	<li><%= link_to_if_authorized l(:label_message_new),
+  	<%= link_to_if_authorized l(:label_message_new),
                           {:controller => 'messages', :action => 'new', :board_id => @board},
                           :class => 'icon icon-add',
-                          :onclick => 'Element.show("add-message"); Form.Element.focus("message_subject"); return false;' %></li>
+                          :onclick => 'Element.show("add-message"); Form.Element.focus("message_subject"); return false;' %>
   <% end %>
+  <ul>
     <li><%= watcher_tag(@board, User.current) %></li>
+  </ul>
 <%end%>
 
 <div id="add-message" style="display:none;">

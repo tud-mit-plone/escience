@@ -1,15 +1,16 @@
 <h1><%= l(:label_news) %></h1>
 <% content_for :sidebar_right do %>
-  <li><%= link_to l(:button_back), {:action => 'index', :project_id => @project}, :class => 'icon icon-cancel' %></li>
-	<li><%= watcher_tag(@news, User.current) %></li>
-	<% if User.current.allowed_to?(:manage_news, @project) %>
-	<li><%= link_to(l(:button_edit),
-	      edit_news_path(@news),
-	      :class => 'icon icon-edit',
-	      :accesskey => accesskey(:edit),
-	      :onclick => 'Element.show("edit-news"); return false;') %></li>
-	<li><%= delete_link news_path(@news) %></li>
-	<%end%>
+  <%= link_to l(:button_back), {:action => 'index', :project_id => @project}, :class => 'icon icon-history' %>
+  <ul>
+  	<li><%= watcher_tag(@news, User.current) %></li>
+  	<% if User.current.allowed_to?(:manage_news, @project) %>
+  	<li><%= link_to(l(:button_edit),
+  	      edit_news_path(@news),
+  	      :accesskey => accesskey(:edit),
+  	      :onclick => 'Element.show("edit-news"); return false;') %></li>
+  	<li><%= delete_link news_path(@news) %></li>
+  	<%end%>
+  </ul>
 <%end%>
 
 <!-- div style="background-image: url('http://141.57.9.94:3000/images/notice.jpg'); background-repeat: no-repeat; padding: 25px 10px; border-left: solid 2px #F0F0F0; border-right: solid 2px #F0F0F0; border-bottom: solid 2px #F0F0F0;" -->

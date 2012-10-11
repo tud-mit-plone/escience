@@ -11,7 +11,7 @@
           <%= check_box_tag("ids[]", issue.id, false, :style => 'display:none;', :id => nil) %>
           <%= link_to(h(issue.id), :controller => 'issues', :action => 'show', :id => issue) %>
         </td -->
-            <%= render_issue_tooltip_small(issue) %>
+            <%= render_issue_tooltip(issue) %>
           </div>
           <% end %>
         </td>

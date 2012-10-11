@@ -39,20 +39,24 @@
 <%= auto_discovery_link_tag(:atom, params.merge(:format => 'atom', :from => nil, :key => User.current.rss_key)) %>
 <% end %>
 
-<% content_for :sidebar do %>
+<% content_for :sidebar_right do %>
 <%= form_tag({}, :method => :get) do %>
-<h3><%= l(:label_activity) %></h3>
-<p><% @activity.event_types.each do |t| %>
-<%= check_box_tag "show_#{t}", 1, @activity.scope.include?(t) %>
-<label for="show_<%=t%>"><%= link_to(l("label_#{t.singularize}_plural"), {"show_#{t}" => 1, :user_id => params[:user_id]})%></label>
-<br />
-<% end %></p>
+<h4><%= l(:label_activity) %></h4>
+<div style="margin-left: 10px;">
+<% @activity.event_types.each do |t| %>
+<%= check_box_tag "show_#{t}", 1, @activity.scope.include?(t), :style => 'float:left; clear:both;margin-right:15px;' %>
+<label for="show_<%=t%>" style ='font-size:10px; float: left'><%= link_to(l("label_#{t.singularize}_plural"), {"show_#{t}" => 1, :user_id => params[:user_id]})%></label><br/>
+<% end %>
+</div>
+<div class="clear"></div>
 <% if @project && @project.descendants.active.any? %>
     <%= hidden_field_tag 'with_subprojects', 0 %>
-    <p><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label></p>
+    <p><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label>
+    </p>
 <% end %>
 <%= hidden_field_tag('user_id', params[:user_id]) unless params[:user_id].blank? %>
-<p><%= submit_tag l(:button_apply), :class => 'button-small', :name => nil %></p>
+<p><%= submit_tag l(:button_apply), :name => nil, :style => "margin-right:10px;" %></p>
+<div class="clear"></div>
 <% end %>
 <% end %>
 

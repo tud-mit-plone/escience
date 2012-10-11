@@ -1,6 +1,9 @@
-<div class="contextual">
-<%= watcher_tag(@wiki, User.current) %>
-</div>
+<% content_for :sidebar_right do %>
+  <ul>
+    <li><%= watcher_tag(@wiki, User.current) %></li>
+  </ul>
+  <%= render :partial => 'sidebar' %>
+<% end %>
 
 <h2><%= l(:label_index_by_date) %></h2>
 

@@ -1,22 +1,22 @@
 <% content_for :sidebar_right do %>
-	<li><%= link_to l(:label_group_new), new_group_path, :class => 'icon icon-add' %></li>
+	<%= link_to l(:label_group_new), new_group_path, :class => 'icon icon-add' %>
 <%end%>
 
 <h2><%= l(:label_group_plural) %></h2>
 
 <% if @groups.any? %>
-<table class="list groups">
+<table class="list groups" width="100%">
   <thead><tr>
   <th><%=l(:label_group)%></th>
-  <th><%=l(:label_user_plural)%></th>
-  <th></th>
+  <th align="right" width="60"><%=l(:label_user_plural)%></th>
+  <th width="80"></th>
   </tr></thead>
   <tbody>
 <% @groups.each do |group| %>
   <tr class="<%= cycle 'odd', 'even' %>">
     <td><%= link_to h(group), edit_group_path(group) %></td>
-    <td align="center"><%= group.users.size %></td>
-    <td class="buttons"><%= delete_link group %></td>
+    <td align="right"><%= group.users.size %></td>
+    <td align="right"><%= delete_link group %></td>
   </tr>
 <% end %>
 </table>

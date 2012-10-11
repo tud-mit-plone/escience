@@ -1,10 +1,13 @@
-<div class="contextual">
-<%= link_to l(:button_log_time), 
-            {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue},
-            :class => 'icon icon-time-add' if User.current.allowed_to?(:log_time, @project, :global => true) %>
-</div>
+<% content_for :sidebar_right do %>
+  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+  <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
+    <ul>
+      <li><%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue} %></li>
+    </ul>
+  <% end %>
+<% end %>
 
-<%= render_timelog_breadcrumb %>
+<%#= render_timelog_breadcrumb %>
 
 <h2><%= l(:label_spent_time) %></h2>
 

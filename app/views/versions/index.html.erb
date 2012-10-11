@@ -1,6 +1,6 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
   <%= link_to l(:label_version_new), new_project_version_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_versions, @project) %>
-</div>
+<% end %>
 
 <h2><%=l(:label_roadmap)%></h2>
 

@@ -1,30 +1,30 @@
 <h2><%=h @blog.title %></h2>
 
 <% if (User.current == @blog.author) %>
-<% content_for :sidebar_right do 
-    if authorize_for "blogs", "edit", true %>
-<li>    
-<%= link_to l(:button_edit),
-                          { :controller => 'blogs',
-                            :action => 'edit',
-                            :id => @blog},
-                          :class => 'icon icon-edit',
-                          :accesskey => accesskey(:edit),
-                          :onclick => 'Element.show("edit-blog");Element.hide("original"); return false;' %>
-</li>
-<% end %>
-<% if authorize_for "blogs", "edit", true %>
-<li>
-<%= link_to l(:button_delete),
-                          { :controller => 'blogs',
-                            :action => 'destroy',
-                            :id => @blog},
-                          :confirm => l(:text_are_you_sure),
-                          :method => :post,
-                          :class => 'icon icon-del' %>
-</li>
-<li><%= link_to l(:button_back), { :controller => 'blogs', :action => 'index', :project_id => @project.id} %></li>
-<% end %>
+<% content_for :sidebar_right do %>
+    <%= link_to l(:button_back), { :controller => 'blogs', :action => 'index', :project_id => @project.id}, :class => "icon icon-history" %>
+    <ul>
+    <% if authorize_for "blogs", "edit", true %>
+        <li>    
+        <%= link_to l(:button_edit),
+                                  { :controller => 'blogs',
+                                    :action => 'edit',
+                                    :id => @blog},
+                                  :accesskey => accesskey(:edit),
+                                  :onclick => 'Element.show("edit-blog");Element.hide("original"); return false;' %>
+        </li>
+      <% end %>
+      <% if authorize_for "blogs", "destroy", true %>
+        <li>
+        <%= link_to l(:button_delete),
+                                  { :controller => 'blogs',
+                                    :action => 'destroy',
+                                    :id => @blog},
+                                  :confirm => l(:text_are_you_sure),
+                                  :method => :post %>
+        </li>
+      <% end %>
+    </ul>
 <% end %>
 
 <div id="edit-blog" style="display:none;">

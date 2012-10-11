@@ -1,6 +1,9 @@
-<div class="contextual">
-<%= watcher_tag(@wiki, User.current) %>
-</div>
+<% content_for :sidebar_right do %>
+  <ul>
+    <li><%= watcher_tag(@wiki, User.current) %></li>
+  </ul>
+  <%= render :partial => 'sidebar' %>
+<% end %>
 
 <h2><%= l(:label_index_by_title) %></h2>
 
@@ -9,10 +12,6 @@
 <% end %>
 
 <%= render_page_hierarchy(@pages_by_parent_id, nil, :timestamp => true) %>
-
-<% content_for :sidebar_right do %>
-  <%= render :partial => 'sidebar' %>
-<% end %>
 
 <% unless @pages.empty? %>
 <% other_formats_links do |f| %>

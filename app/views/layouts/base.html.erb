@@ -18,7 +18,8 @@
   <%= yield :jquery_tags -%>
   <%= javascript_heads %>
   
-  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})>0 ?  l(:tooltip_sidebar_issues_explain, :position => Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})) : "" %>
+  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})>0 ?  l(:tooltip_navbar_issues_explain, :position => Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})) : ""
+     project = @project.nil? ? 'eScience' : @project %>
   <%= javascript_tag '
   // Jquery Funtion um alle Externen Links zu selektieren
   function externalLinks() {
@@ -33,10 +34,23 @@
   $j(function() {addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'")});
   $j(function() {addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'")});
   $j(function() {addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'")});
-  $j(function() {addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues) + '")});
-  $j(function() {addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar)+'")});
+  $j(function() {addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues_all) + '")});
+  $j(function() {addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar_all)+'")});
   $j(function() {addToolTip(".sidebar .doodles ","'+l(:tooltip_sidebar_doodles)+'")});
-  $j(function() {addToolTip("#navigation .newmessage","'+l(:tooltip_sidebar_issues_count)+'<br/>' + "#{issues}"+'", "bottom")});
+  $j(function() {addToolTip(".sidebar .overview ","'+l(:tooltip_sidebar_overview, :project => "#{project}")+'")});
+  $j(function() {addToolTip(".sidebar .issues ","'+l(:tooltip_sidebar_issues, :project => "#{project}")+'")});
+  $j(function() {addToolTip(".sidebar .calendar ","'+l(:tooltip_sidebar_calendar, :project => "#{project}")+'")});
+  $j(function() {addToolTip(".sidebar .news ","'+l(:tooltip_sidebar_news)+'")});
+  $j(function() {addToolTip(".sidebar .blogs ","'+l(:tooltip_sidebar_blogs)+'")});
+  $j(function() {addToolTip(".sidebar .documents ","'+l(:tooltip_sidebar_documents)+'")});
+  $j(function() {addToolTip(".sidebar .wiki ","'+l(:tooltip_sidebar_wiki)+'")});
+  $j(function() {addToolTip(".sidebar .boards ","'+l(:tooltip_sidebar_boards)+'")});
+  $j(function() {addToolTip(".sidebar .files ","'+l(:tooltip_sidebar_files)+'")});
+  $j(function() {addToolTip(".sidebar .settings ","'+l(:tooltip_sidebar_settings)+'")});
+  $j(function() {addToolTip("#navigation .newmessage","'+l(:tooltip_navbar_issues_count)+'<br/>' + "#{issues}"+'", "bottom")});
+  $j(function() {addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom")});
+  $j(function() {addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom")});
+  $j(function() {addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom")});
   '
   %>
   <%= heads_for_theme %>
@@ -149,10 +163,10 @@
   		    	<%= render_menu :sidebarright_menu %>
   		    	<% unless (yield :sidebar_right) == "" %>
   		    	<div class="splitter"><%= l(:label_specific) %></div>
-  		    	<ul>
+  		    	<div id="sitespecivic">
   	        	<%= yield :sidebar_right %>
-  		    	</ul>
   		      <% end %>
+  		    	</div>
           </div>
           <% else %>		    	
   		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>

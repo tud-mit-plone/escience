@@ -36,7 +36,7 @@ function removeBlock(block) {
 
 
 <% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-cancel' %>
+  <%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-history' %>
 <% end %>
 <h2><%=l(:label_my_page)%></h2>
 <p><%=l(:text_personalize_account)%></p>
@@ -52,7 +52,7 @@ function removeBlock(block) {
             :update => "list-top",
             :position => :top,
             :complete => "afterAddBlock();"
-           }, :class => 'icon icon-add button', :style => 'float: none;'
+           }, :class => 'button', :style => 'float: none;'
              %>
 <% end %>
 </div>

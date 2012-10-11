@@ -90,8 +90,7 @@
     <div class="contextual">
     <%= link_to_remote_if_authorized(
           l(:button_quote),
-          { :url => {:controller => 'journals', :action => 'new', :id => @issue} },
-          :class => 'icon icon-comment') %>
+          { :url => {:controller => 'journals', :action => 'new', :id => @issue} }) %>
     </div>
     <div class="wiki">
     <%= textilizable @issue, :description, :attachments => @issue.attachments %>
@@ -155,6 +154,7 @@
 <% html_title "#{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
 
 <% content_for :sidebar do %>
+  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
   <%= render :partial => 'issues/sidebar' %>
   <% if User.current.allowed_to?(:add_issue_watchers, @project) ||
     (@issue.watchers.present? && User.current.allowed_to?(:view_issue_watchers, @project)) %>

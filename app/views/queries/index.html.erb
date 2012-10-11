@@ -1,6 +1,6 @@
-<div class="contextual">
+<% content_for :sidebar_right do %>
 <%= link_to_if_authorized l(:label_query_new), new_project_query_path(:project_id => @project), :class => 'icon icon-add' %>
-</div>
+<% end %>
 
 <h2><%= l(:label_query_plural) %></h2>
 

@@ -1156,10 +1156,18 @@ de:
   tooltip_sidebar_sent: Finden Sie die Nachrichten, die Sie verfasst haben. 
   tooltip_sidebar_archive: Alle wichtigen Nachrichten, die Sie für archivierungswürdig halten.
   tooltip_sidebar_trash: Der Papierkorb für Ihre internen Nachrichten auf der eScience-Plattform
-  tooltip_sidebar_issues_count: "Sehen Sie die Arbeitsanweisungen, die Ihnen in den einzelnen Projekt zugeordnet wurden."
-  tooltip_sidebar_issues: Sehen Sie die Arbeitsanweisungen der einzelnen Projekte an, bei denen Sei Mitglied sind.
-  tooltip_sidebar_issues_explain: "Die (%{position}) teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
-  tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen.
+  tooltip_sidebar_overview: Verschaffen Sie sich einen Überblick über das Projekt »%{project}«. 
+  tooltip_sidebar_issues_all: Sehen Sie die Arbeitsanweisungen der einzelnen Projekte an, bei denen Sei Mitglied sind.
+  tooltip_sidebar_issues: Sehen Sie die Arbeitsanweisungen des Projekts »%{project}« an.
+  tooltip_sidebar_calendar_all: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen.
+  tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen im Projekt »%{project}«.
+  tooltip_sidebar_news: Hier finden Sie Mitteilungen, die für alle Mitglieder hinterlassen wurden.
+  tooltip_sidebar_blogs: Eine weitere Mitteilungszentrale.
+  tooltip_sidebar_documents: Alle Dokumente, die zu diesem Projekt angehängt wurden, sind hier zu finden.
+  tooltip_sidebar_wiki: An dieser Stelle befindet sich eine Wissensdatenbank, die alle Mitglieder mit den entsprechenden Berechtigungen pflegen - oder zumindest einsehen können.
+  tooltip_sidebar_boards: Möchten Sie mit anderen Mitgliedern dieses Projekts diskutieren, so finden Sie hier die Möglichkeit dazu.
+  tooltip_sidebar_files: Alle Datein, die zu diesem Projekt angehängt wurden, sind hier zu finden.
+  tooltip_sidebar_settings: Um die Einstellungen zu diesem Projekt zu ändern, klicken Sie hier.
   tooltip_sidebar_doodles: Erstellen Sie eine kleine Umfrage und lassen Sie bestimmte Gruppenmitglieder abstimmen.
   
   tooltip_user_message_archive: Archivieren Sie diese Nachricht.
@@ -1167,3 +1175,8 @@ de:
   tooltip_user_message_deleteFin: Löschen Sie diese Nachricht entgültig.
   tooltip_user_message_emptyTrash: Leeren Sie den <i>gelöscht</i> Ordner. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
   tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.
+  tooltip_navbar_issues_count: "Sehen Sie die Arbeitsanweisungen, die Ihnen in den einzelnen Projekt zugeordnet wurden."
+  tooltip_navbar_issues_explain: "Die (%{position}) teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
+  tooltip_navbar_account: Hallo %{name}. Wenn Sie hier klicken, können Sie Ihre Angaben ändern.
+  tooltip_navbar_logout: Zum Abmelden bitt hier klicken... Bis zum nächsten Mal.
+  tooltip_navbar_help: Sie haben Fragen und kommen nicht weiter? Schauen Sie zunächst hier nach einer Antwort. Sollten Sie nicht fündig werde stehen wir Ihnen gern zur Verfügung.

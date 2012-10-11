@@ -1,3 +1,4 @@
+
 <%= error_messages_for 'tracker' %>
 
 <div class="splitcontentleft">
@@ -27,7 +28,7 @@
 </div>
 <%= submit_tag l(@tracker.new_record? ? :button_create : :button_save) %>
 </div>
-
+<div class="clear"></div>
 <div class="splitcontentright">
 <% if @projects.any? %>
 <fieldset class="box" id="tracker_project_ids"><legend><%= l(:label_project_plural) %></legend>

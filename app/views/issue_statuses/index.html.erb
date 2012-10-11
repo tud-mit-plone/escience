@@ -1,17 +1,17 @@
 <% content_for :sidebar_right do %>
-	<li>
-      <%= link_to l(:label_issue_status_new), new_issue_status_path, :class => 'icon icon-add' %>
-    </li>
+  <%= link_to l(:label_issue_status_new), new_issue_status_path, :class => 'icon icon-add' %>
 	<% if Issue.use_status_for_done_ratio? %>
-	<li>
+	<ul>
+	 <li>
       <%= link_to(l(:label_update_issue_done_ratios), update_issue_done_ratio_issue_statuses_path, :class => 'icon icon-multiple', :method => 'post', :confirm => l(:text_are_you_sure))  %>
-    </li>
+   </li>
+	</ul>
 	<%end%>
 <%end%>
 
 <h2><%=l(:label_issue_status_plural)%></h2>
 
-<table class="list">
+<table class="list" width="100%">
   <thead><tr>
   <th><%=l(:field_status)%></th>
   <% if Issue.use_status_for_done_ratio? %>
@@ -20,7 +20,7 @@
   <th><%=l(:field_is_default)%></th>
   <th><%=l(:field_is_closed)%></th>
   <th><%=l(:button_sort)%></th>
-  <th></th>
+  <th width="60"></th>
   </tr></thead>
   <tbody>
 <% for status in @issue_statuses %>
@@ -32,7 +32,7 @@
   <td align="center"><%= checked_image status.is_default? %></td>
   <td align="center"><%= checked_image status.is_closed? %></td>
   <td align="center" style="width:15%;"><%= reorder_links('issue_status', {:action => 'update', :id => status}, :put) %></td>
-  <td class="buttons">
+  <td align="right">
     <%= delete_link issue_status_path(status) %>
   </td>
   </tr>

@@ -1,9 +1,9 @@
 /* Split 25/75 */
 div.tags a, .icon22-tags {
 	padding-left: 20px;
-	background-image: url(../images/tag_label.png);
-	background-repeat: no-repeat;
-	background-position: left center;
+//	background-image: url(../images/tag_label.png);
+//	background-repeat: no-repeat;
+//	background-position: left center;
 }
 .css1 { font-size: 1.0em; }
 .css2 { font-size: 1.2em; }
@@ -18,4 +18,8 @@ dt.blog-comment { background-image: url(../images/balloons.png); }
 }
 #blogs img {
   max-width: 98%;
+}
+
+.sidebar .tags {
+  font-size: 7px;
 }

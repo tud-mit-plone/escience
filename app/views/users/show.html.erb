@@ -1,6 +1,8 @@
 <% content_for :sidebar_right do %>
 	<% if User.current.admin? %>
-	<li><%= link_to(l(:button_edit), edit_user_path(@user), :class => 'icon icon-edit') %></li>
+	<ul>
+  	<li><%= link_to(l(:button_edit), edit_user_path(@user), :class => 'icon icon-edit') %></li>
+	</ul>
 	<%end%>
 <%end%>
 

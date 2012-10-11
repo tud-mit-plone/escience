@@ -24,8 +24,10 @@
 <% end %>
 
 <% content_for :sidebar_right do %>
-  	<li><%= link_to(l(:label_back), user_messages_path) %></li>
-  	<li><%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-passwd') %></li>
-  	<li><%= link_to(l(:label_user_messages_reply), {:action => 'new', :id => @user_message.user_id, :reply => @user_message.id}, :class => 'icon icon-passwd') %></li>
-  	<li><%= link_to(l(:label_user_messages_delete), {:action => 'destroy'}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) %></li>
+  	<%= link_to(l(:label_back), user_messages_path, :class => 'icon icon-history') %>
+  	<%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-add') %>
+  	<ul>
+    	<li><%= link_to(l(:label_user_messages_reply), {:action => 'new', :id => @user_message.user_id, :reply => @user_message.id}) %></li>
+    	<li><%= link_to(l(:label_user_messages_delete), {:action => 'destroy'}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) %></li>
+  	</ul>
 <%end%>

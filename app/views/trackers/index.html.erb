@@ -1,15 +1,15 @@
 <% content_for :sidebar_right do %>
-	<li><%= link_to l(:label_tracker_new), new_tracker_path, :class => 'icon icon-add' %></li>
+	<%= link_to l(:label_tracker_new), new_tracker_path, :class => 'icon icon-add' %>
 <%end%>
 
 <h2><%=l(:label_tracker_plural)%></h2>
 
-<table class="list">
+<table class="list" width="100%">
   <thead><tr>
   <th><%=l(:label_tracker)%></th>
   <th></th>
   <th><%=l(:button_sort)%></th>
-  <th></th>
+  <th width="60"></th>
   </tr></thead>
   <tbody>
 <% for tracker in @trackers %>
@@ -17,7 +17,7 @@
   <td><%= link_to h(tracker.name), edit_tracker_path(tracker) %></td>
   <td align="center"><% unless tracker.workflows.count > 0 %><span class="icon icon-warning"><%= l(:text_tracker_no_workflow) %> (<%= link_to l(:button_edit), {:controller => 'workflows', :action => 'edit', :tracker_id => tracker} %>)</span><% end %></td>
   <td align="center" style="width:15%;"><%= reorder_links('tracker', {:action => 'update', :id => tracker}, :put) %></td>
-  <td class="buttons">
+  <td align="right">
     <%= delete_link tracker_path(tracker) %>
   </td>
   </tr>

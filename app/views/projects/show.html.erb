@@ -1,9 +1,3 @@
-<% content_for :sidebar_right do %>
-  <% if User.current.allowed_to?(:add_subprojects, @project) %>
-    <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %></li>
-  <% end %>
-<%end%>
-
 <h2><%=l(:label_overview)%> <%= l(:label_forproject) %> <%= @project.name %></h2>
 
 <% unless @topproject.nil? %>
@@ -32,6 +26,14 @@
   <% end %>
   </ul>
 </div>
+
+  <% if @news.any? && authorize_for('news', 'index') %>
+<fieldset>
+  <legend><%=l(:label_news_latest)%></legend>
+    <%= render :partial => 'news/news', :collection => @news %>
+    <p><%= link_to l(:label_news_view_all), :controller => 'news', :action => 'index', :project_id => @project %></p>
+</fieldset>
+  <% end %>
 
 <% if @subprojects.any? %>
 <fieldset>
@@ -66,23 +68,22 @@
 <% end %>
 <%= call_hook(:view_projects_show_left, :project => @project) %>
 
-  <%= render :partial => 'members_box' %>
+<%= render :partial => 'members_box' %>
 
-  <% if @news.any? && authorize_for('news', 'index') %>
-<fieldset>
-  <legend><%=l(:label_news_latest)%></legend>
-    <%= render :partial => 'news/news', :collection => @news %>
-    <p><%= link_to l(:label_news_view_all), :controller => 'news', :action => 'index', :project_id => @project %></p>
-</fieldset>
-  <% end %>
-  <%= call_hook(:view_projects_show_right, :project => @project) %>
+
+<%= call_hook(:view_projects_show_right, :project => @project) %>
 
 <% content_for :sidebar_right do %>
     <% if @total_hours.present? %>
-    <h3><%= l(:label_spent_time) %></h3>
-    <p><span class="icon icon-time"><%= l_hours(@total_hours) %></span></p>
-    <p><%= link_to(l(:label_details), {:controller => 'timelog', :action => 'index', :project_id => @project}) %> |
-    <%= link_to(l(:label_report), {:controller => 'timelog', :action => 'report', :project_id => @project}) %></p>
+  <% if User.current.allowed_to?(:add_subprojects, @project) %>
+    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
+  <% end %>
+    <h4><%= l(:label_spent_time) %>:</h4>
+    <span class="icon icon-time"><%= l_hours(@total_hours) %></span>
+    <ul>
+      <li><%= link_to(l(:label_details), {:controller => 'timelog', :action => 'index', :project_id => @project}) %></li>
+      <li><%= link_to(l(:label_report), {:controller => 'timelog', :action => 'report', :project_id => @project}) %></li>
+    </ul>
     <% end %>
     <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
 <% end %>
