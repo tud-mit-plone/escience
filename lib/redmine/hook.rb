@@ -17,6 +17,9 @@
 
 module Redmine
   module Hook
+    if Rails.env.development?
+      mattr_accessor :listener_classes
+    end
     @@listener_classes = []
     @@listeners = nil
     @@hook_listeners = {}

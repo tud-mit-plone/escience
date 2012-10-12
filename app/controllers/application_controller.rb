@@ -17,7 +17,9 @@
 
 if Rails.env.development?
   require_dependency "#{Rails.root}/plugins/redmine_blogs/init.rb"
+  tmp = Redmine::Hook.listener_classes
   require_dependency "#{Rails.root}/lib/redmine/hook.rb"
+  Redmine::Hook.listener_classes = tmp
   require_dependency "#{Rails.root}/lib/redmine/themes.rb"
 end
 
