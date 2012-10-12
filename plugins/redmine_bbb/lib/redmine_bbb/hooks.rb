@@ -56,7 +56,6 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
       config.logger.error(e.message)
       config.logger.error(e.backtrace.inspect)
       #output = ""
-    ensure
       output = "<h3>#{l(:label_bigbluebutton)}</h3>"
       output << "<p>#{l(:label_bigbluebutton_error)}</p>"
     end
