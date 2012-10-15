@@ -1,4 +1,4 @@
-<h3><%=l(:label_document_plural)%></h3>
+<legend><%=l(:label_document_plural)%></legend>
 
 <% project_ids = @user.projects.select {|p| @user.allowed_to?(:view_documents, p)}.collect(&:id) %>
 <%= render(:partial => 'documents/document',

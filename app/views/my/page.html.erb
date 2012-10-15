@@ -14,27 +14,27 @@
      @blocks['top'].each do |b|
      next unless MyController::BLOCKS.keys.include? b  
      %>
-  <div class="mypage-box<%= ((counter+=1) % 3) == 0 ? ' last': '' %>">
+  <fieldset class="mypage-box<%= ((counter+=1) % 3) == 0 ? ' last': '' %>">
     <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
-  </div>
+  </fieldset>
   <% end if @blocks['top'] %>
 </div>
 
 <div id="list-left" class="splitcontentleft">
   <% @blocks['left'].each do |b|
      next unless MyController::BLOCKS.keys.include? b %>
-  <div class="mypage-box">
+  <fieldset class="mypage-box">
     <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
-  </div>
+  </fieldset>
   <% end if @blocks['left'] %>
 </div>
 
 <div id="list-right" class="splitcontentright">
   <% @blocks['right'].each do |b|
      next unless MyController::BLOCKS.keys.include? b %>
-  <div class="mypage-box">
+  <fieldset class="mypage-box">
     <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
-  </div>
+  </fieldset>
   <% end if @blocks['right'] %>
 </div>
 

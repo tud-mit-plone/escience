@@ -12,8 +12,6 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
         url = Setting.plugin_redmine_bbb['bbb_help']
         link = url.empty? ? "" : "&nbsp;&nbsp;<a href='" + url + "' target='_blank' class='icon icon-help'>&nbsp;</a>"
 
-        output << "<h3>#{l(:label_bigbluebutton)}#{link}</h3>"
-
         server = Setting.plugin_redmine_bbb['bbb_ip'].empty? ? Setting.plugin_redmine_bbb['bbb_server'] : Setting.plugin_redmine_bbb['bbb_ip']
         meeting_started=false
         #First, test if meeting room already exists
@@ -22,32 +20,37 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
         
         doc = REXML::Document.new(data)
 	      if doc.root.elements['returncode'].text == "FAILED"
-            output << "#{l(:label_bigbluebutton_status)}: <b>#{l(:label_bigbluebutton_status_closed)}</b><br><br>"
+            output << "<div class=\"status\">(#{l(:label_bigbluebutton_status_closed)})</div>"
+            output << "<h4 style=\"margin-bottom:0px\">#{l(:label_bigbluebutton)}#{link}</h4>"
         else
             meeting_started = true
+            output << "<div class=\"status\">(#{l(:label_bigbluebutton_status_running)})</div>"
+            output << "<h4 style=\"margin-bottom:0px\">#{l(:label_bigbluebutton)}#{link}</h4>"
             if Setting.plugin_redmine_bbb['bbb_popup'] != '1'
+              output << "<ul style=\"padding-top:0px\"><li>"
               output << link_to(l(:label_bigbluebutton_join), {:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true})
+              output << "</li></ul>"
             else
-              output << "<a href='' onclick='javascript:var wihe = \"width=\"+screen.availWidth+\",height=\"+screen.availHeight; open(\"" + url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true) + "\",\"Meeting\",\"directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,\" + wihe);return false;'>#{l(:label_bigbluebutton_join)}</a>"
+              output << "<ul style=\"padding-top:0px\"><li><a href='' onclick='javascript:var wihe = \"width=\"+screen.availWidth+\",height=\"+screen.availHeight; open(\"" + url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true) + "\",\"Meeting\",\"directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,\" + wihe);return false;'>#{l(:label_bigbluebutton_join)}</a></li></ul>"
             end
-            output << "<br><br>"
-            output << "#{l(:label_bigbluebutton_status)}: <b>#{l(:label_bigbluebutton_status_running)}</b>"
-            output << "<br><i>#{l(:label_bigbluebutton_people)}:</i><br>"
+            output << "<div class=\"people\">#{l(:label_bigbluebutton_people)}:<br><ul>"
 
 	          doc.root.elements['attendees'].each do |attendee|
 	            name=attendee.elements['fullName'].text
-              output << "&nbsp;&nbsp;- #{name}<br>"
+              output << "<li>#{name}</li>"
 	          end
+	          output << "</ul></div>"
         end
 
          if !meeting_started
            if User.current.allowed_to?(:bigbluebutton_start, @project)
              if Setting.plugin_redmine_bbb['bbb_popup'] != '1'
+               output << "<ul><li>"
                output << link_to(l(:label_bigbluebutton_start), {:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true})
+               output << "</li></ul>"
              else
-               output << "<a href='' onclick='javascript:var wihe = \"width=\"+screen.availWidth+\",height=\"+screen.availHeight; open(\"" + url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true) + "\",\"Meeting\",\"directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,\" + wihe);return false;'>#{l(:label_bigbluebutton_start)}</a>"
+               output << "<ul><li><a href='' onclick='javascript:var wihe = \"width=\"+screen.availWidth+\",height=\"+screen.availHeight; open(\"" + url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true) + "\",\"Meeting\",\"directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,\" + wihe);return false;'>#{l(:label_bigbluebutton_start)}</a></li></ul>"
              end
-             output << "<br><br>"
            end
 
          end
@@ -56,7 +59,7 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
       config.logger.error(e.message)
       config.logger.error(e.backtrace.inspect)
       #output = ""
-      output = "<h3>#{l(:label_bigbluebutton)}</h3>"
+      output = "<h4>#{l(:label_bigbluebutton)}</h4>"
       output << "<p>#{l(:label_bigbluebutton_error)}</p>"
     end
     return output

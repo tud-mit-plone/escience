@@ -1,11 +1,9 @@
 <% content_for :sidebar_right do %>
   <ul>
-  	<li><%= link_to l(:label_profile), user_path(@user), :class => 'icon icon-user' %></li>
+  	<li><%= link_to l(:label_profile), user_path(@user) %></li>
   	<li><%= change_status_link(@user) %></li>
   	<% if User.current != @user %>
-  		<li>
-        <%= delete_link user_path(@user) %>
-      </li>
+  		<li><%= delete_link user_path(@user) %></li>
   	<%end%>
   </ul>
 <%end%>
@@ -14,9 +12,9 @@
 
 <div id="profile">
 <%= render_tabs user_settings_tabs %>
-
 <% html_title(l(:label_user), @user.login, l(:label_administration)) -%>
 </div>
+
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'profile' %>
 <% end %>

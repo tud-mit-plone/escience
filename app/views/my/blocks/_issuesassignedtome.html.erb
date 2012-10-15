@@ -1,4 +1,4 @@
-<h3><%=l(:label_assigned_to_me_issues)%> (<%= Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})%>)</h3>
+<legend><%=l(:label_assigned_to_me_issues)%> (<%= Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})%>)</legend>
 
 <% assigned_issues = Issue.visible.open.find(:all,
                                 :conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)},

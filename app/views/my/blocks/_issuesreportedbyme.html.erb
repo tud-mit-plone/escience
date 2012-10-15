@@ -1,5 +1,5 @@
-<h3><%=l(:label_reported_issues)%> 
-<%#= Issue.visible.count(:conditions => { :author_id => User.current.id }) %></h3>
+<legend><%=l(:label_reported_issues)%> 
+<%#= Issue.visible.count(:conditions => { :author_id => User.current.id }) %></legend>
 
 <% reported_issues = Issue.visible.find(:all,
                                 :conditions => { :author_id => User.current.id },

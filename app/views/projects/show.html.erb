@@ -87,9 +87,8 @@
     <% end %>
     <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
 <% end %>
-    <p>HOOK HERE</p>
-<%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
-    <p>HOOK HERE</p>
+
+
 <% content_for :header_tags do %>
 <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
 <% end %>

@@ -2,7 +2,7 @@
   <%= stylesheet_link_tag 'calendar', :media => 'all' %>
 <% end %>
 
-<h3><%= l(:label_calendar) %></h3>
+<legend><%= l(:label_calendar) %></legend>
 <div class="calendar controller-calendars ">
 <% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :week)
    calendar.events = Issue.visible.find :all,

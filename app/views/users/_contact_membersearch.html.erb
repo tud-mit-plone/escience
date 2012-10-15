@@ -28,12 +28,13 @@
 					success: function( data ) {
 					  $js("#ausgabe").html("");
 						response( $js.map( data, function( item ) {
-						  console.log(item);
+//						  console.log(item);
 					    var $element = $js("<fieldset class=\'project\' />");
 					    $element.append($js("<legend>").text(item[0]));
 					    var $tbl = $js("<table width=\"100%\">");
 					    for (var i = 0; i < item[1].length; i++) {
-                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0][\'firstname\']+" "+item[1][i][0][\'lastname\']+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0][\'id\']+"\'><div class=\"openUser\"></div></a>","<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0][\'id\']+"\'><div class=\"sendMessage\"></div></a>")));
+					      console.log (item[1][i][0].user.firstname);
+                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0].user.id+"\'><div class=\"openUser\"></div></a>","<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>")));
               }
 
               $element.append($tbl);

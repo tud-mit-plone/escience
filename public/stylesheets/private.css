@@ -115,15 +115,19 @@ textarea {
 		border-radius:10px;
 		-moz-border-radius:10px;
 		-webkit-border-radius:10px;		
-		overflow:hidden;
-		border: solid 1px #FAFAFA;
-		background-color: #FAFAFA
+		border: solid 2px #F0F0F0;
+		background-color: #FAFAFA;
+		padding:10px;
 	}
 
 	#list-top .mypage-box div, #list-top .mypage-box form {
 	 padding: 0 20px;
   }
 	
+	#list-top .mypage-box div.calendar {
+		border: solid 1px #F0F0F0 !important;
+	}
+
 	#list-top .mypage-box .small {
   	background-color: #F0F0F0;
   	text-align: center;
@@ -147,11 +151,6 @@ textarea {
 	#list-top .mypage-box .small:hover a {
 	  color: #FFFFFF;
 	}	
-
-  #list-top .mypage-box:hover {
-		border: solid 1px #F0F0F0;
-		background-color: #FAFAFA
-  }
 
 	#list-top .mypage-box.last {
 		margin-right: 0px;
