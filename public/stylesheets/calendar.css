@@ -485,9 +485,6 @@ div.mypage-box .cal {
   border-color: #F0F0F0;
 }
 
-.cal #small .today:hover {
-  border-color: #d0d0d0;
-}
 
 .cal #small .td_box {
   height: auto;
