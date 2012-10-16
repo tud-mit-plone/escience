@@ -1,6 +1,6 @@
 <h2><%=l(:label_my_members)%></h2>
 <%= error_messages_for 'user' %>
 
-<%= render_tabs member_tabs %>
+<%= render_tabs member_tabs,{:allusers => @allusers} %>
 
 <% html_title(l(:label_my_members)) -%>

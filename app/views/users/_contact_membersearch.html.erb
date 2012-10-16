@@ -3,6 +3,7 @@
 </div>
 <div style="height:20px;"></div>
 <label><%= l(:label_memberlist_searchit) %>:</label> <input id="member_search" />
+<div style="clear:both"></div>
 <div id="ausgabe"></div>
 
 
@@ -34,7 +35,11 @@
 					    var $tbl = $js("<table width=\"100%\">");
 					    for (var i = 0; i < item[1].length; i++) {
 					      console.log (item[1][i][0].user.firstname);
-                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0].user.id+"\'><div class=\"openUser\"></div></a>","<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>")));
+                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append(
+                "<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0].user.id+"\'><div class=\"openUser\"></div></a>",
+                "<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>",
+                "<a href=\''+url_for(:controller => "user_contact", :action => "add")+'?contact_member_id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>"
+                )));
               }
 
               $element.append($tbl);

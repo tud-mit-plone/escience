@@ -330,6 +330,10 @@ RedmineApp::Application.routes.draw do
     end
   end
 
+  match '/user_contact', :controller => 'user_contact', :action =>'index', :via => [:get, :post]
+  match '/user_contact/add', :controller => 'user_contact', :action =>'add', :via => [:get, :post]
+  match '/user_contact/delete', :controller => 'user_contact', :action =>'delete', :via => [:get, :post]
+
   match 'workflows', :controller => 'workflows', :action => 'index', :via => :get
   match 'workflows/edit', :controller => 'workflows', :action => 'edit', :via => [:get, :post]
   match 'workflows/copy', :controller => 'workflows', :action => 'copy', :via => [:get, :post]

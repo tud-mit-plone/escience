@@ -89,6 +89,8 @@ class User < Principal
   has_many :user_messages #User.current.user_messages --> sent
   has_many :receivers, :through => :user_messages
 
+  has_many :user_contacts
+  
   scope :in_group, lambda {|group|
     group_id = group.is_a?(Group) ? group.id : group.to_i
     { :conditions => ["#{User.table_name}.id IN (SELECT gu.user_id FROM #{table_name_prefix}groups_users#{table_name_suffix} gu WHERE gu.group_id = ?)", group_id] }

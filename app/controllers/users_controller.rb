@@ -107,10 +107,9 @@ class UsersController < ApplicationController
                                  AND m.user_id = u.id
                                  AND p.status=1
                                  AND p.id = m.project_id
-                                 AND p.id IN (?)
+                                 AND p.id IN (#{User.current.projects.map{|p| "'#{p.id}'"}.join(",")})
                                  AND u.id <> ?
                                  ","#{params[:q]}%", "#{params[:q]}%",
-                                 "#{User.current.projects.map{|p| p.id}.join(",")}",
                                  User.current.id])
     end
     @projects = []

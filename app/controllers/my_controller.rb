@@ -189,49 +189,30 @@ class MyController < ApplicationController
     end
     render :nothing => true
   end
-  
-  def contact_members
-    user_list = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id
-                               FROM users u, projects p, members m
-                               WHERE m.user_id = u.id
-                               AND p.status=1
-                               AND p.id = m.project_id
-                               AND p.id IN (?)
-                               AND u.admin = 0
-                               AND u.id <> ?
-                               ",
-                               "#{User.current.projects.map{|p| p.id}.join(",")}",
-                               User.current.id])
+
+  def members
+    @allusers = []
+    unless User.current.anonymous?
+      User.current.user_contacts.each do |uc|
+      @allusers << uc.contact_member
+      end unless User.current.user_contacts.nil?
+    end
+
     respond_to do |format|
-      format.html {
-        project_list = Project.visible.find(:all, :order => 'lft')
-        @projects = []
-        @allusers = []
-        project_list.each do |project|
-          users = []
-          project.users_by_role.each do |user_project|
-            role = ""
-            user_project.each do |user_roles|
-              if user_roles.class.to_s == "Role"
-                role = user_roles.name
-              elsif user_roles.class.to_s == "Array"
-                user_roles.each do |user|
-                  if !(user_list.detect {|v| v.id == user.id}).nil?
-                    users += [[user, role]]
-                    @allusers += [user]
-                  end
-                end
-              end
-            end
-          end
-          if !users.empty?
-            users.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
-            @projects += [[project.name, users]]
-          end
-        end
-        @allusers.sort! { |a,b| a.lastname.downcase <=> b.lastname.downcase }
-        @allusers.uniq!
-      }
+      format.html
+    end
+  end
+
+  def contact_members
+    @allusers = []
+    unless User.current.anonymous?
+      User.current.user_contacts.each do |uc|
+      @allusers << uc.contact_member
+      end unless User.current.user_contacts.nil?
+    end
+    
+    respond_to do |format|
+      format.html 
     end
   end
 end

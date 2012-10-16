@@ -246,9 +246,10 @@ module ApplicationHelper
   end
 
   # Renders tabs and their content
-  def render_tabs(tabs)
+  def render_tabs(tabs, locals = {} )
     if tabs.any?
-      render :partial => 'common/tabs', :locals => {:tabs => tabs}
+      locals[:tabs] = tabs
+      render :partial => 'common/tabs', :locals => locals
     else
       content_tag 'p', l(:label_no_data), :class => "nodata"
     end
