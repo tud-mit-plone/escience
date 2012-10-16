@@ -8,28 +8,37 @@ class UserContactController < ApplicationController
     else
       contacts = User.current.user_contacts.nil? ? [] : User.current.user_contacts
     end
+    contact_users = []
+    contacts.each do |con|
+      u = User.find(con.contact_member)
+      contact_users << "#{u.firstname}, #{u.lastname}"
+    end
     respond_to do |format|
-      format.xml { render :xml => contacts }
-      format.js { render :json => contacts }
-      format.json { render :json => contacts }
+      format.xml { render :xml => contact_users }
+      format.js { render :json => contact_users }
+      format.json { render :json => contact_users }
     end
   end
 
   def add
-    if User.current.id == params[:contact_member_id]
+    if params[:contact_member_id].nil? || User.current.id == params[:contact_member_id]
       return nil 
     end
-    contacts = User.current.user_contacts
     new_contact = User.find(params[:contact_member_id])
 
-    unless in_contact?(contacts,new_contact.id)
+    if UserContact.find_by_user_id_and_contact_member_id(User.current.id,new_contact).nil?
       uc = UserContact.new
       uc.user = User.current
       uc.contact_member = new_contact
       uc.save!
     end
     flash[:notice] = l(:notice_user_successful_added, :member => User.find(new_contact).to_s())
-    redirect_to request.referrer
+
+    unless request.referrer.nil?
+      redirect_to request.referrer
+    else
+      redirect_to(:controller => 'my', :action => :members)
+    end
   end
 
   def delete
@@ -38,18 +47,11 @@ class UserContactController < ApplicationController
       uc.delete
     end
     flash[:notice] = l(:notice_user_successful_deleted, :member => User.find(params[:contact_member_id]).to_s())
-    redirect_to request.referrer
-  end
-
-  private
-
-  def in_contact?(contacts,id)
-    contacts.each do |con|
-      if con.contact_member_id == id
-        return true
-      end
+    unless request.referrer.nil?
+      redirect_to request.referrer
+    else
+      redirect_to(:controller => 'my', :action => :members)
     end
-    return false 
   end
 
 end

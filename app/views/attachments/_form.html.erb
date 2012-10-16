@@ -17,9 +17,9 @@
       <div class="cover_input">
         <div class="fileupload" onclick="jQuery(this).parent().parent().find('.file').click()"><%= l(:label_fileupload) %></div>
         <div class="editfilename">
-          <input class="userinput" size="10">
+          <input class="userinput" size="10" />
           <span></span>
-          <%= hidden_field_tag 'attachments[1][filename]', '', :id => nil, :class => 'hiddenname' %>
+          <%= hidden_field_tag 'attachments[1][newname]', '', :id => nil, :class => 'hiddenname' %>
         </div>
       </div>
       <div class="descr"><%= text_area_tag 'attachments[1][description]', '', :id => nil, :class => 'description', :rows => 3, :placeholder => l(:label_optional_description) %></div>

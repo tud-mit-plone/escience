@@ -65,6 +65,7 @@ module Redmine
         end
 
         def save_attachments(attachments, author=User.current)
+          p "newname :: #{attachments.values}"
           if attachments.is_a?(Hash)
             attachments = attachments.values
           end
@@ -82,6 +83,10 @@ module Redmine
               end
               next unless a
               a.description = attachment['description'].to_s.strip
+              unless attachment['newname'].nil?
+                a.filename = attachment['newname']
+                a.save!
+              end
               if a.new_record?
                 unsaved_attachments << a
               else
