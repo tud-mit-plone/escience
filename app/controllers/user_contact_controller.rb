@@ -28,6 +28,7 @@ class UserContactController < ApplicationController
       uc.contact_member = new_contact
       uc.save!
     end
+    flash[:notice] = l(:notice_user_successful_added, :member => User.find(new_contact).to_s())
     redirect_to request.referrer
   end
 
@@ -36,6 +37,7 @@ class UserContactController < ApplicationController
       uc = UserContact.find_by_contact_member_id_and_user_id(params[:contact_member_id],User.current.id)
       uc.delete
     end
+    flash[:notice] = l(:notice_user_successful_deleted, :member => User.find(params[:contact_member_id]).to_s())
     redirect_to request.referrer
   end
 

@@ -199,6 +199,15 @@
 	border-top-right-radius:10px;
 }
 
+#quick-search.empty {
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border-bottom-right-radius:10px;
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-bottom-left-radius:10px;
+	border-bottom-left-radius:10px;
+}
+
 #quick-search input[type=text] {
 	width:120px;
 	height:14px;
@@ -255,9 +264,9 @@
 @-moz-document url-prefix(){ 
 	.sidebar ul {
   	list-style-position:outside;
-  	text-indent: 0px;
+  	text-indent: -1px;
   	-moz-hyphens: auto;
-  	padding: 5px 10px 5px 10px;
+  	padding: 5px 10px 5px 15px;
 	}
 }
 

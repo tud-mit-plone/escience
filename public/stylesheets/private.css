@@ -18,9 +18,13 @@ fieldset {
 
 fieldset legend {
 	font-size:13pt;
-	margin-left: -10px;
+//	margin-left: -10px;
 }
 	
+.controller-projects.action-show fieldset legend {
+  margin-left: -10px;
+}
+
 label {
 	padding-right: 5px;
 }
@@ -266,7 +270,7 @@ select#membership_project_id {
 	  padding-top: 3px;
 	}
 
-	.action-members .openUser, .action-members .sendMessage {
+	.action-members .openUser, .action-members .sendMessage, .action-members .addUser, .action-members .deleteUser {
 	  float: right;
   	width:13px;
   	height: 10px;
@@ -281,15 +285,26 @@ select#membership_project_id {
   	background-image: url("../images/sendmessage.png");
 	}
 
-	.action-members .openUser:hover, .action-members .sendMessage:hover {
+	.action-members .addUser {
+  	background-image: url("../images/adduser.png");
+	}
+
+	.action-members .deleteUser {
+  	background-image: url("../images/deleteuser.png");
+	}
+
+	.action-members .openUser:hover, .action-members .sendMessage:hover, .action-members .deleteUser:hover, .action-members .addUser:hover {
   	background-position: 50% 100%;
 	}
 
 	.action-members #member_search {
-  	width: 86%;
+  	width: 85%;
   	margin-top: -3px;
   	float: right;
-  	margin-bottom: 20px;
+	}
+	
+	.action-members #ausgabe {
+  	margin-top: 20px;
 	}
 
 	.controller-users label {
@@ -370,7 +385,10 @@ select#membership_project_id {
   	margin: 0 0 20px 20px;
 	}	
 	
-	
+	fieldset.project {
+  	width: 535px;
+	}
+		
 /* /* !---------- Filter ------------ */
 	
 .filter label, .add-filter label{

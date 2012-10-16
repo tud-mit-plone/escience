@@ -29,21 +29,22 @@
 					success: function( data ) {
 					  $js("#ausgabe").html("");
 						response( $js.map( data, function( item ) {
-//						  console.log(item);
 					    var $element = $js("<fieldset class=\'project\' />");
 					    $element.append($js("<legend>").text(item[0]));
 					    var $tbl = $js("<table width=\"100%\">");
 					    for (var i = 0; i < item[1].length; i++) {
-					      console.log (item[1][i][0].user.firstname);
-                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"50\">").append(
+                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"55\">").append(
                 "<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0].user.id+"\'><div class=\"openUser\"></div></a>",
                 "<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>",
-                "<a href=\''+url_for(:controller => "user_contact", :action => "add")+'?contact_member_id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>"
+                "<a href=\''+url_for(:controller => "user_contact", :action => "add")+'?contact_member_id="+item[1][i][0].user.id+"\'><div class=\"addUser\"></div></a>"
                 )));
               }
 
               $element.append($tbl);
   						$js("#ausgabe").append($element);
+              addToolTip(".addUser ","'+l(:tooltip_addUser)+'","top");
+              addToolTip(".openUser ","'+l(:tooltip_openUser)+'","top");
+              addToolTip(".sendMessage ","'+l(:tooltip_sendMessage)+'","top");
   						return false;
 						}));
 					}

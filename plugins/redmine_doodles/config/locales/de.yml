@@ -1,6 +1,7 @@
 # German strings go here for Rails i18n
 de:
   doodle_inactive: "Die Umfrage ist inaktiv"
+  doodle_ends: Umfrage endet am
   doodle_update_successful: "Die Umfrage wurde erfolgreich aktualisiert"
   doodle_update_unsuccessful: "Fehler beim Aktualisieren der Umfrage"
   doodle_answer_create_successful: "Ihre Antwort wurde aufgenommen"

@@ -24,10 +24,11 @@
 <% end %>
 
 <% content_for :sidebar_right do %>
-  	<%= link_to(l(:label_back), user_messages_path, :class => 'icon icon-history') %>
+  	<%= link_to(l(:label_back), user_messages_path, :class => 'icon icon-history') %><br/>
   	<%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-add') %>
   	<ul>
     	<li><%= link_to(l(:label_user_messages_reply), {:action => 'new', :id => @user_message.user_id, :reply => @user_message.id}) %></li>
     	<li><%= link_to(l(:label_user_messages_delete), {:action => 'destroy'}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete) %></li>
+    	<li><%= link_to(l(:label_user_add), {:controller => "user_contact", :action => "add", :contact_member_id => @user_message.user_id}) %></li>
   	</ul>
 <%end%>

@@ -20,7 +20,8 @@
 module WatchersHelper
 
   def watcher_tag(object, user, options={})
-    content_tag("span", watcher_link(object, user), :class => watcher_css(object))
+#    content_tag("span", watcher_link(object, user), :class => watcher_css(object))
+    watcher_link(object, user)
   end
 
   def watcher_link(object, user)

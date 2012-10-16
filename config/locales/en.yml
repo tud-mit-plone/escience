@@ -490,6 +490,16 @@ en:
   project_module_calendar: Calendar
   project_module_gantt: Gantt
 
+  label_star_mandatory: Fields marked with * are mandatory.
+  label_sortby: Sort by
+  label_back: Back
+  label_user_add: Add to contact list
+  label_subprojectof: Overall project
+  label_fileupload: Choose file
+  label_contact: Contact
+  label_privacypolicy: Privacy Policy
+  label_imprint: Impres
+  label_termsconditions: Terms of Service
   label_events: Events
   label_organisation: Organize
   label_hello: Hello
@@ -566,7 +576,7 @@ en:
   label_home_logged: Activities
   label_my_page: My account
   label_meta_information: Meta informationen
-  label_meta_information_description: Enter keywords for search
+  label_meta_information_description: Enter keywords
   label_my: Overview
   label_my_account: My account
   label_my_projects: My projects
@@ -588,8 +598,8 @@ en:
   label_user_messages_from: message from
   label_user_messages_to: message sent to
   label_privatearea: Private area
-  label_memberlist_all: entire list
-  label_memberlist_grouped: grouped by projects
+  label_memberlist_all: Entire list
+  label_memberlist_grouped: Grouped by projects
   label_memberlist_search: Search
   label_memberlist_searchit: Search
   label_administration: Administration
@@ -991,6 +1001,7 @@ en:
 
   field_active: Active
 
+  text_member_search: Please enter the member to search in the input field. The result is generated automatically based on the input (at least 3 characters).
   text_user_messages_empty: There is no message.
   text_personalize_account: Here you have the ability to adjust your overview page. Select to display items and change their order.
   text_select_mail_notifications: Select actions for which email notifications should be sent.
@@ -1114,3 +1125,43 @@ en:
   description_date_range_interval: Choose range by selecting start and end date
   description_date_from: Enter start date
   description_date_to: Enter end date
+
+  tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.). 
+  tooltip_sidebar_projects: Manage your projects, create new, or change the settings.
+  tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform. 
+  tooltip_sidebar_sent: Find the messages that you have written.
+  tooltip_sidebar_archive: All important messages that you deem worthy of archiving.
+  tooltip_sidebar_trash: The recycle bin for your internal message to the eScience platform
+  tooltip_sidebar_overview: Get an overview of the project »%{project}«. 
+  tooltip_sidebar_issues_all: See the issues of the individual projects, where you are a member.
+  tooltip_sidebar_issues: See the issues of the project »%{project}«.
+  tooltip_sidebar_calendar_all: Get an overview of the dates of the issues.
+  tooltip_sidebar_calendar: Get an overview of the dates of the issues »%{project}«.
+  tooltip_sidebar_news: Here you will find messages that have been left for all members. And if you are want to leave a message you can do this as well.
+  tooltip_sidebar_blogs: Eine weitere Mitteilungszentrale.
+  tooltip_sidebar_documents: All documents that were attached to this project, can be found here.
+  tooltip_sidebar_wiki: At this point, there is a knowledge base that maintain all the members with the proper permissions - or at least can see.
+  tooltip_sidebar_boards: Want to talk to other members of this project, you will find the opportunity here.
+  tooltip_sidebar_files: All files that have been attached to this project, can be found here.
+  tooltip_sidebar_settings: To change the settings for this project, click here.
+  tooltip_sidebar_doodles: Create a small survey for certain group members.
+  
+  tooltip_user_message_archive: Archive this message.
+  tooltip_user_message_delete: Delete this message. (It will take be moved to the <i>deleted</i> folder.)
+  tooltip_user_message_deleteFin: Delete this message final.
+  tooltip_user_message_emptyTrash: Empty the <i>deleted</i> folder. All messages will be permanently removed from this folder.
+  tooltip_user_message_newMessage: Create a new message.
+  tooltip_navbar_issues_count: "See the instructions, which have been assigned to you in each project."
+  tooltip_and: and
+  tooltip_navbar_user_messages_count: You received %{count} message(s) from %{persons}. 
+  tooltip_navbar_issues_explain: "The %{position} tells you that there are %{position} issues that are asigned to you."
+  tooltip_sidebar_contactlist: Here is a list of your contacts. At this point you can also search for contacts from different projects and add them to your contact list.
+  tooltip_navbar_account: Hello %{name}. By clicking here, you can change your account-details.
+  tooltip_navbar_logout: To unsubscribe please click here ... Until next time.
+  tooltip_navbar_help: You have questions and get stuck? Look here first for answers. If you can't find help please contact us.
+  
+  tooltip_addUser: Add member to contact list
+  tooltip_deleteUser: Remove member to contact list
+  tooltip_openUser: Show member informations
+  tooltip_sendMessage: Send member a message
+  

@@ -209,6 +209,7 @@ Redmine::MenuManager.map :private_menu do |menu|
 #  menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => {"value_behind"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => :label_mymessage, :html => {:class => "newmessage"}
   menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => :label_calendar
+  menu.push :my_members, {:controller => 'my', :action => 'members'}, :caption => :label_my_members
 end
 
 Redmine::MenuManager.map :project_menu do |menu|

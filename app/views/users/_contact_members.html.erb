@@ -22,13 +22,19 @@
       <%= (!user.title.empty?) ? l("field_title_vals.#{user.title}") : "" %>
       <%= user.name %> <%= (!user.department.empty?) ? "(#{user.department})" : "" %>
       </td>    
-      <td width="50">
-        <%= link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
+      <td width="55">
+        <%= link_to({:controller => 'user_contact', :action => 'delete', :contact_member_id => user.id}, :data => {:confirm => l(:text_are_you_sure)}) do %><div class="deleteUser"></div><% end %>
         <%= link_to(:controller => 'user_messages', :action => 'new', :id => user.id) do %><div class="sendMessage"></div><% end %>
-        <%= link_to(:controller => 'user_contact', :action => 'delete', :contact_member_id => user.id) do %><div class="openUser"></div><% end %>
+        <%= link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
       </td>
     </tr>
   <% end %>
   </table>
 </fieldset>
 <% end unless sorted_users.nil?%>
+
+<%= javascript_tag '
+    addToolTip(".deleteUser ","'+l(:tooltip_deleteUser)+'","top");
+    addToolTip(".openUser ","'+l(:tooltip_openUser)+'","top");
+    addToolTip(".sendMessage ","'+l(:tooltip_sendMessage)+'","top");
+' %>

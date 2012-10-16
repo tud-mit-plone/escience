@@ -468,6 +468,7 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_user_add: zur Kontaktliste
   label_eu: Europäische Union
   label_esf: Europäische Sozialfond
   label_smwk: Staatsministerium für Wissenschaft und Kunst
@@ -1148,7 +1149,9 @@ de:
   field_ldap_filter: LDAP Filter
   label_search_for_watchers: Nach hinzufügbaren Beobachtern suchen
   lable_click_user_message_to_admin: klicken Sie hier, wenn die Weiterleitung nicht funktioniert
-  
+
+  notice_user_successful_added: "%{member} wurde erfolgreich zu Ihrer Kontaktliste hinzugefügt."
+  notice_user_successful_deleted: "%{member} wurde erfolgreich aus Ihrer Kontaktliste gelöscht."
   
   tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.). 
   tooltip_sidebar_projects: Verwalten Sie Ihre Projekte, legen Sie neue an oder ändern Sie die Einstellungen.
@@ -1169,14 +1172,23 @@ de:
   tooltip_sidebar_files: Alle Datein, die zu diesem Projekt angehängt wurden, sind hier zu finden.
   tooltip_sidebar_settings: Um die Einstellungen zu diesem Projekt zu ändern, klicken Sie hier.
   tooltip_sidebar_doodles: Erstellen Sie eine kleine Umfrage und lassen Sie bestimmte Gruppenmitglieder abstimmen.
-  
+  tooltip_sidebar_contactlist: Hier finden Sie eine Auflistung Ihrer Kontakt. Auch können Sie an dieser Stelle nach Kontakten aus verschiedenen Projekten suchen und zu Ihrer Kontaktliste hinzufügen.
+    
   tooltip_user_message_archive: Archivieren Sie diese Nachricht.
   tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Ordner <i>gelöscht</i> verschoben.)
   tooltip_user_message_deleteFin: Löschen Sie diese Nachricht entgültig.
   tooltip_user_message_emptyTrash: Leeren Sie den <i>gelöscht</i> Ordner. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
   tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.
   tooltip_navbar_issues_count: "Sehen Sie die Arbeitsanweisungen, die Ihnen in den einzelnen Projekt zugeordnet wurden."
-  tooltip_navbar_issues_explain: "Die (%{position}) teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
+  tooltip_and: und
+  tooltip_navbar_user_messages_count: Sie haben %{count} Nachricht(en) von %{persons} erhalten. 
+  tooltip_navbar_issues_explain: "Die %{position} teilt Ihnen mit, dass Ihnen %{position} Arbeitsanweisungen in verschiednen Projekten zugeordnent wurden."
   tooltip_navbar_account: Hallo %{name}. Wenn Sie hier klicken, können Sie Ihre Angaben ändern.
   tooltip_navbar_logout: Zum Abmelden bitte hier klicken... Bis zum nächsten Mal.
   tooltip_navbar_help: Sie haben Fragen und kommen nicht weiter? Schauen Sie zunächst hier nach einer Antwort. Sollten Sie nicht fündig werde stehen wir Ihnen gern zur Verfügung.
+  
+  tooltip_addUser: Mitglied zur Kontaktliste hinzufügen
+  tooltip_deleteUser: Mitglied aus Kontaktliste entfernen
+  tooltip_openUser: Mitgliedinformationen anzeigen
+  tooltip_sendMessage: Mitglied eine Nachricht senden
+

@@ -18,8 +18,19 @@
   <%= yield :jquery_tags -%>
   <%= javascript_heads %>
   
-  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})>0 ?  l(:tooltip_navbar_issues_explain, :position => Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})) : ""
-     project = @project.nil? ? 'eScience' : @project %>
+  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})
+     project = @project.nil? ? 'eScience' : @project 
+     user_messages = UserMessage.where("receiver_id = ? AND state = 1", User.current.id).count
+     message_persons = []
+     UserMessage.find(:all,:conditions => {:receiver_id => User.current.id, :state => 1}).each do |msg|
+       message_persons << User.find(msg.user_id).to_s()
+     end
+     persons = message_persons.join(', ')
+     if user_messages > 1
+       persons[persons.rindex(', ')] = ' '+l(:tooltip_and)+' '
+     end
+     tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
+  %>
   <%= javascript_tag '
   // Jquery Funtion um alle Externen Links zu selektieren
   function externalLinks() {
@@ -27,30 +38,34 @@
   }
   
   // Alle selektierten Externen Links werden mit den Attribute \'_blank\' erweitert und mit einem Title-Tag versehen.
-  $j(document).ready(function() {externalLinks().attr({target: "_blank"})});
-  $j(function() {addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'")});
-  $j(function() {addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'")});
-  $j(function() {addToolTip(".sidebar .user-messages","'+l(:tooltip_sidebar_user_messages)+'")});
-  $j(function() {addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'")});
-  $j(function() {addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'")});
-  $j(function() {addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'")});
-  $j(function() {addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues_all) + '")});
-  $j(function() {addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar_all)+'")});
-  $j(function() {addToolTip(".sidebar .doodles ","'+l(:tooltip_sidebar_doodles)+'")});
-  $j(function() {addToolTip(".sidebar .overview ","'+l(:tooltip_sidebar_overview, :project => "#{project}")+'")});
-  $j(function() {addToolTip(".sidebar .issues ","'+l(:tooltip_sidebar_issues, :project => "#{project}")+'")});
-  $j(function() {addToolTip(".sidebar .calendar ","'+l(:tooltip_sidebar_calendar, :project => "#{project}")+'")});
-  $j(function() {addToolTip(".sidebar .news ","'+l(:tooltip_sidebar_news)+'")});
-  $j(function() {addToolTip(".sidebar .blogs ","'+l(:tooltip_sidebar_blogs)+'")});
-  $j(function() {addToolTip(".sidebar .documents ","'+l(:tooltip_sidebar_documents)+'")});
-  $j(function() {addToolTip(".sidebar .wiki ","'+l(:tooltip_sidebar_wiki)+'")});
-  $j(function() {addToolTip(".sidebar .boards ","'+l(:tooltip_sidebar_boards)+'")});
-  $j(function() {addToolTip(".sidebar .files ","'+l(:tooltip_sidebar_files)+'")});
-  $j(function() {addToolTip(".sidebar .settings ","'+l(:tooltip_sidebar_settings)+'")});
-  $j(function() {addToolTip("#navigation .newmessage","'+l(:tooltip_navbar_issues_count)+'<br/>' + "#{issues}"+'", "bottom")});
-  $j(function() {addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom")});
-  $j(function() {addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom")});
-  $j(function() {addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom")});
+  $j(document).ready(function() {
+    externalLinks().attr({target: "_blank"})
+    addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
+    addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'");
+    addToolTip(".sidebar .user-messages","'+"#{tooltip_user_messages}"+'");
+    addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'");
+    addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'");
+    addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'");
+    addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues_all) + '");
+    addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar_all)+'");
+    addToolTip(".sidebar .doodles ","'+l(:tooltip_sidebar_doodles)+'");
+    addToolTip(".sidebar .overview ","'+l(:tooltip_sidebar_overview, :project => "#{project}")+'");
+    addToolTip(".sidebar .issues ","'+l(:tooltip_sidebar_issues, :project => "#{project}")+'");
+    addToolTip(".sidebar .calendar ","'+l(:tooltip_sidebar_calendar, :project => "#{project}")+'");
+    addToolTip(".sidebar .news ","'+l(:tooltip_sidebar_news)+'");
+    addToolTip(".sidebar .blogs ","'+l(:tooltip_sidebar_blogs)+'");
+    addToolTip(".sidebar .documents ","'+l(:tooltip_sidebar_documents)+'");
+    addToolTip(".sidebar .wiki ","'+l(:tooltip_sidebar_wiki)+'");
+    addToolTip(".sidebar .boards ","'+l(:tooltip_sidebar_boards)+'");
+    addToolTip(".sidebar .files ","'+l(:tooltip_sidebar_files)+'");
+    addToolTip(".sidebar .settings ","'+l(:tooltip_sidebar_settings)+'");
+    addToolTip(".sidebar .my-members","'+l(:tooltip_sidebar_contactlist)+'");
+    addToolTip("#navigation .newmessage.issues","'+l(:tooltip_navbar_issues_explain, :position => "#{issues}")+'", "bottom");
+    addToolTip("#navigation .newmessage.user-messages","'+l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}")+'", "bottom");
+    addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom");
+    addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom");
+    addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom");
+  });
   '
   %>
   <%= heads_for_theme %>
@@ -125,22 +140,16 @@
     	<div class="container_inner container_16">
   	    <div id="left" class="<%= (User.current.logged?) ? 'grid_3' : 'grid_2' %>">
   	    	<div id="sidebar_left" class="sidebar">
-  	    	  <% if User.current.logged? %>
-  		    <div class="headline"><%= l(:label_communication) %></div>
-  		    <%= render_menu :private_menu %>
-  	            <%= render_project_jump_box %>
-  		    <%= render_main_menu(@project) %>
-  		    <% if User.current.admin? %>
-                      <div class="splitter">
-                       <%= l :label_administration %>
-                      </div>
-                      <%= render_menu :admin_menu %>
-                    <% end %>
-  		    <%#= yield :sidebar_left %>
-  		    <%#= call_hook :view_layouts_base_sidebar %>
-  		  <% else %>
-  		    &nbsp;
-  		  <% end %>
+	    	  <% if User.current.logged? %>
+    		    <div class="headline"><%= l(:label_communication) %></div>
+    		    <%= render_menu :private_menu %>
+    	            <%= render_project_jump_box %>
+    		    <%= render_main_menu(@project) %>
+    		    <%= yield :sidebar_left %>
+    		    <%= call_hook :view_layouts_base_sidebar %>
+    		  <% else %>
+    		    &nbsp;
+    		  <% end %>
   	    	</div>
   	    </div>
   	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
@@ -152,21 +161,27 @@
   	    </div>
   	    <div id="right" class="grid_3">
   	    	<% if User.current.logged? %>
-  		    <div id="quick-search">
+  		    <div id="quick-search" <%= 'class=empty' if (!User.current.admin? && (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") %>>
   	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
   		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
   		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
   		        <%= submit_tag "" %>
   	        <% end %>
   		    </div>
-  		    <div id="sidebar_right" class="sidebar">
-  		    	<%= render_menu :sidebarright_menu %>
-  		    	<% unless (yield :sidebar_right) == "" %>
-  		    	<div class="splitter"><%= l(:label_specific) %></div>
-  		    	<div id="sitespecivic">
-  	        	<%= yield :sidebar_right %>
+  		    <div id="sidebar_right" class="sidebar<%= ' empty' if (!User.current.admin? && (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") %>">
+  		    	<%#= render_menu :sidebarright_menu %>
+  		    	<% unless (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n" %>
+<!--  		    	<div class="splitter"><%= l(:label_specific) %></div> -->
+    		    	<div id="sitespecivic">
+    	        	<%= yield :sidebar_right %>
+    		    	</div>
   		      <% end %>
-  		    	</div>
+    		    <% if User.current.admin? %>
+              <div class="splitter">
+               <%= l :label_administration %>
+              </div>
+              <%= render_menu :admin_menu %>
+            <% end %>
           </div>
           <% else %>		    	
   		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>
