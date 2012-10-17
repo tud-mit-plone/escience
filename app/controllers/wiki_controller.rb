@@ -228,8 +228,9 @@ class WikiController < ApplicationController
     if !@page.new_record? && params[:content].present? && @content.text == params[:content][:text]
       attachments = Attachment.attach_files(@page, params[:attachments])
       render_attachment_warning_if_needed(@page)
-      render_attachment_notice_if_upload_failed(attachments)
-      
+#      render_attachment_notice_if_upload_failed(attachments)
+      flash[:notice] = l(:mail_subject_wiki_content_updated, :id => @page.title)
+
       # don't save content if text wasn't changed
       @page.save
       redirect_to :action => 'show', :project_id => @project, :id => @page.title
