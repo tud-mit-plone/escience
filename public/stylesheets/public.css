@@ -37,8 +37,10 @@
 }
 
 #navigation_group #private {
-	width:150px;
-	height:93px;
+	width:140px;
+	height:88px;
+	padding-right: 10px;
+	padding-top: 5px;
 	position: absolute;
 	margin-left: 35px;
 	text-align:right;
@@ -47,8 +49,8 @@
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	font-size:18pt;
-	font-weight:bold;
+	font-size:16pt;
+	font-weight:300;
 	color:#fff;
 	z-index:10;
 	background-position-x:30%;
@@ -133,6 +135,12 @@
 	background-size: 5px;
 }
 
+@-moz-document url-prefix(){ 
+	#login .submit_container input {
+	 padding-right: 6px;
+	}
+}
+
 #login a:hover,#login input[type=submit]:hover {
 	text-decoration:underline;
 }
@@ -142,6 +150,10 @@
 	margin-top:0;
 	margin-bottom:2px;
 	color:#B61634;
+}
+
+#login h2 {
+  color: #ffffff;
 }
 
 
@@ -243,6 +255,27 @@ input.error {
 	color: #707070;
 }
 
+fieldset h3 {
+	color: #707070;
+	margin-bottom: 0px;
+	padding-bottom: 3px;
+	font-size: 16px;
+}
+
+fieldset {
+  border: solid 1px #cacaca;
+  background-color: #fdfdfd;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  padding: 0px 15px 10px 15px;
+}
+
+fieldset .author {
+  margin-top: 0px;
+  padding-top: 0px;
+}
 
 /* lost password*/
 #lostpassword label{

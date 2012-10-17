@@ -34,7 +34,7 @@
 <div id="preview" class="wiki"></div>
 </div>
 <% end %>
-<span class="author"><%= authoring @news.created_on, @news.author %></span></p>
+<p><span class="author"><%= User.current.logged? ? strip_tags(authoring @news.created_on, @news.author) : authoring @news.created_on, @news.author %></span></p>
 
 <p><% unless @news.summary.blank? %><em><%=h @news.summary %></em><br /><% end %>
 <div class="wiki">

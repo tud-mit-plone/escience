@@ -5,10 +5,9 @@
 <%unless User.current.logged? %>
 <article class="article">
 	<div class="inside">
-		<h1>Das Forschungsnetzwerk Sachsen</h1>
+		<h1><%= l(:text_headline) %></h1>
 		<div class="column" style="padding-right:50px">
-		<p><br /><img style="float: right;" title="images/grafik.png" src="images/grafik.png" alt="/images/grafik.png" width="280" height="220" />
-                  Diese Plattform bietet einen virtuellen Raum mit anderen Wissenschaftlern zu kommunizieren, zusammen neue  Erkenntnisse zu gewinnen und gemeinsame Ressourcen für Forschungszwecke zu entwickeln und teilen. Neben Werkzeuge zur Arbeitsorganisation und Koordinierung von Aktivitäten finden Sie hier umfangreiches Wissen, Medieninhalte und Dokumentationen, sowie Software und Daten für wissenschaftliche Experimente. Sie entscheiden selbst, was, womit und mit wem Sie forschen. Eine starke Community ist stets an Ihrer Seite. </p>
+		<p><br /><img style="float: right;" title="images/grafik.png" src="images/grafik.png" alt="/images/grafik.png" width="280" height="220" /><%= l(:text_welcome) %></p>
 		</div>
 	</div>
 </article>
@@ -16,7 +15,7 @@
 <%else%>
 	<article class="article">
 		<div class="inside">
-			<h1>Das Forschungsnetzwerk Sachsen</h1>
+			<h1><%= l(:text_headline) %></h1>
 		</div>
 	</article>
 	<% content_for :sidebar_left do %>

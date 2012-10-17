@@ -32,12 +32,8 @@
      tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
   %>
   <%= javascript_tag '
-  // Jquery Funtion um alle Externen Links zu selektieren
-  function externalLinks() {
-    return $j(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');
-  }
+  function externalLinks() { return $j(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');}
   
-  // Alle selektierten Externen Links werden mit den Attribute \'_blank\' erweitert und mit einem Title-Tag versehen.
   $j(document).ready(function() {
     externalLinks().attr({target: "_blank"})
     addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
@@ -129,7 +125,9 @@
       	<!-- Navigation for Team/Community/Private -->
       	<div class="container_16">
       		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %>">
-      			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>"></div>
+      			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>">
+        			<%= User.current.logged? ? l(:label_private) : l(:label_guest) %>
+      			</div>
       			<div id="group"></div>
       			<div id="community"></div>
       		</div>
@@ -153,7 +151,7 @@
   	    	</div>
   	    </div>
   	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
-	        <%= render_flash_messages %>
+	        <%#= render_flash_messages %>
 	        <%= yield %>
 	        <%= call_hook :view_layouts_base_content %>
 	        <div style="clear:both;"></div>

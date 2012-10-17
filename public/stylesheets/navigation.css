@@ -5,8 +5,10 @@
 }
 
 #navigation_group #private {
-	width:109px;
-	height:65px;
+	width:99px;
+	height:60px;
+	padding-top: 5px; 
+	padding-right: 10px; 
 	position: absolute;
 	margin-left: 27px;
 	text-align:right;
@@ -15,8 +17,8 @@
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	font-size:18pt;
-	font-weight:bold;
+	font-size:12pt;
+	font-weight:300;
 	color:#fff;
 	z-index:10;
 	background-size: 109px;
@@ -332,10 +334,6 @@
 .sidebar .menu-children li {
 	padding: 0px 5px;
 }
-
-//#admin-menu ul ul {
-//	padding: 0;
-//}
 
 #sidebar_left {
 	-moz-border-radius-topleft:10px;

@@ -289,7 +289,7 @@ en:
   field_effective_date: Date
   field_password: Password
   field_new_password: New password
-  field_password_confirmation: Confirmation
+  field_password_confirmation: Confirm
   field_version: Version
   field_type: Type
   field_host: Host
@@ -491,6 +491,9 @@ en:
   project_module_gantt: Gantt
 
   label_star_mandatory: Fields marked with * are mandatory.
+  label_eu: European Union
+  label_esf: European Social Fund
+  label_smwk: Ministry of Science and Art
   label_sortby: Sort by
   label_back: Back
   label_user_add: Add to contact list
@@ -595,9 +598,11 @@ en:
   label_user_messages_subject: Subject
   label_user_messages_body: Content (max. of 2000 characters)
   label_user_messages_send: Send message
-  label_user_messages_from: message from
-  label_user_messages_to: message sent to
+  label_user_messages_from: Message from
+  label_user_messages_to: Message sent to
   label_privatearea: Private area
+  label_private: Private
+  label_guest: Guest
   label_memberlist_all: Entire list
   label_memberlist_grouped: Grouped by projects
   label_memberlist_search: Search
@@ -610,6 +615,7 @@ en:
   label_assigned_to_me_issues: Issues assigned to me
   label_last_login: Last connection
   label_registered_on: Registered on
+  label_register_submit: Register  
   label_activity: Activity
   label_overall_activity: Overall activity
   label_user_activity: "%{value}'s activity"
@@ -647,6 +653,8 @@ en:
   label_report_plural: Reports
   label_news: News
   label_news_new: Add news
+  label_news_anonym: News
+  label_news_plural_anonym: News
   label_news_plural: News
   label_news_latest: Latest news
   label_news_view_all: View all news
@@ -1080,6 +1088,8 @@ en:
   text_account_destroy_confirmation: "Are you sure you want to proceed?\nYour account will be permanently deleted, with no way to reactivate it."
   text_session_expiration_settings: "Warning: changing these settings may expire the current sessions including yours."
   text_project_closed: This project is closed and read-only.
+  text_welcome: This platform provides a virtual space where scientists can communicate with each other to generate new knowledge and to develop common resources for research and sharing. In addition to tools for work organization and coordination of activities can be found here extensive knowledge, media and documentation, as well as software and data for scientific experiments. You decide what, with what and whom you are researching. A strong community is always at your side.
+  text_headline: The Research Network for Saxony
 
   default_role_manager: Manager
   default_role_developer: Developer
@@ -1154,7 +1164,7 @@ en:
   tooltip_navbar_issues_count: "See the instructions, which have been assigned to you in each project."
   tooltip_and: and
   tooltip_navbar_user_messages_count: You received %{count} message(s) from %{persons}. 
-  tooltip_navbar_issues_explain: "The %{position} tells you that there are %{position} issues that are asigned to you."
+  tooltip_navbar_issues_explain: "There is %{position} issue(s) that is asigned to you."
   tooltip_sidebar_contactlist: Here is a list of your contacts. At this point you can also search for contacts from different projects and add them to your contact list.
   tooltip_navbar_account: Hello %{name}. By clicking here, you can change your account-details.
   tooltip_navbar_logout: To unsubscribe please click here ... Until next time.

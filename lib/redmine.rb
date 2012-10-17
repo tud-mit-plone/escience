@@ -156,7 +156,7 @@ Redmine::MenuManager.map :top_menu do |menu|
   menu.push :home, :home_path, :html => {:class => "first"}, :if => Proc.new { !User.current.logged? }
   menu.push :my, { :controller => 'my', :action => 'page' },:caption => :label_home_logged, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
   menu.push :knowledge, { :controller => 'wiki', :action => 'show_all' }, :caption => :label_knowledge, :if => Proc.new { User.current.logged? }
-  menu.push :news, { :controller => 'welcome', :action => 'news' }, :caption => :label_news, :if => Proc.new { !User.current.logged? }
+  menu.push :news, { :controller => 'welcome', :action => 'news' }, :caption => :label_news_anonym, :if => Proc.new { !User.current.logged? }
   menu.push :events, { :controller => 'welcome', :action => 'events' }, :caption => :label_events, :if => Proc.new { !User.current.logged? }
   #menu.push :administration, { :controller => 'admin', :action => 'index' }, :if => Proc.new { User.current.admin? }, :last => true
 end
