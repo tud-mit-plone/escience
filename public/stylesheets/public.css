@@ -57,9 +57,13 @@
 }
 
 #navigation_group #group {
-	width:100px;
-	height:62px;
-	float: left;
+	width:93px;
+	height:57px;
+	font-size: 11px;
+	color: #dcdcdc;
+	text-align: right;
+	padding-right: 7px;
+	padding-top: 5px;
 	margin-top:-25px;
 	background:#7D7D7D url(../images/team_grau.png) center bottom no-repeat;
 	-moz-border-radius:10px;
@@ -70,8 +74,13 @@
 }
 
 #navigation_group #community {
-	width:100px;
-	height:62px;
+	width:97px;
+	height:57px;
+	font-size: 11px;
+	color: #dcdcdc;
+	text-align: center;
+	padding-left: 3px;
+	padding-top: 5px;
 	float: right;
 	margin-top:-62px;
 	margin-left:180px;

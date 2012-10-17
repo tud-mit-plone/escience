@@ -128,8 +128,8 @@
       			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>">
         			<%= User.current.logged? ? l(:label_private) : l(:label_guest) %>
       			</div>
-      			<div id="group"></div>
-      			<div id="community"></div>
+      			<div id="group"><%= l(:label_team) %></div>
+      			<div id="community"><%= l(:label_community) %></div>
       		</div>
       	</div>	    
       </header>

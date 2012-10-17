@@ -490,6 +490,8 @@ en:
   project_module_calendar: Calendar
   project_module_gantt: Gantt
 
+  label_community: Community
+  label_team: Team
   label_star_mandatory: Fields marked with * are mandatory.
   label_eu: European Union
   label_esf: European Social Fund
