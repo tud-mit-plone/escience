@@ -3,13 +3,13 @@ RedmineApp::Application.configure do
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
-  require 'syslog_logger'
+  require 'syslog/logger'
 
   #####
   # Customize the default logger (http://ruby-doc.org/core/classes/Logger.html)
   #
   # Use a different logger for distributed setups
-  config.logger        = SyslogLogger.new("ecience-rails")
+  config.logger        = Syslog::Logger.new("ecience-rails")
   #
   # Rotate logs bigger than 1MB, keeps no more than 7 rotated logs around.
   # When setting a new Logger, make sure to set it's log level too.
