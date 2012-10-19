@@ -34,9 +34,9 @@
 <div id="preview" class="wiki"></div>
 </div>
 <% end %>
-<p><span class="author"><%= User.current.logged? ? strip_tags(authoring @news.created_on, @news.author) : authoring @news.created_on, @news.author %></span></p>
+<p><span class="author"><%= User.current.logged? ? strip_tags(authoring @news.created_on, @news.author) : authoring(@news.created_on, @news.author) %></span></p>
 
-<p><% unless @news.summary.blank? %><em><%=h @news.summary %></em><br /><% end %>
+<p><% unless @news.summary.blank? %><em><%=h @news.summary %></em><br /><% end %></p>
 <div class="wiki">
 <%= textilizable(@news, :description) %>
 </div>
