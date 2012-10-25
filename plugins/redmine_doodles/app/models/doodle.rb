@@ -25,7 +25,7 @@ class Doodle < ActiveRecord::Base
     old_answers = responses.map(&:answers)[0]
     new_answers = responses.map(&:answers)[1]
     answers = nil
-    unless old_answers.nil? || (old_answers.length == new_answers.length)
+    if( !(old_answers.nil?) && !(new_answers.nil?) && !(old_answers.length == new_answers.length))
       temp = Array.new(new_answers.length, false)
       temp2 = old_answers.length < new_answers.length ? old_answers : new_answers
       temp2.each_with_index do |el,i|
@@ -33,6 +33,8 @@ class Doodle < ActiveRecord::Base
       end
       answers = [temp,new_answers]
       responses.map(&:answers)[0] = temp
+    else
+      answers = responses.map(&:answers)
     end
     @results ||= responses.empty? ? Array.new(options.length, 0) : answers.transpose.map { |x| x.select { |v| v }.length }
 #    @results ||= responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
