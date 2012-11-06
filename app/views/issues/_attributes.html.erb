@@ -32,10 +32,6 @@
                    :tabindex => 200) if User.current.allowed_to?(:manage_versions, @issue.project) %>
 </p>
 <% end %>
-</div>
-<div style="clear:both; height:5px;"></div>
-
-<div class="splitcontentright">
 
 <!--
 <% if @issue.safe_attribute? 'parent_issue_id' %>
@@ -56,7 +52,6 @@
 <%= f.text_field :due_date, :value => format_date(@issue[:due_date]), :size => 10, :disabled => !@issue.leaf? %><%= calendar_for('issue_due_date') if @issue.leaf? %>
 </div>
 <% end %>
-<div style="clear:both; height:5px;"></div>
 
 <% if @issue.safe_attribute? 'estimated_hours' %>
 <div id="estimated_time" class="w33">

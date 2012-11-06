@@ -1,6 +1,12 @@
 <% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
-  <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add') %>
+  <ul style="padding:0; list-style-position: inside; margin:0 0 -5px 0;">
+    <li style="list-style:none;">
+    <%= link_to(l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history', :target => "_self", :style => 'padding-left:25px !important;')%>
+    </li>
+    <li style="list-style:none">
+    <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add', :style => 'padding-left:25px !important;') %>
+    </li>
+  </ul>
   <ul>
 	<% if authorize_for("issues", "edit") %>
 		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :onclick => 'showAndScrollTo("update", "notes"); return false;', :accesskey => accesskey(:edit)) %></li>

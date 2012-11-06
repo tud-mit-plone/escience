@@ -105,23 +105,22 @@ table.issues {
 .list .group .expander {
   clear: both;
   float: left;
-  width: 15px;
-  height: 15px;
   margin-left: 20px;
+  padding-left: 20px;
   background-image: url(../images/contract.png);
   background-repeat: no-repeat;
   margin-right: 10px;
   margin-top: 2px;
+  cursor: pointer;
 }
 
 .list.issues .expander:hover {
   background-image: url(../images/expand_hover.png);
+  color: #7DB414;
 }
 
 .list.issues .open .expander {
   display: inline-block;
-  width: 15px;
-  height: 15px;
   background-image: url(../images/expand.png);
 }
 
@@ -375,4 +374,9 @@ table.issues {
   border-radius: 10px;
   background-color: #ffffff;
   padding: 10px !important;
+}
+
+.splitcontentleft div {
+  width: 48%;
+  float: left;
 }

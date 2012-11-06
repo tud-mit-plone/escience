@@ -212,6 +212,8 @@ class IssuesController < ApplicationController
   end
 
   def update
+    params[:issue][:start_date] = params[:issue][:start_date].empty? ? '':format_date(params[:issue][:start_date])
+    params[:issue][:due_date] = params[:issue][:due_date].empty? ? '':format_date(params[:issue][:due_date])
     return unless update_issue_from_params
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     saved = false

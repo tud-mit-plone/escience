@@ -22,9 +22,11 @@
   <% if (@issues_by_group.size>1) || (!key.nil? && !key.empty?) %> 
       <div class="group" valign="top">
           <% unless @issues_by_group.size==1 %>
-            <div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div>
+            <!-- div class="expander" onclick="toggleDivGroup(this);">&nbsp;</div -->
+            <div class="expander headline" onclick="toggleDivGroup(this);"><%= key.strip %> (<%= issue_list.size %>)</div>
+          <% else %>
+            <div class="headline"><%= key.strip %> (<%= issue_list.size %>)</div>
           <% end %>
-          <div class="headline"><%= key.strip %> (<%= issue_list.size %>)</div>
       </div>
       <div class="clear"></div>
   <% end %>
