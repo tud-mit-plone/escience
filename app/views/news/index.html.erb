@@ -32,6 +32,7 @@
   <% @newss.each do |news| %>
       <%= link_to(news, :class => "link_to_news") do %>
       <fieldset class="news_wrapper">
+        <legend><%= format_date(news.created_on) %></legend>
         <h3><%= avatar(news.author, :size => "24") %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
         <%= h(news.title) %>
         <%= " (#{l(:label_x_comments, :count => news.comments_count)})" if news.comments_count > 0 %></h3>
