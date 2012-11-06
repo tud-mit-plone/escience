@@ -33,6 +33,21 @@ fieldset label {
 	display: inline-block
 }
 	
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
+  display: inline-block;
+  padding: 4px 6px;
+//  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #555555;
+  vertical-align: middle;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #F0F0F0;
+}
+
 textarea {
 	width: 98%;
 }
@@ -49,8 +64,15 @@ textarea {
   float: right;
 }
 
+.link_to_news legend {
+  margin-bottom: -15px;
+  font-size: 12px;
+  text-align: right;
+}
+
 .link_to_news, .link_to_news h3 {
   color: #707070;
+  margin-top: 10px;
 }
 
 .link_to_news:hover {
@@ -657,4 +679,53 @@ div .add_attachment:hover {
 }
 #sitespecivic .people li {
   padding-left: 3px;
+}
+
+/*----------- Documents ---------------------------- */
+#documents .sort_buttons {
+  padding-bottom: 20px;
+}
+
+#documents .sort_buttons a:hover {
+  text-decoration: none;
+  background-color: #E9E9E9;
+}
+
+#documents .sortby {
+  padding: 5px 10px;
+}
+
+#documents .sort_buttons .selected {
+  color: #7DB414;
+  background-color: #F4F4F4;
+}
+
+#documents .sort_buttons .first a {
+  border-left: 2px solid #F0F0F0;
+}
+
+#documents .sort_buttons a {
+  background-color: #FAFAFA;
+  border-bottom: 2px solid #F0F0F0;
+  border-right: 2px solid #F0F0F0;
+  display: inline-block;
+  padding: 5px 10px;
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -khtml-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  color: #707070;
+}
+
+#documents .sort_buttons div {
+  float:left;
+  border-top: 1px solid #F0F0F0;
+}
+
+.attachments .imagejpeg {
+  width: 15px;
+  height: 15px;
+  background-image: url('/images/calendar.png');
+  float: left;
+  margin-right: 10px;
 }

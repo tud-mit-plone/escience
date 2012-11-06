@@ -114,7 +114,7 @@ module ApplicationHelper
     opt_only_path = {}
     opt_only_path[:only_path] = (options[:only_path] == false ? false : true)
     options.delete(:only_path)
-    options[:target] = '_blank'
+    options[:target] = options[:target].empty? ? '_blank': nil
     link_to(h(text),
            {:controller => 'attachments', :action => action,
             :id => attachment, :filename => attachment.filename}.merge(opt_only_path),

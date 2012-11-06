@@ -1,6 +1,9 @@
 <div class="attachments">
 <% for attachment in attachments %>
-<p><%= link_to_attachment attachment, :class => 'icon icon-attachment', :download => true -%>
+<p>
+  
+  <div class="<%= h(attachment.content_type.delete('/')) %>"></div> 
+  <%= link_to_attachment attachment, :class => 'fancybox fancybox-effects-d', :target => '_self', :rel=> 'group', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
   <% if attachment.is_text? %>
     <%= link_to image_tag('magnifier.png'),
                 :controller => 'attachments', :action => 'show',
