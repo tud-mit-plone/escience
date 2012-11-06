@@ -74,7 +74,7 @@
 }
 
 .controller-calendars table.cal td.event {
-  background-color: #7DB414 !important;
+  background-color: rgba(125,181,21,0.5) !important;
   color: #ffffff;
 }
 
