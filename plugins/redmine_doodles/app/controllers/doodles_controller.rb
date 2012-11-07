@@ -56,6 +56,8 @@ class DoodlesController < ApplicationController
   end
   
   def update
+    expiry_date = Date.strptime(params[:doodle][:expiry_date], t("date.formats.default"))
+    params[:doodle][:expiry_date] = params[:doodle][:expiry_date].empty? ? '' : expiry_date.strftime("%d.%m.%Y")
     @doodle.attributes = params[:doodle]
     if @doodle.save
       flash[:notice] = l(:doodle_update_successful)
