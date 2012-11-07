@@ -722,10 +722,45 @@ div .add_attachment:hover {
   border-top: 1px solid #F0F0F0;
 }
 
-.attachments .imagejpeg {
-  width: 15px;
-  height: 15px;
-  background-image: url('/images/calendar.png');
-  float: left;
-  margin-right: 10px;
+.attachments p {
+  margin: 4px 0;
+}
+
+.attachments .fancybox {
+  padding-bottom: 2px;
+  padding-top: 3px;
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  font-weight: 700;
+  color: #707070;
+}
+
+.attachments .fancybox:hover {
+  background-position: 0 100%;
+  color: #7DB414;
+  text-decoration: none;
+}
+
+.attachments .image {
+  background-image: url('/images/picture.png');
+}
+
+.attachments .text, .attachments .rtf, .attachments .doc, .attachments .docx, .attachments .odt {
+  background-image: url('/images/textfile.png');
+}
+
+.attachments .ppt, .attachments .odp, .attachments .pptx, .attachments .pps {
+  background-image: url('/images/presentation.png');
+}
+
+.attachments .pdf {
+  background-image: url('/images/pdf_file.png');
+}
+
+.attachments .xls, .attachments .xlsx, .attachments .ods {
+  background-image: url('/images/sheet_file.png');
+}
+
+.attachments .zip, .attachments .rar, .attachments .tar, .attachments .gz {
+  background-image: url('/images/archive_file.png');
 }

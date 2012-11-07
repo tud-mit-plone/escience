@@ -1,9 +1,12 @@
 <div class="attachments">
 <% for attachment in attachments %>
 <p>
-  
-  <div class="<%= h(attachment.content_type.delete('/')) %>"></div> 
-  <%= link_to_attachment attachment, :class => 'fancybox fancybox-effects-d', :target => '_self', :rel=> 'group', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
+  <% css_classes = Redmine::MimeType.main_mimetype_of(attachment.filename) %>
+  <% css_classes += " "+attachment.filename[(attachment.filename.rindex('.')+1)..-1] %>
+  <%= link_to_attachment attachment, :class => 'fancybox '+css_classes, :target => '_self', :rel=> 'group', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
+  <% if attachment.filename[(attachment.filename.rindex('.')+1)..-1] == "doc" %>
+    <%= link_to image_tag('magnifier.png'), 'http://docs.google.com/viewer?url='+ CGI::escape("http://141.57.9.94:3000"+url_for(attachment)).to_s()+"/"+attachment.filename, {'data-fancybox-type' => 'iframe', :class => 'fancybox fancybox.ajax', :target => '_self', :rel=> 'group'} -%>
+  <% end %>
   <% if attachment.is_text? %>
     <%= link_to image_tag('magnifier.png'),
                 :controller => 'attachments', :action => 'show',
@@ -23,6 +26,7 @@
   <% end %>
   </p>
 <% end %>
+
 <% if defined?(thumbnails) && thumbnails %>
   <% images = attachments.select(&:thumbnailable?) %>
   <% if images.any? %>
