@@ -57,8 +57,8 @@
 <% unless @res %>
 <%= render :partial => 'doodle' %>
 <% else %>
-<%= render :partial => 'doodle_create_answer' %>
-<%#= render :partial => @res.new_record? ? 'doodle_create_answer' : 'doodle_update_answer' %>
+<%#= render :partial => 'doodle_create_answer' %>
+<%= render :partial => @res.new_record? ? 'doodle_create_answer' : 'doodle_update_answer' %>
 <% end %>
 </div>
 <% html_title "Doodle #{@doodle.id}: #{@doodle.title}" -%>
