@@ -81,22 +81,22 @@
 
 
 <%= javascript_tag "
-  var $j = jQuery.noConflict();
-	$j(function() {
+  var $ = jQuery.noConflict();
+	$(function() {
 	  visiblity = 'visible';
-		$j('.linkToInfo').each(function(obj) {
-		  $j(this).hover(function() {
-		    infobox = $j(this).parent().find('.infobox');
+		$('.linkToInfo').each(function(obj) {
+		  $(this).hover(function() {
+		    infobox = $(this).parent().find('.infobox');
 		    infobox.css('visibility','visible');
 		    infobox.hover( function () {
 		      visiblity = 'visible';
 		    }, function () {
-		      $j(this).css('visibility','hidden');
+		      $(this).css('visibility','hidden');
 		    });
 		  }, function () {  
 		    visiblity = 'hidden';
-		    id = $j(this).attr('id');
-		    setTimeout(\"$j('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
+		    id = $(this).attr('id');
+		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
 		  });
 		});
   });

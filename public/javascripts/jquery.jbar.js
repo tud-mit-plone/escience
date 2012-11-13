@@ -19,8 +19,8 @@
  *
  */
 
-(function($j) {
-  $j.fn.jbar = function(settings) {
+(function($) {
+  $.fn.jbar = function(settings) {
     var config = {
       cssClass: 'jbar',
       downArrow: '&#x25BC;',
@@ -30,20 +30,20 @@
     };
     
     if (settings) {
-      $j.extend(config, settings);
+      $.extend(config, settings);
     }
   
     this.each(function(){
-      var menu = $j(this);
+      var menu = $(this);
       menu.addClass(config.cssClass);
       
       // To allow IE specific css
-      if ($j.browser.msie) {
-        menu.addClass('jbar_browser_IE').addClass('jbar_browser_IE'+parseInt($j.browser.version));
+      if ($.browser.msie) {
+        menu.addClass('jbar_browser_IE').addClass('jbar_browser_IE'+parseInt($.browser.version));
       }
       
       menu.find('> li').each(function(){
-        var li = $j(this);
+        var li = $(this);
         var submenu = li.find('ul');
         var link = li.find('> a');
         var hasSubmenu = (submenu.length != 0);
@@ -67,7 +67,7 @@
         submenu.show();
         
         if (!hasLink) {
-          link = $j('<a href="#" class="has_lonely_down_arrow"></a>');
+          link = $('<a href="#" class="has_lonely_down_arrow"></a>');
           hasAnchorLink = true;
           li.prepend(link);
         }
@@ -81,15 +81,15 @@
         // Otherwise the down arrow is the trigger and the link remains active.
         } else {
           link.addClass('has_trigger_down_arrow').find('.link_text').mouseover(function(){
-            $j(this).addClass('hovered');
+            $(this).addClass('hovered');
           }).mouseleave(function(){
-            $j(this).removeClass('hovered');
+            $(this).removeClass('hovered');
           });
           
           link.find('.down_arrow').addClass('trigger').mouseover(function(){
-            $j(this).addClass('hovered');
+            $(this).addClass('hovered');
           }).mouseleave(function(){
-            $j(this).removeClass('hovered');
+            $(this).removeClass('hovered');
           });
         }
 
@@ -108,7 +108,7 @@
           li.find('span.up_arrow').css({ paddingLeft: upArrowPosition + 'px' });
           // Position the submenu directly under the menu.
           li.find('.submenu_container').css({ top: li.outerHeight() + 'px' }).show();
-          $j(this).addClass('triggered').addClass('hovered');
+          $(this).addClass('triggered').addClass('hovered');
           li.mouseleave(function(){
             li.find('.trigger').removeClass('triggered').removeClass('hovered');
             li.find('.submenu_container').hide();
@@ -116,15 +116,15 @@
         });
       });
       
-      $j(this).find('> li:first a:first').addClass('first');
-      $j(this).find('> li:last a:first').addClass('last');
+      $(this).find('> li:first a:first').addClass('first');
+      $(this).find('> li:last a:first').addClass('last');
     });
   
     // IE 7 and down doesn't do z-index correctly.
-    if (config.fixIEzindex && $j.browser.msie && $j.browser.version < 8) {
+    if (config.fixIEzindex && $.browser.msie && $.browser.version < 8) {
      var zIndex = 99999;
-     $j('ul.jbar').each(function(){
-       $j(this).wrap('<div class="jbar_IE_zIndex_fix" style="z-index:'+zIndex+'" />');
+     $('ul.jbar').each(function(){
+       $(this).wrap('<div class="jbar_IE_zIndex_fix" style="z-index:'+zIndex+'" />');
        zIndex--;
      });
     }

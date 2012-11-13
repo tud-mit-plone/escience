@@ -15,11 +15,10 @@
   <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
   <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
   <%= javascript_tag '
-  var $js = jQuery.noConflict();
-	$js(function() {
-		$js( "#member_search" ).autocomplete({
+  	$(function() {
+		$( "#member_search" ).autocomplete({
 			source: function( request, response ) {
-				$js.ajax({
+				$.ajax({
 					url: "'+url_for(:controller => "users", :action => "contact_member_search")+'",
   				dataType: "json",
 					data: {
@@ -27,13 +26,13 @@
 						q: request.term
 					},
 					success: function( data ) {
-					  $js("#ausgabe").html("");
-						response( $js.map( data, function( item ) {
-					    var $element = $js("<fieldset class=\'project\' />");
-					    $element.append($js("<legend>").text(item[0]));
-					    var $tbl = $js("<table width=\"100%\">");
+					  $("#ausgabe").html("");
+						response( $.map( data, function( item ) {
+					    var $element = $("<fieldset class=\'project\' />");
+					    $element.append($("<legend>").text(item[0]));
+					    var $tbl = $("<table width=\"100%\">");
 					    for (var i = 0; i < item[1].length; i++) {
-                $tbl.append($js("<tr>").append($js("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$js("<td width=\"55\">").append(
+                $tbl.append($("<tr>").append($("<td>").text(item[1][i][0].user.firstname+" "+item[1][i][0].user.lastname+" ("+item[1][i][1]+")"),$("<td width=\"55\">").append(
                 "<a href=\''+url_for(:controller => "users", :action => "index")+'/"+item[1][i][0].user.id+"\'><div class=\"openUser\"></div></a>",
                 "<a href=\''+url_for(:controller => "user_messages", :action => "new")+'?id="+item[1][i][0].user.id+"\'><div class=\"sendMessage\"></div></a>",
                 "<a href=\''+url_for(:controller => "user_contact", :action => "add")+'?contact_member_id="+item[1][i][0].user.id+"\'><div class=\"addUser\"></div></a>"
@@ -41,7 +40,7 @@
               }
 
               $element.append($tbl);
-  						$js("#ausgabe").append($element);
+  						$("#ausgabe").append($element);
               addToolTip(".addUser ","'+l(:tooltip_addUser)+'","top");
               addToolTip(".openUser ","'+l(:tooltip_openUser)+'","top");
               addToolTip(".sendMessage ","'+l(:tooltip_sendMessage)+'","top");
@@ -56,10 +55,10 @@
 				return false;
 			},
 			open: function() {
-				$js( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
 			},
 			close: function() {
-				$js( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
 			}
 		});
 });' %>

@@ -1357,7 +1357,7 @@ module ApplicationHelper
 
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = "\n".html_safe + javascript_tag("$j = jQuery.noConflict();")
+    tags = javascript_include_tag('jquery-1.7.2-ui-1.8.21-ujs-2.0.3', 'application')
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.jbar.js")
     tags << "\n".html_safe
@@ -1368,7 +1368,6 @@ module ApplicationHelper
     tags << javascript_include_tag("escience.js")
     tags << javascript_tag(flash_notifications)
 
-    tags << javascript_include_tag('jquery-1.7.2-ui-1.8.21-ujs-2.0.3', 'effects', 'dragdrop', 'controls', 'rails', 'application')
     tags << "\n".html_safe
     tags << "\n".html_safe
 
@@ -1424,8 +1423,8 @@ module ApplicationHelper
     message = flash[:error] || flash[:notice] || flash[:warning]
     if message
       type = flash.keys[0].to_s
-      %Q{$j(document).ready(function(){
-        $j.notification({ message:"#{message}", type:"#{type}" });
+      %Q{$(document).ready(function(){
+        $.notification({ message:"#{message}", type:"#{type}" });
         });
       }
     end
@@ -1441,7 +1440,7 @@ module ApplicationHelper
     }
 
     javascript_tag "$(document).ready(function(){
-      $j(\"\##{field_id}\").tagsInput(#{parameter.to_json});
+      $(\"\##{field_id}\").tagsInput(#{parameter.to_json});
     });"
   end
 end

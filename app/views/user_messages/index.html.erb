@@ -1,10 +1,10 @@
 <% content_for :header_tags do %>
 <%= javascript_tag '
-  $j(function() {addToolTip(".inbox .user_message_links div.delete, .archive .user_message_links div.delete, .sent .user_message_links div.delete","'+l(:tooltip_user_message_delete)+'","left")});
-  $j(function() {addToolTip(".trash .user_message_links div.delete","'+l(:tooltip_user_message_deleteFin)+'","left")});
-  $j(function() {addToolTip(".user_message_links div.archive","'+l(:tooltip_user_message_archive)+'","left")});
-  $j(function() {addToolTip("#emptytrash_user_message_link","'+l(:tooltip_user_message_emptyTrash)+'","left")});
-  $j(function() {addToolTip("#new_user_message_link","'+l(:tooltip_user_message_newMessage)+'","left")});
+  $(function() {addToolTip(".inbox .user_message_links div.delete, .archive .user_message_links div.delete, .sent .user_message_links div.delete","'+l(:tooltip_user_message_delete)+'","left")});
+  $(function() {addToolTip(".trash .user_message_links div.delete","'+l(:tooltip_user_message_deleteFin)+'","left")});
+  $(function() {addToolTip(".user_message_links div.archive","'+l(:tooltip_user_message_archive)+'","left")});
+  $(function() {addToolTip("#emptytrash_user_message_link","'+l(:tooltip_user_message_emptyTrash)+'","left")});
+  $(function() {addToolTip("#new_user_message_link","'+l(:tooltip_user_message_newMessage)+'","left")});
 '%>
 <% end %>
 

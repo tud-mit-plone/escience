@@ -14,9 +14,9 @@
   <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
-  <%= jquery_heads %>
-  <%= yield :jquery_tags -%>
   <%= javascript_heads %>
+  <%= yield :jquery_tags -%>
+  
   
   <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})
      project = @project.nil? ? 'eScience' : @project 
@@ -32,9 +32,9 @@
      tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
   %>
   <%= javascript_tag '
-  function externalLinks() { return $j(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');}
+  function externalLinks() { return $(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');}
   
-  $j(document).ready(function() {
+  $(document).ready(function() {
     externalLinks().attr({target: "_blank"})
     addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
     addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'");

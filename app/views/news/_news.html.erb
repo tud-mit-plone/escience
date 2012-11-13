@@ -1,5 +1,5 @@
   <%= javascript_tag '
-  $j(function() {addToolTip("#newsdate_'+"#{news.id}"+'",\''+"#{authoring(news.created_on, news.author)}"+'\',"top")});
+  $(function() {addToolTip("#newsdate_'+"#{news.id}"+'",\''+"#{authoring(news.created_on, news.author)}"+'\',"top")});
   '
   %>
 <p><%= link_to_project(news.project) + ': ' unless @project %>
