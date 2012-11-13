@@ -91,7 +91,7 @@ class Version < ActiveRecord::Base
 
   # Returns true if the version is completed: due date reached and no open issues
   def completed?
-    effective_date && (effective_date <= Date.today) && (open_issues_count == 0)
+    effective_date && (effective_date < Date.today) && (open_issues_count == 0)
   end
 
   def behind_schedule?
@@ -162,13 +162,13 @@ class Version < ActiveRecord::Base
     "#{project} - #{name}"
   end
 
-  # Versions are sorted by effective_date and "Project Name - Version name"
-  # Those with no effective_date are at the end, sorted by "Project Name - Version name"
+  # Versions are sorted by effective_date and name
+  # Those with no effective_date are at the end, sorted by name
   def <=>(version)
     if self.effective_date
       if version.effective_date
         if self.effective_date == version.effective_date
-          "#{self.project.name} - #{self.name}" <=> "#{version.project.name} - #{version.name}"
+          name == version.name ? id <=> version.id : name <=> version.name
         else
           self.effective_date <=> version.effective_date
         end
@@ -179,10 +179,17 @@ class Version < ActiveRecord::Base
       if version.effective_date
         1
       else
-        "#{self.project.name} - #{self.name}" <=> "#{version.project.name} - #{version.name}"
+        name == version.name ? id <=> version.id : name <=> version.name
       end
     end
   end
+
+  def self.fields_for_order_statement(table=nil)
+    table ||= table_name
+    ["(CASE WHEN #{table}.effective_date IS NULL THEN 1 ELSE 0 END)", "#{table}.effective_date", "#{table}.name", "#{table}.id"]
+  end
+
+  scope :sorted, order(fields_for_order_statement)
 
   # Returns the sharings that +user+ can set the version to
   def allowed_sharings(user = User.current)

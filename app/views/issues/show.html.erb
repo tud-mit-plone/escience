@@ -1,5 +1,3 @@
-<%#= render :partial => 'action_menu' %>
-
 <h2>
   <% unless @subissue.nil? %>
     <span style="font-weight: 300"><%= l(:label_subissue)%> <%= link_to(@subissue.subject, issue_path(@subissue)) %></span>
@@ -88,9 +86,11 @@
     <legend><%=l(:field_description)%></legend>
   <% if @issue.description? %>
     <div class="contextual">
-    <%= link_to_remote_if_authorized(
-          l(:button_quote),
-          { :url => {:controller => 'journals', :action => 'new', :id => @issue} }) %>
+  <%= link_to l(:button_quote),
+              {:controller => 'journals', :action => 'new', :id => @issue},
+              :remote => true,
+              :method => 'post',
+              :class => 'icon icon-comment' if authorize_for('issues', 'edit') %>
     </div>
     <div class="wiki">
     <%= textilizable @issue, :description, :attachments => @issue.attachments %>
@@ -161,7 +161,7 @@
     <div id="watchers">
       <%= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
     </div>
-  <% end %>  
+  <% end %>
 <% end %>
 
 <% content_for :header_tags do %>

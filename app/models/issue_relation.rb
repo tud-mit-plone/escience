@@ -15,6 +15,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Class used to represent the relations of an issue
+class IssueRelations < Array
+  include Redmine::I18n
+
+  def initialize(issue, *args)
+    @issue = issue
+    super(*args)
+  end
+
+  def to_s(*args)
+    map {|relation| "#{l(relation.label_for(@issue))} ##{relation.other_issue(@issue).id}"}.join(', ')
+  end
+end
+
 class IssueRelation < ActiveRecord::Base
   belongs_to :issue_from, :class_name => 'Issue', :foreign_key => 'issue_from_id'
   belongs_to :issue_to, :class_name => 'Issue', :foreign_key => 'issue_to_id'
@@ -26,6 +40,8 @@ class IssueRelation < ActiveRecord::Base
   TYPE_BLOCKED      = "blocked"
   TYPE_PRECEDES     = "precedes"
   TYPE_FOLLOWS      = "follows"
+  TYPE_COPIED_TO    = "copied_to"
+  TYPE_COPIED_FROM  = "copied_from"
 
   TYPES = { TYPE_RELATES =>     { :name => :label_relates_to, :sym_name => :label_relates_to, :order => 1, :sym => TYPE_RELATES },
             TYPE_DUPLICATES =>  { :name => :label_duplicates, :sym_name => :label_duplicated_by, :order => 2, :sym => TYPE_DUPLICATED },
@@ -33,7 +49,9 @@ class IssueRelation < ActiveRecord::Base
             TYPE_BLOCKS =>      { :name => :label_blocks, :sym_name => :label_blocked_by, :order => 4, :sym => TYPE_BLOCKED },
             TYPE_BLOCKED =>     { :name => :label_blocked_by, :sym_name => :label_blocks, :order => 5, :sym => TYPE_BLOCKS, :reverse => TYPE_BLOCKS },
             TYPE_PRECEDES =>    { :name => :label_precedes, :sym_name => :label_follows, :order => 6, :sym => TYPE_FOLLOWS },
-            TYPE_FOLLOWS =>     { :name => :label_follows, :sym_name => :label_precedes, :order => 7, :sym => TYPE_PRECEDES, :reverse => TYPE_PRECEDES }
+            TYPE_FOLLOWS =>     { :name => :label_follows, :sym_name => :label_precedes, :order => 7, :sym => TYPE_PRECEDES, :reverse => TYPE_PRECEDES },
+            TYPE_COPIED_TO =>   { :name => :label_copied_to, :sym_name => :label_copied_from, :order => 8, :sym => TYPE_COPIED_FROM },
+            TYPE_COPIED_FROM => { :name => :label_copied_from, :sym_name => :label_copied_to, :order => 9, :sym => TYPE_COPIED_TO, :reverse => TYPE_COPIED_TO }
           }.freeze
 
   validates_presence_of :issue_from, :issue_to, :relation_type
@@ -99,6 +117,10 @@ class IssueRelation < ActiveRecord::Base
     TYPES[relation_type] ? TYPES[relation_type][(self.issue_from_id == issue.id) ? :name : :sym_name] : :unknow
   end
 
+  def css_classes_for(issue)
+    "rel-#{relation_type_for(issue)}"
+  end
+
   def handle_issue_order
     reverse_if_needed
 
@@ -113,7 +135,7 @@ class IssueRelation < ActiveRecord::Base
   def set_issue_to_dates
     soonest_start = self.successor_soonest_start
     if soonest_start && issue_to
-      issue_to.reschedule_after(soonest_start)
+      issue_to.reschedule_on!(soonest_start)
     end
   end
 
@@ -124,7 +146,8 @@ class IssueRelation < ActiveRecord::Base
   end
 
   def <=>(relation)
-    TYPES[self.relation_type][:order] <=> TYPES[relation.relation_type][:order]
+    r = TYPES[self.relation_type][:order] <=> TYPES[relation.relation_type][:order]
+    r == 0 ? id <=> relation.id : r
   end
 
   private

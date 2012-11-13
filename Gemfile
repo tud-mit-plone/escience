@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.6'
-gem 'prototype-rails', '3.2.1'
+gem 'rails', '3.2.8'
+gem "jquery-rails", "~> 2.0.2"
 gem "i18n", "~> 0.6.0"
 gem "coderay", "~> 1.0.6"
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :mingw_18, :jruby]
-gem "builder"
+gem "builder", "3.0.0"
 
 # Optional gem for LDAP authentication
 group :ldap do
@@ -74,7 +74,12 @@ end
 
 group :test do
   gem "shoulda", "~> 2.11"
-  gem "mocha"
+  # Shoulda does not work nice on Ruby 1.9.3 and JRuby 1.7.
+  # It seems to need test-unit explicitely.
+  platforms = [:mri_19]
+  platforms << :jruby if defined?(JRUBY_VERSION) && JRUBY_VERSION >= "1.7"
+  gem "test-unit", :platforms => platforms
+  gem "mocha", "0.12.3"
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")

@@ -47,9 +47,9 @@ class Role < ActiveRecord::Base
   }
 
   before_destroy :check_deletable
-  has_many :workflows, :dependent => :delete_all do
+  has_many :workflow_rules, :dependent => :delete_all do
     def copy(source_role)
-      Workflow.copy(nil, source_role, nil, proxy_association.owner)
+      WorkflowRule.copy(nil, source_role, nil, proxy_association.owner)
     end
   end
 
@@ -66,6 +66,15 @@ class Role < ActiveRecord::Base
   validates_inclusion_of :issues_visibility,
     :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
     :if => lambda {|role| role.respond_to?(:issues_visibility)}
+
+  # Copies attributes from another role, arg can be an id or a Role
+  def copy_from(arg, options={})
+    return unless arg.present?
+    role = arg.is_a?(Role) ? arg : Role.find_by_id(arg.to_s)
+    self.attributes = role.attributes.dup.except("id", "name", "position", "builtin", "permissions")
+    self.permissions = role.permissions.dup
+    self
+  end
 
   def permissions=(perms)
     perms = perms.collect {|p| p.to_sym unless p.blank? }.compact.uniq if perms
@@ -124,6 +133,11 @@ class Role < ActiveRecord::Base
     self.builtin != 0
   end
 
+  # Return true if the role is the anonymous role
+  def anonymous?
+    builtin == 2
+  end
+  
   # Return true if the role is a project member role
   def member?
     !self.builtin?

@@ -55,7 +55,7 @@ class MailerTest < ActiveSupport::TestCase
       # link to a referenced ticket
       assert_select 'a[href=?][title=?]',
                     'https://mydomain.foo/issues/1',
-                    'Can\'t print recipes (New)',
+                    'Can&#x27;t print recipes (New)',
                     :text => '#1'
       # link to a changeset
       assert_select 'a[href=?][title=?]',
@@ -94,7 +94,7 @@ class MailerTest < ActiveSupport::TestCase
       # link to a referenced ticket
       assert_select 'a[href=?][title=?]',
                     'http://mydomain.foo/rdm/issues/1',
-                    'Can\'t print recipes (New)',
+                    'Can&#x27;t print recipes (New)',
                     :text => '#1'
       # link to a changeset
       assert_select 'a[href=?][title=?]',
@@ -134,7 +134,7 @@ class MailerTest < ActiveSupport::TestCase
       # link to a referenced ticket
       assert_select 'a[href=?][title=?]',
                     'http://mydomain.foo/rdm/issues/1',
-                    'Can\'t print recipes (New)',
+                    'Can&#x27;t print recipes (New)',
                     :text => '#1'
       # link to a changeset
       assert_select 'a[href=?][title=?]',
@@ -336,6 +336,20 @@ class MailerTest < ActiveSupport::TestCase
     end
   end
 
+  def test_issue_edit_should_send_private_notes_to_users_with_permission_only
+    journal = Journal.find(1)
+    journal.private_notes = true
+    journal.save!
+
+    Role.find(2).add_permission! :view_private_notes
+    Mailer.issue_edit(journal).deliver
+    assert_equal %w(dlopper@somenet.foo jsmith@somenet.foo), ActionMailer::Base.deliveries.last.bcc.sort
+
+    Role.find(2).remove_permission! :view_private_notes
+    Mailer.issue_edit(journal).deliver
+    assert_equal %w(jsmith@somenet.foo), ActionMailer::Base.deliveries.last.bcc.sort
+  end
+
   def test_document_added
     document = Document.find(1)
     valid_languages.each do |lang|
@@ -508,6 +522,27 @@ class MailerTest < ActiveSupport::TestCase
     assert_mail_body_match 'Bug #3: Error 281 when updating a recipe', mail
   end
 
+  def test_reminder_should_include_issues_assigned_to_groups
+    with_settings :default_language => 'en' do
+      group = Group.generate!
+      group.users << User.find(2)
+      group.users << User.find(3)
+
+      Issue.create!(:project_id => 1, :tracker_id => 1, :status_id => 1,
+                      :subject => 'Assigned to group', :assigned_to => group,
+                      :due_date => 5.days.from_now,
+                      :author_id => 2)
+      ActionMailer::Base.deliveries.clear
+
+      Mailer.reminders(:days => 7)
+      assert_equal 2, ActionMailer::Base.deliveries.size
+      assert_equal %w(dlopper@somenet.foo jsmith@somenet.foo), ActionMailer::Base.deliveries.map(&:bcc).flatten.sort
+      ActionMailer::Base.deliveries.each do |mail|
+        assert_mail_body_match 'Assigned to group', mail
+      end
+    end
+  end
+
   def test_mailer_should_not_change_locale
     Setting.default_language = 'en'
     # Set current language to italian
@@ -542,10 +577,27 @@ class MailerTest < ActiveSupport::TestCase
     end
   end
 
-private
+  def test_should_escape_html_templates_only
+    Issue.generate!(:project_id => 1, :tracker_id => 1, :subject => 'Subject with a <tag>')
+    mail = last_email
+    assert_equal 2, mail.parts.size
+    assert_include '<tag>', text_part.body.encoded
+    assert_include '&lt;tag&gt;', html_part.body.encoded
+  end
+
+  private
+
   def last_email
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
     mail
+  end
+
+  def text_part
+    last_email.parts.detect {|part| part.content_type.include?('text/plain')}
+  end
+
+  def html_part
+    last_email.parts.detect {|part| part.content_type.include?('text/html')}
   end
 end

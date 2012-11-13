@@ -30,20 +30,20 @@ class TrackerTest < ActiveSupport::TestCase
 
   def test_copy_workflows
     source = Tracker.find(1)
-    assert_equal 89, source.workflows.size
+    assert_equal 89, source.workflow_rules.size
 
     target = Tracker.new(:name => 'Target')
     assert target.save
-    target.workflows.copy(source)
+    target.workflow_rules.copy(source)
     target.reload
-    assert_equal 89, target.workflows.size
+    assert_equal 89, target.workflow_rules.size
   end
 
   def test_issue_statuses
     tracker = Tracker.find(1)
-    Workflow.delete_all
-    Workflow.create!(:role_id => 1, :tracker_id => 1, :old_status_id => 2, :new_status_id => 3)
-    Workflow.create!(:role_id => 2, :tracker_id => 1, :old_status_id => 3, :new_status_id => 5)
+    WorkflowTransition.delete_all
+    WorkflowTransition.create!(:role_id => 1, :tracker_id => 1, :old_status_id => 2, :new_status_id => 3)
+    WorkflowTransition.create!(:role_id => 2, :tracker_id => 1, :old_status_id => 3, :new_status_id => 5)
 
     assert_kind_of Array, tracker.issue_statuses
     assert_kind_of IssueStatus, tracker.issue_statuses.first
@@ -51,7 +51,7 @@ class TrackerTest < ActiveSupport::TestCase
   end
 
   def test_issue_statuses_empty
-    Workflow.delete_all("tracker_id = 1")
+    WorkflowTransition.delete_all("tracker_id = 1")
     assert_equal [], Tracker.find(1).issue_statuses
   end
 
@@ -81,6 +81,11 @@ class TrackerTest < ActiveSupport::TestCase
 
     assert_equal %w(assigned_to_id due_date done_ratio), Tracker.core_fields(trackers)
     assert_equal Tracker::CORE_FIELDS - %w(assigned_to_id due_date done_ratio), Tracker.disabled_core_fields(trackers)
+  end
+
+  def test_core_fields_should_return_all_fields_for_an_empty_argument
+    assert_equal Tracker::CORE_FIELDS, Tracker.core_fields([])
+    assert_equal [], Tracker.disabled_core_fields([])
   end
 
   def test_sort_should_sort_by_position

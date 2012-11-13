@@ -31,14 +31,23 @@ class AccountControllerTest < ActionController::TestCase
     User.current = nil
   end
 
+  def test_get_login
+    get :login
+    assert_response :success
+    assert_template 'login'
+
+    assert_select 'input[name=username]'
+    assert_select 'input[name=password]'
+  end
+
   def test_login_should_redirect_to_back_url_param
     # request.uri is "test.host" in test environment
-    post :login, :username => 'jsmith', :password => 'jsmith', :back_url => 'http%3A%2F%2Ftest.host%2Fissues%2Fshow%2F1'
+    post :login, :username => 'jsmith', :password => 'jsmith', :back_url => 'http://test.host/issues/show/1'
     assert_redirected_to '/issues/show/1'
   end
 
   def test_login_should_not_redirect_to_another_host
-    post :login, :username => 'jsmith', :password => 'jsmith', :back_url => 'http%3A%2F%2Ftest.foo%2Ffake'
+    post :login, :username => 'jsmith', :password => 'jsmith', :back_url => 'http://test.foo/fake'
     assert_redirected_to '/my/page'
   end
 
@@ -46,9 +55,11 @@ class AccountControllerTest < ActionController::TestCase
     post :login, :username => 'admin', :password => 'bad'
     assert_response :success
     assert_template 'login'
-    assert_tag 'div',
-               :attributes => { :class => "flash error" },
-               :content => /Invalid user or password/
+
+    assert_select 'div.flash.error', :text => /Invalid user or password/
+    assert_select 'input[name=username][value=admin]'
+    assert_select 'input[name=password]'
+    assert_select 'input[name=password][value]', 0
   end
 
   def test_login_should_rescue_auth_source_exception

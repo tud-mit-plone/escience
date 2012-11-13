@@ -171,7 +171,7 @@ class TimelogController < ApplicationController
           flash[:notice] = l(:notice_successful_update)
           redirect_back_or_default :action => 'index', :project_id => @time_entry.project
         }
-        format.api  { head :ok }
+        format.api  { render_api_ok }
       end
     else
       respond_to do |format|
@@ -223,7 +223,7 @@ class TimelogController < ApplicationController
       }
       format.api  {
         if destroyed
-          head :ok
+          render_api_ok
         else
           render_validation_errors(@time_entries)
         end
@@ -308,6 +308,9 @@ private
       when 'last_week'
         @from = Date.today - 7 - (Date.today.cwday - 1)%7
         @to = @from + 6
+      when 'last_2_weeks'
+        @from = Date.today - 14 - (Date.today.cwday - 1)%7
+        @to = @from + 13
       when '7_days'
         @from = Date.today - 7
         @to = Date.today

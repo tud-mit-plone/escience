@@ -2,7 +2,7 @@
 
 
 # Redmine - project management software
-# Copyright (C) 2006-2011  Jean-Philippe Lang
+# Copyright (C) 2006-2012  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ class AccountController < ApplicationController
     redirect_to home_url
   end
 
-  # Enable user to choose a new password
+  # Lets user choose a new password
   def lost_password
     redirect_to(home_url) && return unless Setting.lost_password?
     if params[:token]
@@ -62,7 +62,7 @@ class AccountController < ApplicationController
         if @user.save
           @token.destroy
           flash[:notice] = l(:notice_account_password_updated)
-          redirect_to :action => 'login'
+          redirect_to signin_path
           return
         end
       end
@@ -86,7 +86,7 @@ class AccountController < ApplicationController
         if token.save
           Mailer.lost_password(token).deliver
           flash[:notice] = l(:notice_account_lost_email_sent)
-          redirect_to :action => 'login'
+          redirect_to signin_path
           return
         end
       end
@@ -116,7 +116,7 @@ class AccountController < ApplicationController
           session[:auth_source_registration] = nil
           self.logged_user = @user
           flash[:notice] = l(:notice_account_activated)
-          redirect_to(home_url)
+          redirect_to :controller => 'my', :action => 'account'
         end
       else
         @user.login = params[:user][:login]
@@ -148,7 +148,7 @@ class AccountController < ApplicationController
       token.destroy
       flash[:notice] = l(:notice_account_activated)
     end
-    redirect_to :action => 'login'
+    redirect_to signin_path
   end
 
   private
@@ -167,7 +167,7 @@ class AccountController < ApplicationController
     if user.nil?
       invalid_credentials
     elsif user.new_record?
-      onthefly_creation_failed(user, {:username => user.mail, :auth_source_id => user.auth_source_id })
+      onthefly_creation_failed(user, {:login => user.mail, :auth_source_id => user.auth_source_id })
     else
       # Valid user
       successful_authentication(user)
@@ -216,6 +216,7 @@ class AccountController < ApplicationController
   end
 
   def successful_authentication(user)
+    logger.info "Successful authentication for '#{user.login}' from #{request.remote_ip} at #{Time.now.utc}"
     # Valid user
     self.logged_user = user
     # generate a key and set cookie if autologin
@@ -247,7 +248,7 @@ class AccountController < ApplicationController
   def onthefly_creation_failed(user, auth_source_options = { })
     @user = user
     session[:auth_source_registration] = auth_source_options unless auth_source_options.empty?
-    render register_path
+    render :action => 'register'
   end
 
   def invalid_credentials
@@ -264,7 +265,7 @@ class AccountController < ApplicationController
     if user.save and token.save
       Mailer.register(token).deliver
       flash[:notice] = l(:notice_account_register_done)
-      redirect_to :action => 'login'
+      redirect_to signin_path
     else
       yield if block_given?
     end
@@ -306,6 +307,6 @@ class AccountController < ApplicationController
 
   def account_pending
     flash[:notice] = l(:notice_account_pending)
-    redirect_to :controller => 'welcome', :action => 'index'
+    redirect_to signin_path
   end
 end

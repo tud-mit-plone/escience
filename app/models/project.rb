@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
 
   # Specific overidden Activities
   has_many :time_entry_activities
-  has_many :members, :include => [:user, :roles], :conditions => "#{User.table_name}.type='User' AND #{User.table_name}.status=#{User::STATUS_ACTIVE}"
+  has_many :members, :include => [:principal, :roles], :conditions => "#{User.table_name}.type='User' AND #{User.table_name}.status=#{User::STATUS_ACTIVE}"
   has_many :memberships, :class_name => 'Member'
   has_many :member_principals, :class_name => 'Member',
                                :include => :principal,
@@ -80,6 +80,7 @@ class Project < ActiveRecord::Base
   # reserved words
   validates_exclusion_of :identifier, :in => %w( new )
 
+  after_save :update_position_under_parent, :if => Proc.new {|project| project.name_changed?}
   before_destroy :delete_all_members
 
   scope :has_module, lambda { |mod| { :conditions => ["#{Project.table_name}.id IN (SELECT em.project_id FROM #{EnabledModule.table_name} em WHERE em.name=?)", mod.to_s] } }
@@ -186,7 +187,7 @@ class Project < ActiveRecord::Base
       end
       if user.logged?
         user.projects_by_role.each do |role, projects|
-          if role.allowed_to?(permission)
+          if role.allowed_to?(permission) && projects.any?
             statement_by_role[role] = "#{Project.table_name}.id IN (#{projects.collect(&:id).join(',')})"
           end
         end
@@ -375,22 +376,7 @@ class Project < ActiveRecord::Base
       # Nothing to do
       true
     elsif p.nil? || (p.active? && move_possible?(p))
-      # Insert the project so that target's children or root projects stay alphabetically sorted
-      sibs = (p.nil? ? self.class.roots : p.children)
-      to_be_inserted_before = sibs.detect {|c| c.name.to_s.downcase > name.to_s.downcase }
-      if to_be_inserted_before
-        move_to_left_of(to_be_inserted_before)
-      elsif p.nil?
-        if sibs.empty?
-          # move_to_root adds the project in first (ie. left) position
-          move_to_root
-        else
-          move_to_right_of(sibs.last) unless self == sibs.last
-        end
-      else
-        # move_to_child_of adds the project in last (ie.right) position
-        move_to_child_of(p)
-      end
+      set_or_update_position_under(p)
       Issue.update_versions_from_hierarchy_change(self)
       true
     else
@@ -478,7 +464,7 @@ class Project < ActiveRecord::Base
   # Returns the users that should be notified on project events
   def notified_users
     # TODO: User part should be extracted to User#notify_about?
-    members.select {|m| m.mail_notification? || m.user.mail_notification == 'all'}.collect {|m| m.user}
+    members.select {|m| m.principal.present? && (m.mail_notification? || m.principal.mail_notification == 'all')}.collect {|m| m.principal}
   end
 
   # Returns an array of all custom fields enabled for project issues
@@ -753,27 +739,30 @@ class Project < ActiveRecord::Base
   end
 
   # Copies issues from +project+
-  # Note: issues assigned to a closed version won't be copied due to validation rules
   def copy_issues(project)
     # Stores the source issue id as a key and the copied issues as the
     # value.  Used to map the two togeather for issue relations.
     issues_map = {}
 
+    # Store status and reopen locked/closed versions
+    version_statuses = versions.reject(&:open?).map {|version| [version, version.status]}
+    version_statuses.each do |version, status|
+      version.update_attribute :status, 'open'
+    end
+
     # Get issues sorted by root_id, lft so that parent issues
     # get copied before their children
     project.issues.find(:all, :order => 'root_id, lft').each do |issue|
       new_issue = Issue.new
-      new_issue.copy_from(issue)
+      new_issue.copy_from(issue, :subtasks => false, :link => false)
       new_issue.project = self
-      # Reassign fixed_versions by name, since names are unique per
-      # project and the versions for self are not yet saved
-      if issue.fixed_version
-        new_issue.fixed_version = self.versions.select {|v| v.name == issue.fixed_version.name}.first
+      # Reassign fixed_versions by name, since names are unique per project
+      if issue.fixed_version && issue.fixed_version.project == project
+        new_issue.fixed_version = self.versions.detect {|v| v.name == issue.fixed_version.name}
       end
-      # Reassign the category by name, since names are unique per
-      # project and the categories for self are not yet saved
+      # Reassign the category by name, since names are unique per project
       if issue.category
-        new_issue.category = self.issue_categories.select {|c| c.name == issue.category.name}.first
+        new_issue.category = self.issue_categories.detect {|c| c.name == issue.category.name}
       end
       # Parent issue
       if issue.parent_id
@@ -788,6 +777,11 @@ class Project < ActiveRecord::Base
       else
         issues_map[issue.id] = new_issue unless new_issue.new_record?
       end
+    end
+
+    # Restore locked/closed version statuses
+    version_statuses.each do |version, status|
+      version.update_attribute :status, status
     end
 
     # Relations after in case issues related each other
@@ -918,5 +912,29 @@ class Project < ActiveRecord::Base
       subproject.send :archive!
     end
     update_attribute :status, STATUS_ARCHIVED
+  end
+
+  def update_position_under_parent
+    set_or_update_position_under(parent)
+  end
+
+  # Inserts/moves the project so that target's children or root projects stay alphabetically sorted
+  def set_or_update_position_under(target_parent)
+    sibs = (target_parent.nil? ? self.class.roots : target_parent.children)
+    to_be_inserted_before = sibs.sort_by {|c| c.name.to_s.downcase}.detect {|c| c.name.to_s.downcase > name.to_s.downcase }
+
+    if to_be_inserted_before
+      move_to_left_of(to_be_inserted_before)
+    elsif target_parent.nil?
+      if sibs.empty?
+        # move_to_root adds the project in first (ie. left) position
+        move_to_root
+      else
+        move_to_right_of(sibs.last) unless self == sibs.last
+      end
+    else
+      # move_to_child_of adds the project in last (ie.right) position
+      move_to_child_of(target_parent)
+    end
   end
 end

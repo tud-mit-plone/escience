@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine - project management software
 # Copyright (C) 2006-2012  Jean-Philippe Lang
 #
@@ -228,9 +230,9 @@ RAW
 
   def test_redmine_links
     issue_link = link_to('#3', {:controller => 'issues', :action => 'show', :id => 3},
-                               :class => 'issue status-1 priority-1 overdue', :title => 'Error 281 when updating a recipe (New)')
+                               :class => 'issue status-1 priority-4 priority-lowest overdue', :title => 'Error 281 when updating a recipe (New)')
     note_link = link_to('#3', {:controller => 'issues', :action => 'show', :id => 3, :anchor => 'note-14'},
-                               :class => 'issue status-1 priority-1 overdue', :title => 'Error 281 when updating a recipe (New)')
+                               :class => 'issue status-1 priority-4 priority-lowest overdue', :title => 'Error 281 when updating a recipe (New)')
 
     changeset_link = link_to('r1', {:controller => 'repositories', :action => 'revision', :id => 'ecookbook', :rev => 1},
                                    :class => 'changeset', :title => 'My very first commit')
@@ -251,8 +253,15 @@ RAW
 
     project_url = {:controller => 'projects', :action => 'show', :id => 'subproject1'}
 
-    source_url = {:controller => 'repositories', :action => 'entry', :id => 'ecookbook', :path => ['some', 'file']}
-    source_url_with_ext = {:controller => 'repositories', :action => 'entry', :id => 'ecookbook', :path => ['some', 'file.ext']}
+    source_url = '/projects/ecookbook/repository/entry/some/file'
+    source_url_with_rev = '/projects/ecookbook/repository/revisions/52/entry/some/file'
+    source_url_with_ext = '/projects/ecookbook/repository/entry/some/file.ext'
+    source_url_with_rev_and_ext = '/projects/ecookbook/repository/revisions/52/entry/some/file.ext'
+
+    export_url = '/projects/ecookbook/repository/raw/some/file'
+    export_url_with_rev = '/projects/ecookbook/repository/revisions/52/raw/some/file'
+    export_url_with_ext = '/projects/ecookbook/repository/raw/some/file.ext'
+    export_url_with_rev_and_ext = '/projects/ecookbook/repository/revisions/52/raw/some/file.ext'
 
     to_test = {
       # tickets
@@ -260,6 +269,8 @@ RAW
       # ticket notes
       '#3-14'                       => note_link,
       '#3#note-14'                  => note_link,
+      # should not ignore leading zero
+      '#03'                         => '#03',
       # changesets
       'r1'                          => changeset_link,
       'r1.'                         => "#{changeset_link}.",
@@ -280,12 +291,16 @@ RAW
       'source:/some/file. '         => link_to('source:/some/file', source_url, :class => 'source') + ".",
       'source:/some/file.ext. '     => link_to('source:/some/file.ext', source_url_with_ext, :class => 'source') + ".",
       'source:/some/file, '         => link_to('source:/some/file', source_url, :class => 'source') + ",",
-      'source:/some/file@52'        => link_to('source:/some/file@52', source_url.merge(:rev => 52), :class => 'source'),
-      'source:/some/file.ext@52'    => link_to('source:/some/file.ext@52', source_url_with_ext.merge(:rev => 52), :class => 'source'),
-      'source:/some/file#L110'      => link_to('source:/some/file#L110', source_url.merge(:anchor => 'L110'), :class => 'source'),
-      'source:/some/file.ext#L110'  => link_to('source:/some/file.ext#L110', source_url_with_ext.merge(:anchor => 'L110'), :class => 'source'),
-      'source:/some/file@52#L110'   => link_to('source:/some/file@52#L110', source_url.merge(:rev => 52, :anchor => 'L110'), :class => 'source'),
-      'export:/some/file'           => link_to('export:/some/file', source_url.merge(:format => 'raw'), :class => 'source download'),
+      'source:/some/file@52'        => link_to('source:/some/file@52', source_url_with_rev, :class => 'source'),
+      'source:/some/file.ext@52'    => link_to('source:/some/file.ext@52', source_url_with_rev_and_ext, :class => 'source'),
+      'source:/some/file#L110'      => link_to('source:/some/file#L110', source_url + "#L110", :class => 'source'),
+      'source:/some/file.ext#L110'  => link_to('source:/some/file.ext#L110', source_url_with_ext + "#L110", :class => 'source'),
+      'source:/some/file@52#L110'   => link_to('source:/some/file@52#L110', source_url_with_rev + "#L110", :class => 'source'),
+      # export
+      'export:/some/file'           => link_to('export:/some/file', export_url, :class => 'source download'),
+      'export:/some/file.ext'       => link_to('export:/some/file.ext', export_url_with_ext, :class => 'source download'),
+      'export:/some/file@52'        => link_to('export:/some/file@52', export_url_with_rev, :class => 'source download'),
+      'export:/some/file.ext@52'    => link_to('export:/some/file.ext@52', export_url_with_rev_and_ext, :class => 'source download'),
       # forum
       'forum#2'                     => link_to('Discussion', board_url, :class => 'board'),
       'forum:Discussion'            => link_to('Discussion', board_url, :class => 'board'),
@@ -524,6 +539,8 @@ RAW
       # link with anchor
       '[[CookBook documentation#One-section]]' => '<a href="/projects/ecookbook/wiki/CookBook_documentation#One-section" class="wiki-page">CookBook documentation</a>',
       '[[Another page#anchor|Page]]' => '<a href="/projects/ecookbook/wiki/Another_page#anchor" class="wiki-page">Page</a>',
+      # UTF8 anchor
+      '[[Another_page#Тест|Тест]]' => %|<a href="/projects/ecookbook/wiki/Another_page##{CGI.escape 'Тест'}" class="wiki-page">Тест</a>|,
       # page that doesn't exist
       '[[Unknown page]]' => '<a href="/projects/ecookbook/wiki/Unknown_page" class="wiki-page new">Unknown page</a>',
       '[[Unknown page|404]]' => '<a href="/projects/ecookbook/wiki/Unknown_page" class="wiki-page new">404</a>',
@@ -684,7 +701,7 @@ RAW
 
     expected = <<-EXPECTED
 <p><a href="/projects/ecookbook/wiki/CookBook_documentation" class="wiki-page">CookBook documentation</a></p>
-<p><a href="/issues/1" class="issue status-1 priority-1" title="Can't print recipes (New)">#1</a></p>
+<p><a href="/issues/1" class="issue status-1 priority-4 priority-lowest" title="Can&#x27;t print recipes (New)">#1</a></p>
 <pre>
 [[CookBook documentation]]
 
@@ -718,7 +735,7 @@ EXPECTED
 RAW
 
     expected = <<-EXPECTED
-<pre><code class="ruby syntaxhl"><span class=\"CodeRay\"><span class="line-numbers">1</span><span class="comment"># Some ruby code here</span></span>
+<pre><code class="ruby syntaxhl"><span class=\"CodeRay\"><span class="comment"># Some ruby code here</span></span>
 </code></pre>
 EXPECTED
 
@@ -968,38 +985,48 @@ RAW
     end
   end
 
-  def test_avatar
-    # turn on avatars
-    Setting.gravatar_enabled = '1'
-    assert avatar(User.find_by_mail('jsmith@somenet.foo')).include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
-    assert avatar('jsmith <jsmith@somenet.foo>').include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
-    # Default size is 50
-    assert avatar('jsmith <jsmith@somenet.foo>').include?('size=50')
-    assert avatar('jsmith <jsmith@somenet.foo>', :size => 24).include?('size=24')
-    # Non-avatar options should be considered html options
-    assert avatar('jsmith <jsmith@somenet.foo>', :title => 'John Smith').include?('title="John Smith"')
-    # The default class of the img tag should be gravatar
-    assert avatar('jsmith <jsmith@somenet.foo>').include?('class="gravatar"')
-    assert !avatar('jsmith <jsmith@somenet.foo>', :class => 'picture').include?('class="gravatar"')
-    assert_nil avatar('jsmith')
-    assert_nil avatar(nil)
+  def test_avatar_enabled
+    with_settings :gravatar_enabled => '1' do
+      assert avatar(User.find_by_mail('jsmith@somenet.foo')).include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
+      assert avatar('jsmith <jsmith@somenet.foo>').include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
+      # Default size is 50
+      assert avatar('jsmith <jsmith@somenet.foo>').include?('size=50')
+      assert avatar('jsmith <jsmith@somenet.foo>', :size => 24).include?('size=24')
+      # Non-avatar options should be considered html options
+      assert avatar('jsmith <jsmith@somenet.foo>', :title => 'John Smith').include?('title="John Smith"')
+      # The default class of the img tag should be gravatar
+      assert avatar('jsmith <jsmith@somenet.foo>').include?('class="gravatar"')
+      assert !avatar('jsmith <jsmith@somenet.foo>', :class => 'picture').include?('class="gravatar"')
+      assert_nil avatar('jsmith')
+      assert_nil avatar(nil)
+    end
+  end
 
-    # turn off avatars
-    Setting.gravatar_enabled = '0'
-    assert_equal '', avatar(User.find_by_mail('jsmith@somenet.foo'))
+  def test_avatar_disabled
+    with_settings :gravatar_enabled => '0' do
+      assert_equal '', avatar(User.find_by_mail('jsmith@somenet.foo'))
+    end
   end
 
   def test_link_to_user
     user = User.find(2)
-    t = link_to_user(user)
-    assert_equal "<a href=\"/users/2\">#{ user.name }</a>", t
+    assert_equal '<a href="/users/2" class="user active">John Smith</a>', link_to_user(user)
   end
 
   def test_link_to_user_should_not_link_to_locked_user
-    user = User.find(5)
-    assert user.locked?
-    t = link_to_user(user)
-    assert_equal user.name, t
+    with_current_user nil do
+      user = User.find(5)
+      assert user.locked?
+      assert_equal 'Dave2 Lopper2', link_to_user(user)
+    end
+  end
+
+  def test_link_to_user_should_link_to_locked_user_if_current_user_is_admin
+    with_current_user User.find(1) do
+      user = User.find(5)
+      assert user.locked?
+      assert_equal '<a href="/users/5" class="user locked">Dave2 Lopper2</a>', link_to_user(user)
+    end
   end
 
   def test_link_to_user_should_not_link_to_anonymous
@@ -1058,7 +1085,7 @@ RAW
   def test_principals_options_for_select_should_include_me_option_when_current_user_is_in_collection
     users = [User.find(2), User.find(4)]
     User.current = User.find(4)
-    assert_include '<option value="4"><< me >></option>', principals_options_for_select(users)
+    assert_include '<option value="4">&lt;&lt; me &gt;&gt;</option>', principals_options_for_select(users)
   end
 
   def test_stylesheet_link_tag_should_pick_the_default_stylesheet

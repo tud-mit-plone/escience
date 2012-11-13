@@ -1,8 +1,6 @@
 <% reply_links = authorize_for('issues', 'edit') -%>
 <% for journal in journals %>
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
-    <%#= link_to "##{journal.indice}", {:anchor => "note-#{journal.indice}"}, :class => "journal-link" %>
-    <%#= avatar(journal.user, :size => "24") %>
     <%= content_tag('a', '', :name => "note-#{journal.indice}")%>
     <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
 

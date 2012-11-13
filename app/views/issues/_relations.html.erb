@@ -15,18 +15,16 @@
     <i><%= h(relation.other_issue(@issue).project) if Setting.cross_project_issue_relations? %></i><br/>
     <%= link_to(h(relation.other_issue(@issue).subject).truncate(60), :controller => 'issues', :action => 'show', :id => relation.other_issue(@issue)) %><br/>
     <%= l(:label_tracker)%>: <%= h(relation.other_issue(@issue).tracker) %>
-    <%#= link_to_issue(relation.other_issue(@issue), :truncate => 60) %>
 </td>
 <td class="status"><%=h relation.other_issue(@issue).status.name %></td>
 <td class="start_date"><%= format_date(relation.other_issue(@issue).start_date) %></td>
 <td class="due_date"><%= format_date(relation.other_issue(@issue).due_date) %></td>
-<td class="buttons" style="float:right !important"><%= link_to_remote(
-                          image_tag('link_break.png'),
-                          { :url => {:controller => 'issue_relations', :action => 'destroy', :id => relation},
-                            :method => :delete,
-                            :data => {:confirm => l(:text_are_you_sure)} },
-                          :title => l(:label_relation_delete)
-                        ) if authorize_for('issue_relations', 'destroy') %></td>
+<td class="buttons" style="float:right !important"><%= link_to( image_tag('link_break.png'),
+                          {:controller => 'issue_relations', :action => 'destroy', :id => relation},
+                          :remote => true,
+						  :method => :delete,
+                          :data => {:confirm => l(:text_are_you_sure)},
+                          :title => l(:label_relation_delete)) if User.current.allowed_to?(:manage_issue_relations, @project) %></td>
 </tr>
 <% end %>
 </table>
@@ -37,7 +35,6 @@
                  :as => :relation, :remote => true,
                  :url => {:controller => 'issue_relations', :action => 'create', :issue_id => @issue},
                  :method => :post,
-                 :complete => "Form.Element.focus('relation_issue_to_id');",
                  :html => {:id => 'new-relation-form', :style => (@relation ? '' : 'display: none;')}
                } do |f| %>
 <%= render :partial => 'issue_relations/form', :locals => {:f => f}%>

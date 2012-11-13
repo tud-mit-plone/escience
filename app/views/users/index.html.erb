@@ -50,7 +50,7 @@
     </td>
     <td align="right">
       <%= change_status_link(user) %>
-      <%= delete_link user_path(user) unless User.current == user %>
+      <%= delete_link user_path(user, :back_url => users_path(params)) unless User.current == user %>
     </td>
   </tr>
 <% end -%>

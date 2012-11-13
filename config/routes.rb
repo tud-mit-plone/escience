@@ -33,7 +33,7 @@ RedmineApp::Application.routes.draw do
   match 'projects/:id/wiki/destroy', :to => 'wikis#destroy', :via => [:get, :post]
 
   match 'boards/:board_id/topics/new', :to => 'messages#new', :via => [:get, :post]
-  get 'boards/:board_id/topics/:id', :to => 'messages#show'
+  get 'boards/:board_id/topics/:id', :to => 'messages#show', :as => 'board_message'
   match 'boards/:board_id/topics/quote/:id', :to => 'messages#quote', :via => [:get, :post]
   get 'boards/:board_id/topics/:id/edit', :to => 'messages#edit'
 
@@ -103,7 +103,7 @@ RedmineApp::Application.routes.draw do
       match 'copy', :via => [:get, :post]
     end
 
-    resources :memberships, :shallow => true, :controller => 'members', :only => [:index, :show, :create, :update, :destroy] do
+    resources :memberships, :shallow => true, :controller => 'members', :only => [:index, :show, :new, :create, :update, :destroy] do
       collection do
         get 'autocomplete'
       end
@@ -148,8 +148,6 @@ RedmineApp::Application.routes.draw do
     end
 
     match 'wiki/index', :controller => 'wiki', :action => 'index', :via => :get
-    match 'wiki/:id/diff/:version/vs/:version_from', :controller => 'wiki', :action => 'diff'
-    match 'wiki/:id/diff/:version', :controller => 'wiki', :action => 'diff'
     resources :wiki, :except => [:index, :new, :create] do
       member do
         get 'rename'
@@ -166,7 +164,10 @@ RedmineApp::Application.routes.draw do
       end
     end
     match 'wiki', :controller => 'wiki', :action => 'show', :via => :get
-    match 'wiki/:id/annotate/:version', :controller => 'wiki', :action => 'annotate'
+    get 'wiki/:id/:version', :to => 'wiki#show'
+    delete 'wiki/:id/:version', :to => 'wiki#destroy_version'
+    get 'wiki/:id/:version/annotate', :to => 'wiki#annotate'
+    get 'wiki/:id/:version/diff', :to => 'wiki#diff'
   end
 
   resources :issues do
@@ -269,7 +270,7 @@ RedmineApp::Application.routes.draw do
   match 'attachments/:id/:filename', :controller => 'attachments', :action => 'show', :id => /\d+/, :filename => /.*/, :via => :get
   match 'attachments/download/:id/:filename', :controller => 'attachments', :action => 'download', :id => /\d+/, :filename => /.*/, :via => :get
   match 'attachments/download/:id', :controller => 'attachments', :action => 'download', :id => /\d+/, :via => :get
-  match 'attachments/thumbnail/:id', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get
+  match 'attachments/thumbnail/:id(/:size)', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get, :size => /\d+/
   resources :attachments, :only => [:show, :destroy]
 
   resources :groups do
@@ -283,19 +284,24 @@ RedmineApp::Application.routes.draw do
   match 'groups/destroy_membership/:id', :controller => 'groups', :action => 'destroy_membership', :id => /\d+/, :via => :post
   match 'groups/edit_membership/:id', :controller => 'groups', :action => 'edit_membership', :id => /\d+/, :via => :post
 
-  resources :trackers, :except => :show
+  resources :trackers, :except => :show do
+    collection do
+      match 'fields', :via => [:get, :post]
+    end
+  end
   resources :issue_statuses, :except => :show do
     collection do
       post 'update_issue_done_ratio'
     end
   end
   resources :custom_fields, :except => :show
-  resources :roles, :except => :show do
+  resources :roles do
     collection do
       match 'permissions', :via => [:get, :post]
     end
   end
   resources :enumerations, :except => :show
+  match 'enumerations/:type', :to => 'enumerations#index', :via => :get
 
   get 'projects/:id/search', :controller => 'search', :action => 'index'
   get 'search', :controller => 'search', :action => 'index'
@@ -336,6 +342,7 @@ RedmineApp::Application.routes.draw do
 
   match 'workflows', :controller => 'workflows', :action => 'index', :via => :get
   match 'workflows/edit', :controller => 'workflows', :action => 'edit', :via => [:get, :post]
+  match 'workflows/permissions', :controller => 'workflows', :action => 'permissions', :via => [:get, :post]
   match 'workflows/copy', :controller => 'workflows', :action => 'copy', :via => [:get, :post]
   match 'settings', :controller => 'settings', :action => 'index', :via => :get
   match 'settings/edit', :controller => 'settings', :action => 'edit', :via => [:get, :post]

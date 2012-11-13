@@ -18,7 +18,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class VersionTest < ActiveSupport::TestCase
-  fixtures :projects, :users, :issues, :issue_statuses, :trackers, :enumerations, :versions
+  fixtures :projects, :users, :issues, :issue_statuses, :trackers, :enumerations, :versions, :projects_trackers
 
   def setup
   end
@@ -105,6 +105,23 @@ class VersionTest < ActiveSupport::TestCase
     add_issue(v, :estimated_hours => 40, :done_ratio => 10)
     assert_progress_equal (25.0*0.2 + 25.0*1 + 10.0*0.3 + 40.0*0.1)/100.0*100, v.completed_pourcent
     assert_progress_equal 25.0/100.0*100, v.closed_pourcent
+  end
+
+  def test_should_sort_scheduled_then_unscheduled_versions
+    Version.delete_all
+    v4 = Version.create!(:project_id => 1, :name => 'v4')
+    v3 = Version.create!(:project_id => 1, :name => 'v2', :effective_date => '2012-07-14')
+    v2 = Version.create!(:project_id => 1, :name => 'v1')
+    v1 = Version.create!(:project_id => 1, :name => 'v3', :effective_date => '2012-08-02')
+    v5 = Version.create!(:project_id => 1, :name => 'v5', :effective_date => '2012-07-02')
+
+    assert_equal [v5, v3, v1, v2, v4], [v1, v2, v3, v4, v5].sort
+    assert_equal [v5, v3, v1, v2, v4], Version.sorted.all
+  end
+
+  def test_completed_should_be_false_when_due_today
+    version = Version.create!(:project_id => 1, :effective_date => Date.today, :name => 'Due today')
+    assert_equal false, version.completed?
   end
 
   context "#behind_schedule?" do

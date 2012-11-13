@@ -249,7 +249,8 @@ sub RedmineDSN {
                   roles.id IN (SELECT member_roles.role_id FROM members, member_roles WHERE members.user_id = users.id AND members.project_id = projects.id AND members.id = member_roles.member_id)
                   OR
                   (roles.builtin=1 AND cast(projects.is_public as CHAR) IN ('t', '1'))
-                ) ";
+                )
+                AND roles.permissions IS NOT NULL";
   $self->{RedmineQuery} = trim($query);
 }
 
@@ -295,7 +296,7 @@ sub set_val {
 Apache2::Module::add(__PACKAGE__, \@directives);
 
 
-my %read_only_methods = map { $_ => 1 } qw/GET PROPFIND REPORT OPTIONS/;
+my %read_only_methods = map { $_ => 1 } qw/GET HEAD PROPFIND REPORT OPTIONS/;
 
 sub request_is_read_only {
   my ($r) = @_;
@@ -342,7 +343,7 @@ sub authen_handler {
       return OK;
   } else {
       $r->note_auth_failure();
-      return AUTH_REQUIRED;
+      return DECLINED;
   }
 }
 

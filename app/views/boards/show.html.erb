@@ -5,12 +5,12 @@
   	<%= link_to_if_authorized l(:label_message_new),
                           {:controller => 'messages', :action => 'new', :board_id => @board},
                           :class => 'icon icon-add',
-                          :onclick => 'Element.show("add-message"); Form.Element.focus("message_subject"); return false;' %>
+                          :onclick => 'showAndScrollTo("add-message", "message_subject"); return false;' %>
   <% end %>
   <ul>
     <li><%= watcher_tag(@board, User.current) %></li>
   </ul>
-<%end%>
+<% end %>
 
 <div id="add-message" style="display:none;">
 <% if authorize_for('messages', 'new') %>
@@ -18,14 +18,8 @@
 <%= form_for @message, :url => {:controller => 'messages', :action => 'new', :board_id => @board}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
   <%= render :partial => 'messages/form', :locals => {:f => f} %>
   <p><%= submit_tag l(:button_create) %>
-  <%= link_to_remote l(:label_preview),
-                     { :url => { :controller => 'messages', :action => 'preview', :board_id => @board },
-                       :method => 'post',
-                       :update => 'preview',
-                       :with => "Form.serialize('message-form')",
-                       :complete => "Element.scrollTo('preview')"
-                     }, :accesskey => accesskey(:preview) %> |
-  <%= link_to l(:button_cancel), "#", :onclick => 'Element.hide("add-message")' %></p>
+  <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form') %> |
+  <%= link_to l(:button_cancel), "#", :onclick => '$("#add-message").hide(); return false;' %></p>
 <% end %>
 <div id="preview" class="wiki"></div>
 <% end %>

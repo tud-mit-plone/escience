@@ -28,11 +28,41 @@ class User < Principal
 
   # Different ways of displaying/sorting users
   USER_FORMATS = {
-    :firstname_lastname => {:string => '#{firstname} #{lastname}', :order => %w(firstname lastname id)},
-    :firstname => {:string => '#{firstname}', :order => %w(firstname id)},
-    :lastname_firstname => {:string => '#{lastname} #{firstname}', :order => %w(lastname firstname id)},
-    :lastname_coma_firstname => {:string => '#{lastname}, #{firstname}', :order => %w(lastname firstname id)},
-    :username => {:string => '#{login}', :order => %w(login id)},
+    :firstname_lastname => {
+        :string => '#{firstname} #{lastname}',
+        :order => %w(firstname lastname id),
+        :setting_order => 1
+      },
+    :firstname_lastinitial => {
+        :string => '#{firstname} #{lastname.to_s.chars.first}.',
+        :order => %w(firstname lastname id),
+        :setting_order => 2
+      },
+    :firstname => {
+        :string => '#{firstname}',
+        :order => %w(firstname id),
+        :setting_order => 3
+      },
+    :lastname_firstname => {
+        :string => '#{lastname} #{firstname}',
+        :order => %w(lastname firstname id),
+        :setting_order => 4
+      },
+    :lastname_coma_firstname => {
+        :string => '#{lastname}, #{firstname}',
+        :order => %w(lastname firstname id),
+        :setting_order => 5
+      },
+    :lastname => {
+        :string => '#{lastname}',
+        :order => %w(lastname id),
+        :setting_order => 6
+      },
+    :username => {
+        :string => '#{login}',
+        :order => %w(login id),
+        :setting_order => 7
+      },
   }
 
   MAIL_NOTIFICATION_OPTIONS = [
@@ -52,8 +82,6 @@ class User < Principal
   has_one :api_token, :class_name => 'Token', :conditions => "action='api'"
   belongs_to :auth_source
 
-  # Active non-anonymous users scope
-  scope :active, :conditions => "#{User.table_name}.status = #{STATUS_ACTIVE}"
   scope :logged, :conditions => "#{User.table_name}.status <> #{STATUS_ANONYMOUS}"
   scope :status, lambda {|arg| arg.blank? ? {} : {:conditions => {:status => arg.to_i}} }
 
@@ -67,7 +95,7 @@ class User < Principal
   LOGIN_LENGTH_LIMIT = 60
   MAIL_LENGTH_LIMIT = 60
 
-  validates_presence_of :firstname, :lastname, :mail, :if => Proc.new { |user| !user.is_a?(AnonymousUser) }
+  validates_presence_of :login, :firstname, :lastname, :mail, :if => Proc.new { |user| !user.is_a?(AnonymousUser) }
   validates_uniqueness_of :login, :if => Proc.new { |user| user.login_changed? && user.login.present? }, :case_sensitive => false
   validates_uniqueness_of :mail, :if => Proc.new { |user| !user.mail.blank? }, :case_sensitive => false
   # Login must contain lettres, numbers, underscores only
@@ -80,7 +108,7 @@ class User < Principal
   validates_inclusion_of :mail_notification, :in => MAIL_NOTIFICATION_OPTIONS.collect(&:first), :allow_blank => true
   validate :validate_password_length
   validates_acceptance_of :confirm, :allow_nil => false, :accept => true
-#  validates_confirmation_of :confirm
+# validates_confirmation_of :confirm
 
   before_create :set_mail_notification
   before_save   :update_hashed_password
@@ -371,6 +399,17 @@ class User < Principal
     name
   end
 
+  CSS_CLASS_BY_STATUS = {
+    STATUS_ANONYMOUS  => 'anon',
+    STATUS_ACTIVE     => 'active',
+    STATUS_REGISTERED => 'registered',
+    STATUS_LOCKED     => 'locked'
+  }
+
+  def css_classes
+    "user #{CSS_CLASS_BY_STATUS[status]}"
+  end
+
   # Returns the current day according to user's time zone
   def today
     if time_zone.nil?
@@ -443,10 +482,13 @@ class User < Principal
   def projects_by_role
     return @projects_by_role if @projects_by_role
 
-    @projects_by_role = Hash.new {|h,k| h[k]=[]}
+    @projects_by_role = Hash.new([])
     memberships.each do |membership|
-      membership.roles.each do |role|
-        @projects_by_role[role] << membership.project if membership.project
+      if membership.project
+        membership.roles.each do |role|
+          @projects_by_role[role] = [] unless @projects_by_role.key?(role)
+          @projects_by_role[role] << membership.project
+        end
       end
     end
     @projects_by_role.each do |role, projects|
@@ -484,17 +526,17 @@ class User < Principal
 
       roles = roles_for_project(context)
       return false unless roles
-      roles.detect {|role|
+      roles.any? {|role|
         (context.is_public? || role.member?) &&
         role.allowed_to?(action) &&
         (block_given? ? yield(role, self) : true)
       }
     elsif context && context.is_a?(Array)
-      # Authorize if user is authorized on every element of the array
-      context.map do |project|
-        allowed_to?(action, project, options, &block)
-      end.inject do |memo,allowed|
-        memo && allowed
+      if context.empty?
+        false
+      else
+        # Authorize if user is authorized on every element of the array
+        context.map {|project| allowed_to?(action, project, options, &block)}.reduce(:&)
       end
     elsif options[:global]
       # Admin users are always authorized
@@ -503,7 +545,7 @@ class User < Principal
       # authorize if user has at least one role that has this permission
       roles = memberships.collect {|m| m.roles}.flatten.uniq
       roles << (self.logged? ? Role.non_member : Role.anonymous)
-      roles.detect {|role|
+      roles.any? {|role|
         role.allowed_to?(action) &&
         (block_given? ? yield(role, self) : true)
       }

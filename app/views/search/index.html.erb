@@ -6,7 +6,7 @@
 <%= label_tag "search-input", l(:description_search), :class => "hidden-for-sighted" %><%= text_field_tag 'q', @question, :size => 60, :id => 'search-input' %></p>
 <fieldset>
 <legend><%= l(:description_project_scope) %></legend>
-<%= javascript_tag "Field.focus('search-input')" %>
+<%= javascript_tag "$('#search-input').focus()" %>
 <%= project_select_tag :truncate => 80 %>
 <%= hidden_field_tag 'all_words', '', :id => nil %>
 <label><%= check_box_tag 'all_words', 1, @all_words %> <%= l(:label_all_words) %></label>

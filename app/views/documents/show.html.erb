@@ -23,7 +23,12 @@
 <%= link_to_attachments @document %>
 
 <% if authorize_for('documents', 'add_attachment') %>
+<<<<<<< HEAD
   <p><%= link_to l(:label_attachment_new), {}, :onclick => "Element.show('add_attachment_form'); Element.hide(this); Element.scrollTo('add_attachment_form'); return false;", :id => 'attach_files_link' %></p>
+=======
+<p><%= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;",
+                                             :id => 'attach_files_link' %></p>
+>>>>>>> 69c0e23d2a17c308d162bc26d3697314a356b665
   <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document }, :multipart => true, :id => "add_attachment_form", :style => "display:none;") do %>
   <div class="box">
     <p><%= render :partial => 'attachments/form' %></p>
@@ -33,6 +38,7 @@
 <% end %>
 <iframe style="border-style: none;" src="http://docs.google.com/viewer?url=http%3A%2F%2Fblogs.digitss.com%2Fwp-content%2Fuploads%2F2010%2F01%2Fsample.pdf&embedded=true" height="390" width="400"></iframe>
 <% html_title @document.title -%>
+<<<<<<< HEAD
 
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'scm' %>
@@ -40,3 +46,5 @@
     <%= javascript_include_tag('jquery.fancybox.pack.js') %>
     <%= javascript_tag '$j(document).ready(function() {$j(".fancybox").fancybox({padding: 0,closeClick : true,helpers: {overlay:null}});});' %>
 <% end %>
+=======
+>>>>>>> 69c0e23d2a17c308d162bc26d3697314a356b665

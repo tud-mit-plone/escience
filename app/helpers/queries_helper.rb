@@ -18,9 +18,36 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module QueriesHelper
+  def filters_options_for_select(query)
+    options_for_select(filters_options(query))
+  end
 
-  def operators_for_select(filter_type)
-    Query.operators_by_filter_type[filter_type].collect {|o| [l(Query.operators[o]), o]}
+  def filters_options(query)
+    options = [[]]
+    sorted_options = query.available_filters.sort do |a, b|
+      ord = 0
+      if !(a[1][:order] == 20 && b[1][:order] == 20) 
+        ord = a[1][:order] <=> b[1][:order]
+      else
+        cn = (CustomField::CUSTOM_FIELDS_NAMES.index(a[1][:field].class.name) <=>
+                CustomField::CUSTOM_FIELDS_NAMES.index(b[1][:field].class.name))
+        if cn != 0
+          ord = cn
+        else
+          f = (a[1][:field] <=> b[1][:field])
+          if f != 0
+            ord = f
+          else
+            # assigned_to or author 
+            ord = (a[0] <=> b[0])
+          end
+        end
+      end
+      ord
+    end
+    options += sorted_options.map do |field, field_options|
+      [field_options[:name], field]
+    end
   end
 
   def column_header(column)
@@ -32,7 +59,7 @@ module QueriesHelper
   def column_content(column, issue)
     value = column.value(issue)
     if value.is_a?(Array)
-      value.collect {|v| column_value(column, issue, v)}.compact.sort.join(', ').html_safe
+      value.collect {|v| column_value(column, issue, v)}.compact.join(', ').html_safe
     else
       column_value(column, issue, value)
     end
@@ -70,6 +97,11 @@ module QueriesHelper
       l(:general_text_No)
     when 'Issue'
       link_to_issue(value, :subject => false)
+    when 'IssueRelation'
+      other = value.other_issue(issue)
+      content_tag('span',
+        (l(value.label_for(issue)) + " " + link_to_issue(other, :subject => false, :tracker => false)).html_safe,
+        :class => value.css_classes_for(issue))
     else
       h(value)
     end

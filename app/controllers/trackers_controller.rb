@@ -45,7 +45,7 @@ class TrackersController < ApplicationController
     if request.post? and @tracker.save
       # workflow copy
       if !params[:copy_workflow_from].blank? && (copy_from = Tracker.find_by_id(params[:copy_workflow_from]))
-        @tracker.workflows.copy(copy_from)
+        @tracker.workflow_rules.copy(copy_from)
       end
       flash[:notice] = l(:notice_successful_create)
       redirect_to :action => 'index'
@@ -79,5 +79,23 @@ class TrackersController < ApplicationController
       @tracker.destroy
     end
     redirect_to :action => 'index'
+  end
+
+  def fields
+    if request.post? && params[:trackers]
+      params[:trackers].each do |tracker_id, tracker_params|
+        tracker = Tracker.find_by_id(tracker_id)
+        if tracker
+          tracker.core_fields = tracker_params[:core_fields]
+          tracker.custom_field_ids = tracker_params[:custom_field_ids]
+          tracker.save
+        end
+      end
+      flash[:notice] = l(:notice_successful_update)
+      redirect_to :action => 'fields'
+      return
+    end
+    @trackers = Tracker.sorted.all
+    @custom_fields = IssueCustomField.all.sort
   end
 end

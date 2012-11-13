@@ -18,13 +18,13 @@
 require "digest/md5"
 
 class Attachment < ActiveRecord::Base
-
   belongs_to :container, :polymorphic => true
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
 
   validates_presence_of :filename, :author
   validates_length_of :filename, :maximum => 255
   validates_length_of :disk_filename, :maximum => 255
+  validates_length_of :description, :maximum => 255
   validate :validate_max_file_size
 
   acts_as_event :title => :filename,
@@ -52,15 +52,6 @@ class Attachment < ActiveRecord::Base
 
   before_save :files_to_final_location
   after_destroy :delete_from_disk
-
-  def container_with_blank_type_check
-    if container_type.blank?
-      nil
-    else
-      container_without_blank_type_check
-    end
-  end
-  alias_method_chain :container, :blank_type_check unless method_defined?(:container_without_blank_type_check)
 
   # Returns an unsaved copy of the attachment
   def copy(attributes=nil)
@@ -146,6 +137,14 @@ class Attachment < ActiveRecord::Base
     File.join(self.class.storage_path, disk_filename.to_s)
   end
 
+  def title
+    title = filename.to_s
+    if description.present?
+      title << " (#{description})"
+    end
+    title
+  end
+
   def increment_download
     increment!(:downloads)
   end
@@ -172,9 +171,17 @@ class Attachment < ActiveRecord::Base
 
   # Returns the full path the attachment thumbnail, or nil
   # if the thumbnail cannot be generated.
-  def thumbnail
+  def thumbnail(options={})
     if thumbnailable? && readable?
-      size = Setting.thumbnails_size.to_i
+      size = options[:size].to_i
+      if size > 0
+        # Limit the number of thumbnails per image
+        size = (size / 50) * 50
+        # Maximum thumbnail size
+        size = 800 if size > 800
+      else
+        size = Setting.thumbnails_size.to_i
+      end
       size = 100 unless size > 0
       target = File.join(self.class.thumbnails_storage_path, "#{id}_#{digest}_#{size}.thumb")
 

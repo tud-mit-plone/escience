@@ -36,7 +36,12 @@
     </td>
 </tr>
 </table>
-<%= javascript_tag "Form.Element.focus('username');" %>
 <% end %>
 </div>
 <%= call_hook :view_account_login_bottom %>
+
+<% if params[:username].present? %>
+<%= javascript_tag "$('#password').focus();" %>
+<% else %>
+<%= javascript_tag "$('#username').focus();" %>
+<% end %>

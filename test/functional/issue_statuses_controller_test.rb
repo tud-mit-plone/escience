@@ -6,7 +6,7 @@ class IssueStatusesController; def rescue_action(e) raise e end; end
 
 
 class IssueStatusesControllerTest < ActionController::TestCase
-  fixtures :issue_statuses, :issues
+  fixtures :issue_statuses, :issues, :users
 
   def setup
     @controller = IssueStatusesController.new
@@ -53,7 +53,7 @@ class IssueStatusesControllerTest < ActionController::TestCase
     post :create, :issue_status => {:name => ''}
     assert_response :success
     assert_template 'new'
-    assert_error_tag :content => /name can't be blank/i
+    assert_error_tag :content => /name can&#x27;t be blank/i
   end
 
   def test_edit
@@ -73,7 +73,7 @@ class IssueStatusesControllerTest < ActionController::TestCase
     put :update, :id => '3', :issue_status => {:name => ''}
     assert_response :success
     assert_template 'edit'
-    assert_error_tag :content => /name can't be blank/i
+    assert_error_tag :content => /name can&#x27;t be blank/i
   end
 
   def test_destroy

@@ -42,7 +42,6 @@ class RepositoriesController < ApplicationController
     @repository = Repository.factory(scm)
     @repository.is_default = @project.repository.nil?
     @repository.project = @project
-    render :layout => !request.xhr?
   end
 
   def create
@@ -236,22 +235,6 @@ class RepositoriesController < ApplicationController
 
     if @issue
       @changeset.issues << @issue
-      respond_to do |format|
-        format.js {
-          render :update do |page|
-            page.replace_html "related-issues", :partial => "related_issues"
-            page.visual_effect :highlight, "related-issue-#{@issue.id}"
-          end
-        }
-      end
-    else
-      respond_to do |format|
-        format.js {
-          render :update do |page|
-            page.alert(l(:label_issue) + ' ' + l('activerecord.errors.messages.invalid'))
-          end
-        }
-      end
     end
   end
 
@@ -259,16 +242,8 @@ class RepositoriesController < ApplicationController
   # DELETE /projects/:project_id/repository/(:repository_id/)revisions/:rev/issues/:issue_id
   def remove_related_issue
     @issue = Issue.visible.find_by_id(params[:issue_id])
-    if @issue 
+    if @issue
       @changeset.issues.delete(@issue)
-    end
-
-    respond_to do |format|
-      format.js {
-        render :update do |page|
-          page.remove "related-issue-#{@issue.id}"
-        end if @issue
-      }
     end
   end
 
@@ -456,4 +431,3 @@ class RepositoriesController < ApplicationController
     graph.burn
   end
 end
-

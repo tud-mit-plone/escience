@@ -18,10 +18,9 @@
 class RolesController < ApplicationController
   layout 'admin'
 
-  before_filter :require_admin, :except => :index
-  before_filter :require_admin_or_api_request, :only => :index
-  before_filter :find_role, :only => [:edit, :update, :destroy]
-  accept_api_auth :index
+  before_filter :require_admin, :except => [:index, :show]
+  before_filter :require_admin_or_api_request, :only => [:index, :show]
+  before_filter :find_role, :only => [:show, :edit, :update, :destroy]
 
   def index
     respond_to do |format|
@@ -35,9 +34,18 @@ class RolesController < ApplicationController
     end
   end
 
+  def show
+    respond_to do |format|
+      format.api
+    end
+  end
+
   def new
-    # Prefills the form with 'Non member' role permissions
+    # Prefills the form with 'Non member' role permissions by default
     @role = Role.new(params[:role] || {:permissions => Role.non_member.permissions})
+    if params[:copy].present? && @copy_from = Role.find_by_id(params[:copy])
+      @role.copy_from(@copy_from)
+    end
     @roles = Role.sorted.all
   end
 
@@ -46,7 +54,7 @@ class RolesController < ApplicationController
     if request.post? && @role.save
       # workflow copy
       if !params[:copy_workflow_from].blank? && (copy_from = Role.find_by_id(params[:copy_workflow_from]))
-        @role.workflows.copy(copy_from)
+        @role.workflow_rules.copy(copy_from)
       end
       flash[:notice] = l(:notice_successful_create)
       redirect_to :action => 'index'

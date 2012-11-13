@@ -409,7 +409,7 @@ class ProjectsControllerTest < ActionController::TestCase
     post :update, :id => 1, :project => {:name => ''}
     assert_response :success
     assert_template 'settings'
-    assert_error_tag :content => /name can't be blank/i
+    assert_error_tag :content => /name can&#x27;t be blank/i
   end
 
   def test_update_should_be_denied_for_member_on_closed_project
@@ -444,6 +444,10 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response :success
     assert_template 'destroy'
     assert_not_nil Project.find_by_id(1)
+    assert_tag :tag => 'strong',
+               :content => ['Private child of eCookbook',
+                            'Child of private child, eCookbook Subproject 1',
+                            'eCookbook Subproject 2'].join(', ')
   end
 
   def test_destroy
@@ -538,9 +542,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal %w(issue_tracking time_tracking), project.enabled_module_names.sort
 
     assert_equal source.versions.count, project.versions.count, "All versions were not copied"
-    # issues assigned to a closed version won't be copied
-    assert_equal source.issues.select {|i| i.fixed_version.nil? || i.fixed_version.open?}.size,
-                 project.issues.count, "All issues were not copied"
+    assert_equal source.issues.count, project.issues.count, "All issues were not copied"
     assert_equal 0, project.members.count
   end
 

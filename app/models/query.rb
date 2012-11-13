@@ -38,7 +38,7 @@ class QueryColumn
   def sortable?
     !@sortable.nil?
   end
-  
+
   def sortable
     @sortable.is_a?(Proc) ? @sortable.call : @sortable
   end
@@ -57,10 +57,7 @@ class QueryCustomFieldColumn < QueryColumn
   def initialize(custom_field)
     self.name = "cf_#{custom_field.id}".to_sym
     self.sortable = custom_field.order_statement || false
-    if %w(list date bool int).include?(custom_field.field_format) && !custom_field.multiple?
-      self.groupable = custom_field.order_statement
-    end
-    self.groupable ||= false
+    self.groupable = custom_field.group_statement || false
     @cf = custom_field
   end
 
@@ -74,7 +71,7 @@ class QueryCustomFieldColumn < QueryColumn
 
   def value(issue)
     cv = issue.custom_values.select {|v| v.custom_field_id == @cf.id}.collect {|v| @cf.cast_value(v.value)}
-    cv.size > 1 ? cv : cv.first
+    cv.size > 1 ? cv.sort {|a,b| a.to_s <=> b.to_s} : cv.first
   end
 
   def css_classes
@@ -103,20 +100,25 @@ class Query < ActiveRecord::Base
                   "o"   => :label_open_issues,
                   "c"   => :label_closed_issues,
                   "!*"  => :label_none,
-                  "*"   => :label_all,
+                  "*"   => :label_any,
                   ">="  => :label_greater_or_equal,
                   "<="  => :label_less_or_equal,
                   "><"  => :label_between,
                   "<t+" => :label_in_less_than,
                   ">t+" => :label_in_more_than,
+                  "><t+"=> :label_in_the_next_days,
                   "t+"  => :label_in,
                   "t"   => :label_today,
                   "w"   => :label_this_week,
                   ">t-" => :label_less_than_ago,
                   "<t-" => :label_more_than_ago,
+                  "><t-"=> :label_in_the_past_days,
                   "t-"  => :label_ago,
                   "~"   => :label_contains,
-                  "!~"  => :label_not_contains }
+                  "!~"  => :label_not_contains,
+                  "=p"  => :label_any_issues_in_project,
+                  "=!p" => :label_any_issues_not_in_project,
+                  "!p"  => :label_no_issues_in_project}
 
   cattr_reader :operators
 
@@ -124,12 +126,13 @@ class Query < ActiveRecord::Base
                                  :list_status => [ "o", "=", "!", "c", "*" ],
                                  :list_optional => [ "=", "!", "!*", "*" ],
                                  :list_subprojects => [ "*", "!*", "=" ],
-                                 :date => [ "=", ">=", "<=", "><", "<t+", ">t+", "t+", "t", "w", ">t-", "<t-", "t-", "!*", "*" ],
-                                 :date_past => [ "=", ">=", "<=", "><", ">t-", "<t-", "t-", "t", "w", "!*", "*" ],
+                                 :date => [ "=", ">=", "<=", "><", "<t+", ">t+", "><t+", "t+", "t", "w", ">t-", "<t-", "><t-", "t-", "!*", "*" ],
+                                 :date_past => [ "=", ">=", "<=", "><", ">t-", "<t-", "><t-", "t-", "t", "w", "!*", "*" ],
                                  :string => [ "=", "~", "!", "!~", "!*", "*" ],
                                  :text => [  "~", "!~", "!*", "*" ],
                                  :integer => [ "=", ">=", "<=", "><", "!*", "*" ],
-                                 :float => [ "=", ">=", "<=", "><", "!*", "*" ] }
+                                 :float => [ "=", ">=", "<=", "><", "!*", "*" ],
+                                 :relation => ["=", "=p", "=!p", "!p", "!*", "*"]}
 
   cattr_reader :operators_by_filter_type
 
@@ -144,12 +147,13 @@ class Query < ActiveRecord::Base
     QueryColumn.new(:assigned_to, :sortable => lambda {User.fields_for_order_statement}, :groupable => true),
     QueryColumn.new(:updated_on, :sortable => "#{Issue.table_name}.updated_on", :default_order => 'desc'),
     QueryColumn.new(:category, :sortable => "#{IssueCategory.table_name}.name", :groupable => true),
-    QueryColumn.new(:fixed_version, :sortable => ["#{Version.table_name}.effective_date", "#{Version.table_name}.name"], :default_order => 'desc', :groupable => true),
+    QueryColumn.new(:fixed_version, :sortable => lambda {Version.fields_for_order_statement}, :groupable => true),
     QueryColumn.new(:start_date, :sortable => "#{Issue.table_name}.start_date"),
     QueryColumn.new(:due_date, :sortable => "#{Issue.table_name}.due_date"),
     QueryColumn.new(:estimated_hours, :sortable => "#{Issue.table_name}.estimated_hours"),
     QueryColumn.new(:done_ratio, :sortable => "#{Issue.table_name}.done_ratio", :groupable => true),
     QueryColumn.new(:created_on, :sortable => "#{Issue.table_name}.created_on", :default_order => 'desc'),
+    QueryColumn.new(:relations, :caption => :label_related_issues)
   ]
   cattr_reader :available_columns
 
@@ -174,14 +178,14 @@ class Query < ActiveRecord::Base
       if values_for(field)
         case type_for(field)
         when :integer
-          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+$/) }
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^[+-]?\d+$/) }
         when :float
           add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+(\.\d*)?$/) }
         when :date, :date_past
           case operator_for(field)
           when "=", ">=", "<=", "><"
             add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && (!v.match(/^\d{4}-\d{2}-\d{2}$/) || (Date.parse(v) rescue nil).nil?) }
-          when ">t-", "<t-", "t-"
+          when ">t-", "<t-", "t-", ">t+", "<t+", "t+", "><t+", "><t-"
             add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+$/) }
           end
         end
@@ -213,48 +217,69 @@ class Query < ActiveRecord::Base
     is_public && !@is_for_all && user.allowed_to?(:manage_public_queries, project)
   end
 
+  def trackers
+    @trackers ||= project.nil? ? Tracker.find(:all, :order => 'position') : project.rolled_up_trackers
+  end
+
+  # Returns a hash of localized labels for all filter operators
+  def self.operators_labels
+    operators.inject({}) {|h, operator| h[operator.first] = l(operator.last); h}
+  end
+
   def available_filters
     return @available_filters if @available_filters
-
-    trackers = project.nil? ? Tracker.find(:all, :order => 'position') : project.rolled_up_trackers
-
-    @available_filters = { "status_id" => { :type => :list_status, :order => 1, :values => IssueStatus.find(:all, :order => 'position').collect{|s| [s.name, s.id.to_s] } },
-                           "tracker_id" => { :type => :list, :order => 2, :values => trackers.collect{|s| [s.name, s.id.to_s] } },
-                           "priority_id" => { :type => :list, :order => 3, :values => IssuePriority.all.collect{|s| [s.name, s.id.to_s] } },
-                           "subject" => { :type => :text, :order => 8 },
-                           "created_on" => { :type => :date_past, :order => 9 },
-                           "updated_on" => { :type => :date_past, :order => 10 },
-                           "start_date" => { :type => :date, :order => 11 },
-                           "due_date" => { :type => :date, :order => 12 },
-                           "estimated_hours" => { :type => :float, :order => 13 },
-                           "done_ratio" =>  { :type => :integer, :order => 14 }}
-
+	trackers = project.nil? ? Tracker.find(:all, :order => 'position') : project.rolled_up_trackers
+    @available_filters = {
+      "status_id" => {
+        :type => :list_status, :order => 0,
+        :values => IssueStatus.find(:all, :order => 'position').collect{|s| [s.name, s.id.to_s] }
+       },
+      "tracker_id" => {
+        :type => :list, :order => 2, :values => trackers.collect{|s| [s.name, s.id.to_s] }
+       },
+      "priority_id" => {
+        :type => :list, :order => 3, :values => IssuePriority.all.collect{|s| [s.name, s.id.to_s] }
+       },
+      "subject" => { :type => :text, :order => 8 },
+      "created_on" => { :type => :date_past, :order => 9 },
+      "updated_on" => { :type => :date_past, :order => 10 },
+      "start_date" => { :type => :date, :order => 11 },
+      "due_date" => { :type => :date, :order => 12 },
+      "estimated_hours" => { :type => :float, :order => 13 },
+      "done_ratio" =>  { :type => :integer, :order => 14 }
+    }
+    IssueRelation::TYPES.each do |relation_type, options|
+      @available_filters[relation_type] = {
+        :type => :relation, :order => @available_filters.size + 100,
+        :label => options[:name]
+      }
+    end
     principals = []
     if project
       principals += project.principals.sort
       unless project.leaf?
         subprojects = project.descendants.visible.all
         if subprojects.any?
-          @available_filters["subproject_id"] = { :type => :list_subprojects, :order => 13, :values => subprojects.collect{|s| [s.name, s.id.to_s] } }
+          @available_filters["subproject_id"] = {
+            :type => :list_subprojects, :order => 13,
+            :values => subprojects.collect{|s| [s.name, s.id.to_s] }
+          }
           principals += Principal.member_of(subprojects)
         end
       end
     else
-      all_projects = Project.visible.all
       if all_projects.any?
         # members of visible projects
         principals += Principal.member_of(all_projects)
-
         # project filter
         project_values = []
         if User.current.logged? && User.current.memberships.any?
           project_values << ["<< #{l(:label_my_projects).downcase} >>", "mine"]
         end
-        Project.project_tree(all_projects) do |p, level|
-          prefix = (level > 0 ? ('--' * level + ' ') : '')
-          project_values << ["#{prefix}#{p.name}", p.id.to_s]
-        end
-        @available_filters["project_id"] = { :type => :list, :order => 1, :values => project_values} unless project_values.empty?
+        project_values += all_projects_values
+        @available_filters["project_id"] = {
+          :type => :list, :order => 1, :values => project_values
+        } unless project_values.empty?
       end
     end
     principals.uniq!
@@ -263,44 +288,109 @@ class Query < ActiveRecord::Base
 
     assigned_to_values = []
     assigned_to_values << ["<< #{l(:label_me)} >>", "me"] if User.current.logged?
-    assigned_to_values += (Setting.issue_group_assignment? ? principals : users).collect{|s| [s.name, s.id.to_s] }
-    @available_filters["assigned_to_id"] = { :type => :list_optional, :order => 4, :values => assigned_to_values } unless assigned_to_values.empty?
+    assigned_to_values += (Setting.issue_group_assignment? ?
+                              principals : users).collect{|s| [s.name, s.id.to_s] }
+    @available_filters["assigned_to_id"] = {
+      :type => :list_optional, :order => 4, :values => assigned_to_values
+    } unless assigned_to_values.empty?
 
     author_values = []
     author_values << ["<< #{l(:label_me)} >>", "me"] if User.current.logged?
     author_values += users.collect{|s| [s.name, s.id.to_s] }
-    @available_filters["author_id"] = { :type => :list, :order => 5, :values => author_values } unless author_values.empty?
+    @available_filters["author_id"] = {
+      :type => :list, :order => 5, :values => author_values
+    } unless author_values.empty?
 
     group_values = Group.all.collect {|g| [g.name, g.id.to_s] }
-    @available_filters["member_of_group"] = { :type => :list_optional, :order => 6, :values => group_values } unless group_values.empty?
+    @available_filters["member_of_group"] = {
+      :type => :list_optional, :order => 6, :values => group_values
+    } unless group_values.empty?
 
     role_values = Role.givable.collect {|r| [r.name, r.id.to_s] }
-    @available_filters["assigned_to_role"] = { :type => :list_optional, :order => 7, :values => role_values } unless role_values.empty?
+    @available_filters["assigned_to_role"] = {
+      :type => :list_optional, :order => 7, :values => role_values
+    } unless role_values.empty?
 
     if User.current.logged?
-      @available_filters["watcher_id"] = { :type => :list, :order => 15, :values => [["<< #{l(:label_me)} >>", "me"]] }
+      @available_filters["watcher_id"] = {
+        :type => :list, :order => 15, :values => [["<< #{l(:label_me)} >>", "me"]]
+      }
     end
 
     if project
       # project specific filters
       categories = project.issue_categories.all
       unless categories.empty?
-        @available_filters["category_id"] = { :type => :list_optional, :order => 6, :values => categories.collect{|s| [s.name, s.id.to_s] } }
+        @available_filters["category_id"] = {
+          :type => :list_optional, :order => 6,
+          :values => categories.collect{|s| [s.name, s.id.to_s] }
+        }
       end
       versions = project.shared_versions.all
       unless versions.empty?
-        @available_filters["fixed_version_id"] = { :type => :list_optional, :order => 7, :values => versions.sort.collect{|s| ["#{s.project.name} - #{s.name}", s.id.to_s] } }
+        @available_filters["fixed_version_id"] = {
+          :type => :list_optional, :order => 7,
+          :values => versions.sort.collect{|s| ["#{s.project.name} - #{s.name}", s.id.to_s] }
+        }
       end
       add_custom_fields_filters(project.all_issue_custom_fields)
     else
       # global filters for cross project issue list
       system_shared_versions = Version.visible.find_all_by_sharing('system')
       unless system_shared_versions.empty?
-        @available_filters["fixed_version_id"] = { :type => :list_optional, :order => 7, :values => system_shared_versions.sort.collect{|s| ["#{s.project.name} - #{s.name}", s.id.to_s] } }
+        @available_filters["fixed_version_id"] = {
+          :type => :list_optional, :order => 7,
+          :values => system_shared_versions.sort.collect{|s|
+                                       ["#{s.project.name} - #{s.name}", s.id.to_s]
+                                     }
+        }
       end
-      add_custom_fields_filters(IssueCustomField.find(:all, :conditions => {:is_filter => true, :is_for_all => true}))
+      add_custom_fields_filters(
+                   IssueCustomField.find(:all,
+                                         :conditions => {
+                                            :is_filter => true,
+                                            :is_for_all => true
+                                         }))
+    end
+    add_associations_custom_fields_filters :project, :author, :assigned_to, :fixed_version
+    if User.current.allowed_to?(:set_issues_private, nil, :global => true) ||
+      User.current.allowed_to?(:set_own_issues_private, nil, :global => true)
+      @available_filters["is_private"] = {
+        :type => :list, :order => 16,
+        :values => [[l(:general_text_yes), "1"], [l(:general_text_no), "0"]]
+      }
+    end
+    Tracker.disabled_core_fields(trackers).each {|field|
+      @available_filters.delete field
+    }
+    @available_filters.each do |field, options|
+      options[:name] ||= l(options[:label] || "field_#{field}".gsub(/_id$/, ''))
     end
     @available_filters
+  end
+
+  # Returns a representation of the available filters for JSON serialization
+  def available_filters_as_json
+    json = {}
+    available_filters.each do |field, options|
+      json[field] = options.slice(:type, :name, :values).stringify_keys
+    end
+    json
+  end
+
+  def all_projects
+    @all_projects ||= Project.visible.all
+  end
+
+  def all_projects_values
+    return @all_projects_values if @all_projects_values
+
+    values = []
+    Project.project_tree(all_projects) do |p, level|
+      prefix = (level > 0 ? ('--' * level + ' ') : '')
+      values << ["#{prefix}#{p.name}", p.id.to_s]
+    end
+    @all_projects_values = values
   end
 
   def add_filter(field, operator, values)
@@ -380,6 +470,17 @@ class Query < ActiveRecord::Base
         :caption => :label_spent_time
       )
     end
+
+    if User.current.allowed_to?(:set_issues_private, nil, :global => true) ||
+      User.current.allowed_to?(:set_own_issues_private, nil, :global => true)
+      @available_columns << QueryColumn.new(:is_private, :sortable => "#{Issue.table_name}.is_private")
+    end
+
+    disabled_fields = Tracker.disabled_core_fields(trackers).map {|field| field.sub(/_id$/, '')}
+    @available_columns.reject! {|column|
+      disabled_fields.include?(column.name.to_s)
+    }
+
     @available_columns
   end
 
@@ -444,7 +545,7 @@ class Query < ActiveRecord::Base
     if arg.is_a?(Hash)
       arg = arg.keys.sort.collect {|k| arg[k]}
     end
-    c = arg.select {|k,o| !k.to_s.blank?}.slice(0,3).collect {|k,o| [k.to_s, o == 'desc' ? o : 'asc']}
+    c = arg.select {|k,o| !k.to_s.blank?}.slice(0,3).collect {|k,o| [k.to_s, (o == 'desc' || o == false) ? 'desc' : 'asc']}
     write_attribute(:sort_criteria, c)
   end
 
@@ -460,12 +561,17 @@ class Query < ActiveRecord::Base
     sort_criteria && sort_criteria[arg] && sort_criteria[arg].last
   end
 
+  def sort_criteria_order_for(key)
+    sort_criteria.detect {|k, order| key.to_s == k}.try(:last)
+  end
+
   # Returns the SQL sort order that should be prepended for grouping
   def group_by_sort_order
     if grouped? && (column = group_by_column)
+      order = sort_criteria_order_for(column.name) || column.default_order
       column.sortable.is_a?(Array) ?
-        column.sortable.collect {|s| "#{s} #{column.default_order}"}.join(',') :
-        "#{column.sortable} #{column.default_order}"
+        column.sortable.collect {|s| "#{s} #{order}"}.join(',') :
+        "#{column.sortable} #{order}"
     end
   end
 
@@ -534,7 +640,7 @@ class Query < ActiveRecord::Base
         end
       end
 
-      if field =~ /^cf_(\d+)$/
+      if field =~ /cf_(\d+)$/
         # custom field
         filters_clauses << sql_for_custom_field(field, operator, v, $1)
       elsif respond_to?("sql_for_#{field}_field")
@@ -584,18 +690,19 @@ class Query < ActiveRecord::Base
   def issues(options={})
     order_option = [group_by_sort_order, options[:order]].reject {|s| s.blank?}.join(',')
     order_option = nil if order_option.blank?
-    
-    joins = (order_option && order_option.include?('authors')) ? "LEFT OUTER JOIN users authors ON authors.id = #{Issue.table_name}.author_id" : nil
 
     issues = Issue.visible.scoped(:conditions => options[:conditions]).find :all, :include => ([:status, :project] + (options[:include] || [])).uniq,
                      :conditions => statement,
                      :order => order_option,
-                     :joins => joins,
+                     :joins => joins_for_order_statement(order_option),
                      :limit  => options[:limit],
                      :offset => options[:offset]
 
     if has_column?(:spent_hours)
       Issue.load_visible_spent_hours(issues)
+    end
+    if has_column?(:relations)
+      Issue.load_visible_relations(issues)
     end
     issues
   rescue ::ActiveRecord::StatementInvalid => e
@@ -606,13 +713,11 @@ class Query < ActiveRecord::Base
   def issue_ids(options={})
     order_option = [group_by_sort_order, options[:order]].reject {|s| s.blank?}.join(',')
     order_option = nil if order_option.blank?
-    
-    joins = (order_option && order_option.include?('authors')) ? "LEFT OUTER JOIN users authors ON authors.id = #{Issue.table_name}.author_id" : nil
 
     Issue.visible.scoped(:conditions => options[:conditions]).scoped(:include => ([:status, :project] + (options[:include] || [])).uniq,
                      :conditions => statement,
                      :order => order_option,
-                     :joins => joins,
+                     :joins => joins_for_order_statement(order_option),
                      :limit  => options[:limit],
                      :offset => options[:offset]).find_ids
   rescue ::ActiveRecord::StatementInvalid => e
@@ -675,15 +780,58 @@ class Query < ActiveRecord::Base
       "(#{nl} #{Issue.table_name}.assigned_to_id #{sw} IN (SELECT DISTINCT #{Member.table_name}.user_id FROM #{Member.table_name}" +
         " WHERE #{Member.table_name}.project_id = #{Issue.table_name}.project_id))"
     when "=", "!"
-      role_cond = value.any? ? 
+      role_cond = value.any? ?
         "#{MemberRole.table_name}.role_id IN (" + value.collect{|val| "'#{connection.quote_string(val)}'"}.join(",") + ")" :
         "1=0"
-      
+
       sw = operator == "!" ? 'NOT' : ''
       nl = operator == "!" ? "#{Issue.table_name}.assigned_to_id IS NULL OR" : ''
       "(#{nl} #{Issue.table_name}.assigned_to_id #{sw} IN (SELECT DISTINCT #{Member.table_name}.user_id FROM #{Member.table_name}, #{MemberRole.table_name}" +
         " WHERE #{Member.table_name}.project_id = #{Issue.table_name}.project_id AND #{Member.table_name}.id = #{MemberRole.table_name}.member_id AND #{role_cond}))"
     end
+  end
+
+  def sql_for_is_private_field(field, operator, value)
+    op = (operator == "=" ? 'IN' : 'NOT IN')
+    va = value.map {|v| v == '0' ? connection.quoted_false : connection.quoted_true}.uniq.join(',')
+
+    "#{Issue.table_name}.is_private #{op} (#{va})"
+  end
+
+  def sql_for_relations(field, operator, value, options={})
+    relation_options = IssueRelation::TYPES[field]
+    return relation_options unless relation_options
+
+    relation_type = field
+    join_column, target_join_column = "issue_from_id", "issue_to_id"
+    if relation_options[:reverse] || options[:reverse]
+      relation_type = relation_options[:reverse] || relation_type
+      join_column, target_join_column = target_join_column, join_column
+    end
+
+    sql = case operator
+      when "*", "!*"
+        op = (operator == "*" ? 'IN' : 'NOT IN')
+        "#{Issue.table_name}.id #{op} (SELECT DISTINCT #{IssueRelation.table_name}.#{join_column} FROM #{IssueRelation.table_name} WHERE #{IssueRelation.table_name}.relation_type = '#{connection.quote_string(relation_type)}')"
+      when "=", "!"
+        op = (operator == "=" ? 'IN' : 'NOT IN')
+        "#{Issue.table_name}.id #{op} (SELECT DISTINCT #{IssueRelation.table_name}.#{join_column} FROM #{IssueRelation.table_name} WHERE #{IssueRelation.table_name}.relation_type = '#{connection.quote_string(relation_type)}' AND #{IssueRelation.table_name}.#{target_join_column} = #{value.first.to_i})"
+      when "=p", "=!p", "!p"
+        op = (operator == "!p" ? 'NOT IN' : 'IN')
+        comp = (operator == "=!p" ? '<>' : '=')
+        "#{Issue.table_name}.id #{op} (SELECT DISTINCT #{IssueRelation.table_name}.#{join_column} FROM #{IssueRelation.table_name}, #{Issue.table_name} relissues WHERE #{IssueRelation.table_name}.relation_type = '#{connection.quote_string(relation_type)}' AND #{IssueRelation.table_name}.#{target_join_column} = relissues.id AND relissues.project_id #{comp} #{value.first.to_i})"
+      end
+
+    if relation_options[:sym] == field && !options[:reverse]
+      sqls = [sql, sql_for_relations(field, operator, value, :reverse => true)]
+      sqls.join(["!", "!*", "!p"].include?(operator) ? " AND " : " OR ")
+    else
+      sql
+    end
+  end
+
+  IssueRelation::TYPES.keys.each do |relation_type|
+    alias_method "sql_for_#{relation_type}_field".to_sym, :sql_for_relations
   end
 
   private
@@ -692,7 +840,8 @@ class Query < ActiveRecord::Base
     db_table = CustomValue.table_name
     db_field = 'value'
     filter = @available_filters[field]
-    if filter && filter[:format] == 'user'
+    return nil unless filter
+    if filter[:format] == 'user'
       if value.delete('me')
         value.push User.current.id.to_s
       end
@@ -703,7 +852,15 @@ class Query < ActiveRecord::Base
       operator = '='
       not_in = 'NOT'
     end
-    "#{Issue.table_name}.id #{not_in} IN (SELECT #{Issue.table_name}.id FROM #{Issue.table_name} LEFT OUTER JOIN #{db_table} ON #{db_table}.customized_type='Issue' AND #{db_table}.customized_id=#{Issue.table_name}.id AND #{db_table}.custom_field_id=#{custom_field_id} WHERE " +
+    customized_key = "id"
+    customized_class = Issue
+    if field =~ /^(.+)\.cf_/
+      assoc = $1
+      customized_key = "#{assoc}_id"
+      customized_class = Issue.reflect_on_association(assoc.to_sym).klass.base_class rescue nil
+      raise "Unknown Issue association #{assoc}" unless customized_class
+    end
+    "#{Issue.table_name}.#{customized_key} #{not_in} IN (SELECT #{customized_class.table_name}.id FROM #{customized_class.table_name} LEFT OUTER JOIN #{db_table} ON #{db_table}.customized_type='#{customized_class}' AND #{db_table}.customized_id=#{customized_class.table_name}.id AND #{db_table}.custom_field_id=#{custom_field_id} WHERE " +
       sql_for_field(field, operator, value, db_table, db_field, true) + ')'
   end
 
@@ -782,21 +939,35 @@ class Query < ActiveRecord::Base
       sql = "#{Issue.table_name}.status_id IN (SELECT id FROM #{IssueStatus.table_name} WHERE is_closed=#{connection.quoted_false})" if field == "status_id"
     when "c"
       sql = "#{Issue.table_name}.status_id IN (SELECT id FROM #{IssueStatus.table_name} WHERE is_closed=#{connection.quoted_true})" if field == "status_id"
-    when ">t-"
+    when "><t-"
+      # between today - n days and today
       sql = relative_date_clause(db_table, db_field, - value.first.to_i, 0)
+    when ">t-"
+      # >= today - n days
+      sql = relative_date_clause(db_table, db_field, - value.first.to_i, nil)
     when "<t-"
+      # <= today - n days
       sql = relative_date_clause(db_table, db_field, nil, - value.first.to_i)
     when "t-"
+      # = n days in past
       sql = relative_date_clause(db_table, db_field, - value.first.to_i, - value.first.to_i)
+    when "><t+"
+      # between today and today + n days
+      sql = relative_date_clause(db_table, db_field, 0, value.first.to_i)
     when ">t+"
+      # >= today + n days
       sql = relative_date_clause(db_table, db_field, value.first.to_i, nil)
     when "<t+"
-      sql = relative_date_clause(db_table, db_field, 0, value.first.to_i)
+      # <= today + n days
+      sql = relative_date_clause(db_table, db_field, nil, value.first.to_i)
     when "t+"
+      # = today + n days
       sql = relative_date_clause(db_table, db_field, value.first.to_i, value.first.to_i)
     when "t"
+      # = today
       sql = relative_date_clause(db_table, db_field, 0, 0)
     when "w"
+      # = this week
       first_day_of_week = l(:general_first_day_of_week).to_i
       day_of_week = Date.today.cwday
       days_ago = (day_of_week >= first_day_of_week ? day_of_week - first_day_of_week : day_of_week + 7 - first_day_of_week)
@@ -812,7 +983,8 @@ class Query < ActiveRecord::Base
     return sql
   end
 
-  def add_custom_fields_filters(custom_fields)
+  def add_custom_fields_filters(custom_fields, assoc=nil)
+    return unless custom_fields.present?
     @available_filters ||= {}
 
     custom_fields.select(&:is_filter?).each do |field|
@@ -839,7 +1011,29 @@ class Query < ActiveRecord::Base
       else
         options = { :type => :string, :order => 20 }
       end
-      @available_filters["cf_#{field.id}"] = options.merge({ :name => field.name, :format => field.field_format })
+      filter_id = "cf_#{field.id}"
+      filter_name = field.name
+      if assoc.present?
+        filter_id = "#{assoc}.#{filter_id}"
+        filter_name = l("label_attribute_of_#{assoc}", :name => filter_name)
+      end
+      @available_filters[filter_id] = options.merge({
+               :name => filter_name,
+               :format => field.field_format,
+               :field => field
+             })
+    end
+  end
+
+  def add_associations_custom_fields_filters(*associations)
+    fields_by_class = CustomField.where(:is_filter => true).group_by(&:class)
+    associations.each do |assoc|
+      association_klass = Issue.reflect_on_association(assoc).klass
+      fields_by_class.each do |field_class, fields|
+        if field_class.customized_class <= association_klass
+          add_custom_fields_filters(fields, assoc)
+        end
+      end
     end
   end
 
@@ -867,5 +1061,25 @@ class Query < ActiveRecord::Base
   # Returns a SQL clause for a date or datetime field using relative dates.
   def relative_date_clause(table, field, days_from, days_to)
     date_clause(table, field, (days_from ? Date.today + days_from : nil), (days_to ? Date.today + days_to : nil))
+  end
+
+  # Additional joins required for the given sort options
+  def joins_for_order_statement(order_options)
+    joins = []
+
+    if order_options
+      if order_options.include?('authors')
+        joins << "LEFT OUTER JOIN #{User.table_name} authors ON authors.id = #{Issue.table_name}.author_id"
+      end
+      order_options.scan(/cf_\d+/).uniq.each do |name|
+        column = available_columns.detect {|c| c.name.to_s == name}
+        join = column && column.custom_field.join_for_order_statement
+        if join
+          joins << join
+        end
+      end
+    end
+
+    joins.any? ? joins.join(' ') : nil
   end
 end

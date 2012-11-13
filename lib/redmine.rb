@@ -78,6 +78,8 @@ Redmine::AccessControl.map do |map|
     map.permission :add_issue_notes, {:issues => [:edit, :update], :journals => [:new], :attachments => :upload}
     map.permission :edit_issue_notes, {:journals => :edit}, :require => :loggedin
     map.permission :edit_own_issue_notes, {:journals => :edit}, :require => :loggedin
+    map.permission :view_private_notes, {}, :read => true, :require => :member
+    map.permission :set_notes_private, {}, :require => :member
     map.permission :move_issues, {:issues => [:bulk_edit, :bulk_update]}, :require => :loggedin
     map.permission :delete_issues, {:issues => :destroy}, :require => :member
     # Queries
@@ -116,7 +118,7 @@ Redmine::AccessControl.map do |map|
   map.project_module :wiki do |map|
     map.permission :manage_wiki, {:wikis => [:edit, :destroy]}, :require => :member
     map.permission :rename_wiki_pages, {:wiki => :rename}, :require => :member
-    map.permission :delete_wiki_pages, {:wiki => :destroy}, :require => :member
+    map.permission :delete_wiki_pages, {:wiki => [:destroy, :destroy_version]}, :require => :member
     map.permission :view_wiki_pages, {:wiki => [:index, :show, :special, :date_index]}, :read => true
     map.permission :export_wiki_pages, {:wiki => [:export]}, :read => true
     map.permission :view_wiki_edits, {:wiki => [:history, :diff, :annotate]}, :read => true

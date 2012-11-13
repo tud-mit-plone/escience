@@ -56,7 +56,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
   end
 
   context "#number_of_rows" do
-
     context "with one project" do
       should "return the number of rows just for that project"
     end
@@ -68,14 +67,12 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
     should "not exceed max_rows option" do
       p = Project.generate!
       5.times do
-        Issue.generate_for_project!(p)
+        Issue.generate!(:project => p)
       end
-
       create_gantt(p)
       @gantt.render
       assert_equal 6, @gantt.number_of_rows
       assert !@gantt.truncated
-
       create_gantt(p, :max_rows => 3)
       @gantt.render
       assert_equal 3, @gantt.number_of_rows
@@ -93,15 +90,14 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
     end
 
     should "count the number of issues without a version" do
-      @project.issues << Issue.generate_for_project!(@project, :fixed_version => nil)
+      @project.issues << Issue.generate!(:project => @project, :fixed_version => nil)
       assert_equal 2, @gantt.number_of_rows_on_project(@project)
     end
 
     should "count the number of issues on versions, including cross-project" do
       version = Version.generate!
       @project.versions << version
-      @project.issues << Issue.generate_for_project!(@project, :fixed_version => version)
-
+      @project.issues << Issue.generate!(:project => @project, :fixed_version => version)
       assert_equal 3, @gantt.number_of_rows_on_project(@project)
     end
   end
@@ -115,7 +111,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.trackers << @tracker
       @version = Version.generate!(:effective_date => (today + 7), :sharing => 'none')
       @project.versions << @version
-
       @issue = Issue.generate!(:fixed_version => @version,
                                :subject => "gantt#line_for_project",
                                :tracker => @tracker,
@@ -151,7 +146,9 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
       context "without assigned issues" do
         setup do
-          @version = Version.generate!(:effective_date => (today + 14), :sharing => 'none', :name => 'empty_version')
+          @version = Version.generate!(:effective_date => (today + 14),
+                                       :sharing => 'none',
+                                       :name => 'empty_version')
           @project.versions << @version
         end
 
@@ -180,7 +177,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
           @shared_version = Version.generate!(:sharing => 'system')
           p.versions << @shared_version
           # Reassign the issue to a shared version of another project
-
           @issue = Issue.generate!(:fixed_version => @shared_version,
                                    :subject => "gantt#assigned_to_shared_version",
                                    :tracker => @tracker,
@@ -200,9 +196,24 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       context "with subtasks" do
         setup do
           attrs = {:project => @project, :tracker => @tracker, :fixed_version => @version}
-          @child1 = Issue.generate!(attrs.merge(:subject => 'child1', :parent_issue_id => @issue.id, :start_date => (today - 1), :due_date => (today + 2)))
-          @child2 = Issue.generate!(attrs.merge(:subject => 'child2', :parent_issue_id => @issue.id, :start_date => today, :due_date => (today + 7)))
-          @grandchild = Issue.generate!(attrs.merge(:subject => 'grandchild', :parent_issue_id => @child1.id, :start_date => (today - 1), :due_date => (today + 2)))
+          @child1 = Issue.generate!(
+                       attrs.merge(:subject => 'child1',
+                                   :parent_issue_id => @issue.id,
+                                   :start_date => (today - 1),
+                                   :due_date => (today + 2))
+                      )
+          @child2 = Issue.generate!(
+                       attrs.merge(:subject => 'child2',
+                                   :parent_issue_id => @issue.id,
+                                   :start_date => today,
+                                   :due_date => (today + 7))
+                       )
+          @grandchild = Issue.generate!(
+                          attrs.merge(:subject => 'grandchild',
+                                      :parent_issue_id => @child1.id,
+                                      :start_date => (today - 1),
+                                      :due_date => (today + 2))
+                          )
         end
 
         should "indent subtasks" do
@@ -235,7 +246,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
                                :start_date => (today - 1),
                                :due_date => (today + 7))
       @project.issues << @issue
-
       @output_buffer = @gantt.lines
     end
 
@@ -307,16 +317,11 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       should "style overdue projects" do
         @project.enabled_module_names = [:issue_tracking]
         @project.versions << Version.generate!(:effective_date => (today - 1))
-
         assert @project.reload.overdue?, "Need an overdue project for this test"
         @output_buffer = @gantt.subject_for_project(@project, {:format => :html})
-
         assert_select 'div span.project-overdue'
       end
-
-
     end
-
     should "test the PNG format"
     should "test the PDF format"
   end
@@ -329,7 +334,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.trackers << @tracker
       @version = Version.generate!(:effective_date => (today - 1))
       @project.versions << @version
-
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#line_for_project",
                                          :tracker => @tracker,
@@ -350,7 +354,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
           @output_buffer = @gantt.line_for_project(@project, {:format => :html, :zoom => 4})
           assert_select "div.project.task_todo[style*=width:58px]", true, @output_buffer
         end
-
       end
 
       context "late line" do
@@ -381,7 +384,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         should "not appear if the starting point is off the gantt chart" do
           # Shift the date range of the chart
           @gantt.instance_variable_set('@date_from', today)
-
           @output_buffer = @gantt.line_for_project(@project, {:format => :html, :zoom => 4})
           assert_select "div.project.starting", false, @output_buffer
         end
@@ -396,10 +398,8 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         should "not appear if the starting point is off the gantt chart" do
           # Shift the date range of the chart
           @gantt.instance_variable_set('@date_to', (today - 14))
-
           @output_buffer = @gantt.line_for_project(@project, {:format => :html, :zoom => 4})
           assert_select "div.project.ending", false, @output_buffer
-
         end
 
         should "appear at the end of the date range" do
@@ -411,7 +411,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       context "status content" do
         should "appear at the far left, even if it's far in the past" do
           @gantt.instance_variable_set('@date_to', (today - 14))
-
           @output_buffer = @gantt.line_for_project(@project, {:format => :html, :zoom => 4})
           assert_select "div.project.label", /#{@project.name}/
         end
@@ -427,7 +426,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         end
       end
     end
-
     should "test the PNG format"
     should "test the PDF format"
   end
@@ -440,7 +438,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.trackers << @tracker
       @version = Version.generate!(:effective_date => (today - 1))
       @project.versions << @version
-
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#subject_for_version",
                                          :tracker => @tracker,
@@ -473,14 +470,12 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       should "style late versions" do
         assert @version.overdue?, "Need an overdue version for this test"
         @output_buffer = @gantt.subject_for_version(@version, {:format => :html})
-
         assert_select 'div span.version-behind-schedule'
       end
 
       should "style behind schedule versions" do
         assert @version.behind_schedule?, "Need a behind schedule version for this test"
         @output_buffer = @gantt.subject_for_version(@version, {:format => :html})
-
         assert_select 'div span.version-behind-schedule'
       end
     end
@@ -496,7 +491,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.trackers << @tracker
       @version = Version.generate!(:effective_date => (today + 7))
       @project.versions << @version
-
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#line_for_project",
                                          :tracker => @tracker,
@@ -517,7 +511,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
           @output_buffer = @gantt.line_for_version(@version, {:format => :html, :zoom => 4})
           assert_select "div.version.task_todo[style*=width:58px]", true, @output_buffer
         end
-
       end
 
       context "late line" do
@@ -548,7 +541,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         should "not appear if the starting point is off the gantt chart" do
           # Shift the date range of the chart
           @gantt.instance_variable_set('@date_from', today)
-
           @output_buffer = @gantt.line_for_version(@version, {:format => :html, :zoom => 4})
           assert_select "div.version.starting", false
         end
@@ -563,10 +555,8 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         should "not appear if the starting point is off the gantt chart" do
           # Shift the date range of the chart
           @gantt.instance_variable_set('@date_to', (today - 14))
-
           @output_buffer = @gantt.line_for_version(@version, {:format => :html, :zoom => 4})
           assert_select "div.version.ending", false
-
         end
 
         should "appear at the end of the date range" do
@@ -578,7 +568,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       context "status content" do
         should "appear at the far left, even if it's far in the past" do
           @gantt.instance_variable_set('@date_to', (today - 14))
-
           @output_buffer = @gantt.line_for_version(@version, {:format => :html, :zoom => 4})
           assert_select "div.version.label", /#{@version.name}/
         end
@@ -594,7 +583,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         end
       end
     end
-
     should "test the PNG format"
     should "test the PDF format"
   end
@@ -605,14 +593,12 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-
       @issue = Issue.generate!(:subject => "gantt#subject_for_issue",
                                :tracker => @tracker,
                                :project => @project,
                                :start_date => (today - 3),
                                :due_date => (today - 1))
       @project.issues << @issue
-
     end
 
     context ":html format" do
@@ -639,10 +625,8 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       should "style overdue issues" do
         assert @issue.overdue?, "Need an overdue issue for this test"
         @output_buffer = @gantt.subject_for_issue(@issue, {:format => :html})
-
         assert_select 'div span.issue-overdue'
       end
-
     end
     should "test the PNG format"
     should "test the PDF format"
@@ -677,7 +661,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
           @output_buffer = @gantt.line_for_issue(@issue, {:format => :html, :zoom => 4})
           assert_select "div.task_todo[style*=width:58px]", true, @output_buffer
         end
-
       end
 
       context "late line" do
@@ -706,7 +689,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
         should "not be the total done width if the chart starts after issue start date"  do
           create_gantt(@project, :date_from => (today - 5))
-
           @output_buffer = @gantt.line_for_issue(@issue, {:format => :html, :zoom => 4})
           assert_select "div.task_done[style*=left:0px]", true, @output_buffer
           assert_select "div.task_done[style*=width:8px]", true, @output_buffer
@@ -733,7 +715,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       context "status content" do
         should "appear at the far left, even if it's far in the past" do
           @gantt.instance_variable_set('@date_to', (today - 14))
-
           @output_buffer = @gantt.line_for_issue(@issue, {:format => :html, :zoom => 4})
           assert_select "div.task.label", true, @output_buffer
         end
@@ -754,7 +735,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @output_buffer = @gantt.line_for_issue(@issue, {:format => :html, :zoom => 4})
       assert_select "div.tooltip", /#{@issue.subject}/
     end
-
     should "test the PNG format"
     should "test the PDF format"
   end
@@ -766,5 +746,4 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
   context "#to_pdf" do
     should "be tested"
   end
-
 end

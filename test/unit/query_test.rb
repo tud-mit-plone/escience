@@ -18,6 +18,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class QueryTest < ActiveSupport::TestCase
+  include Redmine::I18n
+
   fixtures :projects, :enabled_modules, :users, :members,
            :member_roles, :roles, :trackers, :issue_statuses,
            :issue_categories, :enumerations, :issues,
@@ -411,6 +413,14 @@ class QueryTest < ActiveSupport::TestCase
     query.add_filter('due_date', '<t+', ['15'])
     issues = find_issues_with_query(query)
     assert !issues.empty?
+    issues.each {|issue| assert(issue.due_date <= (Date.today + 15))}
+  end
+
+  def test_operator_in_the_next_days
+    query = Query.new(:project => Project.find(1), :name => '_')
+    query.add_filter('due_date', '><t+', ['15'])
+    issues = find_issues_with_query(query)
+    assert !issues.empty?
     issues.each {|issue| assert(issue.due_date >= Date.today && issue.due_date <= (Date.today + 15))}
   end
 
@@ -418,6 +428,15 @@ class QueryTest < ActiveSupport::TestCase
     Issue.find(7).update_attribute(:due_date, (Date.today - 3))
     query = Query.new(:project => Project.find(1), :name => '_')
     query.add_filter('due_date', '>t-', ['3'])
+    issues = find_issues_with_query(query)
+    assert !issues.empty?
+    issues.each {|issue| assert(issue.due_date >= (Date.today - 3))}
+  end
+
+  def test_operator_in_the_past_days
+    Issue.find(7).update_attribute(:due_date, (Date.today - 3))
+    query = Query.new(:project => Project.find(1), :name => '_')
+    query.add_filter('due_date', '><t-', ['3'])
     issues = find_issues_with_query(query)
     assert !issues.empty?
     issues.each {|issue| assert(issue.due_date >= (Date.today - 3) && issue.due_date <= Date.today)}
@@ -577,6 +596,137 @@ class QueryTest < ActiveSupport::TestCase
     User.current = nil
   end
 
+  def test_filter_on_project_custom_field
+    field = ProjectCustomField.create!(:name => 'Client', :is_filter => true, :field_format => 'string')
+    CustomValue.create!(:custom_field => field, :customized => Project.find(3), :value => 'Foo')
+    CustomValue.create!(:custom_field => field, :customized => Project.find(5), :value => 'Foo')
+
+    query = Query.new(:name => '_')
+    filter_name = "project.cf_#{field.id}"
+    assert_include filter_name, query.available_filters.keys
+    query.filters = {filter_name => {:operator => '=', :values => ['Foo']}}
+    assert_equal [3, 5], find_issues_with_query(query).map(&:project_id).uniq.sort
+  end
+
+  def test_filter_on_author_custom_field
+    field = UserCustomField.create!(:name => 'Client', :is_filter => true, :field_format => 'string')
+    CustomValue.create!(:custom_field => field, :customized => User.find(3), :value => 'Foo')
+
+    query = Query.new(:name => '_')
+    filter_name = "author.cf_#{field.id}"
+    assert_include filter_name, query.available_filters.keys
+    query.filters = {filter_name => {:operator => '=', :values => ['Foo']}}
+    assert_equal [3], find_issues_with_query(query).map(&:author_id).uniq.sort
+  end
+
+  def test_filter_on_assigned_to_custom_field
+    field = UserCustomField.create!(:name => 'Client', :is_filter => true, :field_format => 'string')
+    CustomValue.create!(:custom_field => field, :customized => User.find(3), :value => 'Foo')
+
+    query = Query.new(:name => '_')
+    filter_name = "assigned_to.cf_#{field.id}"
+    assert_include filter_name, query.available_filters.keys
+    query.filters = {filter_name => {:operator => '=', :values => ['Foo']}}
+    assert_equal [3], find_issues_with_query(query).map(&:assigned_to_id).uniq.sort
+  end
+
+  def test_filter_on_fixed_version_custom_field
+    field = VersionCustomField.create!(:name => 'Client', :is_filter => true, :field_format => 'string')
+    CustomValue.create!(:custom_field => field, :customized => Version.find(2), :value => 'Foo')
+
+    query = Query.new(:name => '_')
+    filter_name = "fixed_version.cf_#{field.id}"
+    assert_include filter_name, query.available_filters.keys
+    query.filters = {filter_name => {:operator => '=', :values => ['Foo']}}
+    assert_equal [2], find_issues_with_query(query).map(&:fixed_version_id).uniq.sort
+  end
+
+  def test_filter_on_relations_with_a_specific_issue
+    IssueRelation.delete_all
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Issue.find(2))
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(3), :issue_to => Issue.find(1))
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=', :values => ['1']}}
+    assert_equal [2, 3], find_issues_with_query(query).map(&:id).sort
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=', :values => ['2']}}
+    assert_equal [1], find_issues_with_query(query).map(&:id).sort
+  end
+
+  def test_filter_on_relations_with_any_issues_in_a_project
+    IssueRelation.delete_all
+    with_settings :cross_project_issue_relations => '1' do
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Project.find(2).issues.first)
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(2), :issue_to => Project.find(2).issues.first)
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Project.find(3).issues.first)
+    end
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=p', :values => ['2']}}
+    assert_equal [1, 2], find_issues_with_query(query).map(&:id).sort
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=p', :values => ['3']}}
+    assert_equal [1], find_issues_with_query(query).map(&:id).sort
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=p', :values => ['4']}}
+    assert_equal [], find_issues_with_query(query).map(&:id).sort
+  end
+
+  def test_filter_on_relations_with_any_issues_not_in_a_project
+    IssueRelation.delete_all
+    with_settings :cross_project_issue_relations => '1' do
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Project.find(2).issues.first)
+      #IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(2), :issue_to => Project.find(1).issues.first)
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Project.find(3).issues.first)
+    end
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '=!p', :values => ['1']}}
+    assert_equal [1], find_issues_with_query(query).map(&:id).sort
+  end
+
+  def test_filter_on_relations_with_no_issues_in_a_project
+    IssueRelation.delete_all
+    with_settings :cross_project_issue_relations => '1' do
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Project.find(2).issues.first)
+      IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(2), :issue_to => Project.find(3).issues.first)
+      IssueRelation.create!(:relation_type => "relates", :issue_to => Project.find(2).issues.first, :issue_from => Issue.find(3))
+    end
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '!p', :values => ['2']}}
+    ids = find_issues_with_query(query).map(&:id).sort
+    assert_include 2, ids
+    assert_not_include 1, ids
+    assert_not_include 3, ids
+  end
+
+  def test_filter_on_relations_with_no_issues
+    IssueRelation.delete_all
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Issue.find(2))
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(3), :issue_to => Issue.find(1))
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '!*', :values => ['']}}
+    ids = find_issues_with_query(query).map(&:id)
+    assert_equal [], ids & [1, 2, 3]
+    assert_include 4, ids
+  end
+
+  def test_filter_on_relations_with_any_issues
+    IssueRelation.delete_all
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(1), :issue_to => Issue.find(2))
+    IssueRelation.create!(:relation_type => "relates", :issue_from => Issue.find(3), :issue_to => Issue.find(1))
+
+    query = Query.new(:name => '_')
+    query.filters = {"relates" => {:operator => '*', :values => ['']}}
+    assert_equal [1, 2, 3], find_issues_with_query(query).map(&:id).sort
+  end
+
   def test_statement_should_be_nil_with_no_filters
     q = Query.new(:name => '_')
     q.filters = {}
@@ -619,6 +769,20 @@ class QueryTest < ActiveSupport::TestCase
     q = Query.new
     column = q.groupable_columns.detect {|c| c.name == :cf_1}
     assert_nil column
+  end
+
+  def test_groupable_columns_should_include_user_custom_fields
+    cf = IssueCustomField.create!(:name => 'User', :is_for_all => true, :tracker_ids => [1], :field_format => 'user')
+
+    q = Query.new
+    assert q.groupable_columns.detect {|c| c.name == "cf_#{cf.id}".to_sym}
+  end
+
+  def test_groupable_columns_should_include_version_custom_fields
+    cf = IssueCustomField.create!(:name => 'User', :is_for_all => true, :tracker_ids => [1], :field_format => 'version')
+
+    q = Query.new
+    assert q.groupable_columns.detect {|c| c.name == "cf_#{cf.id}".to_sym}
   end
 
   def test_grouped_with_valid_column
@@ -797,8 +961,17 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   def test_label_for
+    set_language_if_valid 'en'
     q = Query.new
     assert_equal 'Assignee', q.label_for('assigned_to_id')
+  end
+
+  def test_label_for_fr
+    set_language_if_valid 'fr'
+    q = Query.new
+    s = "Assign\xc3\xa9 \xc3\xa0"
+    s.force_encoding('UTF-8') if s.respond_to?(:force_encoding)
+    assert_equal s, q.label_for('assigned_to_id')
   end
 
   def test_editable_by
@@ -993,11 +1166,11 @@ class QueryTest < ActiveSupport::TestCase
         User.add_to_project(@developer, @project, @developer_role)
         User.add_to_project(@boss, @project, [@manager_role, @developer_role])
         
-        @issue1 = Issue.generate_for_project!(@project, :assigned_to_id => @manager.id)
-        @issue2 = Issue.generate_for_project!(@project, :assigned_to_id => @developer.id)
-        @issue3 = Issue.generate_for_project!(@project, :assigned_to_id => @boss.id)
-        @issue4 = Issue.generate_for_project!(@project, :assigned_to_id => @guest.id)
-        @issue5 = Issue.generate_for_project!(@project)
+        @issue1 = Issue.generate!(:project => @project, :assigned_to_id => @manager.id)
+        @issue2 = Issue.generate!(:project => @project, :assigned_to_id => @developer.id)
+        @issue3 = Issue.generate!(:project => @project, :assigned_to_id => @boss.id)
+        @issue4 = Issue.generate!(:project => @project, :assigned_to_id => @guest.id)
+        @issue5 = Issue.generate!(:project => @project)
       end
 
       should "search assigned to for users with the Role" do

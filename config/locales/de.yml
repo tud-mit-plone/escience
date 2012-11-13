@@ -52,6 +52,9 @@ de:
       about_x_hours:
         one: 'etwa 1 Stunde'
         other: 'etwa %{count} Stunden'
+      x_hours:
+        one:   "1 Stunde"
+        other: "%{count} Stunden"
       x_days:
         one: '1 Tag'
         other: '%{count} Tagen'
@@ -81,9 +84,7 @@ de:
       format:
         unit: '€'
         format: '%n %u'
-        separator:
-        delimiter:
-        precision:
+        delimiter: ''
     percentage:
       format:
         delimiter: ""
@@ -93,7 +94,7 @@ de:
     human:
       format:
         delimiter: ""
-        precision: 1
+        precision: 3
       storage_units:
         format: "%n %u"
         units:
@@ -373,7 +374,7 @@ de:
   setting_date_format: Datumsformat
   setting_time_format: Zeitformat
   setting_cross_project_issue_relations: Aufgaben-Beziehungen zwischen Projekten erlauben
-  setting_issue_list_default_columns: Default-Spalten in der Aufgaben-Auflistung
+  setting_issue_list_default_columns: Standard-Spalten in der Aufgaben-Auflistung
   setting_emails_footer: E-Mail-Fußzeile
   setting_protocol: Protokoll
   setting_per_page_options: Objekte pro Seite
