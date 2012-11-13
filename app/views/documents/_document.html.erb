@@ -1,4 +1,4 @@
-<h3><%= link_to h(document.title), document_path(document) %></h3>
+<h3><%= link_to h(document.title)+" ("+document.attachments.size.to_s()+" "+l(:label_attachment_plural)+")", document_path(document) %></h3>
 <p><em><%= format_time(document.updated_on) %></em></p>
 
 <div class="wiki">

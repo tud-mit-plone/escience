@@ -1,19 +1,19 @@
+<% javascriptString = "" %>
 <div class="attachments">
 <% for attachment in attachments %>
-<p>
-  <% css_classes = Redmine::MimeType.main_mimetype_of(attachment.filename) %>
-  <% css_classes += " "+attachment.filename[(attachment.filename.rindex('.')+1)..-1] %>
-  <%= link_to_attachment attachment, :class => 'fancybox '+css_classes, :target => '_self', :rel=> 'group', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
-  <% if attachment.filename[(attachment.filename.rindex('.')+1)..-1] == "doc" %>
-    <%= link_to image_tag('magnifier.png'), 'http://docs.google.com/viewer?url='+ CGI::escape("http://141.57.9.94:3000"+url_for(attachment)).to_s()+"/"+attachment.filename, {'data-fancybox-type' => 'iframe', :class => 'fancybox fancybox.ajax', :target => '_self', :rel=> 'group'} -%>
+<div class="attachement">
+  <% mimetype = Redmine::MimeType.main_mimetype_of(attachment.filename) 
+     filetype = attachment.filename[(attachment.filename.rindex('.')+1)..-1] %>
+  <% if filetype == 'pdf' %>
+    <%= link_to attachment.filename.to_s(), '#showPDF', :class => 'fancybox '+filetype+' '+mimetype, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :onclick => 'new PDFObject({ url: "'+ url_for(attachment).to_s()+'/'+attachment.filename.to_s() +'"}).embed("showPDF");', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
+  <% else %>
+    <%= link_to_attachment attachment, :class => 'fancybox '+filetype+' '+mimetype, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
   <% end %>
   <% if attachment.is_text? %>
     <%= link_to image_tag('magnifier.png'),
                 :controller => 'attachments', :action => 'show',
                 :id => attachment, :filename => attachment.filename %>
   <% end %>
-  <%= h(" - #{attachment.description}") unless attachment.description.blank? %>
-  <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
   <% if options[:deletable] %>
     <%= link_to image_tag('delete.png'), attachment_path(attachment),
                                          :data => {:confirm => l(:text_are_you_sure)},
@@ -21,11 +21,19 @@
                                          :class => 'delete',
                                          :title => l(:button_delete) %>
   <% end %>
-  <% if options[:author] %>
-    <span class="author"><%= h(attachment.author) %>, <%= format_time(attachment.created_on) %></span>
+  <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
+  <% if options[:author] || !attachment.description.empty? %>
+  <% file_information = ''
+     file_information += '<div class="thumbnail">'+image_tag(url_for(attachment), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
+     file_information += '<i>'.html_safe+h(attachment.author)+', ' + format_time(attachment.created_on)+'</i>'.html_safe
+     file_information += h(" #{attachment.description}")+'<br/>'.html_safe unless attachment.description.empty?
+     javascriptString += 'addToolTip("#fileinfo_'+attachment.id.to_s+'",\''+file_information+'\');' %>
   <% end %>
-  </p>
+</div>
 <% end %>
+<div style="display: none">
+  <div tabindex="-1" style="width: 612px; height: 600px;" id="showPDF"></div>
+</div>
 
 <% if defined?(thumbnails) && thumbnails %>
   <% images = attachments.select(&:thumbnailable?) %>
@@ -38,3 +46,10 @@
   <% end %>
 <% end %>
 </div>
+ 
+<%= javascript_tag '
+  $(document).ready(function() {
+    '+javascriptString+'
+    var myPDF = new PDFObject({ url: "'+ url_for(attachments[1]).to_s()+"/"+attachments[1].filename.to_s() +'"}).embed("showPDF");
+  });' 
+%>
