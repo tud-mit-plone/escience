@@ -16,17 +16,26 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Tracker < ActiveRecord::Base
+
+  CORE_FIELDS_UNDISABLABLE = %w(project_id tracker_id subject description priority_id is_private).freeze
+  # Fields that can be disabled
+  # Other (future) fields should be appended, not inserted!
+  CORE_FIELDS = %w(assigned_to_id category_id fixed_version_id parent_issue_id start_date due_date estimated_hours done_ratio).freeze
+  CORE_FIELDS_ALL = (CORE_FIELDS_UNDISABLABLE + CORE_FIELDS).freeze
+
   before_destroy :check_integrity
   has_many :issues
-  has_many :workflows, :dependent => :delete_all do
+  has_many :workflow_rules, :dependent => :delete_all do
     def copy(source_tracker)
-      Workflow.copy(source_tracker, nil, proxy_association.owner, nil)
+      WorkflowRule.copy(source_tracker, nil, proxy_association.owner, nil)
     end
   end
 
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :custom_fields, :class_name => 'IssueCustomField', :join_table => "#{table_name_prefix}custom_fields_trackers#{table_name_suffix}", :association_foreign_key => 'custom_field_id'
   acts_as_list
+
+  attr_protected :field_bits
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -39,10 +48,6 @@ class Tracker < ActiveRecord::Base
 
   def <=>(tracker)
     position <=> tracker.position
-  end
-
-  def self.all
-    find(:all, :order => 'position')
   end
 
   # Returns an array of IssueStatus that are used

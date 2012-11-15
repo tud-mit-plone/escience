@@ -8,7 +8,7 @@
   <div id="options">
     <%= render :partial => 'options', :locals => {:options => @doodle.options} %>
   </div>
-  <p><%= link_to_function l(:label_add_options) do |page|
+  <p><%= link_to_function l(:label_add_options),nil do |page|
       page.insert_html :bottom, :options, :partial => 'options', :locals => {:options => nil}
     end %></p>
   <p><label><%= l(:label_doodle_should_answer) %></label>
