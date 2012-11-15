@@ -17,15 +17,19 @@ function addToolTip() {
   $(selector).qtip({content: {text: tooltip}, style: {classes: 'ui-tooltip-shadow ui-tooltip-green'}, position: {at:''+position+' center', my:''+direction+' center'}});
 }
 
-function toggleDivGroup(el) {
-  var div = Element.up(el, 'div.group');
-  var n = Element.next(div);
-  div.toggleClassName('open');
-  while (n != undefined && !n.hasClassName('group')) {
-    Element.toggle(n);
-    n = Element.next(n);
+function toggleDivGroup(el, num) {
+  var div = $(el).parent();
+  div.toggleClass('open');
+  var hiddenLinks = div.parent().find('div.listOfIssues.element_'+num);
+//  hiddenLinks.each(hiddenLinks, function(e,v) {$(v).toggle();});
+//  console.log(hiddenLinks);
+  hiddenLinks.toggle();
+
+/*  while (n != undefined && !n.hasClass('group')) {
+    n.toggle();
+    n = n.find(n);
   }
-}
+*/}
 
 function tagItForUs(el,text,id) {
   jQuery(el).tagit({
