@@ -62,16 +62,8 @@
                   } ) do |f| %>
     <fieldset><legend><%=l(:label_member_new)%></legend>
 
-    <p class="membership"><%= label_tag "principal_search", l(:label_principal_search) %><%= text_field_tag 'principal_search', nil %></p>
-    <%= observe_field(:principal_search,
-                 :frequency => 0.5,
-                 :update => :principals,
-                 :url => autocomplete_project_memberships_path(@project),
-                 :method => :get,
-                 :before => '$("principal_search").addClassName("ajax-loading")',
-                 :complete => '$("principal_search").removeClassName("ajax-loading")',
-                 :with => 'q')
-                  %>
+    <p><%= label_tag "principal_search", l(:label_principal_search) %><%= text_field_tag 'principal_search', nil %></p>
+    <%= javascript_tag "observeSearchfield('principal_search', 'principals', '#{ escape_javascript autocomplete_project_memberships_path(@project) }')" %>
 
     <div id="principals" class="membership">
       <%= principals_check_box_tags 'membership[user_ids][]', principals %>
