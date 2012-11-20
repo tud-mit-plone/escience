@@ -76,7 +76,7 @@ function contextMenuCreate() {
     var menu = document.createElement("div");
     menu.setAttribute("id", "context-menu");
     menu.setAttribute("style", "display:none;");
-    document.getElementById("content").appendChild(menu);
+    if ($("#content").length>0) $("#content").appendChild(menu);
   }
 }
 

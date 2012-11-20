@@ -21,15 +21,8 @@ function toggleDivGroup(el, num) {
   var div = $(el).parent();
   div.toggleClass('open');
   var hiddenLinks = div.parent().find('div.listOfIssues.element_'+num);
-//  hiddenLinks.each(hiddenLinks, function(e,v) {$(v).toggle();});
-//  console.log(hiddenLinks);
   hiddenLinks.toggle();
-
-/*  while (n != undefined && !n.hasClass('group')) {
-    n.toggle();
-    n = n.find(n);
-  }
-*/}
+}
 
 function tagItForUs(el,text,id) {
   jQuery(el).tagit({
