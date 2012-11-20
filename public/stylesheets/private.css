@@ -784,6 +784,7 @@ div .add_attachment:hover {
   display: block;
 }
 
+/* !---------- Dokumente -------------- */
 .ui-tooltip-content .thumbnail {
   text-align: center;
   padding: 5px;
@@ -795,4 +796,50 @@ div .add_attachment:hover {
 .ui-tooltip-content .thumbnail img {
   width: 100%;
   height: 100%;
+}
+
+/* !---------- Breadcrumb ------------ */
+.breadcrumb {
+  position: absolute;
+  margin-top: -55px !important;
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  z-index: 1000;
+}
+
+.breadcrumb a {text-decoration: none;}
+
+.breadcrumb li {
+  background: url('/images/breadcrumb_arrow_right.png') right center no-repeat;;
+  float: left;
+  padding-right: 16px; 
+}
+
+.breadcrumb li.last_element {background: none;}
+.breadcrumb li.has_submenu {background: url('/images/breadcrumb_arrow_right_green.png') right center no-repeat;}
+.breadcrumb li.has_submenu:hover {background: url('/images/breadcrumb_arrow_down_green.png') right center no-repeat;}
+.breadcrumb li:hover ul.bc_submenu {display: block;}
+
+ul.bc_submenu {
+  position: absolute;
+  display: none;
+  background-color: #CAED9E;
+  -moz-border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0 5px 5px 5px;
+  -khtml-border-radius: 0 5px 5px 5px;
+  border-radius: 0 5px 5px 5px;
+  border: 1px solid #90D93F;
+  padding: 5px !important;
+  font-size: 11px;
+}
+
+ul.bc_submenu a { color: #3F6219;}
+ul.bc_submenu a:hover {color: #0066CC;}
+ul.bc_submenu li:hover {background: url('/images/breadcrumb_arrow_right_green.png') left center no-repeat;}
+ul.bc_submenu li {
+  float: none;
+  white-space: nowrap;
+  background: url('/images/breadcrumb_arrow_right.png') left center no-repeat;;
+  padding-left: 15px;
+  padding-right: 0px;
 }

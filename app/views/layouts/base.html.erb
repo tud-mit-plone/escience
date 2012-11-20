@@ -151,7 +151,7 @@
   	    	</div>
   	    </div>
   	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
-	        <%#= render_flash_messages %>
+	        <%= breadcrumb_list({:max_crumblength => 80, :max_layerlenght => 120}) %>
 	        <%= yield %>
 	        <%= call_hook :view_layouts_base_content %>
 	        <div style="clear:both;"></div>

@@ -28,6 +28,59 @@ module ApplicationHelper
   extend Forwardable
   def_delegators :wiki_helper, :wikitoolbar_for, :heads_for_wiki_formatter
 
+
+  def breadcrumb_list(options = {:max_crumblength => 80, :max_layerblength => 120})
+    unless (@project.nil?)
+      parent_id = @project.parent_id
+      projectArray = Array.new {Array.new} 
+      breadcrumb = [@project]
+      while !(parent_id.nil?)
+           breadcrumb_project = Project.visible.where(:id => parent_id).first
+         breadcrumb << breadcrumb_project
+         parent_id = breadcrumb_project.parent_id
+      end
+      breadcrumb = breadcrumb.reverse
+      projectArray = Array.new
+      breadcrumb.each_with_index do |main_element, level|
+          projects = Project.visible.where(:parent_id => main_element.id).order(:name)
+        unless projects.nil?
+          projects.each do |project|
+            if projectArray[level].nil? 
+              projectArray[level] = [project]
+            else
+              projectArray[level] << project
+            end
+          end
+        end
+      end
+    end
+    s = '<ul class="breadcrumb">'
+    unless breadcrumb.nil?
+      breadcrumb.each_with_index do |currentProjectElement, level|
+         class_name = ''
+         class_name = 'has_submenu' if (!projectArray[level].nil? && (projectArray[level].length > 1 || projectArray[level][0] != @project))
+         class_name += ' last_element' if breadcrumb.length-1 == level 
+         s << '<li class="' + class_name + '">'
+         if currentProjectElement == @project
+           s << h(truncate(@project.name, :length => options[:max_crumblength]))
+         else
+           s << link_to_project(currentProjectElement, :truncate => options[:max_crumblength])
+         end
+         if (!projectArray[level].nil? && (projectArray[level].length > 1 || projectArray[level][0] != @project))
+           s << '<ul class="bc_submenu">'
+             projectArray[level].each do |project|
+               s << "<li>" + link_to_project(project, :truncate => options[:max_layerlenght]) + "</li>".html_safe unless project == @project
+             end
+           s << '</ul>'
+          end
+         s << '</li>'
+      end
+    end
+    s << '</ul>'
+    s.html_safe
+  end
+  
+  
   # Return true if user is authorized for controller/action, otherwise false
   def authorize_for(controller, action)
     User.current.allowed_to?({:controller => controller, :action => action}, @project)
@@ -166,7 +219,11 @@ module ApplicationHelper
       h(project)
     else
       url = {:controller => 'projects', :action => 'show', :id => project}.merge(options)
-      link_to(h(project), url, html_options)
+      if options[:truncate].nil?
+        link_to(h(project), url, html_options)
+      else
+        link_to(h(truncate(project.name, :length => options[:truncate])), url, html_options)
+      end
     end
   end
 
