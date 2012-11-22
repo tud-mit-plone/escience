@@ -8,7 +8,7 @@
       <li><%= link_to l(:button_edit), 
                                 {:action => 'edit', :id => @doodle},
                                 :accesskey => accesskey(:edit),
-                                :onclick => 'Element.show("edit-doodle"); Element.hide("preview"); return false;' %>
+                                :onclick => '$("#edit-doodle").show(); $("#preview").hide(); return false;' %>
       </li>
     <% end %>
     <%# if User.current.allowed_to?({:controller => 'doodles', :action => 'destroy'}, @project) || @doodle.author == User.current %>

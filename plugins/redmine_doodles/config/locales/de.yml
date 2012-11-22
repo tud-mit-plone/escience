@@ -11,6 +11,7 @@ de:
   label_doodle: "Umfrage"
   label_doodle_new: "Neue Umfrage"
   label_doodle_plural: "Umfragen"
+  label_doodle_answer: "Stimme abgeben"
   label_add_options: "Optionen hinzufügen"
   label_doodle_watchers: "Beobachter (von diesen Benutzern wird auch eine Antwort erwartet)"
   label_doodle_should_answer: "Benutzer die sich an dieser Umfrage beteiligen sollten"

@@ -3,7 +3,7 @@
     <%= link_to l(:label_doodle_new),
                             {:controller => 'doodles', :action => 'new', :project_id => @project},
                             :class => 'icon icon-add',
-                            :onclick => 'Element.show("add-doodle"); Form.Element.focus("doodle_title"); Element.hide("preview"); return false;' %>
+                            :onclick => '$("#add-doodle").show(); $("#doodle_title").focus(); $("#preview").hide(); return false;' %>
   <% end %>
 <%end%>
 
@@ -19,7 +19,7 @@
                      :remote => true, 
                      :with => "Form.serialize('doodle-form')"
                    }, :accesskey => accesskey(:preview) %> |
-<%= link_to l(:button_cancel), '#', :onclick => 'Element.hide("add-doodle")' %>
+<%= link_to l(:button_cancel), '#', :onclick => '$("#add-doodle").hide()' %>
 <% end if @project %>
 </div>
 <div id="preview" class="doodle">
