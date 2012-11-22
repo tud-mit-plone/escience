@@ -35,20 +35,22 @@ module ApplicationHelper
       projectArray = Array.new {Array.new} 
       breadcrumb = [@project]
       while !(parent_id.nil?)
-           breadcrumb_project = Project.visible.where(:id => parent_id).first
-         breadcrumb << breadcrumb_project
-         parent_id = breadcrumb_project.parent_id
+        breadcrumb_project = Project.visible.where(:id => parent_id).first
+        breadcrumb << breadcrumb_project
+        parent_id = breadcrumb_project.parent_id
       end
       breadcrumb = breadcrumb.reverse
       projectArray = Array.new
       breadcrumb.each_with_index do |main_element, level|
-          projects = Project.visible.where(:parent_id => main_element.id).order(:name)
+        projects = Project.visible.where(:parent_id => main_element.id).order(:name)
         unless projects.nil?
           projects.each do |project|
-            if projectArray[level].nil? 
-              projectArray[level] = [project]
-            else
-              projectArray[level] << project
+            unless breadcrumb.include?(project)
+              if projectArray[level].nil? 
+                projectArray[level] = [project]
+              else
+                projectArray[level] << project
+              end
             end
           end
         end
@@ -69,7 +71,7 @@ module ApplicationHelper
          if (!projectArray[level].nil? && (projectArray[level].length > 1 || projectArray[level][0] != @project))
            s << '<ul class="bc_submenu">'
              projectArray[level].each do |project|
-               s << "<li>" + link_to_project(project, :truncate => options[:max_layerlenght]) + "</li>".html_safe unless project == @project
+               s << "<li>" + link_to_project(project, :truncate => options[:max_layerlenght]) + "</li>".html_safe
              end
            s << '</ul>'
           end
@@ -1283,7 +1285,7 @@ module ApplicationHelper
 
   def calendar_for(field_id)
     include_calendar_headers_tags
-    image_tag("calendar.png", {:id => "#{field_id}_trigger",:class => "calendar-trigger"}) +
+#    image_tag("calendar.png", {:id => "#{field_id}_trigger",:class => "calendar-trigger"}) +
     javascript_tag("$(function() { $('##{field_id}').datepicker(datepickerOptions); });")
   end
 
@@ -1298,7 +1300,7 @@ module ApplicationHelper
         start_of_week = start_of_week.to_i % 7
 
         tags = javascript_tag(
-                   "var datepickerOptions={dateFormat: '#{t("date.formats.default")}', firstDay: #{start_of_week}, " +
+                   "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', firstDay: #{start_of_week}, " +
                      "showOn: 'button', buttonImageOnly: true, buttonImage: '" + 
                      path_to_image('/images/calendar.png') +
                      "', showButtonPanel: true};")
@@ -1306,6 +1308,7 @@ module ApplicationHelper
         unless jquery_locale == 'en'
           tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
         end
+        tags << stylesheet_link_tag('jquery/jquery-ui-custom')
         tags
       end
     end
