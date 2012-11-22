@@ -50,4 +50,8 @@
     <%= render :partial => 'issues/sidebar' %>
 <% end %>
 
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'calendar' %>
+<% end %>
+
 <% html_title(l(:label_calendar)) -%>

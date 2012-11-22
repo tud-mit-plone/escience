@@ -12,6 +12,7 @@ de:
       default: "%d.%m.%Y"
       short: "%e. %b"
       long: "%e. %B %Y"
+      jquery: "dd.mm.yy"
 
     day_names: [Sonntag, Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag]
     abbr_day_names: [So, Mo, Di, Mi, Do, Fr, Sa]
