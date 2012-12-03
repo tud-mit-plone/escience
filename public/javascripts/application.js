@@ -370,7 +370,8 @@ function format_fileSize(size) {
 }
 
 function showTab(name) {
-  $('div#content .tab-content').hide();
+
+  $('div#main .tab-content').hide();
   $('div.tabs a').removeClass('selected');
   $('#tab-content-' + name).show();
   $('#tab-' + name).addClass('selected');
