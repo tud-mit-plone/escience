@@ -31,7 +31,7 @@ module WatchersHelper
            :object_type => object.class.to_s.underscore,
            :object_id => object.id}
     link_to((watched ? l(:button_unwatch) : l(:button_watch)), url,
-            :remote => true, :method => 'post', :href => url_for(url))
+            :remote => true, :method => 'post', :href => url_for(url), :class=>"#{object.class.to_s.underscore}-#{object.id}-watcher")
     # , :class => (watched ? 'icon icon-fav' : 'icon icon-fav-off') --> removed for eScience
   end
 
