@@ -202,7 +202,7 @@ Redmine::MenuManager.map :admin_menu do |menu|
 end
 
 Redmine::MenuManager.map :private_menu do |menu|
-  menu.push :my_account, {:controller => 'my', :action => 'account'}, :caption => :label_my_account
+  menu.push :my_account, {:controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => :label_my_account
   menu.push :my, { :controller => 'my', :action => 'page' },:caption => :label_organisation, :if => Proc.new { User.current.logged? }
   menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :caption => :label_project_plural
   menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {"value_behind"=>Proc.new {"#{UserMessage.get_number_of_messages}"},"text" => :label_usermessage }, :html => {:class => "newmessage"}
@@ -212,7 +212,7 @@ Redmine::MenuManager.map :private_menu do |menu|
 #  menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => {"value_behind"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => :label_mymessage, :html => {:class => "newmessage"}
   menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => :label_calendar
-  menu.push :my_members, {:controller => 'my', :action => 'members'}, :caption => :label_my_members
+  menu.push :my_members, {:controller => 'my', :action => 'members', :sub => 'my_members'}, :caption => :label_my_members
 end
 
 Redmine::MenuManager.map :project_menu do |menu|
