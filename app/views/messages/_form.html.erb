@@ -4,7 +4,7 @@
 <div class="box">
 <!--[form:message]-->
 <p><label for="message_subject"><%= l(:field_subject) %></label><br />
-<%= f.text_field :subject, :size => 120, :id => "message_subject" %>
+<%= f.text_field :subject, :size => 109, :id => "message_subject", :style => "width:565px" %>
 
 <% unless replying %>
   <% if @message.safe_attribute? 'sticky' %>
