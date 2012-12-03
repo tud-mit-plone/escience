@@ -32,10 +32,10 @@
      tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
   %>
   <%= javascript_tag '
-  function externalLinks() { return $(\'a[href^=http]:not("[href^=\\\'\' + document.domain + \'\\\']"):not(":has(\\\'img\\\')")\');}
+  function externalLinks() {return $("a[href^=\'http\']:not([href^=\'http://" + window.location.host + "\'])");}
   
   $(document).ready(function() {
-    externalLinks().attr({target: "_blank"})
+    externalLinks().attr({target: "_blank"});
     addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
     addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'");
     addToolTip(".sidebar .user-messages","'+"#{tooltip_user_messages}"+'");
