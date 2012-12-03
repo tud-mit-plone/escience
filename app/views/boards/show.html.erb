@@ -1,5 +1,4 @@
-<%= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)) %>
-
+<%#= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)) %>
 <% content_for :sidebar_right do %>
   <% if authorize_for('messages', 'new') %>
   	<%= link_to_if_authorized l(:label_message_new),

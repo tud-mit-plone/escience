@@ -1,4 +1,4 @@
-<%= board_breadcrumb(@message) %>
+<%#= board_breadcrumb(@message) %>
 
 <% content_for :sidebar_right do %>
   <ul>
@@ -9,7 +9,6 @@
           {:action => 'quote', :id => @topic},
           :remote => true,
           :method => 'get',
-          :class => 'icon icon-comment',
           :remote => true) if !@topic.locked? && authorize_for('messages', 'reply') %></li>
     <% end %>
     <% if @message.editable_by?(User.current) %>
