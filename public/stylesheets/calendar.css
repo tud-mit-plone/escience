@@ -203,8 +203,8 @@ img.calendar-trigger {
 }
 
 div.calendar {
-  position: relative; 
-  z-index: 60;
+//  position: relative; 
+//  z-index: 60;
   background-color: #FFFFFF;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
