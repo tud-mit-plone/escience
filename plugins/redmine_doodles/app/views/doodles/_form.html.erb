@@ -8,15 +8,18 @@
   <div id="options">
     <%= render :partial => 'options', :locals => {:options => @doodle.options} %>
   </div>
-  <p><%= link_to_function l(:label_add_options),nil do |page|
-      page.insert_html :bottom, :options, :partial => 'options', :locals => {:options => nil}
-    end %></p>
-  <p><label><%= l(:label_doodle_should_answer) %></label>
-  <% @project.users.sort.each do |user| -%>
-  <label class="floating"><%= check_box_tag 'doodle[should_answer_ids][]', user.id %> <%=h user %></label>
-  <%# end -%>
+  <% 
+    content = ::ActiveSupport::JSON.encode(render({:partial => 'doodles/options', :locals => {:calender => false}}))
+    insertElement = "el = $(#{content});$('#options').append(el);el.find('input').datepicker(datepickerOptions);"    
+  %>
+  <p><%= link_to_function(l(:label_add_options), insertElement) %></p>
+  <label><%= l(:label_doodle_should_answer) %>:</label><br />
+  <p>
+    <% @project.users.sort.each do |user| -%>
+      <label class="floating"><%= check_box_tag 'doodle[should_answer_ids][]', user.id %> <%=h user %></label><br />
+    <%# end -%>
+    <% end %>
   </p>
-  <% end %>
 </div>
 
 <%= wikitoolbar_for 'doodle_description' %>

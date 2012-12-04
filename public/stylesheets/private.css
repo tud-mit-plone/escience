@@ -35,7 +35,7 @@ fieldset label {
 	
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   display: inline-block;
-  padding: 4px 6px;
+  padding: 2px 4px;
 //  margin-bottom: 10px;
   font-size: 12px;
   line-height: 16px;
@@ -45,7 +45,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
      -moz-border-radius: 4px;
           border-radius: 4px;
   background-color: #ffffff;
-  border: 1px solid #F0F0F0;
+  border: 1px solid #E0E0E0;
 }
 
 textarea {
@@ -504,13 +504,10 @@ select#values_project_id_1 {
 }
 
 #attachments_fields .cover_input {
-  position: relative;
-  z-index: 10;
   width: 45%;
 }
 
 #attachments_fields .fileupload {
-  z-index: 10;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
@@ -827,6 +824,7 @@ div .add_attachment:hover {
 ul.bc_submenu {
   position: absolute;
   display: none;
+  z-index: 11;
   background-color: #ffffff;
   -moz-border-radius: 0 5px 5px 5px;
   -webkit-border-radius: 0 5px 5px 5px;

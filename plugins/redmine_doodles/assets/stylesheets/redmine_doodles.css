@@ -27,6 +27,10 @@
   font-size: .9em;
 }
 
+#edit-doodle #options p {
+  margin: 2px 0; 
+}
+
 .doodle.details .description {
   border-top: 1px solid #aaaaaa;
   padding-top: 10px;
