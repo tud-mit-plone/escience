@@ -3,10 +3,12 @@ require 'redmine'
 Rails.configuration.to_prepare do
   require_dependency 'project'
   require_dependency 'mailer'
+  require_dependency 'user'
   require 'redmine_doodles/patch_redmine_classes'
   
   Project.send(:include, ::Plugin::Doodles::Project)
   Mailer.send(:include, ::Plugin::Doodles::Mailer)
+  User.send(:include, ::Plugin::Doodles::User)
 end
 
 require_dependency 'redmine_doodles/view_hooks'

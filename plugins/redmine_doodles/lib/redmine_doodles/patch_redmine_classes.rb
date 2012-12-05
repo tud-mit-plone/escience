@@ -17,6 +17,22 @@ module Plugin
       end
     end
     
+    module User
+      module ClassMethods
+      end
+      
+      module InstanceMethods
+      end
+      
+      def self.included(receiver)
+        receiver.extend         ClassMethods
+        receiver.send :include, InstanceMethods
+        receiver.class_eval do
+          has_and_belongs_to_many :should_answer, :class_name => 'Doodle', :join_table => "#{table_name_prefix}users_should_answer_doodles#{table_name_suffix}"
+        end
+      end
+    end
+
     module Mailer
       module ClassMethods
       end
