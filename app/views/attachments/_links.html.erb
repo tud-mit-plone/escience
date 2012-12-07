@@ -47,9 +47,4 @@
 <% end %>
 </div>
  
-<%= javascript_tag '
-  $(document).ready(function() {
-    '+javascriptString+'
-    var myPDF = new PDFObject({ url: "'+ url_for(attachments[1]).to_s()+"/"+attachments[1].filename.to_s() +'"}).embed("showPDF");
-  });' 
-%>
+<%= javascript_tag ''%>
