@@ -14,6 +14,7 @@ class Doodle < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'doodles', :action => 'show', :id => o.id}}
   acts_as_activity_provider :find_options => {:include => [:project, :author]},
                             :author_key => :author_id
+  acts_as_searchable :columns => ['doodles.title', 'doodles.options', 'doodles.description'], :include => :project
   
   validates :title, :options, :presence => true
   
@@ -58,7 +59,7 @@ class Doodle < ActiveRecord::Base
     !user.nil? && user.allowed_to?(:view_doodles, project)
   end
 
-  def has_answered?(user=User.current)
+  def user_has_answered?(user=User.current)
     !user.nil? && !responses.find_by_author_id(user.id).nil?
   end
     

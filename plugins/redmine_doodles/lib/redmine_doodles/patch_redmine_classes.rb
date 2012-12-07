@@ -23,11 +23,11 @@ module Plugin
       
       module InstanceMethods
         def open_answers
-          @open_answers = Array.new
+          open_answers = Array.new
           self.should_answer.each do |doodle|
-            @open_answers << doodle unless doodle.has_answered? 
+            open_answers << doodle unless doodle.user_has_answered? 
           end
-          return @open_answers
+          return open_answers
         end
       end
       

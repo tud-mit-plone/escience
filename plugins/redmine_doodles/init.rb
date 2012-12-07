@@ -13,6 +13,9 @@ end
 
 require_dependency 'redmine_doodles/view_hooks'
 
+Redmine::Search.map do |search|
+  search.register :doodles
+end
 Redmine::Plugin.register :redmine_doodles do
   name 'Redmine Doodles plugin'
   author 'Felix Schaefer'
