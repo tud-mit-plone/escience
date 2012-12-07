@@ -1,9 +1,9 @@
 class DoodlesController < ApplicationController
   unloadable
   
-  before_filter :find_project, :except => [:show, :destroy, :update, :lock, :edit]
+  before_filter :find_project, :except => [:show, :destroy, :update, :lock, :edit, :list]
   before_filter :find_doodle, :only => [:show, :destroy, :update, :lock, :edit]
-  before_filter :authorize
+  before_filter :authorize, :except => [:list]
   
   #verify :method => :post, :only => [:lock], :redirect_to => { :action => :show }
   
@@ -68,6 +68,17 @@ class DoodlesController < ApplicationController
     end
   end
   
+  def list
+    if params[:unanswered]
+      @doodles = User.current.open_answers
+    else
+      @doodles = User.current.should_answer
+    end
+    if @doodles.length == 1
+      redirect_to :action => 'show', :id => @doodles[0]
+    end
+  end
+
   def lock
     @doodle = Doodle.find(params[:id])
     @doodle.update_attribute :locked, params[:locked]

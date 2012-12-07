@@ -598,6 +598,8 @@ en:
   label_my_page_block: Displayed items
   label_my_members: Contact list
   label_my_inbox: Inbox
+  label_my_doodles: Survey
+  label_my_doodles_plural: Surveys  
   label_user_messages: Own messages
   label_user_messages_new: New message
   label_user_messages_reply: Answer message

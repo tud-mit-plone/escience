@@ -9,6 +9,9 @@
 
 #custom routes for this plugin
 RedmineApp::Application.routes.draw do
+#  match 'users/doodles', :controller => 'doodles', :action => 'list'
+#  match 'users/:id/doodles', :controller => 'doodles', :action => 'list'
+  match 'doodles', :controller => 'doodles', :action => 'list'
   shallow do
     resources :projects, :only => [] do
       resources :doodles do

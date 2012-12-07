@@ -22,13 +22,20 @@ module Plugin
       end
       
       module InstanceMethods
+        def open_answers
+          @open_answers = Array.new
+          self.should_answer.each do |doodle|
+            @open_answers << doodle unless doodle.has_answered? 
+          end
+          return @open_answers
+        end
       end
       
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval do
-          has_and_belongs_to_many :should_answer, :class_name => 'Doodle', :join_table => "#{table_name_prefix}users_should_answer_doodles#{table_name_suffix}"
+          has_and_belongs_to_many :should_answer, :class_name => 'Doodle', :join_table => "#{table_name_prefix}users_should_answer_doodles#{table_name_suffix}", :conditions => ["doodles.expiry_date >= ?", Time.now]
         end
       end
     end

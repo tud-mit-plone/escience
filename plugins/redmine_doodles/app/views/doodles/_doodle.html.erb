@@ -14,12 +14,10 @@
     </tr>
   </thead>
   <tbody>
-
     <% @responses.each do |res| %>
       <tr class="<%= cycle('odd', 'even') %><%= ' current' if res.author == User.current %>">
         <!--td class="gravatar"><%= avatar(res.author, :size => "24") %></td-->
         <td class="answeree"><%= h res.author.name %></td>
-        <% p res.answers_with_css_classes %>
       <% res.answers_with_css_classes.each_with_index do |answer_with_css,i| %>
         <% unless @doodle.options[i].nil? %>
         <% answer, css = *answer_with_css %>

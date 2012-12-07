@@ -57,7 +57,11 @@ class Doodle < ActiveRecord::Base
   def visible?(user=User.current)
     !user.nil? && user.allowed_to?(:view_doodles, project)
   end
-  
+
+  def has_answered?(user=User.current)
+    !user.nil? && !responses.find_by_author_id(user.id).nil?
+  end
+    
   def users_missing_answer
     @users_missing_answer ||= should_answer - responses.collect(&:author)
   end
