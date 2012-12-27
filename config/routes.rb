@@ -273,6 +273,8 @@ RedmineApp::Application.routes.draw do
   match 'attachments/thumbnail/:id(/:size)', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get, :size => /\d+/
   resources :attachments, :only => [:show, :destroy]
 
+  resources :contents, :only => [:show, :destroy]
+  
   resources :groups do
     member do
       get 'autocomplete_for_user'

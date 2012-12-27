@@ -24,7 +24,7 @@ class SettingTest < ActiveSupport::TestCase
   end
 
   def test_read_default
-    assert_equal "Redmine", Setting.app_title
+    assert_equal "eScience", Setting.app_title
     assert Setting.self_registration?
     assert !Setting.login_required?
   end

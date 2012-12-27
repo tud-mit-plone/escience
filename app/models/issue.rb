@@ -390,12 +390,9 @@ class Issue < ActiveRecord::Base
   def safe_attributes=(attrs, user=User.current)
     return unless attrs.is_a?(Hash)
 
-    # User can change issue attributes only if he has :edit permission or if a workflow transition is allowed
-    attrs = delete_unsafe_attributes(attrs, user)
-    return if attrs.empty?
+    attrs = attrs.dup
 
     # Project and Tracker must be set before since new_statuses_allowed_to depends on it.
-    # ask Mathias what to do about this
     if (p = attrs.delete('project_id')) && safe_attribute?('project_id')
       if allowed_target_projects(user).collect(&:id).include?(p.to_i)
         self.project_id = p

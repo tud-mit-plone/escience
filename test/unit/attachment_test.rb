@@ -175,7 +175,7 @@ class AttachmentTest < ActiveSupport::TestCase
         Attachment.attach_files(issue,
           '1' => {
             'file' => uploaded_test_file('testfile.txt', 'text/plain'),
-            'description' => 'test'
+            'description' => 'test', 'meta_information' => ["information"]
           })
       end
 
@@ -194,8 +194,8 @@ class AttachmentTest < ActiveSupport::TestCase
       with_settings(:attachment_max_size => 0) do
         @project = Project.find(1)
         response = Attachment.attach_files(@project, {
-                                             '1' => {'file' => mock_file, 'description' => 'test'},
-                                             '2' => {'file' => mock_file, 'description' => 'test'}
+                                             '1' => {'file' => mock_file, 'description' => 'test', 'meta_information' => "meta_information"},
+                                             '2' => {'file' => mock_file, 'description' => 'test', 'meta_information' => "meta_information"}
                                            })
 
         assert response[:unsaved].present?

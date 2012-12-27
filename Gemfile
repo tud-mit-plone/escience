@@ -94,6 +94,19 @@ Dir.glob File.expand_path("../plugins/*/Gemfile", __FILE__) do |file|
   instance_eval File.read(file)
 end
 
+group :development, :test do
+    gem 'railroady'
+end
+
 gem "thin"
 gem "SyslogLogger"  # in production mode log to syslog
 gem "acts-as-taggable-on"
+#piwik analytics 
+gem 'piwik_analytics', '~> 1.0.0'
+#gem 'turbolinks'
+#pry console no need for readline 
+gem "pry"
+#dropbox plugin
+gem "oauth"
+gem  "multipart-post"
+gem "dropbox-sdk"

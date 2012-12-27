@@ -7,7 +7,7 @@
   <% if filetype == 'pdf' %>
     <%= link_to attachment.filename.to_s(), '#showPDF', :class => 'fancybox '+filetype+' '+mimetype, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :onclick => 'new PDFObject({ url: "'+ url_for(attachment).to_s()+'/'+attachment.filename.to_s() +'"}).embed("showPDF");', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
   <% else %>
-    <%= link_to_attachment attachment, :class => 'fancybox '+filetype+' '+mimetype, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
+    <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
   <% end %>
   <% if attachment.is_text? %>
     <%= link_to image_tag('magnifier.png'),
@@ -46,5 +46,13 @@
   <% end %>
 <% end %>
 </div>
- 
-<%= javascript_tag ''%>
+
+<% unless attachments[1].nil? %>
+<%= javascript_tag '
+  $(document).ready(function() {
+    '+javascriptString+'
+    var myPDF = new PDFObject({ url: "'+ url_for(attachments[1]).to_s()+"/"+attachments[1].filename.to_s() +'"}).embed("showPDF");
+  });' 
+%>
+<%end%>
+
