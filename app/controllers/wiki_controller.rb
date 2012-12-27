@@ -167,6 +167,7 @@ class WikiController < ApplicationController
       return
     end
     @content = @page.content_for_version(params[:version])
+
     if User.current.allowed_to?(:export_wiki_pages, @project)
       if params[:format] == 'pdf'
         send_data(wiki_page_to_pdf(@page, @project), :type => 'application/pdf', :filename => "#{@page.title}.pdf")
@@ -255,6 +256,7 @@ class WikiController < ApplicationController
     end
     @content.author = User.current
     @page.content = @content
+
     if @page.save
       attachments = Attachment.attach_files(@page, params[:attachments])
       render_attachment_warning_if_needed(@page)

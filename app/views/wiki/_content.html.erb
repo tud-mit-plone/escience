@@ -2,3 +2,10 @@
   <%= textilizable content, :text, :attachments => content.page.attachments,
         :edit_section_links => (@sections_editable && {:controller => 'wiki', :action => 'edit', :project_id => @page.project, :id => @page.title}) %>
 </div>
+<h3>content from ContentContainer</h3>
+<br />
+<div class="new">
+  <% content.page.content_containers.each do |c| %>
+    <%= textilizable c, :content %>
+  <% end %>
+</div> 

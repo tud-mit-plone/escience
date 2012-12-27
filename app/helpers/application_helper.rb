@@ -1006,7 +1006,7 @@ module ApplicationHelper
   # Adds ids and links to headings unless options[:headings] is set to false
   def parse_headings(text, project, obj, attr, only_path, options)
     return if options[:headings] == false
-
+    text = text.to_s.force_encoding("UTF-8")
     text.gsub!(HEADING_RE) do
       level, attrs, content = $2.to_i, $3, $4
       item = strip_tags(content).strip
@@ -1303,7 +1303,7 @@ module ApplicationHelper
                    "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', firstDay: #{start_of_week}, " +
                      "showOn: 'button', buttonImageOnly: true, buttonImage: '" + 
                      path_to_image('/images/calendar.png') +
-                     "', showButtonPanel: true, constrainInput: false};")
+                     "', showButtonPanel: true};")
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
         unless jquery_locale == 'en'
           tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
