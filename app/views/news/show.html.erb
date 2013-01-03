@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <h1><%= l(:label_news) %></h1>
 <% content_for :sidebar_right do %>
   <%= link_to l(:button_back), {:action => 'index', :project_id => @project}, :class => 'icon icon-history' %>
@@ -24,8 +23,19 @@
                                       :html => { :id => 'news-form', :multipart => true, :method => :put } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
   <%= submit_tag l(:button_save) %>
+
 <%= preview_link preview_news_path(:project_id => @project, :id => @news), 'news-form' %> |
 <%= link_to l(:button_cancel), "#", :onclick => '$("#edit-news").hide(); return false;' %>
+
+  <%= link_to l(:label_preview),
+                     { :url => preview_news_path(:project_id => @project),
+                       :method => 'get',
+                       :update => 'preview',
+                       :remote => true,
+                       :with => "Form.serialize('news-form')"
+                     }, :accesskey => accesskey(:preview) %> |
+  <%= link_to l(:button_cancel), "#", :onclick => 'Element.hide("edit-news"); return false;' %>
+
   <% end %>
 </div>
 <% end %>
@@ -75,7 +85,6 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
 <% end %>
-=======
 <div class="contextual">
 <%= watcher_tag(@news, User.current) %>
 <%= link_to(l(:button_edit),
@@ -138,4 +147,3 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
 <% end %>
->>>>>>> 69c0e23d2a17c308d162bc26d3697314a356b665
