@@ -36,6 +36,9 @@ module ApplicationHelper
       breadcrumb = [@project]
       while !(parent_id.nil?)
         breadcrumb_project = Project.visible.where(:id => parent_id).first
+        if breadcrumb_project.nil?
+          breadcrumb_project = Project.find(parent_id)
+        end
         breadcrumb << breadcrumb_project
         parent_id = breadcrumb_project.parent_id
       end
@@ -66,7 +69,11 @@ module ApplicationHelper
          if currentProjectElement == @project
            s << h(truncate(@project.name, :length => options[:max_crumblength]))
          else
-           s << link_to_project(currentProjectElement, :truncate => options[:max_crumblength])
+           if User.current.member_of?(currentProjectElement)
+             s << link_to_project(currentProjectElement, :truncate => options[:max_crumblength])
+           else
+             s << truncate(currentProjectElement.name, :length => options[:max_crumblength])
+           end
          end
          if (!projectArray[level].nil? && (projectArray[level].length > 1 || projectArray[level][0] != @project))
            s << '<ul class="bc_submenu">'
@@ -680,6 +687,7 @@ module ApplicationHelper
       raise ArgumentError, 'invalid arguments to textilizable'
     end
     return '' if text.blank?
+    
     project = options[:project] || @project || (obj && obj.respond_to?(:project) ? obj.project : nil)
     only_path = options.delete(:only_path) == false ? false : true
 
@@ -1045,7 +1053,11 @@ module ApplicationHelper
   def catch_macros(text)
     macros = {}
     text.gsub!(MACROS_RE) do
-      all, macro = $1, $4.downcase
+      unless $4.nil?
+        all, macro = $1, $4.downcase
+      else
+        all, macro = $1, ''
+      end
       if macro_exists?(macro) || all =~ MACRO_SUB_RE
         index = macros.size
         macros[index] = all
