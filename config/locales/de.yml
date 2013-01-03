@@ -910,7 +910,7 @@ de:
   button_edit: Bearbeiten
   button_edit_associated_wikipage: "Zugehörige Wikiseite bearbeiten: %{page_title}"
   button_add: Hinzufügen
-  button_change: Wechseln
+  button_change: Ändern
   button_apply: Anwenden
   button_clear: Zurücksetzen
   button_lock: Sperren
@@ -1000,7 +1000,7 @@ de:
   text_load_default_configuration: Standard-Konfiguration laden
   text_status_changed_by_changeset: "Status geändert durch Changeset %{value}."
   text_issues_destroy_confirmation: 'Sind Sie sicher, dass Sie die ausgewählten Arbeitsansweisungen löschen möchten?'
-  text_select_project_modules: 'Bitte wählen Sie die Module aus, die in diesem Projekt aktiviert sein sollen:'
+  text_select_project_modules: 'Bitte wählen Sie die aktiven Module dieses Projekts aus'
   text_default_administrator_account_changed: Administrator-Kennwort geändert
   text_file_repository_writable: Verzeichnis für Dateien beschreibbar
   text_plugin_assets_writable: Verzeichnis für Plugin-Assets beschreibbar

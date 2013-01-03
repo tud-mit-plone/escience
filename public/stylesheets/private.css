@@ -290,7 +290,15 @@ select#membership_project_id {
 	.action-members fieldset {
 	  padding-top: 3px;
 	}
-
+	
+	#tab-content-members .member.edit {
+  	background-color: #F9F9F9;
+	}
+	#tab-content-members .member.edit td {
+	  padding-bottom: 5px;
+	  padding-top: 5px;
+  }
+	  	
 	.action-members .openUser, .action-members .sendMessage, .action-members .addUser, .action-members .deleteUser {
 	  float: right;
   	width:13px;
@@ -327,7 +335,11 @@ select#membership_project_id {
 	.action-members #ausgabe {
   	margin-top: 20px;
 	}
-
+	
+	.new_membership p label {
+  	width: 200px !important;
+	}
+	
 	.controller-users label {
 	  width: 50px;
 	}
