@@ -2,8 +2,9 @@
 <% labelled_tabular_form_for :doodle, @doodle, :url => { :controller => 'doodles', :action => 'update', :id => @doodle}, :html => { :id => 'doodle-form', :method => :put } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_save) %>
-<%= link_to_remote l(:label_preview), 
+<%= link_to l(:label_preview), 
                    { :url => { :controller => 'doodles', :action => 'preview', :project_id => @project },
+                     :remote => true,
                      :method => 'post',
                      :update => 'preview',
                      :with => "Form.serialize('doodle-form')"
