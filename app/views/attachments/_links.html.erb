@@ -9,26 +9,27 @@
   <% else %>
     <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
   <% end %>
+  <div class="options" style="display:none;">
+    <%= link_to_attachment attachment, :download => true, :target => '_self', :text => "", :title => l(:label_download_file), :class => "download" -%>
+    <%= link_to("", attachment_path(attachment), 
+                    :class => "delete", 
+                    :title => l(:label_delete_file),
+                    :data => {:confirm => l(:text_are_you_sure)}, 
+                    :method => :delete) if options[:deletable] %>
   <% if attachment.is_text? %>
     <%= link_to image_tag('magnifier.png'),
                 :controller => 'attachments', :action => 'show',
                 :id => attachment, :filename => attachment.filename %>
   <% end %>
-  <% if options[:deletable] %>
-    <%= link_to image_tag('delete.png'), attachment_path(attachment),
-                                         :data => {:confirm => l(:text_are_you_sure)},
-                                         :method => :delete,
-                                         :class => 'delete',
-                                         :title => l(:button_delete) %>
-  <% end %>
   <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
   <% if options[:author] || !attachment.description.empty? %>
   <% file_information = ''
-     file_information += '<div class="thumbnail">'+image_tag(url_for(attachment), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
+     file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(attachment), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
      file_information += '<i>'.html_safe+h(attachment.author)+', ' + format_time(attachment.created_on)+'</i>'.html_safe
-     file_information += h(" #{attachment.description}")+'<br/>'.html_safe unless attachment.description.empty?
-     javascriptString += 'addToolTip("#fileinfo_'+attachment.id.to_s+'",\''+file_information+'\');' %>
+     file_information += '</br><div style="max-width:180px">'+h(" #{attachment.description}")+'</div>'.html_safe unless attachment.description.empty?
+     javascriptString += 'addToolTip("#fileinfo_'+attachment.id.to_s+'",\''+file_information+'\',"left");' %>
   <% end %>
+  </div>
 </div>
 <% end %>
 <div style="display: none">
@@ -47,11 +48,11 @@
 <% end %>
 </div>
 
-<% unless attachments[1].nil? %>
+<% unless attachments[0].nil? %>
 <%= javascript_tag '
   $(document).ready(function() {
     '+javascriptString+'
-    var myPDF = new PDFObject({ url: "'+ url_for(attachments[1]).to_s()+"/"+attachments[1].filename.to_s() +'"}).embed("showPDF");
+//    var myPDF = new PDFObject({ url: "'+ url_for(attachments[0]).to_s()+"/"+attachments[0].filename.to_s() +'"}).embed("showPDF");
   });' 
 %>
 <%end%>

@@ -2,20 +2,22 @@
   <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
   <ul>
     <% if User.current.allowed_to?(:manage_documents, @project) %>
+    <li><%= link_to(l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;",
+                                             :id => 'attach_files_link') if authorize_for('documents', 'add_attachment') %></li>
     <li><%= link_to l(:button_edit), edit_document_path(@document), :accesskey => accesskey(:edit) %></li>
     <li><%= delete_link document_path(@document) %></li>
     <% end %>
+    
   </ul>
 <%end%>
 
 <h2><%=h @document.title %></h2>
-<p>
-  <em>
+<div style="float:right; margin-top: -45px; text-align:right">
     <%=h @document.category.name %><br />
     <%= format_date @document.created_on %>
-  </em>
-</p>
-<div class="wiki">
+</div>
+<%= l(:label_description) unless @document.description.empty? %>
+<div class="wiki" style="padding:10px 20px; border: 1px solid #F0F0F0">
   <%= textilizable @document.description, :attachments => @document.attachments %>
 </div>
 
@@ -23,8 +25,7 @@
 <%= link_to_attachments @document %>
 
 <% if authorize_for('documents', 'add_attachment') %>
-<p><%= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;",
-                                             :id => 'attach_files_link' %></p>
+<p><%#= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;", :id => 'attach_files_link' %></p>
   <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document }, :multipart => true, :id => "add_attachment_form", :style => "display:none;") do %>
   <div class="box">
     <p><%= render :partial => 'attachments/form' %></p>
@@ -38,7 +39,7 @@
     <%= stylesheet_link_tag 'scm' %>
     <%= stylesheet_link_tag 'jquery.fancybox' %>
     <%= javascript_include_tag('jquery.fancybox.pack.js') %>
-    <%= javascript_include_tag('jquery.pdf.min.js') %>
+    <%#= javascript_include_tag('jquery.pdf.min.js') %>
     <%= javascript_tag '$(document).ready(function() {
       $(".fancybox").fancybox({padding: 0,closeClick : true});
 //      var myPDF = new PDFObject({ url: "http://141.57.9.94:3000/attachments/256/PascalDuffy.pdf" }).embed();

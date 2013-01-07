@@ -284,15 +284,39 @@ function submit_query_form(id) {
   $('#'+id).submit();
 }
 
+
+function toggleFieldsetNew(fieldset) {
+  jQuery(fieldset).toggleClass('collapsed');
+  jQuery(fieldset).find('div.toToggle').slideToggle('slow');
+}
+
 var fileFieldCount = 1;
-function addFileField() {
-  var fields = $('#attachments_fields');
-  if (fields.children().length >= 10) return false;
-  fileFieldCount++;
-  var s = fields.children('span').first().clone();
-  s.children('input.file').attr('name', "attachments[" + fileFieldCount + "][file]").val('');
-  s.children('input.description').attr('name', "attachments[" + fileFieldCount + "][description]").val('');
-  fields.append(s);
+function addFileField(message) {
+  jQuery(document).ready(function(cash) {
+    if (!$("fieldset.fileselected:last").hasClass('collapsed')) toggleFieldsetNew($("fieldset.fileselected:last"));
+    var fields = $('#attachments_fields');
+    if (fields.children().length >= 10) return false;
+    var elements = fields.children().first().children();
+    $('.add_attachment').addClass('disabled');
+    var s = $('<fieldset>');
+    fileFieldCount++;
+    elements.each(function(index, el) {
+      newElement = $(el).clone(true);
+      if ($(newElement).hasClass('toToggle')) $(newElement).attr('style','');
+      if ($(newElement).find('.meta') != 'undefinded') {
+        $(newElement).find('.meta').html("<ul class = 'meta_information'></ul>");
+      }
+      $(newElement).find('.fileupload').html(message);
+      s.append(newElement);
+    });
+    s.find('legend').html(message);
+    s.find('input[type=text], input[type=file], textarea').each(function(nr,el) {
+      el.name = "attachments[" + fileFieldCount + el.name.slice(el.name.indexOf(']['));
+    });
+    s.find('input').val('');
+    tagItForUs(s.find('.meta_information'),label_meta_information_description,fileFieldCount);
+    fields.append(s);
+  });
 }
 
 function removeFileField(el) {
@@ -317,7 +341,6 @@ function removeFileField(el) {
 
 function checkFileSize(el, maxSize, message) {
   var files = el.files;
-  console.log(maxSize);
   if (files) {
     jQuery(document).ready(function($) {
       for (var i=0; i<files.length; i++) {

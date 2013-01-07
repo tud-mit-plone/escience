@@ -601,7 +601,6 @@ select#values_project_id_1 {
   background-image: url(../images/arrow_expanded.png);
 }
 
-
 #attachments_fields .deleteButton {
   position: relative;
   float: right;
@@ -796,6 +795,43 @@ div .add_attachment:hover {
   visibility: visible;
   display: block;
 }
+
+.attachments.filename {
+  padding: 2px;
+}
+
+.attachement {
+  padding: 2px 0;  
+}
+
+.attachement:hover .options {
+  margin-top: -4px;
+  margin-left:5px;
+  display: inline-block !important;
+}
+
+.file .download, .file .delete, .attachement .download, .attachement .delete {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-position: 0 10%;
+}
+
+.attachement .download, .attachement .delete {  background-position: 0 -10%; }
+.file .download, .attachement .download {background-image: url('/images/download2.png');}
+.file .delete, .attachement .delete {background-image: url('/images/delete2.png');}
+.file .download:hover, .file .delete:hover {background-position: 0 110%;}
+.attachement .download:hover, .attachement .delete:hover {background-position: 0 90%;}
+
+.files.list thead th {
+  border-bottom: solid 1px #F0F0F0;
+  padding-bottom: 5px;
+}
+
+.files.list tbody tr:first-child td {
+  padding-top: 5px;
+}
+
 
 /* !---------- Dokumente -------------- */
 .ui-tooltip-content .thumbnail {

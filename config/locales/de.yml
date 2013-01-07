@@ -487,6 +487,8 @@ de:
   label_termsconditions: Nutzungsbedingungen
   label_organisation: Organisieren
   label_hello: Hallo
+  label_delete_file: Datei löschen
+  label_download_file: Datei herunterladen
   label_specific: Seitenspezifisch
   label_specific_none: Keine spezifischen Links
   label_usermessage: Nachrichten
