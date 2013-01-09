@@ -39,7 +39,7 @@ module Redmine
       return nil unless date
       options = {}
 #      options[:format] = Setting.date_format unless Setting.date_format.blank?
-      options[:format] = t("date.formats.default")
+      options[:format] = ::I18n.t("date.formats.default")
       options[:locale] = User.current.language unless User.current.language.blank?
       ::I18n.l(date.to_date, options)
     end
