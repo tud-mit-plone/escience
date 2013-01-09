@@ -210,6 +210,8 @@ class WikiController < ApplicationController
     @content.version = @page.content.version
 
     @text = @content.text
+    @puretext = replace_macros(@text)
+    
     if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
       @section = params[:section].to_i
       @text, @section_hash = Redmine::WikiFormatting.formatter.new(@text).get_section(@section)
@@ -217,73 +219,13 @@ class WikiController < ApplicationController
     end
   end
 
-  require 'rexml/document'
-  include REXML
-  def convertHtmlWiki(html)
-    html = "<toplevel>#{html}</toplevel>"
-    translation = Document.new(html)
-    replaceElement(translation.root)
-  end
-
-  def replaceElement(elements)
-    if elements.node_type == :element
-      unless @replaceMap[elements.name.to_sym].nil?
-        replacement = @replaceMap[elements.name.to_sym][:replace]
-        unless @replaceMap[elements.name.to_sym][:spec].nil?
-          @replaceMap[elements.name.to_sym][:spec].each do |variante|
-            replacement = variante[:replace]
-            if variante[:attr].nil? || (!variante[:attr].nil?) && elements.attributes[variante[:attr]] == variante[:value]
-              content = ""
-              elements.each do |element|
-                content << replaceElement(element)
-              end
-              substitut = replacement.scan(/\$\$(.*?)\$\$/).flatten
-              substitut.delete('content')
-              substitut.each do |placeholder|
-                unless elements.attributes[placeholder].nil?
-                  replacement.gsub!('$$'+placeholder+'$$', elements.attributes[placeholder])
-                end
-              end
-              return replacement 
-            end
-          end
-        else
-          substitut = replacement.scan(/\$\$(.*?)\$\$/).flatten
-          content = ""
-          elements.each do |element|
-            content << replaceElement(element)
-          end
-          return replacement.gsub('$$content$$', content)
-        end
-      end
-      string = ""
-      elements.each do |element|
-        string << replaceElement(element)
-      end
-      return string
-    end
-    return elements.nil? ? "" : elements.to_s
-  end
-
   # Creates a new page or updates an existing one
   def update
     return render_403 unless editable?
     was_new_page = @page.new_record?
 
-    @replaceMap = {
-                    :a   => {:spec => [
-                      {:attr => 'class', :value => 'wiki-page', :replace => "[[$$content$$]]" },
-                      {:replace => "{{$$href$$|$$content$$}}" }
-                    ]},
-                    :p  => {:replace => "$$content$$\r\n\r\n"},
-                    :h3  => {:replace => "h3. $$content$$\r\n\r\n"},
-                    :h2  => {:replace => "h2. $$content$$\r\n\r\n"},
-                    :h1  => {:replace => "h1. $$content$$\r\n\r\n"},
-                    :tr  => {:replace => "$$content$$|\r\n"},
-                    :td  => {:replace => "|$$content$$"},
-                  }
-
-    params[:content][:text] = convertHtmlWiki(params[:ckeditor])
+    params[:content][:text] = convertHtmlToWiki(params[:ckeditor])
+#    abort(params[:content][:text])
 
     @page.content = WikiContent.new(:page => @page) if @page.new_record?
     @page.safe_attributes = params[:wiki_page]

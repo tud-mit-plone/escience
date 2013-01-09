@@ -19,7 +19,11 @@
 <div class="box tabular">
 <%= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25,
                   :class => 'wiki-edit', :accesskey => accesskey(:edit) %>
-
+Bitte geben Sie hier etwas ein:
+<input type="hidden" name="content[text]" />
+<textarea class="ckeditor" cols="80" id="ckeditor" name="ckeditor" rows="40">
+  <%= textilizable(@puretext) %>
+</textarea>
 <% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
   <%= fields_for @page do |fp| %>
     <p>
@@ -46,6 +50,8 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
   <%= robot_exclusion_tag %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
 
 <% html_title @page.pretty_title %>

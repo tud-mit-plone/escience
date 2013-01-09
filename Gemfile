@@ -110,3 +110,5 @@ gem "pry"
 gem "oauth"
 gem  "multipart-post"
 gem "dropbox-sdk"
+# htmlentities are needed for decoding wysiwyg into wiki
+gem "htmlentities"

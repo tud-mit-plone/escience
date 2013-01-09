@@ -10,7 +10,7 @@
   <%= submit_tag l(:label_search) %>
 <% end %>
 
-<% p @result
+<%
   if !@results.nil? && @results.size > 0 %>
     <div id="search-results-counts">
     <%= render_results_by_type(@results_by_type) unless @scope.size == 1 %>

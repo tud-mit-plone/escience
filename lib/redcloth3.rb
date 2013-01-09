@@ -690,7 +690,8 @@ class RedCloth3 < String
         cite, cite_title = check_refs( cite )
         cite = " cite=\"#{ cite }\"" if cite
         atts = shelve( atts ) if atts
-        "\t<blockquote#{ cite }>\n\t\t<p#{ atts }>#{ content }</p>\n\t</blockquote>"
+#        "\t<blockquote#{ cite }>\n\t\t<p#{ atts }>#{ content }</p>\n\t</blockquote>"
+        "\t<blockquote#{ cite }>\n\t\t#{ content }\n\t</blockquote>"
     end
 
     def textile_p( tag, atts, cite, content )
@@ -718,7 +719,6 @@ class RedCloth3 < String
         if text =~ BLOCK_RE
             tag,tagpre,num,atts,cite,content = $~[1..6]
             atts = pba( atts )
-
             # pass to prefix handler
             replacement = nil
             if respond_to? "textile_#{ tag }", true
@@ -845,7 +845,7 @@ class RedCloth3 < String
             atts = shelve( atts ) if atts
             
             external = (url =~ /^https?:\/\//) ? ' class="external"' : ''
-            
+                        
             "#{ pre }<a#{ atts }#{ external }>#{ text }</a>#{ post }"
           end
         end

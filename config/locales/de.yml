@@ -765,6 +765,8 @@ de:
   label_wiki_edit_plural: Wiki-Bearbeitungen
   label_wiki_page: Wiki-Seite
   label_wiki_page_plural: Wiki-Seiten
+  label_wiki_toc: Inhaltsverzeichnis
+  label_wiki_toplink: Zum Seitenanfang
   label_index_by_title: Seiten nach Titel sortiert
   label_index_by_date: Seiten nach Datum sortiert
   label_current_version: Gegenwärtige Version

@@ -178,8 +178,8 @@ module ApplicationHelper
     opt_only_path = {}
     opt_only_path[:only_path] = (options[:only_path] == false ? false : true)
     options.delete(:only_path)
-    options[:target] = '_blank'
-    link_to(h(text),
+    options[:target] = '_blank' if options[:target].nil?
+    link_to(text.html_safe(),
            {:controller => 'attachments', :action => action,
             :id => attachment, :filename => attachment.filename}.merge(opt_only_path),
            options)
@@ -710,6 +710,7 @@ module ApplicationHelper
     if @parsed_headings.any?
       replace_toc(text, @parsed_headings)
     end
+    replace_top_link(text)
 
     text.html_safe
   end
@@ -926,7 +927,6 @@ module ApplicationHelper
                                                 :class => 'document'
             end
           when 'top_link'
-              p params["id"]
               if params["id"].nil?
                 params["id"] = 'hilfe.html'
               end
@@ -1028,7 +1028,8 @@ module ApplicationHelper
       end
       @parsed_headings << [level, anchor, item]
 #      "<a name=\"#{anchor}\"></a>\n<h#{level} #{attrs}>#{content}<a href=\"##{anchor}\" class=\"wiki-anchor\">&para;</a></h#{level}>"
-      "<a name=\"#{anchor}\"></a>\n<h#{level} #{attrs}>#{content}</h#{level}>"
+#      "<a name=\"#{anchor}\"></a>\n<h#{level} #{attrs}>#{content}</h#{level}>"
+      "<h#{level} #{attrs}>#{content}</h#{level}>"
     end
   end
 
@@ -1089,8 +1090,148 @@ module ApplicationHelper
     end
   end
 
-  TOC_RE = /<p>\{\{([<>]?)toc(\(([^\}]*)\))?\}\}<\/p>/i unless const_defined?(:TOC_RE)
 
+
+  require 'rexml/document'
+  require 'htmlentities'
+  include REXML
+  def convertHtmlToWiki(html)
+    html = "<toplevel>#{html}</toplevel>"
+    translation = Document.new(html)
+    @replaceMap = {
+      :a   => {:spec => [
+        {:attr => 'class', :value => 'wiki-page', :replace => "[[$$content$$]]" },
+        {:child => 'img', :replace => "$$content$$:$$href$$" },
+        {:replace => "\"$$content$$\":$$href$$" }
+      ]},
+      :img =>  {:spec => [
+          {:parent => 'a', :replace => "!$$src$$!"},
+          {:replace => "!$$src$$!"}
+      ]},
+      :p  => {:spec => [
+        {:attr => "style", :value=>"text-align:center;", :replace => "p=. $$content$$\r\n\r\n"},
+        {:attr => "style", :value=>"text-align:right;", :replace => "p>. $$content$$"},
+        {:replace => "$$content$$\r\n\r\n"}
+      ]},
+      :h3  => {:replace => "\r\nh3. $$content$$\r\n\r\n"},
+      :h2  => {:replace => "h2. $$content$$\r\n\r\n"},
+      :h1  => {:replace => "h1. $$content$$\r\n\r\n"},
+      :tr  => {:replace => "$$content$$|\r\n"},
+      :table => {:replace => "$$content$$\r\n\r\n"},
+      :th => {:spec => [
+        {:attr => "style", :value=>"text-align:center;", :replace => "|_=. $$content$$"},
+        {:attr => "style", :value=>"text-align:right;", :replace => "|_>. $$content$$"},
+        {:attr => "style", :value=>"text-align:left;", :replace => "|_<. $$content$$"},
+        {:replace => "|_. $$content$$"}
+      ]},
+      :td => {:spec => [
+        {:attr => "style", :value=>"text-align:center;", :replace => "|=. $$content$$"},
+        {:attr => "style", :value=>"text-align:right;", :replace => "|>. $$content$$"},
+        {:attr => "style", :value=>"text-align:left;", :replace => "|<. $$content$$"},
+        {:replace => "| $$content$$"}
+      ]},
+      :strong  => {:replace => " *$$content$$* "},
+      :ins  => {:replace => " +$$content$$+ "},
+      :em  => {:replace => " _$$content$$_ "},
+      :del  => {:replace => " -$$content$$- "},
+      :code  => {:replace => " @$$content$$@ "},
+      :pre  => {:replace => "$$content$$", :pre => true},
+      :sup  => {:replace => " ^$$content$$^ "},
+      :sub  => {:replace => " ~$$content$$~ "},
+      :blockquote => {:replace => "\r\n\r\nbq. $$content$$\r\n\r\n"},
+      :li => {:spec => [
+          {:parent => 'ul', :parentparent => 'li', :replace => "\r\n** $$content$$"},
+          {:parent => 'ol', :parentparent => 'li', :replace => "\r\n\#\# $$content$$"},
+          {:parent => 'ul', :replace => "\r\n* $$content$$"},
+          {:parent => 'ol', :replace => "\r\n\# $$content$$"},
+      ]},
+      :span => {:spec => [
+          {:attr => 'class', :value => 'toc', :replace => "{{toc($$content$$)}}"},
+          {:attr => 'class', :value => 'toplink', :replace => "\r\n\r\n\{{top_link|$$content$$}}"}
+      ]}
+    }    
+    decoder = HTMLEntities.new
+    decoder.decode(replaceElement(translation.root))
+  end
+
+  def replaceElement(elements)
+    if elements.node_type == :element
+      unless @replaceMap[elements.name.to_sym].nil?
+        replacement = @replaceMap[elements.name.to_sym][:replace]
+        unless @replaceMap[elements.name.to_sym][:spec].nil?
+          @replaceMap[elements.name.to_sym][:spec].each do |variante|
+            replacement = variante[:replace]
+            if (!variante[:parent].nil? && elements.parent.name == variante[:parent]) || (!variante[:child].nil? && !elements.elements[1].nil? && elements.elements[1].name == variante[:child])
+              if variante[:parentparent].nil? || elements.parent.parent.name == variante[:parentparent]
+                content = ""
+                elements.each do |element|
+                  content << replaceElement(element)
+                end
+                replacement = replacement.sub('$$content$$', content)
+                substitut = replacement.scan(/\$\$(.*?)\$\$/).flatten
+                substitut.delete('content')
+                substitut.each do |placeholder|
+                  unless elements.attributes[placeholder].nil?
+                    replacement.gsub!('$$'+placeholder+'$$', elements.attributes[placeholder])
+                  end
+                end
+                return replacement
+              end
+            elsif variante[:parent].nil? && variante[:child].nil? && (variante[:attr].nil? || (!variante[:attr].nil?) && elements.attributes[variante[:attr]] == variante[:value])            
+              content = ""
+              elements.each do |element|
+                content << replaceElement(element)
+              end
+              replacement = replacement.sub('$$content$$', content)
+              substitut = replacement.scan(/\$\$(.*?)\$\$/).flatten
+              substitut.delete('content')
+              substitut.each do |placeholder|
+                unless elements.attributes[placeholder].nil?
+                  replacement.gsub!('$$'+placeholder+'$$', elements.attributes[placeholder])
+                end
+              end
+              return replacement 
+            end
+          end
+        else
+          content = ""
+          unless @replaceMap[elements.name.to_sym][:pre]
+            elements.each do |element|
+              content << replaceElement(element)
+            end
+          else
+            formatter = REXML::Formatters::Default.new
+            formatter.write(elements,content)
+          end
+          return replacement.gsub('$$content$$', content)
+        end
+      end
+      string = ""
+      elements.each do |element|
+        string << replaceElement(element)
+      end
+      return string
+    end
+    return elements.nil? ? "" : elements.to_s
+  end
+  
+  def replace_macros(text)
+    output = text.gsub(/\{\{([<>]?)toc(\(([^\}]*)\))?\}\}/i) do
+      out = '<span class="toc">'
+      out << ($2.nil? ? l(:label_wiki_toc) : $2.strip[1..$2.strip.length-2])
+      out << "</span>\r\n\r\n"
+      out.html_safe
+    end
+    output.gsub!(/\{\{top_link\|(([^\}]*))?\}\}/i) do
+      out = '<span class="toplink">'
+      out << ($2.nil? ? l(:label_wiki_toplink) : $2)
+      out << "</span>\r\n\r\n"
+    end
+    
+    return output
+  end
+
+  TOC_RE = /<p>\{\{([<>]?)toc(\(([^\}]*)\))?\}\}<\/p>/i unless const_defined?(:TOC_RE)
   # Renders the TOC with given headings
   def replace_toc(text, headings)
     text.gsub!(TOC_RE) do
@@ -1124,6 +1265,16 @@ module ApplicationHelper
     end
   end
 
+  def replace_top_link(text)
+    text.gsub!(/\{\{top_link\|(([^\}]*))?\}\}/i) do
+      out = ""
+      unless $2.nil?
+        out << "<a href=\"#top\">#{$2}</a>"
+      end
+      out
+    end   
+  end
+  
   # Same as Rails' simple_format helper without using paragraphs
   def simple_format_without_paragraph(text)
     text.to_s.
