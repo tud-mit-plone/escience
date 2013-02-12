@@ -87,6 +87,10 @@
 <% end %>
 
 
+<fieldset>
+<%= render :partial => 'activities/index' %>
+</fieldset>
+
 <% content_for :header_tags do %>
 <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
 <% end %>

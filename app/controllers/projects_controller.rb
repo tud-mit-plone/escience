@@ -189,6 +189,8 @@ class ProjectsController < ApplicationController
       @total_hours = TimeEntry.visible.sum(:hours, :include => :project, :conditions => cond).to_f
     end
 
+    activity_index_for_project
+
     @key = User.current.rss_key
 
     respond_to do |format|
