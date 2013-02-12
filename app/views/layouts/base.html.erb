@@ -124,16 +124,80 @@
       	
       	<!-- Navigation for Team/Community/Private -->
       	<div class="container_16">
-      		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %>">
-      			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %>">
+      		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %> roundabout-holder">
+      			<div id="private" class="<%= (User.current.logged? && User.current.female)? 'female' : 'male' %> front mover roundabout-moveable-item roundabout-in-focus">
         			<%= User.current.logged? ? l(:label_private) : l(:label_guest) %>
       			</div>
-      			<div id="group"><%= l(:label_team) %></div>
-      			<div id="community"><%= l(:label_community) %></div>
+      			<div id="group" class='mover back backright'><%= l(:label_team) %></div>
+      			<div id="community" class='mover back backleft roundabout-moveable-item'><%= l(:label_community) %></div>
       		</div>
       	</div>	    
       </header>
+    <% if User.current.logged? %>
+      <%= javascript_tag '
+
+      $(document).ready(function() {
+        $("#navigation_group").roundabout({
+          minZ: 100,
+          maxZ: 300,
+          minOpacity: 0.5,
+          minScale: 0.5,
+          maxScale: 1.4,
+          shape: \'tearDrop\',
+          childSelector: \'.mover\',
+          dropDuration: 300, 
+          triggerFocusEvents: true,
+          enableDrag: true,
+          tilt: -4,
+          clickToFocusCallback: function(){set_this_nav_to_front($(this))},
+          dropCallback: function(){set_this_nav_to_front($(this))}
+        });
+      });
+
+      function set_this_nav_to_front(me){
+          me.promise().done(function(){
+            if(!me.hasClass(\'front\')){
+              set_nxt_nav_to_front(me);
+            }
+          });
+        };
+
+        function animate_class_change(me){
+          var time = 0; 
       
+          if(me.hasClass(\'roundabout-in-focus\')){
+            me.switchClass( \'back\', \'front\', time);
+            return;
+          }else{
+            me.switchClass( \'front\', \'back\', time);
+          }
+          return;
+          if(me.hasClass(\'backleft\')){
+            var bg = me.css(\'background-image\');
+            bg = bg.replace(\'url(\',\'\').replace(\'grau\',\'gruen\').replace(\')\',\'\');
+                       
+            me.switchClass( \'back backleft\', \'front\', time * 0);
+            return;
+          }
+          if(me.hasClass(\'front\')){
+            var bg = me.css(\'background-image\');
+            bg = bg.replace(\'url(\',\'\').replace(\'gruen\',\'grau\').replace(\')\',\'\');
+            
+            me.switchClass( \'front\', \'back backright\', time * 0 );
+            //me.switchClass( \'\', \'back backright\', time );
+            return;
+          }
+        };
+
+        function set_nxt_nav_to_front(act_obj){
+          $("#navigation_group").children().each(
+          function(){
+            animate_class_change($(this));
+           }
+          )
+        };
+      '%> 
+    <%end%>
     <%= tag('div', {:id => 'container', :class => ((has_content?(:sidebar_left) || has_content?(:sidebar_right)) ? '' : 'nosidebar')}, true) %>
     	<div class="container_inner container_16">
   	    <div id="left" class="<%= (User.current.logged?) ? 'grid_3' : 'grid_2' %>">

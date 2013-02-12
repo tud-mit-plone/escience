@@ -28,7 +28,6 @@ module ApplicationHelper
   extend Forwardable
   def_delegators :wiki_helper, :wikitoolbar_for, :heads_for_wiki_formatter
 
-
   def breadcrumb_list(options = {:max_crumblength => 80, :max_layerblength => 120})
     unless (@project.nil?)
       parent_id = @project.parent_id
@@ -1589,6 +1588,10 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.qtip.min.js")
     tags << "\n".html_safe
     tags << javascript_include_tag("escience.js")
+    tags << javascript_include_tag("jquery.roundabout.min.js")
+    tags << javascript_include_tag("jquery.event.drag-2.2.js")
+    tags << javascript_include_tag("jquery.event.drop-2.2.js")
+    tags << javascript_include_tag("jquery.roundabout-shapes.min.js")
     tags << javascript_tag(flash_notifications)
 
     tags << "\n".html_safe
