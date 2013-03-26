@@ -10,15 +10,18 @@
 <div class="floatleft"><label><%= l(:field_status) %></label> <%= h(@issue.status.name) %></div>
 <% end %>
 
-<% if @issue.safe_attribute? 'priority_id' %>
+<% if @issue.safe_attribute? 'priority_id' && @issue.project.nil? %>
 <div class="w33"><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></div>
 <% end %>
 
-<% if @issue.safe_attribute? 'assigned_to_id' %>
+<% if @issue.safe_attribute? 'assigned_to_id' && session[:current_view_of_eScience] != '0' %>
 <div class="w33 last"><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></div>
+<% else %>
+<div class="w33 last"><input type="hidden" value="<%= User.current.id %>" name="issue[assigned_to_id]" /></div>
+<div class="clear"></div>
 <% end %>
 
-<% if @issue.safe_attribute?('category_id') && @issue.project.issue_categories.any? %>
+<% if @issue.safe_attribute?('category_id') && !@issue.project.nil? && @issue.project.issue_categories.any? %>
 <p><%= f.select :category_id, (@issue.project.issue_categories.collect {|c| [c.name, c.id]}), :include_blank => true, :required => @issue.required_attribute?('category_id') %>
 <%= link_to(image_tag('add.png', :style => 'vertical-align: middle;'),
             new_project_issue_category_path(@issue.project),
@@ -28,7 +31,7 @@
             :tabindex => 200) if User.current.allowed_to?(:manage_categories, @issue.project) %></p>
 <% end %>
 
-<% if @issue.safe_attribute?('fixed_version_id') && @issue.assignable_versions.any? %>
+<% if @issue.safe_attribute?('fixed_version_id')  && !@issue.project.nil? && @issue.assignable_versions.any? %>
 <p><%= f.select :fixed_version_id, version_options_for_select(@issue.assignable_versions, @issue.fixed_version), :include_blank => true, :required => @issue.required_attribute?('fixed_version_id') %>
 <%= link_to(image_tag('add.png', :style => 'vertical-align: middle;'),
             new_project_version_path(@issue.project),

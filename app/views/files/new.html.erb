@@ -1,5 +1,5 @@
 <% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
 <% end %>
 
 <h2><%=l(:label_attachment_new)%></h2>

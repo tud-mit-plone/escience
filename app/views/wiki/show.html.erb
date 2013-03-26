@@ -1,4 +1,5 @@
 <% content_for :sidebar_right do %>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' unless current_page?(:controller => 'wiki', :action => 'show', :id => nil) %>
   <% if @editable %>
     <ul>
   	<% if (authorize_for("wiki", "edit") && @content.current_version?) %>

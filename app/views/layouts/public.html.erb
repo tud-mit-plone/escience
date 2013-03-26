@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title><%=h html_title %></title>
+  <meta name="description" content="<%= Redmine::Info.app_name %>" />
+  <meta name="keywords" content="issue,bug,tracker" />
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+  <%= csrf_meta_tag %>
+  <%= favicon %>
+  <%= stylesheet_link_tag 'application', :media => 'all' %>
+  <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
+  <%= stylesheet_link_tag 'public', :media => 'all'%>
+  <%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
+  <%= javascript_heads %>
+  <%= yield :jquery_tags -%>
+  <%= javascript_tag '
+    function externalLinks() {return $("a[href^=\'http\']:not([href^=\'http://" + window.location.host + "\'])");}
+    $(document).ready(function() {
+      externalLinks().attr({target: "_blank"});
+      $("ul.roundabout-holder").roundabout({
+    		minScale: 0.60,
+    		minOpacity: 0.9,
+    		maxScale: 1.0,
+    		shape: "tearDrop",
+    		clickToFocus: false,
+      });
+    });
+  '%>
+  <%= heads_for_theme %>
+  <!--[if IE 6]>
+      <style type="text/css">
+        * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+        body {behavior: url(<%= stylesheet_path "csshover.htc" %>);}
+      </style>
+  <![endif]-->
+  <%= yield :header_tags -%>
+</head>
+
+<body class="<%=h body_css_classes %>">
+  <div id="wrapper">
+    <div id="separate_footer">
+      <header id="header">
+        <!-- backgrounds for the top-navigations -->
+      	<div class="bar"></div>
+      	<div id="header_bg_bar"></div>
+      	
+      	<!-- logo -->
+      	<div class="inside container_16">
+      		<div id="logo" class="grid_3 prefix_12">
+      			<%= link_to({:controller => 'welcome'}) do %>
+      				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
+      			<%end%>
+      		</div>
+      		<div class="clear"></div>
+      	</div>
+      	
+      	<!-- Navigation with green background -->
+      	<div id="main_navigation"></div>
+      
+      	<!-- Navigation with gray background -->
+      	<div id="navigation">
+      		<div class="inside container_16">
+      			<div class="grid_10 prefix_6">
+      			  <%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+      			</div>
+      		  <div class="clear"></div>
+      	  </div>
+      	</div>
+      	
+      	<!-- Navigation for Team/Community/Private -->
+      	<div class="container_16">
+      		<div id="navigation_group" class="grid_4 prefix_1 roundabout-holder">
+      		  <ul class="roundabout-holder">
+        		  <li class="roundabout-moveable-item roundabout-in-focus" id="private">
+          		  <div class="roundabout_label"><%= l(:label_guest) %></div>
+          		  <img src="<%= Redmine::Utils.relative_url_root %>/images/gast_gruen.png" />
+        		  </li>
+        		  <li class="roundabout-moveable-item" id="team">
+        		    <div class="roundabout_label"><%= l(:label_team) %></div>
+        		    <img src="<%= Redmine::Utils.relative_url_root %>/images/team_grau.png" />
+        		  </li>
+        		  <li class="roundabout-moveable-item" id="community">
+        		    <div class="roundabout_label"><%= l(:label_community) %></div>
+        		    <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
+        		  </li>
+        		</ul>
+      		</div>
+      	</div>	    
+      </header>
+
+      <div class="nosidebar" id="container">
+      	<div class="container_inner container_16">
+    	    <div id="left" class="grid_2"><div id="sidebar_left" class="sidebar">&nbsp;</div></div>
+    	    <div id="main" class="grid_10">
+  	        <%= yield %>
+  	        <%= call_hook :view_layouts_base_content %>
+  	        <div style="clear:both;"></div>
+    	    </div>
+    	    <div id="right" class="grid_3"><div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div></div>
+    	    <div class="clear"></div>
+        </div>
+      </div>    
+      <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
+      <div id="ajax-modal" style="display:none;"></div>
+    </div>
+  </div>
+  <div id="footer">
+  	<div style="background-color:#fff; height:3px; width:100%"></div>
+  	<div class="inside">
+  		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
+  		<div id="eu"><a href="http://europa.eu/" title="<%= l(:label_eu) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/eu.png" width="54" height="39" /></a></div>
+  		<div id="esf"><a href="http://www.esf.de/" title="<%= l(:label_esf) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/esf.png" width="89" height="39" /></a></div>
+  		<div id="sachsen"><a href="http://www.smwk.sachsen.de/" title="<%= l(:label_smwk) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/sachsen.png" width="32" height="39"/></a></div>
+  		<div id="miscellaneous">
+  		   <ul>
+  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+  		      <li class="withborder"><a href="/static/agb.html" title="<%= l(:label_termsconditions) %>"><%= l(:label_termsconditions) %></a></li>
+  		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
+  		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>
+  		   </ul>
+  		</div> 
+  	</div>
+  </div>
+  <%= call_hook :view_layouts_base_body_bottom %>
+</body>
+</html>

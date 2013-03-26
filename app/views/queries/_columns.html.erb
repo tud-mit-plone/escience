@@ -28,7 +28,7 @@
     </td>
   </tr>
 </table>
-
+<%= hidden_field_tag 'id', params['id'] if params['id']  %>
 <% content_for :header_tags do %>
 <%= javascript_include_tag 'select_list_move' %>
 <% end %>

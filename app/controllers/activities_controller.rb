@@ -23,7 +23,7 @@ class ActivitiesController < ApplicationController
 
   def index
     begin  
-      activity_index_for_project
+      events = activity_index_for_project
       if events.empty? || stale?(:etag => [@activity.scope, @date_to, @date_from, @with_subprojects, @author, events.first, events.size, User.current, current_language])
         respond_to do |format|
           format.html {

@@ -162,7 +162,7 @@ class User < Principal
     end
     self.read_attribute(:identity_url)
   end
-
+  
   # Returns the user that matches provided login and password, or nil
   def self.try_to_login(login, password)
     login = login.to_s
@@ -251,7 +251,7 @@ class User < Principal
   end
 
   def activate
-    self.status = STATUS_ACTIVE
+    self.status = STATUS_ACTIVE    
   end
 
   def register
@@ -260,6 +260,27 @@ class User < Principal
 
   def lock
     self.status = STATUS_LOCKED
+  end
+
+  def get_project_identifier
+    return project_name
+  end
+  
+  def create_project_for_user
+    identifier = self.login.gsub('.','_')
+    identifier["@"] = "_"
+    if Project.find_by_identifier(identifier).nil?
+      project = Project.new
+      project.creator = self.id
+      project.name = self.name
+      project.identifier = identifier
+      project.is_public = false
+      project.status = 1
+      m = Member.new(:user => self, :roles => [Role.givable.first], :project => project)
+      project.members << m
+      project.save!
+      self.privateproject = project.id
+    end
   end
 
   def activate!

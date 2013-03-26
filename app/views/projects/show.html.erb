@@ -1,6 +1,7 @@
-<h2><%=l(:label_overview)%> <%= l(:label_forproject) %> <%= @project.name %></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe %></h1></div>
+<!--<h2><%=l(:label_overview)%> <%= l(:label_forproject) %> </h2>-->
 
-<% unless @topproject.nil? %>
+<% if !@topproject.nil? && (session[:current_view_of_eScience] != '0' || @topproject.name != 'eScience') %>
 <p id="subprojectof">
   <%= l(:label_subprojectof) %>:
   <% if User.current.allowed_to?(:view_project, @topproject) %>
@@ -11,27 +12,41 @@
 </p>
 <% end %>
 
-<div class="wiki">
-  <%= textilizable @project.description %>
-  <ul>
-  <% unless @project.homepage.blank? %>
-    <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage), @project.homepage).html_safe %></li>
-  <% end %>
-  <% @project.visible_custom_field_values.each do |custom_value| %>
-  <% if !custom_value.value.blank? %>
-     <li><%=h custom_value.custom_field.name %>: <%=h show_value(custom_value) %></li>
-  <% end %>
-  <% end %>
-  </ul>
-</div>
+<fieldset class="collapsable">
+  <legend onclick="toggleFieldset(this)">
+    <%=l(:label_description)%>
+    <%= content_tag('div', l(:label_last_modified) +": "+ format_time(@last_update), :class => 'last_modified') %>
+  </legend>
+  <div class="wiki">
+    <label><%=l(:label_spent_time)%>:</label><%= @total_hours ? (link_to @total_hours.to_s+" h", {:controller => 'timelog', :action => 'index', :project_id => @project}) : "" %>
+    <table>
+      <tr>
+        <td width="40" valign="top"><%= Date.parse(format_date(@project.created_on)).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
+    <%= content_tag('td', textilizable(@project.description, :project => @project), :class => 'wiki description', :valign => "top") %>
+      </tr>
+    </table>
+    <% unless @project.homepage.blank? || @project.visible_custom_field_values.count == 0 %>
+      <ul>
+      <% unless @project.homepage.blank? %>
+        <li><%=l(:field_homepage)%>: <%= link_to(h(@project.homepage), @project.homepage).html_safe %></li>
+      <% end %>
+      <% @project.visible_custom_field_values.each do |custom_value| %>
+        <% if !custom_value.value.blank? %>
+           <li><%=h custom_value.custom_field.name %>: <%=h show_value(custom_value) %></li>
+        <% end %>
+      <% end %>
+      </ul>
+    <% end %>
+  </div>
+</fieldset>
 
-  <% if @news.any? && authorize_for('news', 'index') %>
+<% if @news.any? && authorize_for('news', 'index') && session[:current_view_of_eScience] != "0" %>
 <fieldset>
   <legend><%=l(:label_news_latest)%></legend>
     <%= render :partial => 'news/news', :collection => @news %>
     <p><%= link_to l(:label_news_view_all), :controller => 'news', :action => 'index', :project_id => @project %></p>
 </fieldset>
-  <% end %>
+<% end %>
 
 <% if @subprojects.any? %>
 <fieldset>
@@ -43,6 +58,9 @@
 <% if User.current.allowed_to?(:view_issues, @project) %>
 <fieldset>
   <legend><%=l(:label_issue_tracking)%></legend>
+    <% unless @issues.empty? %>
+    <%= render :partial => 'issues/list_very_simple', :locals => { :issues => @issues } %>
+    <!--
     <ul>
     <% for tracker in @trackers %>
       <li><%= link_to h(tracker.name), :controller => 'issues', :action => 'index', :project_id => @project,
@@ -53,6 +71,8 @@
       </li>
     <% end %>
     </ul>
+    -->
+    <p>&nbsp;</p>
     <p>
       <%= link_to l(:label_issue_view_all), :controller => 'issues', :action => 'index', :project_id => @project, :set_filter => 1 %>
       <% if User.current.allowed_to?(:view_calendar, @project, :global => true) %>
@@ -61,13 +81,24 @@
       <% if User.current.allowed_to?(:view_gantt, @project, :global => true) %>
         | <%= link_to(l(:label_gantt), :controller => 'gantts', :action => 'show', :project_id => @project) %>
       <% end %>
+      <% if User.current.allowed_to?(:manage_subtasks, @project) %>
+        | <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }) %>
+      <% end %>  
+      | <a id="hide_closed" onclick="$('.linkToIssue.closed').toggle();$(this).hide();$('#show_closed').show()"><%= l(:label_issues_closed_hide) %></a>
+        <a id="show_closed" style="display:none" onclick="$('.linkToIssue.closed').toggle();$(this).hide();$('#hide_closed').show()"><%= l(:label_issues_closed_show) %></a>
     </p>
+    <% else %>
+      <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add', :style => 'padding-left:25px !important;') %>
+    <% end %>
 </fieldset>
 <% end %>
 <%= call_hook(:view_projects_show_left, :project => @project) %>
 
-<%= render :partial => 'members_box' %>
+<%= render :partial => 'attachments/form' %>
 
+<% unless session[:current_view_of_eScience] == "0" %>
+  <%= render :partial => 'members_box' %>
+<% end %>
 
 <%= call_hook(:view_projects_show_right, :project => @project) %>
 
@@ -76,6 +107,13 @@
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
     <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
   <% end %>
+	<% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
+		<%= link_to(l(:label_project_edit), {:controller => 'projects', :action => 'settings', :show_project => @project.id}, :class => 'icon icon-settings')%>
+	<% end %>
+  
+    <div class="splitter">
+     <%= l :label_forproject %>
+    </div>
     <h4><%= l(:label_spent_time) %>:</h4>
     <span class="icon icon-time"><%= l_hours(@total_hours) %></span>
     <ul>
@@ -92,6 +130,7 @@
 </fieldset>
 
 <% content_for :header_tags do %>
-<%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
+  <%= stylesheet_link_tag 'project' %>
+  <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
 <% end %>
 <% html_title(l(:label_overview)) -%>

@@ -1,5 +1,9 @@
-<% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+<% unless @project.nil? %>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
   <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
     <ul>
       <li><%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue} %></li>
@@ -9,28 +13,51 @@
 
 <%#= render_timelog_breadcrumb %>
 
-<h2><%= l(:label_spent_time) %></h2>
+<% unless @issue.nil? %>
+
+  <h2 style="float:left"><%= l(:label_spent_time_for_issue) %></h2>
+  <%= link_to(l(:button_back), {:controller => 'issues',:action => 'show', :id => @issue.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+  <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
+    <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'button' %>
+  <% end %>
+  <div class="clear"></div>
+  <h2 style="font-size:1.4em;margin-top:-20px;"><%= @issue.subject %> (<%= l(:label_total) %>: <%= html_hours(l_hours(@total_hours)) %>)</h2>
+  
+<% else %>
+
+  <h2 style="float:left"><%= l(:label_spent_time) %></h2>
+  <% unless @project.nil? %>
+    <%= link_to(l(:button_back), {:controller => 'projects', :action => 'show', :id => @project.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+  <% end %>
+  <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
+    <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'button' %>
+  <% end %>
+  <div class="clear"></div>
+
+<% end %>
 
 <%= form_tag({:controller => 'timelog', :action => 'index', :project_id => @project, :issue_id => @issue}, :method => :get, :id => 'query_form') do %>
 <%= render :partial => 'date_range' %>
 <% end %>
-
-<div class="total-hours">
-<p><%= l(:label_total) %>: <%= html_hours(l_hours(@total_hours)) %></p>
+<div class="timelog content">
+  <div class="total-hours">
+  <p style="padding:10px 0px;margin:0px;"><%= l(:label_total) %>: <%= html_hours(l_hours(@total_hours)) %></p>
+  </div>
+  
+  <% unless @entries.empty? %>
+  <%= render :partial => 'list', :locals => { :entries => @entries }%>
+  <p class="pagination"><%= pagination_links_full @entry_pages, @entry_count %></p>
+  
+  <% other_formats_links do |f| %>
+    <%= f.link_to 'Atom', :url => params.merge({:issue_id => @issue, :key => User.current.rss_key}) %>
+    <%= f.link_to 'CSV', :url => params %>
+  <% end %>
 </div>
-
-<% unless @entries.empty? %>
-<%= render :partial => 'list', :locals => { :entries => @entries }%>
-<p class="pagination"><%= pagination_links_full @entry_pages, @entry_count %></p>
-
-<% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => params.merge({:issue_id => @issue, :key => User.current.rss_key}) %>
-  <%= f.link_to 'CSV', :url => params %>
-<% end %>
 <% end %>
 
 <% html_title l(:label_spent_time), l(:label_details) %>
 
 <% content_for :header_tags do %>
-    <%= auto_discovery_link_tag(:atom, {:issue_id => @issue, :format => 'atom', :key => User.current.rss_key}, :title => l(:label_spent_time)) %>
+  <%= auto_discovery_link_tag(:atom, {:issue_id => @issue, :format => 'atom', :key => User.current.rss_key}, :title => l(:label_spent_time)) %>
+  <%= stylesheet_link_tag 'issues' %>    
 <% end %>

@@ -15,8 +15,12 @@
 <%= sort_header_tag('spent_on', :caption => l(:label_date), :default_order => 'desc') %>
 <%= sort_header_tag('user', :caption => l(:label_member)) %>
 <%= sort_header_tag('activity', :caption => l(:label_activity)) %>
-<%= sort_header_tag('project', :caption => l(:label_project)) %>
+<% if @project.nil? %>
+  <%= sort_header_tag('project', :caption => l(:label_project)) %>
+<% end %>
+<% if @issue.nil? %>
 <%= sort_header_tag('issue', :caption => l(:label_issue), :default_order => 'desc') %>
+<% end %>
 <!-- <th><%= l(:field_comments) %></th> -->
 <%= sort_header_tag('hours', :caption => l(:field_hours)) %>
 <th></th>
@@ -24,34 +28,41 @@
 </thead>
 <tbody>
 <% entries.each do |entry| -%>
-<tr class="time-entry <%= cycle("odd", "even") %> hascontextmenu" valign="top">
-<!--
-<td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entry.id, false, :id => nil) %></td>
--->
-<td class="spent_on"><%= format_date(entry.spent_on) %></td>
-<td class="user"><%= link_to_user(entry.user) %></td>
-<td class="activity"><%=h entry.activity %></td>
-<td class="project"><%= link_to_project(entry.project) %></td>
-<td class="subject">
-<% if entry.issue -%>
-<%= entry.issue.visible? ? link_to_issue(entry.issue,{:subject => false, :link_text => h(entry.issue.subject).truncate(40)}) : "##{entry.issue.id}" -%>
-<% end -%>
-</td>
-<!--
-<td class="comments"><%=h entry.comments %></td>
--->
-<td class="hours"><%= html_hours("%.2f" % entry.hours) %></td>
-<td align="center">
-<% if entry.editable_by?(User.current) -%>
-    <%= link_to image_tag('edit.png'), edit_time_entry_path(entry),
-                                       :title => l(:button_edit) %>
-    <%= link_to image_tag('delete.png'), time_entry_path(entry),
-                                         :data => {:confirm => l(:text_are_you_sure)},
-                                         :method => :delete,
-                                         :title => l(:button_delete) %>
-<% end -%>
-</td>
-</tr>
+  <tr class="time-entry <%= cycle("odd", "even") %> hascontextmenu" valign="top" <%= 'id=comment_'+entry.id.to_s unless entry.comments.empty? %>>
+  <!--
+  <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entry.id, false, :id => nil) %></td>
+  -->
+  <td class="spent_on">
+    <%= format_date(entry.spent_on) %>
+  </td>
+  <td class="user"><%= link_to_user(entry.user) %></td>
+  <td class="activity"><%=h entry.activity %></td>
+  <% if @project.nil? %>
+    <td class="project"><%= link_to_project(entry.project) %></td>
+  <% end %>
+  <% if @issue.nil? %>
+  <td class="subject">
+  <% if entry.issue -%>
+  <%= entry.issue.visible? ? link_to_issue(entry.issue,{:subject => false, :link_text => h(entry.issue.subject).truncate(40)}) : "##{entry.issue.id}" -%>
+  <% end -%>
+  </td>
+  <% end %>
+  <!--
+  <td class="comments"><%=h entry.comments %></td>
+  -->
+  <td class="hours"><%= html_hours("%.2f" % entry.hours) %></td>
+  <td align="center">
+  <% if entry.editable_by?(User.current) -%>
+      <%= link_to image_tag('edit.png'), edit_time_entry_path(entry),
+                                         :title => l(:button_edit) %>
+      <%= link_to image_tag('delete.png'), time_entry_path(entry),
+                                           :data => {:confirm => l(:text_are_you_sure)},
+                                           :method => :delete,
+                                           :title => l(:button_delete) %>
+  <% end -%>
+  <%= javascript_tag 'console.log($("#comment_'+entry.id.to_s+'"));addToolTip("#comment_'+entry.id.to_s+'","'+h(entry.comments)+'","left");' %>
+  </td>
+  </tr>
 <% end -%>
 </tbody>
 </table>

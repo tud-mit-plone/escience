@@ -1,13 +1,19 @@
-<h2>
-  <% unless @subissue.nil? %>
-    <span style="font-weight: 300"><%= l(:label_subissue)%> <%= link_to(@subissue.subject, issue_path(@subissue)) %></span>
-    <br/>
-  <% end %>
-  <%= @issue.subject %><%#= issue_heading(@issue) %>
-</h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<h2><%= @issue.subject %><%#= issue_heading(@issue) %></h2>
+<% unless @subissue.nil? %>
+  <div style="font-weight: 300; margin-top:-15px; margin-bottom:10px;">(<%= l(:label_subissue)%> <%= link_to(@subissue.subject, issue_path(@subissue)) %>)</div>
+<% end %>
 
-<div class="<%= @issue.css_classes %> details">
-  <% if @prev_issue_id || @next_issue_id %>
+<% if Issue.visible.open.where(:project_id => @project.id).count > 1 %>
+  <% content_for :sidebar_left do %>
+    <div class="headline"><%= l(:label_navigation) %></div>
+    <%= render :partial => 'issues/list_very_simple_sidebar', :locals => { :current => @issue } %>
+  <% end %>
+<% end %>
+
+<div class="<%= @issue.css_classes %> details" style="position:relative">
+  <%# -------------- deaktiviert ------------------ %>
+  <% if (@prev_issue_id || @next_issue_id) && 1==0 %>
     <div class="next-prev-links">
       <div class="prev<%= " first" if @issue_position==1 %>">
       <%= link_to_if @prev_issue_id,
@@ -28,80 +34,101 @@
       </div>
     </div>
   <% end %>
-
+  <%# -------------- deaktiviert ------------------ %>
+  
   <%= avatar(@issue.author, :size => "50") %>
 
-  <div class="tracker"><label style="font-weight:bold"><%= l(:label_tracker)%>:</label> <%= Tracker.find(@issue.tracker_id) %></div>
-
-  <p class="author">
-    <%= authoring @issue.created_on, @issue.author %>.
-    <% if @issue.created_on != @issue.updated_on %>
-    <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
-    <% end %>
-  </p>
-
-<fieldset>
-  <legend><%= l(:label_attribute_plural)%></legend>
-  <table class="attributes" width="100%">
-    <tr>
-      <td class="status" width="50%"><label><%=l(:field_status)%>:</label><%= h(@issue.status.name) %></td>
-      <td class="start-date" width="50%"><label><%=l(:field_start_date)%>:</label><%= format_date(@issue.start_date) %></td>
-    </tr>
-    <tr>
-      <td class="priority"><label><%=l(:field_priority)%>:</label><%= h(@issue.priority.name) %></td>
-      <td class="due-date"><label><%=l(:field_due_date)%>:</label><%= format_date(@issue.due_date) %></td>
-    </tr>
-    <tr><td colspan="2">&nbsp;</td></tr>
-    <tr>
-      <td class="assigned-to"><label><%=l(:field_assigned_to)%>:</label>
-        <%#= avatar(@issue.assigned_to, :size => "14") %>
-        <%= @issue.assigned_to ? link_to_user(@issue.assigned_to) : "-" %>
-      </td>
-      <td class="progress"><label><%=l(:field_done_ratio)%>:</label>
-        <%= progress_bar @issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%" %>
-      </td>
-    </tr>
-    <tr>
-      <td class="category"><label><%=l(:field_category)%>:</label><%=h(@issue.category ? @issue.category.name : "-") %></td>
-      <% if User.current.allowed_to?(:view_time_entries, @project) %>
-      <td class="spent-time"><label><%=l(:label_spent_time)%>:</label><%= @issue.total_spent_hours > 0 ? (link_to l_hours(@issue.total_spent_hours), {:controller => 'timelog', :action => 'index', :project_id => @project, :issue_id => @issue}) : "-" %></td>
+<fieldset class="collapsable collapsed">
+  <legend onclick="toggleFieldset(this)"><%= l(:label_attribute_plural)%></legend>
+  <div class="content">
+    <label style="font-weight:bold"><%= l(:label_tracker)%>:</label> <%= Tracker.find(@issue.tracker_id) %>
+    <p class="author">
+      <% if session[:current_view_of_eScience] != '0' %>
+        <%= authoring @issue.created_on, @issue.author %>.
       <% else %>
-      <td></td>
+        <%= authoring @issue.created_on, nil, :label => :label_added_time %>.
       <% end %>
-    </tr>
-    <tr>
-      <td class="fixed-version"><label><%=l(:field_fixed_version)%>:</label><%= @issue.fixed_version ? link_to_version(@issue.fixed_version) : "-" %></td>
-      <% if @issue.estimated_hours %>
-      <td class="estimated-hours"><label><%=l(:field_estimated_hours)%>:</label><%= l_hours(@issue.estimated_hours) %></td>
-      <% else %>
-      <td></td>
+      <% if @issue.created_on != @issue.updated_on %>
+      <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
       <% end %>
-    </tr>
-    <%= render_custom_fields_rows(@issue) %>
-    <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
-  </table>
+    </p>
+    <table class="attributes" width="100%">
+      <tr>
+        <td class="status" width="50%"><label><%=l(:field_status)%>:</label><%= h(@issue.status.name) %></td>
+        <td class="start-date" width="50%"><label><%=l(:field_start_date)%>:</label><%= format_date(@issue.start_date) %></td>
+      </tr>
+      <tr>
+        <td class="priority"><label><%=l(:field_priority)%>:</label><%= h(@issue.priority.name) %></td>
+        <td class="due-date"><label><%=l(:field_due_date)%>:</label><%= format_date(@issue.due_date) %></td>
+      </tr>
+      <tr>
+        <td class="assigned-to"><label>
+          <%#= avatar(@issue.assigned_to, :size => "14") %>
+          <% if session[:current_view_of_eScience] != '0' %>
+            <%=l(:field_assigned_to)%>:</label>
+            <%= @issue.assigned_to ? link_to_user(@issue.assigned_to) : "-" %>
+          <% end %>
+        </td>
+        <td class="progress"><label><%=l(:field_done_ratio)%>:</label>
+          <%= progress_bar @issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%" %>
+        </td>
+      </tr>
+      <tr>
+        <td class="category"><label><%=l(:field_category)%>:</label><%=h(@issue.category ? @issue.category.name : "-") %></td>
+        <% if User.current.allowed_to?(:view_time_entries, @project) %>
+        <td class="spent-time">
+          <label><%=l(:label_spent_time)%>:</label><%= @issue.total_spent_hours > 0 ? (link_to @issue.total_spent_hours.to_s+" h", {:controller => 'timelog', :action => 'index', :project_id => @project, :issue_id => @issue}) : "-" %>
+          <%#= @issue.total_spent_hours > 0 ? (link_to l_hours(@issue.total_spent_hours), {:controller => 'timelog', :action => 'index', :project_id => @project, :issue_id => @issue}) : "-" %>
+          <% if @issue.estimated_hours %>
+            (<%= @issue.estimated_hours %> <%=l(:label_estimated_hours)%>)
+          <% end %>
+        </td>
+        <% else %>
+        <td></td>
+        <% end %>
+      </tr>
+      <!--
+      <tr>
+        <td class="fixed-version"><label><%=l(:field_fixed_version)%>:</label><%= @issue.fixed_version ? link_to_version(@issue.fixed_version) : "-" %></td>
+        <% if @issue.estimated_hours %>
+        <td class="estimated-hours"><label><%=l(:field_estimated_hours)%>:</label><%= l_hours(@issue.estimated_hours) %></td>
+        <% else %>
+        <td></td>
+        <% end %>
+      </tr>
+      -->
+      <%= render_custom_fields_rows(@issue) %>
+      <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
+    </table>
+  </div>
 </fieldset>
+
 <% if @issue.description? || @issue.attachments.any? %>
-  <fieldset>
-    <legend><%=l(:field_description)%></legend>
-  <% if @issue.description? %>
-    <div class="contextual">
-  <%= link_to l(:button_quote),
-              {:controller => 'journals', :action => 'new', :id => @issue},
-              :remote => true,
-              :method => 'post',
-              :class => 'icon icon-comment' if authorize_for('issues', 'edit') %>
+  <fieldset class="collapsable">
+    <legend onclick="toggleFieldset(this)"><%=l(:field_description)%></legend>
+    <div class="content" style="margin-top:-15px">
+    <% if @issue.description? %>
+      <div class="wiki"><%= textilizable @issue, :description, :attachments => @issue.attachments %></div>
+    <% else %>
+      <br/>
+    <% end %>
+    <% if @issue.attachments.any? %>
+      <hr>
+      <h4 style="margin-top:-0px; margin-bottom: -0px"><%= l(:label_fileuploads) %>:</h4>
+      <%= link_to_attachments @issue %>
+    <% end %>
     </div>
-    <div class="wiki">
-    <%= textilizable @issue, :description, :attachments => @issue.attachments %>
-    </div>
-  <% end %>
-  <%= link_to_attachments @issue %>
   </fieldset>
 <% end %>
 </div>
-
 <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
+
+<% if @journals.present? %>
+<fieldset id="history" class="collapsable">
+  <legend onclick="toggleFieldset(this)"><%=l(:label_history)%></legend>
+  <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @journals } %>
+</fieldset>
+<% end %>
 
 <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
 <fieldset id="issue_tree">
@@ -112,13 +139,11 @@
   <%= render_descendants_tree(@issue) unless @issue.leaf?%>
 </fieldset>
 <% end %>
-
 <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
 <fieldset id="relations">
   <%= render :partial => 'relations' %>
 </fieldset>
 <% end %>
-
 
 <% if @changesets.present? %>
 <fieldset id="issue-changesets">
@@ -126,14 +151,6 @@
   <%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
 </fieldset>
 <% end %>
-
-<% if @journals.present? %>
-<fieldset id="history">
-  <legend><%=l(:label_history)%></legend>
-  <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @journals } %>
-</fieldset>
-<% end %>
-
 
 <div style="clear: both;"></div>
 <%= render :partial => 'action_menu' %>
@@ -151,23 +168,15 @@
   <%= f.link_to 'PDF' %>
 <% end %>
 
-<% html_title "#{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
-
-<% content_for :sidebar do %>
-  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
-  <%= render :partial => 'issues/sidebar' %>
-  <% if User.current.allowed_to?(:add_issue_watchers, @project) ||
-    (@issue.watchers.present? && User.current.allowed_to?(:view_issue_watchers, @project)) %>
-    <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
-    </div>
-  <% end %>
-<% end %>
+<% html_title "#{l(:field_issue)}: #{@issue.subject}" %>
 
 <% content_for :header_tags do %>
     <%= auto_discovery_link_tag(:atom, {:format => 'atom', :key => User.current.rss_key}, :title => "#{@issue.project} - #{@issue.tracker} ##{@issue.id}: #{@issue.subject}") %>
     <%= stylesheet_link_tag 'scm' %>
     <%= stylesheet_link_tag 'issues' %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
+
 
 <%= context_menu issues_context_menu_path %>

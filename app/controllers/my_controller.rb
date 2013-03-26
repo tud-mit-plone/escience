@@ -61,7 +61,7 @@ class MyController < ApplicationController
         @user.notified_project_ids = (@user.mail_notification == 'selected' ? params[:notified_project_ids] : [])
         set_language_if_valid @user.language
         flash[:notice] = l(:notice_account_updated)
-        redirect_to :action => 'account'
+        redirect_to :action => 'account', :sub => 'my_account'
         return
       end
     end

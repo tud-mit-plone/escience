@@ -1,4 +1,7 @@
-<h2><%=l(:label_project_new)%></h2>
+<h2 style="float:left"><%= l(:label_project_new) %></h2>
+
+<%= link_to(l(:button_back), {:action => 'index', :id => @project.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+<div class="clear"></div>
 
 <%= labelled_form_for @project do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>

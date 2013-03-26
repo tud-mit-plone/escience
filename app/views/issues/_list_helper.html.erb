@@ -1,0 +1,33 @@
+<div class="linkToIssue<%= ' closed' if issue.closed?%>">
+  <%= link_to(h(truncate(issue.subject, :length => 60)),{:controller => 'issues', :action => 'show', :id => issue}, :class => "#{issue.closed? ? 'closed' : nil}", :title => "#{l(:label_closed_issues) if issue.closed?}") %>
+  <div class="progress">
+    <img src="/images/battery-<%= issue.closed? ? '110' : (roundup((issue.done_ratio/10).ceil*10)).to_s %>.png" class="progress" title="<%= issue.closed? ? l(:label_closed_issues) : issue.done_ratio.to_s + l(:field_done_ratio) %>" /><%= "#{issue.done_ratio}%" %>
+  </div>
+  <div class="innerInfo<%= ' collapsed' unless open_element == true %>">
+    <div class="tools">
+    	<%# if User.current.allowed_to?(:edit_issue, nil, :global => true) %>
+        <div class="settings_project">
+          <%= link_to(image_tag("/images/settings.png"), {:controller => 'issues', :action => 'edit', :id => issue.id}) %>
+        </div>
+        <div class="settings_project">
+          <%= link_to(image_tag("/images/delete.png"), {:controller => 'issues', :method => 'destroy', :id => issue.id}) %>
+        </div>
+      <%# end %>
+    </div>                 
+    <div class="text">
+      <table>
+        <tr>
+          <td width="40" valign="top">
+            <%= Date.parse(format_date(issue.created_on)).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %>
+          </td>
+          <td class="wiki description" valign = "top">
+            <%= textilizable(issue.description) if issue.description.present? %>
+          </td>
+        </tr>
+      </table>
+      <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
+      <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span><br/>
+      <%= content_tag('div', l(:field_due_date) +": "+ format_date(issue.due_date), :class => 'last_modified') unless issue.due_date.nil? %>    
+    </div>
+  </div>
+</div>

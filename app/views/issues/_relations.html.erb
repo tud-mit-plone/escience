@@ -2,7 +2,8 @@
 
 <div class="contextual">
 <% if User.current.allowed_to?(:manage_issue_relations, @project) %>
-  <%= toggle_link l(:button_add), 'new-relation-form', {:focus => 'relation_issue_to_id'} %>
+  <%= link_to_function l(:button_add), '$("#new-relation-form").toggle();$("#new-relation-form").focus();$(this).parent().hide();' %>
+  <%#= toggle_link l(:button_add), 'new-relation-form', {:focus => 'relation_issue_to_id'} %>
 <% end %>
 </div>
 <div class="clear"></div>
@@ -22,7 +23,7 @@
 <td class="buttons" style="float:right !important"><%= link_to( image_tag('link_break.png'),
                           {:controller => 'issue_relations', :action => 'destroy', :id => relation},
                           :remote => true,
-						  :method => :delete,
+                          :method => :delete,
                           :data => {:confirm => l(:text_are_you_sure)},
                           :title => l(:label_relation_delete)) if User.current.allowed_to?(:manage_issue_relations, @project) %></td>
 </tr>
@@ -30,7 +31,6 @@
 </table>
 </form>
 <% end %>
-
 <%= form_for @relation, {
                  :as => :relation, :remote => true,
                  :url => {:controller => 'issue_relations', :action => 'create', :issue_id => @issue},

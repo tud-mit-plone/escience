@@ -470,6 +470,8 @@ de:
   project_module_calendar: Kalender
   project_module_gantt: Gantt
 
+  label_estimated_hours: h geschätzt
+  label_navigation: Aufgabenhierarchie
   label_community: Gemeinschaft
   label_team: Gruppe
   label_user_add: zur Kontaktliste
@@ -485,7 +487,7 @@ de:
   label_privacypolicy: Datenschutz
   label_imprint: Impressum
   label_termsconditions: Nutzungsbedingungen
-  label_organisation: Organisieren
+  label_organisation: Übersicht
   label_hello: Hallo
   label_delete_file: Datei löschen
   label_download_file: Datei herunterladen
@@ -494,8 +496,8 @@ de:
   label_usermessage: Nachrichten
   label_usermessage_announce: neue Nachricht
   label_usermessage_announce_plural: neue Nachrichten
-  label_mymessage: Arbeitsanweisungen
-  label_mymessage_plural: Arbeitsanweisungen
+  label_mymessage: Meine Aufgaben
+  label_mymessage_plural: Aufgaben
   label_projectspec: Projektspezifisch
   label_projectnew: Neues Projekt
   label_knowledge: Wissensräume
@@ -508,21 +510,24 @@ de:
   label_user_anonymous: Anonym
   label_project: Projekt
   label_project_new: Neues Projekt
+  label_project_edit: Einstellungen
   label_project_plural: Projekte
+  label_projects_list: Liste der Projekte
+  label_myproject_plural: Meine Projekte
   label_x_projects:
     zero:  keine Projekte
     one:   1 Projekt
     other: "%{count} Projekte"
   label_project_all: Alle Projekte
   label_project_latest: Neueste Projekte
-  label_issue: Arbeitsanweisungen
-  label_issue_new: Neue Anweisung
-  label_issue_plural: Arbeitsanweisungen
-  label_issue_view_all: Alle Arbeitsanweisungen anzeigen
-  label_issues_by: "Arbeitsanweisungen von %{value}"
-  label_issue_added: Arbeitsanweisung hinzugefügt
-  label_issue_updated: Arbeitsanweisung aktualisiert
-  label_issue_parent: Übergeordnete Arbeitsanweisung
+  label_issue: Aufgaben
+  label_issue_new: Neue Aufgabe
+  label_issue_plural: Aufgaben
+  label_issue_view_all: Alle Aufgaben anzeigen
+  label_issues_by: "Aufgaben von %{value}"
+  label_issue_added: Aufgabe hinzugefügt
+  label_issue_updated: Aufgabe aktualisiert
+  label_issue_parent: Übergeordnete Aufgabe
   label_document: Dokument
   label_document_new: Neues Dokument
   label_document_plural: Dokumente
@@ -587,6 +592,7 @@ de:
   label_user_messages_to: Nachricht an
   label_privatearea: Privater Bereich
   label_private: Privat
+  label_admin: Administrator
   label_guest: Gast
   label_memberlist_all: Gesamte Liste
   label_memberlist_grouped: nach Projekten gruppiert
@@ -622,17 +628,19 @@ de:
   label_string: Text
   label_text: Langer Text
   label_attribute: Attribut
-  label_attribute_plural: Attribute
+  label_attribute_plural: Übersicht
   label_download: "%{count} Download"
   label_download_plural: "%{count} Downloads"
   label_no_data: Nichts anzuzeigen
+  label_issues: Keine Aufgaben vorhanden
   label_change_status: Statuswechsel
-  label_history: Historie
+  label_history: Verlauf
   label_attachment: Datei
   label_attachment_new: Neue Datei hinzufügen
   label_attachment_delete: Anhang löschen
   label_attachment_plural: Dateien
   label_file_added: Datei hinzugefügt
+  label_fileuploads: Dateianhänge
   label_report: Bericht
   label_report_plural: Berichte
   label_events: Termine
@@ -656,7 +664,7 @@ de:
   label_public_projects: Öffentliche Projekte
   label_open_issues: offen
   label_open_issues_plural: offen
-  label_closed_issues: geschlossen
+  label_closed_issues: abgeschlossen
   label_closed_issues_plural: geschlossen
   label_x_open_issues_abbr_on_total:
     zero:  0 offen / %{total}
@@ -740,6 +748,8 @@ de:
   label_associated_revisions: Zugehörige Revisionen
   label_added: hinzugefügt
   label_modified: geändert
+  label_last_modified: geändert am
+  label_newest_project: zuletzt geändert
   label_copied: kopiert
   label_renamed: umbenannt
   label_deleted: gelöscht
@@ -755,7 +765,7 @@ de:
   label_roadmap: Roadmap
   label_roadmap_due_in: "Fällig in %{value}"
   label_roadmap_overdue: "%{value} verspätet"
-  label_roadmap_no_issues: Keine Arbeitsanweisungen für diese Version
+  label_roadmap_no_issues: Keine Aufgaben für diese Version
   label_search: Suche
   label_search_plural: Suchen
   label_result_plural: Resultate
@@ -773,8 +783,9 @@ de:
   label_preview: Vorschau
   label_feed_plural: Feeds
   label_changes_details: Details aller Änderungen
-  label_issue_tracking: Arbeitsanweisungen
+  label_issue_tracking: Aufgaben
   label_spent_time: Aufgewendete Zeit
+  label_spent_time_for_issue: Aufgewendete Zeit für die Aufgabe
   label_overall_spent_time: Aufgewendete Zeit aller Projekte anzeigen
   label_f_hour: "%{value} Stunde"
   label_f_hour_plural: "%{value} Stunden"
@@ -835,6 +846,7 @@ de:
   label_feeds_access_key_created_on: "Atom-Zugriffsschlüssel vor %{value} erstellt"
   label_module_plural: Module
   label_added_time_by: "Von %{author} vor %{age} hinzugefügt"
+  label_added_time: "Vor %{age} hinzugefügt"
   label_updated_time_by: "Von %{author} vor %{age} aktualisiert"
   label_updated_time: "Vor %{value} aktualisiert"
   label_jump_to_a_project: Projekt wählen
@@ -873,6 +885,8 @@ de:
   label_example: Beispiel
   label_display: Anzeige
   label_sort: Sortierung
+  label_sort_by_update: nach letzter Änderung
+  label_sort_by_name: nach Name
   label_ascending: Aufsteigend
   label_descending: Absteigend
   label_date_from_to: von %{start} bis %{end}
@@ -896,11 +910,13 @@ de:
   label_missing_api_access_key: Der API-Zugriffsschlüssel fehlt.
   label_api_access_key_created_on: Der API-Zugriffsschlüssel wurde vor %{value} erstellt
   label_profile: Profil
-  label_subtask_plural: Arbeitsanweisung unterteilt sich in Teilanweisungen
+  label_subtask_plural: Aufgabe unterteilt sich in Teilaufgaben
   label_project_copy_notifications: Sende Mailbenachrichtigungen beim Kopieren des Projekts.
   label_project_delete: Projekt löschen.
   label_principal_search: "Nach Benutzer oder Gruppe suchen:"
   label_user_search: "Nach Benutzer suchen:"
+  label_issues_closed_hide: fertige Aufgaben ausblenden
+  label_issues_closed_show: fertige Aufgaben anzeigen
 
   button_login: Login
   button_submit: OK
@@ -908,8 +924,8 @@ de:
   button_check_all: Alles auswählen
   button_uncheck_all: Alles abwählen
   button_delete: Löschen
-  button_create: Anlegen
-  button_create_and_continue: Anlegen und weiter
+  button_create: Anlegen und zurück
+  button_create_and_continue: Anlegen
   button_test: Testen
   button_edit: Bearbeiten
   button_edit_associated_wikipage: "Zugehörige Wikiseite bearbeiten: %{page_title}"
@@ -996,11 +1012,11 @@ de:
   text_issue_added: "Aufgabe %{id} wurde erstellt von %{author}."
   text_issue_updated: "Aufgabe %{id} wurde aktualisiert von %{author}."
   text_wiki_destroy_confirmation: Sind Sie sicher, dass Sie dieses Wiki mit sämtlichem Inhalt löschen möchten?
-  text_issue_category_destroy_question: "Einige Arbeitsanweisungen (%{count}) sind dieser Kategorie zugeodnet. Was möchten Sie tun?"
+  text_issue_category_destroy_question: "Einige Aufgaben (%{count}) sind dieser Kategorie zugeodnet. Was möchten Sie tun?"
   text_issue_category_destroy_assignments: Kategorie-Zuordnung entfernen
-  text_issue_category_reassign_to: Arbeitsanweisungen dieser Kategorie zuordnen
+  text_issue_category_reassign_to: Aufgaben dieser Kategorie zuordnen
   text_user_mail_option: "Für nicht ausgewählte Projekte werden Sie nur Benachrichtigungen für Dinge erhalten, die Sie beobachten oder an denen Sie beteiligt sind (z. B. Arbeitsansweisungen, deren Autor Sie sind oder die Ihnen zugewiesen sind)."
-  text_no_configuration_data: "Rollen, Aufgabenarten, Arbeitsanweisungs-Status und Workflows wurden noch nicht konfiguriert.\nEs ist sehr zu empfehlen, die Standard-Konfiguration zu laden. Sobald sie geladen ist, können Sie sie abändern."
+  text_no_configuration_data: "Rollen, Aufgabenarten, Aufgaben-Status und Workflows wurden noch nicht konfiguriert.\nEs ist sehr zu empfehlen, die Standard-Konfiguration zu laden. Sobald sie geladen ist, können Sie sie abändern."
   text_load_default_configuration: Standard-Konfiguration laden
   text_status_changed_by_changeset: "Status geändert durch Changeset %{value}."
   text_issues_destroy_confirmation: 'Sind Sie sicher, dass Sie die ausgewählten Arbeitsansweisungen löschen möchten?'
@@ -1111,6 +1127,7 @@ de:
 
   notice_project_alreadyexists: Es existiert bereits ein Projekt mit diesem Namen.
   notice_issue_successful_create: Anweisung %{id} erfolgreich erstellt.
+  notice_issue_error_create: Beim Anlegen der Anweisung trat ein Fehler auf. Überprüfen Sie alle Felder.
   label_between: between
   setting_issue_group_assignment: Erlaube Anweisung Gruppen zuzuweisen
   label_diff: diff
@@ -1177,10 +1194,10 @@ de:
   tooltip_sidebar_archive: Alle wichtigen Nachrichten, die Sie für archivierungswürdig halten.
   tooltip_sidebar_trash: Der Papierkorb für Ihre internen Nachrichten auf der eScience-Plattform
   tooltip_sidebar_overview: Verschaffen Sie sich einen Überblick über das Projekt »%{project}«. 
-  tooltip_sidebar_issues_all: Sehen Sie die Arbeitsanweisungen der einzelnen Projekte an, bei denen Sei Mitglied sind.
-  tooltip_sidebar_issues: Sehen Sie die Arbeitsanweisungen des Projekts »%{project}« an.
-  tooltip_sidebar_calendar_all: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen.
-  tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Arbeitsanweisungen im Projekt »%{project}«.
+  tooltip_sidebar_issues_all: Sehen Sie die Aufgaben der einzelnen Projekte an, bei denen Sei Mitglied sind.
+  tooltip_sidebar_issues: Sehen Sie die Aufgaben des Projekts »%{project}« an.
+  tooltip_sidebar_calendar_all: Verschaffen Sie sich einen Überblick über die Stichtage der Aufgaben.
+  tooltip_sidebar_calendar: Verschaffen Sie sich einen Überblick über die Stichtage der Aufgaben im Projekt »%{project}«.
   tooltip_sidebar_news: Hier finden Sie Mitteilungen, die für alle Mitglieder hinterlassen wurden.
   tooltip_sidebar_blogs: Eine weitere Mitteilungszentrale.
   tooltip_sidebar_documents: Alle Dokumente, die zu diesem Projekt angehängt wurden, sind hier zu finden.
@@ -1191,15 +1208,20 @@ de:
   tooltip_sidebar_doodles: Erstellen Sie eine kleine Umfrage und lassen Sie bestimmte Gruppenmitglieder abstimmen.
   tooltip_sidebar_contactlist: Hier finden Sie eine Auflistung Ihrer Kontakt. Auch können Sie an dieser Stelle nach Kontakten aus verschiedenen Projekten suchen und zu Ihrer Kontaktliste hinzufügen.
     
+  tooltip_project_message_delete: Löschen.
+  tooltip_project_message_settings: Einstellungen.
+  tooltip_project_message_issues: Aufgaben in diesem Projekt.
+  tooltip_project_message_public: Durch aktivieren dieser Option wird Ihr Projekt für jeden der Gemeinschaft sichbar.
+
   tooltip_user_message_archive: Archivieren Sie diese Nachricht.
   tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Ordner <i>gelöscht</i> verschoben.)
   tooltip_user_message_deleteFin: Löschen Sie diese Nachricht entgültig.
   tooltip_user_message_emptyTrash: Leeren Sie den <i>gelöscht</i> Ordner. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
   tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.
-  tooltip_navbar_issues_count: "Sehen Sie die Arbeitsanweisungen, die Ihnen in den einzelnen Projekt zugeordnet wurden."
+  tooltip_navbar_issues_count: "Sehen Sie die Aufgaben, die Ihnen in den einzelnen Projekt zugeordnet wurden."
   tooltip_and: und
   tooltip_navbar_user_messages_count: Sie haben %{count} Nachricht(en) von %{persons} erhalten. 
-  tooltip_navbar_issues_explain: "Ihnen wurde(n) %{position} Arbeitsanweisung(en) in verschiednen Projekten zugewiesen."
+  tooltip_navbar_issues_explain: "Ihnen wurde(n) %{position} Aufgabe(n) in verschiednen Projekten zugewiesen."
   tooltip_navbar_account: Hallo %{name}. Wenn Sie hier klicken, können Sie Ihre Angaben ändern.
   tooltip_navbar_logout: Zum Abmelden bitte hier klicken... Bis zum nächsten Mal.
   tooltip_navbar_help: Sie haben Fragen und kommen nicht weiter? Schauen Sie zunächst hier nach einer Antwort. Sollten Sie nicht fündig werde stehen wir Ihnen gern zur Verfügung.

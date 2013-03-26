@@ -44,6 +44,7 @@ class ProjectsController < ApplicationController
   helper :repositories
   include RepositoriesHelper
   include ProjectsHelper
+  include ApplicationHelper
 
   # Lists visible projects
   def index
@@ -53,8 +54,21 @@ class ProjectsController < ApplicationController
         unless params[:closed]
           scope = scope.active
         end
-        @projects = scope.visible.order('lft').all
-#        @projects = scope.visible.order('identifier').all
+
+        if !params[:sub].nil? && session[:current_view_of_eScience] == "0"
+          projects = scope.own(User.current)
+        else
+          projects = scope.visible.all
+        end
+        @name_dir = 'desc'
+        @newest_dir = 'desc'
+        if params[:order] == 'name'
+          @name_dir = params[:dir] == 'asc' ? 'desc' : 'asc'
+        elsif params[:order] == 'created_on'
+          @newest_dir = params[:dir] == 'desc' ? 'asc' : 'desc'
+        end
+        @projects = project_nested_list(projects)
+
       }
       format.api  {
         @offset, @limit = api_offset_and_limit
@@ -66,6 +80,70 @@ class ProjectsController < ApplicationController
                                               :limit => Setting.feeds_limit.to_i)
         render_feed(projects, :title => "#{Setting.app_title}: #{l(:label_project_latest)}")
       }
+    end
+  end
+  
+  def project_nested_list(projects)
+    if projects.any?
+      if params[:order] == 'created_on'
+        projects_with_activities = []
+        projects.each do |project|
+          @activity = Redmine::Activity::Fetcher.new(User.current, :project => project,
+                                                                   :with_subprojects => false,
+                                                                   :author => User.current)
+          events = @activity.events(nil, nil,{:limit=>1})
+          unless events.empty?
+            event = events.first
+            if (event[:updated_on]) && event[:updated_on].to_i > project.updated_on.to_i
+              projects_with_activities << {:last_activity => event.updated_on, :project => project}
+            elsif event[:created_on].to_i > project.updated_on.to_i
+              projects_with_activities << {:last_activity => event.created_on, :project => project}
+            else
+              projects_with_activities << {:last_activity => project.updated_on, :project => project}
+            end
+          else
+            projects_with_activities << {:last_activity => project.updated_on, :project => project}
+          end
+        end
+        if params[:dir].nil? || params[:dir] == 'desc'
+          projects_with_activities.sort! { |a, b| [b[:last_activity], b[:project]] <=> [a[:last_activity], a[:project]] }
+        else 
+          projects_with_activities.sort! { |a, b| [a[:last_activity], a[:project]] <=> [b[:last_activity], b[:project]] }
+        end
+        projects = projects_with_activities
+      end
+
+
+      parents = []
+      projects.each do |project_element|
+        project = projects_with_activities.nil? ? project_element : project_element[:project]
+        unless params[:show_all]
+          projects_hierarchy = project.hierarchy()
+          start = 0
+          if projects_hierarchy.size() > 1
+            projects_hierarchy.slice!(0)
+            start = 1
+          end
+          parent = projects_hierarchy[0]
+          if parent[:id] != 6 && !parents.any? { |b| b[:id] == parent[:id]}
+            newest = projects_with_activities.nil? ? project_element.id : project_element[:project].id
+            last_activity = projects_with_activities.nil? ? project_element.updated_on : project_element[:last_activity]
+            parents << {:id => parent.id, :project => parent, :date => last_activity, :start => start, :newest => newest}
+          end
+        else
+          parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
+        end
+      end
+      
+      if params[:order] == 'name' || params[:order].nil?
+        if params[:dir].nil? || params[:dir] == 'asc'
+          parents.sort! { |a,b| a[:project].name.downcase <=> b[:project].name.downcase }
+        else
+          parents.sort! { |a,b| b[:project].name.downcase <=> a[:project].name.downcase }
+        end
+      end
+      
+      return parents
     end
   end
 
@@ -91,10 +169,10 @@ class ProjectsController < ApplicationController
       end
       params[:project][:identifier] = identifier
     end
-    params[:project][:author] = User.current.id
     @project.safe_attributes = params[:project]
+    @project.creator = User.current.id
     
-    if Project.find_by_name(params[:project][:name]).nil? && params[:project][:name].length<51 && validate_parent_id && @project.save
+    if Project.find_by_name(params[:project][:name]).nil? && params[:project][:name].length<51 && validate_parent_id && @project.save!
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
       # Add current user as a project member if he is not admin
       unless User.current.admin?
@@ -182,6 +260,7 @@ class ProjectsController < ApplicationController
 
     cond = @project.project_condition(Setting.display_subprojects_issues?)
 
+    @issues = Issue.visible.open.where(:parent_id => nil, :project_id => @project.id)
     @open_issues_by_tracker = Issue.visible.open.where(cond).count(:group => :tracker)
     @total_issues_by_tracker = Issue.visible.where(cond).count(:group => :tracker)
 
@@ -189,8 +268,19 @@ class ProjectsController < ApplicationController
       @total_hours = TimeEntry.visible.sum(:hours, :include => :project, :conditions => cond).to_f
     end
 
-    activity_index_for_project
-
+    activities = activity_index_for_project
+    unless activities.empty?
+      last_event = activities.first[1][0]
+      @last_update = @project.updated_on
+      if (last_event[:updated_on]) && last_event[:updated_on].to_i > @project.updated_on.to_i
+        @last_update = last_event.updated_on
+      elsif last_event[:created_on].to_i > @project.updated_on.to_i
+        @last_update = last_event.created_on
+      end
+    else
+      @last_update = @project.updated_on
+    end 
+    
     @key = User.current.rss_key
 
     respond_to do |format|
@@ -211,6 +301,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    params[:project][:description] = convertHtmlToWiki(params[:project][:description])
     @project.safe_attributes = params[:project]
     if validate_parent_id && @project.save
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')

@@ -1,7 +1,8 @@
 <%= form_for @project,
             :url => { :action => 'modules', :id => @project },
             :html => {:id => 'modules-form',
-                      :method => :post} do |f| %>
+            :class => "tab_view",
+            :method => :post} do |f| %>
 
 <div class="box">
 <fieldset>

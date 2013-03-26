@@ -12,3 +12,4 @@ end
 
 # Initialize the rails application
 RedmineApp::Application.initialize!
+ActiveRecord::Base.logger.level = Logger::INFO

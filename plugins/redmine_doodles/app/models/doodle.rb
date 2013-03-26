@@ -21,6 +21,10 @@ class Doodle < ActiveRecord::Base
   before_validation :sanitize_options
   
   after_create :add_author_as_watcher, :send_mails
+
+  # Nicht sicher, welche Einstellung für den Scope notwendig - Anpassung wegen acts_as_activity_provider -> find_events-Funktion durchgeführt
+  scope :visible, lambda {|*args| { :include => :project,
+                                          :conditions => Project.allowed_to_condition(args.shift || User.current, :view_messages, *args) } }
   
   def results
     old_answers = responses.map(&:answers)[0]

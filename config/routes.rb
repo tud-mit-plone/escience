@@ -170,7 +170,9 @@ RedmineApp::Application.routes.draw do
     get 'wiki/:id/:version/diff', :to => 'wiki#diff'
   end
 
+  match '/issues/new_with_decision', :to => 'issues#new_with_decision', :via => [:post, :get]
   resources :issues do
+
     collection do
       match 'bulk_edit', :via => [:get, :post]
       post 'bulk_update'

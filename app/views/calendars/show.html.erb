@@ -1,6 +1,10 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
+
 <% content_for :sidebar_right do %>
-  <% if params['sub'].nil? && User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
+  <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
     <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
+  <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'icon icon-add' %>
   <% end %>
 <% end %>
 
@@ -22,7 +26,7 @@
   </div>
   <div class="buttons">
     <div><%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %></div>
-    <div><%= link_to_function l(:button_apply), '$("query_form").submit()', :class => 'btn' %></div>
+    <div><%= submit_tag l(:button_apply) %></div>
   </div>
 </fieldset>
 

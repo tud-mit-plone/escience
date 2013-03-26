@@ -1,4 +1,11 @@
-<h2><%= l(:label_spent_time) %></h2>
+<% unless @project.nil? %>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<% end %>
+
+<h2 style="float:left"><%= l(:label_spent_time) %></h2>
+
+<%= link_to(l(:button_back), {:action => 'index', :id => @project, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+<div class="clear"></div>
 
 <%= labelled_form_for @time_entry, :url => time_entries_path do |f| %>
   <%= hidden_field_tag 'project_id', params[:project_id] if params[:project_id] %>

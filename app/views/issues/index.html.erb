@@ -1,3 +1,5 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless (@project.nil?)%></h1></div>
+
 <% content_for :sidebar_right do %>
   <% if params['sub'].nil? && User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
     <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
@@ -15,12 +17,12 @@
     <%= hidden_field_tag 'set_filter', '1' %>
     <%= hidden_field_tag 'sub', 'issues_all' unless params['sub'].nil? %>
     <div id="query_form_content" class="hide-when-print">
-    <fieldset id="filters" class="collapsible ">
+    <fieldset id="filters" class="collapsable" style="padding-right:10px;<%= 'display:none' unless params['id'].nil? %>">
       <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
       <div>
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
-      <div class="buttons hide-when-print">
+      <div class="buttons hide-when-print" style="margin-bottom:10px;">
         <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")' %></div>
         <div>
           <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project, :sub => 'issues_all' }, :class => 'icon icon-reload' if (!params.nil? && !params['issues_all'].nil?)  %>
@@ -59,35 +61,36 @@
 <% end %>
 
 <%= error_messages_for 'query' %>
+
 <% if @query.valid? %>
-<% if @issues.empty? %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% else %>
-<%= render :partial => 'issues/list', :locals => {:issues => @issues, :query => @query} %>
-<% end %>
-
-<% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => params.merge(:key => User.current.rss_key) %>
-  <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
-  <%= f.link_to 'PDF', :url => params %>
-<% end %>
-
-<div id="csv-export-options" style="display:none;">
-  <h3 class="title"><%= l(:label_export_options, :export_format => 'CSV') %></h3>
-  <%= form_tag(params.merge({:format => 'csv',:page=>nil}), :method => :get, :id => 'csv-export-form') do %>
-  <p>
-    <label><%= radio_button_tag 'columns', '', true %> <%= l(:description_selected_columns) %></label><br />
-    <label><%= radio_button_tag 'columns', 'all' %> <%= l(:description_all_columns) %></label>
-  </p>
-  <p>
-    <label><%= check_box_tag 'description', '1' %> <%= l(:field_description) %></label>
-  </p>
-  <p class="buttons">
-    <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);" %>
-    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
-  </p>
+  <% if @issues.empty? %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+    <%= render :partial => 'issues/list', :locals => {:issues => @issues} %>
   <% end %>
-</div>
+  
+  <% other_formats_links do |f| %>
+    <%= f.link_to 'Atom', :url => params.merge(:key => User.current.rss_key) %>
+    <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
+    <%= f.link_to 'PDF', :url => params %>
+  <% end %>
+  
+  <div id="csv-export-options" style="display:none;">
+    <h3 class="title"><%= l(:label_export_options, :export_format => 'CSV') %></h3>
+    <%= form_tag(params.merge({:format => 'csv',:page=>nil}), :method => :get, :id => 'csv-export-form') do %>
+    <p>
+      <label><%= radio_button_tag 'columns', '', true %> <%= l(:description_selected_columns) %></label><br />
+      <label><%= radio_button_tag 'columns', 'all' %> <%= l(:description_all_columns) %></label>
+    </p>
+    <p>
+      <label><%= check_box_tag 'description', '1' %> <%= l(:field_description) %></label>
+    </p>
+    <p class="buttons">
+      <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);" %>
+      <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+    </p>
+    <% end %>
+  </div>
 
 <% end %>
 <%= call_hook(:view_issues_index_bottom, { :issues => @issues, :project => @project, :query => @query }) %>
@@ -102,7 +105,7 @@
                                  :query_id => @query, :format => 'atom',
                                  :page => nil, :key => User.current.rss_key},
                                 :title => l(:label_changes_details)) %>
-   <%= stylesheet_link_tag 'issues' %>
+   <%= stylesheet_link_tag 'project' %>
 <% end %>
 
 <%= context_menu issues_context_menu_path %>

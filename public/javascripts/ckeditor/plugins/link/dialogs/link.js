@@ -40,7 +40,8 @@ CKEDITOR.dialog.add( 'link', function( editor ) {
 	// Handles the event when the "Type" selection box is changed.
 	var linkTypeChanged = function() {
 			var dialog = this.getDialog(),
-				partIds = [ 'urlOptions', 'anchorOptions', 'emailOptions', 'wikiOptions' ],
+//				partIds = [ 'urlOptions', 'anchorOptions', 'emailOptions', 'wikiOptions' ],
+				partIds = [ 'urlOptions', 'emailOptions' ],
 				typeValue = this.getValue(),
 				uploadTab = dialog.definition.getContents( 'upload' ),
 				uploadInitiallyHidden = uploadTab && uploadTab.hidden;
@@ -123,7 +124,7 @@ CKEDITOR.dialog.add( 'link', function( editor ) {
 			}
 
 			if ( !retval.type ) {
-				if ( ( wikiMatch = getLinkClass(element) ) == 'wiki-page' ) {
+/*				if ( ( wikiMatch = getLinkClass(element) ) == 'wiki-page' ) {
 					retval.type = 'wiki';
 					retval.wiki = {};
 					retval.wiki = retval.wiki = element.getHtml();
@@ -134,7 +135,8 @@ CKEDITOR.dialog.add( 'link', function( editor ) {
 					retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
 				}
 				// Protected email link as encoded string.
-				else if ( ( emailMatch = href.match( emailRegex ) ) ) {
+				else */
+				 if ( ( emailMatch = href.match( emailRegex ) ) ) {
 					var subjectMatch = href.match( emailSubjectRegex ),
 						bodyMatch = href.match( emailBodyRegex );
 
@@ -346,9 +348,9 @@ CKEDITOR.dialog.add( 'link', function( editor ) {
 				'default': 'url',
 				items: [
 					[ linkLang.toUrl, 'url' ],
-					[ linkLang.toAnchor, 'anchor' ],
+//					[ linkLang.toAnchor, 'anchor' ],
 					[ linkLang.toEmail, 'email' ],
-					[ linkLang.toWiki, 'wiki' ]
+//					[ linkLang.toWiki, 'wiki' ]
 					],
 				onChange: linkTypeChanged,
 				setup: function( data ) {

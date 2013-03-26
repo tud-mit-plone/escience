@@ -71,9 +71,11 @@ module WikiHelper
     length = options[:truncate].nil? ? 98 : options[:truncate]
     options = [[l(:label_project_all), 'all']]
     options << [l(:label_my_projects), 'my_projects'] unless User.current.memberships.empty?
-    options << [l(:label_and_its_subprojects, @project.name), 'subprojects'] unless @project.nil? || @project.descendants.active.empty?
-    name = truncate(@project.name,:length => length)
-    options << [name, ''] unless @project.nil?
+    unless @project.nil?
+      options << [l(:label_and_its_subprojects, @project.name), 'subprojects'] unless @project.nil? || @project.descendants.active.empty?
+      name = truncate(@project.name,:length => length)
+      options << [name, '']
+    end
     select_tag('scope', options_for_select(options, params[:scope].to_s)) if options.size > 1
   end
 

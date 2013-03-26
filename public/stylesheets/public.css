@@ -33,65 +33,54 @@
 
 #navigation_group {
 	position: absolute;
-	top:135px;
+	top:100px;
 }
 
-#navigation_group #private {
-	width:140px;
-	height:88px;
-	padding-right: 10px;
-	padding-top: 5px;
-	position: absolute;
-	margin-left: 35px;
-	text-align:right;
-	vertical-align:bottom;
-	background:#7DB414 url(../images/gast_gruen.png) center bottom no-repeat;
+#navigation_group ul { 
+  padding: 0px; 
+  position: relative; 
+  height: 100px; 
+  width: 150px; 
+  margin-left: 35px;
+}
+
+#navigation_group .roundabout-moveable-item {
+  height: 90px; 
+  width: 150px; 
+  text-align:center;
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	font-size:16pt;
+	font-size:11pt;
 	font-weight:300;
 	color:#fff;
-	z-index:10;
-	background-position-x:30%;
+	text-align:right;
+	vertical-align:bottom;
 }
 
-#navigation_group #group {
-	width:93px;
-	height:57px;
-	font-size: 11px;
-	color: #dcdcdc;
-	text-align: right;
-	padding-right: 7px;
-	padding-top: 5px;
-	margin-top:-25px;
-	background:#7D7D7D url(../images/team_grau.png) center bottom no-repeat;
-	-moz-border-radius:10px;
+#navigation_group .roundabout-moveable-item img {
+  display:block; 
+  width:100%; 
+  height:100%;
+  -moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	background-size:100px;
-	z-index:5;
 }
 
-#navigation_group #community {
-	width:97px;
-	height:57px;
-	font-size: 11px;
-	color: #dcdcdc;
-	text-align: center;
-	padding-left: 3px;
-	padding-top: 5px;
-	float: right;
-	margin-top:-62px;
-	margin-left:180px;
-	background:#7D7D7D url(../images/community_grau.png) center bottom no-repeat;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	border-radius:10px;
-	background-size:100px;
-	z-index:5;
+#navigation_group .roundabout-moveable-item .roundabout_label {
+	position: absolute;
+	right: 7px;
+	top: 5px;
 }
-	
+
+#navigation_group .roundabout-moveable-item {
+  background: #7d7d7d !important;
+}
+
+#navigation_group .roundabout-moveable-item.roundabout-in-focus {
+  background: #7db515 !important;
+  font-size: 22px;
+}	
 
 /* Style sheet login */
 #login .inner{

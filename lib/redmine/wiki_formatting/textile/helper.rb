@@ -32,7 +32,7 @@ module Redmine
         def initial_page_content(page)
           "h1. #{@page.pretty_title}"
         end
-
+        
         def heads_for_wiki_formatter
           unless @heads_for_wiki_formatter_included
             content_for :header_tags do

@@ -68,7 +68,7 @@
     <%= javascript_tag "observeSearchfield('principal_search', 'principals', '#{ escape_javascript autocomplete_project_memberships_path(@project) }')" %>
 
     <div id="principals" class="membership">
-      <%= principals_check_box_tags 'membership[user_ids][]', principals %>
+      <%#= principals_check_box_tags 'membership[user_ids][]', principals %>
     </div>
 
     <p class="membership"><%= l(:label_role_plural) %>:

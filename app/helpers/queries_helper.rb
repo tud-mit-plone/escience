@@ -118,12 +118,14 @@ module QueriesHelper
       cond << " OR project_id = #{@project.id}" if @project
       @query = Query.find(params[:query_id], :conditions => cond)
       raise ::Unauthorized unless @query.visible?
+      @query.setView(session[:current_view_of_eScience])
       @query.project = @project
       session[:query] = {:id => @query.id, :project_id => @query.project_id}
       sort_clear
     elsif api_request? || params[:set_filter] || session[:query].nil? || session[:query][:project_id] != (@project ? @project.id : nil)
       # Give it a name, required to be valid
       @query = Query.new(:name => "_")
+      @query.setView(session[:current_view_of_eScience])
       @query.project = @project
       build_query_from_params
       session[:query] = {:project_id => @query.project_id, :filters => @query.filters, :group_by => @query.group_by, :column_names => @query.column_names}
@@ -131,6 +133,7 @@ module QueriesHelper
       # retrieve from session
       @query = Query.find_by_id(session[:query][:id]) if session[:query][:id]
       @query ||= Query.new(:name => "_", :filters => session[:query][:filters], :group_by => session[:query][:group_by], :column_names => session[:query][:column_names])
+      @query.setView(session[:current_view_of_eScience])
       @query.project = @project
     end
   end

@@ -1,0 +1,37 @@
+<%= labelled_form_for @issue, :html => {:id => 'issue-form', :multipart => true} do |f| %>
+    <%= error_messages_for 'issue', 'time_entry' %>
+    <%= render :partial => 'conflict' if @conflict %>
+    <div class="box">
+    <% if User.current.allowed_to?(:log_time, @project) %>
+        <fieldset class="tabular">
+          <legend><%= l(:button_log_time) %></legend>
+          <%= labelled_fields_for :time_entry, @time_entry do |time_entry| %>
+            <table width="100%">
+              <tr>
+                <td width="16%"><%= l(:label_spent_time) %></td>
+                <td width="84%"><%= time_entry.text_field :hours, :size => 6, :no_label => true %> <%= l(:field_hours) %></td>
+              </tr>
+              <tr>
+                <td><%= l(:label_activity) %></td>
+                <td><%= time_entry.select :activity_id, activity_collection_for_select_options,:no_label => true %></td>
+              </tr>
+              <tr>
+                <td><%= l(:label_comment) %></td>
+                <td><%= time_entry.text_field :comments, :style => 'width:100%', :maxsize=>'60',:no_label => true %></td>
+              </tr>
+              <% @time_entry.custom_field_values.each do |value| %>
+              <tr>
+                <td></td>
+                <td><%= custom_field_tag_with_label :time_entry, value %></td>
+              </tr>
+              <% end %>
+            </table>
+          <% end %>
+        </fieldset>
+    <% end %>
+    </div>
+    <%= f.hidden_field :lock_version %>
+    <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
+    <%= link_to l(:button_cancel), {:action => 'show', :id => @issue.id}, :class => "button" %></p>
+    <%= submit_tag l(:button_submit) %>
+<% end %>

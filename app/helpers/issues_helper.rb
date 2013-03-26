@@ -92,6 +92,10 @@ module IssuesHelper
     h("#{issue.subject}")
   end
 
+  def roundup(zahl)
+    zahl % 20 == 0 ? zahl : zahl + 20 - (zahl % 20) 
+  end
+
   def render_issue_subject_with_tree(issue)
     s = ''
     ancestors = issue.root? ? [] : issue.ancestors.visible.all
@@ -109,11 +113,11 @@ module IssuesHelper
   end
 
   def render_descendants_tree(issue)
-    s = '<form><table width="100%">'
+    s = '<form><table width="100%" style="clear:both">'
       issue_list(Issue.find_all_by_parent_id(issue).sort_by(&:lft)) do |child, level|
         s << content_tag('tr',
-             content_tag('td width="70%"', link_to(child.subject, issue_path(child))) + 
-             content_tag('td width="15%"', h(child.status)) +
+             content_tag('td width="68%"', link_to(child.subject, issue_path(child))) + 
+             content_tag('td width="17%"', h(child.status)) +
              content_tag('td width="15%"', progress_bar(child.done_ratio, :width => '80px')),
              :class => "issue issue-#{child.id} hascontextmenu #{level > 0 ? "idnt idnt-#{level}" : nil}")
       end

@@ -2,12 +2,12 @@
 
 <table class="list">
   <thead><tr>
-    <th><%= l(:field_name) %></th>
-    <th><%= l(:enumeration_system_activity) %></th>
+    <th width="78%"><%= l(:field_name) %></th>
+    <th width="20%"><%= l(:enumeration_system_activity) %></th>
     <% TimeEntryActivity.new.available_custom_fields.each do |value| %>
     <th><%= h value.name %></th>
     <% end %>
-    <th width="60;" align="center"><%= l(:field_active) %></th>
+    <th width="2%" align="center"><%= l(:field_active) %></th>
   </tr></thead>
 
   <% @project.activities(true).each do |enumeration| %>
@@ -35,8 +35,8 @@
 <%= link_to(l(:button_reset), project_enumerations_path(@project),
             :method => :delete,
             :data => {:confirm => l(:text_are_you_sure)},
-            :class => 'button') %>
+            :class => 'button submit') %>
 </div>
 
-<%= submit_tag l(:button_save) %>
+<%= submit_tag l(:button_save), :style => "margin-right:0px;" %>
 <% end %>

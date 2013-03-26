@@ -16,14 +16,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class IssuesController < ApplicationController
-  menu_item :new_issue, :only => [:new, :create]
+  menu_item :new_issue, :only => [:new, :create, :new_with_descision]
   default_search_scope :issues
 
   before_filter :find_issue, :only => [:show, :edit, :update]
   before_filter :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
   before_filter :find_project, :only => [:new, :create]
-  before_filter :authorize, :except => [:index]
-  before_filter :find_optional_project, :only => [:index]
+  before_filter :authorize, :except => [:index, :new_with_decision]
+  before_filter :find_optional_project, :only => [:index, :new_with_descision]
   before_filter :check_for_default_issue_status, :only => [:new, :create]
   before_filter :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -51,21 +51,26 @@ class IssuesController < ApplicationController
   include IssuesHelper
   helper :timelog
   helper :gantt
+#  include ApplicationHelper
   include Redmine::Export::PDF
   
   def index
-    unless (params['sub'].nil? || !params['set_filter'].nil?) 
-      bufferProjectId = @project
-      unless session[:query].nil? 
-        session[:query][:project_id] = nil
+    unless params['id'].nil?
+      @project = Project.find(params['id']);
+    else
+      unless (params['sub'].nil? || !params['set_filter'].nil?) 
+        bufferProjectId = @project
+        unless session[:query].nil? 
+          session[:query][:project_id] = nil
+        end
+        @project = nil
+        params["f"] = !params['f'].nil? && !params['f'].include?('project_id') ? params['f'] : ["status_id", "project_id"]
+        params["f"][2] = "assigned_to_id" if params['show'] == 'new'
+        params["op"] = !params['op'].nil? && !params['op'][:project_id].nil? ? params['op'] : {"status_id"=>"o", "project_id"=>"="}
+        params['op'][:assigned_to_id] = '=' if params['show'] == 'new'
+        params["v"] = !params['v'].nil? && !params['v'][:project_id].nil? ? params['v'] : {"project_id"=>["mine"]}
+        params['v'][:assigned_to_id] = ["me"] if params['show'] == 'new'
       end
-      @project = nil
-      params["f"] = !params['f'].nil? && !params['f'].include?('project_id') ? params['f'] : ["status_id", "project_id"]
-      params["f"][2] = "assigned_to_id" if params['show'] == 'new'
-      params["op"] = !params['op'].nil? && !params['op'][:project_id].nil? ? params['op'] : {"status_id"=>"o", "project_id"=>"="}
-      params['op'][:assigned_to_id] = '=' if params['show'] == 'new'
-      params["v"] = !params['v'].nil? && !params['v'][:project_id].nil? ? params['v'] : {"project_id"=>["mine"]}
-      params['v'][:assigned_to_id] = ["me"] if params['show'] == 'new'
     end
     params["c"] = ["project", "tracker", "status", "priority", "subject", "assigned_to", "updated_on"]
     params["group_by"] = "project"
@@ -94,10 +99,19 @@ class IssuesController < ApplicationController
       @issue_count = @query.issue_count
       @issue_pages = Paginator.new self, @issue_count, @limit, params['page']
       @offset ||= @issue_pages.current.offset
-      @issues = @query.issues(:include => [:assigned_to, :tracker, :priority, :category, :fixed_version],
-                              :order => sort_clause,
-                              :offset => @offset,
-                              :limit => @limit)
+      if !params[:sub].nil? && session[:current_view_of_eScience] == "0"
+        @issues = @query.issues(:include => [:assigned_to, :tracker, :priority, :category, :fixed_version],
+                                :conditions => ["(creator = #{User.current.id} AND issues.parent_id IS NULL)"],
+                                :order => sort_clause,
+                                :offset => @offset,
+                                :limit => @limit)
+      else
+        @issues = @query.issues(:include => [:assigned_to, :tracker, :priority, :category, :fixed_version],
+                                :conditions => ["(issues.parent_id IS NULL)"],
+                                :order => sort_clause,
+                                :offset => @offset,
+                                :limit => @limit) 
+      end
       @issue_count_by_group = @query.issue_count_by_group
       
       if !(params[:group_by].nil? || params[:group_by].empty?)
@@ -134,7 +148,11 @@ class IssuesController < ApplicationController
   end
 
   def show
-    @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
+    if session[:current_view_of_eScience] == "0"
+      @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
+    else 
+      @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
+    end
     @journals.each_with_index {|j,i| j.indice = i+1}
     @journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
@@ -171,8 +189,32 @@ class IssuesController < ApplicationController
     end
   end
 
+  def new_with_decision
+    if session[:current_view_of_eScience] == "0"
+        @projects = Project.own
+    else
+    end
+    unless params[:issue].nil?
+      @selected_project = Project.find(params[:issue][:project_id])
+      @project = @selected_project
+    else
+      @project = @projects.first
+    end
+    build_new_issue_from_params()
+    @project = nil
+
+    respond_to do |format|
+      format.html { render :action => 'new_with_decision', :layout => !request.xhr? }
+      format.js {
+        render :partial => 'update_form_with_decision'
+      }
+    end
+  end
+
   def create
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
+    @issue.description = convertHtmlToWiki(params[:issue][:description])
+
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     @issue.parent_issue_id = params[:parent_id]
     if @issue.save
@@ -181,15 +223,31 @@ class IssuesController < ApplicationController
         format.html {
           render_attachment_warning_if_needed(@issue)
           flash[:notice] = l(:notice_issue_successful_create, :id => "<a href='#{issue_path(@issue)}'>##{@issue.id}</a>")
-          redirect_to(params[:continue] ?  { :action => 'new', :project_id => @issue.project, :issue => {:tracker_id => @issue.tracker, :parent_issue_id => @issue.parent_issue_id}.reject {|k,v| v.nil?} } :
-                      { :action => 'show', :id => @issue })
+          if params[:continue]
+            if params[:form] == 'new_with_decision'
+              @projects = Project.own
+              redirect_to({ :action => 'new_with_decision'})
+            else
+              redirect_to({ :action => 'new', :project_id => @issue.project, :issue => {:tracker_id => @issue.tracker, :parent_issue_id => @issue.parent_issue_id}.reject {|k,v| v.nil?} })
+            end
+          else
+            redirect_to({ :action => 'show', :id => @issue })
+          end
         }
         format.api  { render :action => 'show', :status => :created, :location => issue_url(@issue) }
       end
       return
     else
       respond_to do |format|
-        format.html { render :action => 'new' }
+        format.html {
+          if params[:form] == 'new_with_decision'
+            @projects = Project.own
+            flash[:notice] = l(:notice_issue_error_create)+"<br>"+@issue.errors.full_messages * '<br>'
+            render :action => 'new_with_decision' 
+          else
+            render :action => 'new' 
+          end
+        }
         format.api  { render_validation_errors(@issue) }
       end
     end
@@ -205,11 +263,15 @@ class IssuesController < ApplicationController
   end
 
   def update
-    params[:issue][:start_date] = params[:issue][:start_date].empty? ? '':format_date(params[:issue][:start_date])
-    params[:issue][:due_date] = params[:issue][:due_date].empty? ? '':format_date(params[:issue][:due_date])
+    unless params[:issue][:start_date].nil?
+      params[:issue][:description] = convertHtmlToWiki(params[:issue][:description])
+      params[:issue][:start_date] = params[:issue][:start_date].empty? ? '':format_date(params[:issue][:start_date])
+      params[:issue][:due_date] = params[:issue][:due_date].empty? ? '':format_date(params[:issue][:due_date])
+      @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+      saved = false
+    end
     return unless update_issue_from_params
-    @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
-    saved = false
+    
     begin
       saved = @issue.save_issue_with_child_records(params, @time_entry)
     rescue ActiveRecord::StaleObjectError
@@ -318,6 +380,8 @@ class IssuesController < ApplicationController
   end
 
   def destroy
+    p "huhu"
+
     @hours = TimeEntry.sum(:hours, :conditions => ['issue_id IN (?)', @issues]).to_f
     if @hours > 0
       case params[:todo]

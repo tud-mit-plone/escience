@@ -1,0 +1,267 @@
+  <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})
+     project = @project.nil? ? 'eScience' : @project 
+     user_messages = UserMessage.where("receiver_id = ? AND state = 1", User.current.id).count
+     message_persons = []
+     UserMessage.find(:all,:conditions => {:receiver_id => User.current.id, :state => 1}).each do |msg|
+       message_persons << User.find(msg.user_id).to_s()
+     end
+     persons = message_persons.join(', ')
+     if user_messages > 1
+       persons[persons.rindex(', ')] = ' '+l(:tooltip_and)+' '
+     end
+     tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
+  %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title><%=h html_title %></title>
+  <meta name="description" content="<%= Redmine::Info.app_name %>" />
+  <meta name="keywords" content="issue,bug,tracker" />
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+  <%= csrf_meta_tag %>
+  <%= favicon %>
+  <%= stylesheet_link_tag 'application', :media => 'all' %>
+  <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
+  <%= stylesheet_link_tag 'public', :media => 'all' unless User.current.logged?%>
+  <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
+  <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
+  <%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
+  <%= javascript_heads %>
+  <%= yield :jquery_tags -%>
+  
+  
+  <%= javascript_tag '
+  function externalLinks() {return $("a[href^=\'http\']:not([href^=\'http://" + window.location.host + "\'])");}
+  
+  $(document).ready(function() {
+    externalLinks().attr({target: "_blank"});
+    addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
+    addToolTip(".sidebar .overview-all","'+l(:tooltip_sidebar_projects)+'");
+    addToolTip(".sidebar .user-messages","'+"#{tooltip_user_messages}"+'");
+    addToolTip(".sidebar .sent","'+l(:tooltip_sidebar_sent)+'");
+    addToolTip(".sidebar .archive","'+l(:tooltip_sidebar_archive)+'");
+    addToolTip(".sidebar .trash","'+l(:tooltip_sidebar_trash)+'");
+    addToolTip(".sidebar .issues-all","'+l(:tooltip_sidebar_issues_all) + '");
+    addToolTip(".sidebar .calendar-all","'+l(:tooltip_sidebar_calendar_all)+'");
+    addToolTip(".sidebar .doodles ","'+l(:tooltip_sidebar_doodles)+'");
+    addToolTip(".sidebar .overview ","'+l(:tooltip_sidebar_overview, :project => "#{project}")+'");
+    addToolTip(".sidebar .issues ","'+l(:tooltip_sidebar_issues, :project => "#{project}")+'");
+    addToolTip(".sidebar .calendar ","'+l(:tooltip_sidebar_calendar, :project => "#{project}")+'");
+    addToolTip(".sidebar .news ","'+l(:tooltip_sidebar_news)+'");
+    addToolTip(".sidebar .blogs ","'+l(:tooltip_sidebar_blogs)+'");
+    addToolTip(".sidebar .documents ","'+l(:tooltip_sidebar_documents)+'");
+    addToolTip(".sidebar .wiki ","'+l(:tooltip_sidebar_wiki)+'");
+    addToolTip(".sidebar .boards ","'+l(:tooltip_sidebar_boards)+'");
+    addToolTip(".sidebar .files ","'+l(:tooltip_sidebar_files)+'");
+    addToolTip(".sidebar .settings ","'+l(:tooltip_sidebar_settings)+'");
+    addToolTip(".sidebar .my-members","'+l(:tooltip_sidebar_contactlist)+'");
+    addToolTip("#navigation .newmessage.issues","'+l(:tooltip_navbar_issues_explain, :position => "#{issues}")+'", "bottom");
+    addToolTip("#navigation .newmessage.user-messages","'+l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}")+'", "bottom");
+    addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom");
+    addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom");
+    addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom");
+  });
+  '
+  %>
+  <%= heads_for_theme %>
+  <!--[if IE 6]>
+      <style type="text/css">
+        * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+        body {behavior: url(<%= stylesheet_path "csshover.htc" %>);}
+      </style>
+  <![endif]-->
+  <%= call_hook :view_layouts_base_html_head %>
+  <!-- page specific tags -->
+  <%= yield :header_tags -%>
+</head>
+
+<body class="<%=h body_css_classes %>">
+  <div id="wrapper">
+    <div id="separate_footer">
+      <header id="header">
+        <!-- backgrounds for the top-navigations -->
+      	<div class="bar"></div>
+      	<div id="header_bg_bar"></div>
+      	
+      	<!-- logo -->
+      	<div class="inside container_16">
+      		<div id="logo" class="grid_3 <%= (!User.current.logged?)? 'prefix_12' : 'prefix_13' %>">
+      			<%= link_to({:controller => 'welcome'}) do %>
+      				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
+      			<%end%>
+      		</div>
+      		<div class="clear"></div>
+      	</div>
+      	
+      	<!-- Navigation with green background -->
+      	<div id="main_navigation">
+      		<% if User.current.logged? %>
+      		<div class="inside container_16">
+      			<div class="grid_13 prefix_3 account_menu">
+      				<%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+      		  </div>
+      		  <div class="clear"></div>
+      		</div>
+      		<% end %>
+      	</div>
+      
+      	<!-- Navigation with gray background -->
+      	<div id="navigation">
+      		<div class="inside container_16">
+      		<% unless User.current.logged? %>
+      			<div class="grid_10 prefix_6">
+      			  <%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+      			</div>
+      		<% else %>
+      			<div class="grid_13 prefix_3">
+      	      <%= render_menu :account_menu -%>
+      	    </div>
+      	  <% end %>
+      		  <div class="clear"></div>
+      	  </div>
+      	</div>
+      	
+      	<!-- Navigation for Team/Community/Private -->
+      	<div class="container_16">
+      		<div id="navigation_group" class="<%= (User.current.logged?)? 'grid_3' : 'grid_4 prefix_1' %> roundabout-holder">
+      		  <ul class="roundabout-holder">
+        		  <li class="roundabout-moveable-item roundabout-in-focus" id="private">
+          		  <div class="roundabout_label"><%= User.current.logged? ? l(:label_private) : l(:label_guest) %></div>
+            		<% unless User.current.logged? %>
+            		  <img src="<%= Redmine::Utils.relative_url_root %>/images/gast_gruen.png" />
+            		<% else %>
+            		  <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.logged? && User.current.female)? 'w' : 'm' %>_grau.png" />
+          		  <% end %>
+        		  </li>
+        		  <li class="roundabout-moveable-item" id="team">
+        		    <div class="roundabout_label"><%= l(:label_team) %></div>
+        		    <img src="<%= Redmine::Utils.relative_url_root %>/images/team_grau.png" />
+        		  </li>
+        		  <li class="roundabout-moveable-item" id="community">
+        		    <div class="roundabout_label"><%= l(:label_community) %></div>
+        		    <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
+        		  </li>
+        		</ul>
+      		</div>
+      	</div>	    
+      </header>
+      <% clickToFocus = User.current.logged? ? '' : 'clickToFocus: false,' %>
+      <% selectedChild = params[:navigation_group].nil? ? '0' : params[:navigation_group] %>
+      <%= javascript_tag '
+
+      $(document).ready(function() {
+        $("ul.roundabout-holder").roundabout({
+      		minScale: 0.60,
+      		minOpacity: 0.9,
+      		maxScale: 1.0,
+      		shape: "tearDrop",
+      		startingChild: '+selectedChild+',
+      		triggerFocusEvents: true,'+
+      		clickToFocus+'
+        });
+        $("ul.roundabout-holder li").focus(function() {setParam($("ul.roundabout-holder").roundabout("getChildInFocus"));});
+      });
+      function setParam(param) {
+        if (param=="0") url = "/my/page";
+        if (param=="1") url = "/user_messages";
+        if (param=="2") url = "/projects/escience";
+        self.location.href = url+"?navigation_group="+param;
+        return;
+        $.ajax({
+          url: url,
+          dataType: "html",
+          type: "GET",
+          data: "navigation_group="+param,
+          success: function(data) {$("#container").html(data); }
+        });
+      }
+      '%> 
+    <%# end%>
+
+    <%= tag('div', {:id => 'container', :class => ((has_content?(:sidebar_left) || has_content?(:sidebar_right)) ? '' : 'nosidebar')}, true) %>
+
+    	<div class="container_inner container_16">
+  	    <div id="left" class="<%= (User.current.logged?) ? 'grid_3' : 'grid_2' %>">
+  	    	<div id="sidebar_left" class="sidebar">
+	    	  <% if User.current.logged? %>
+    		    <div class="headline"><%= l(:label_communication) %></div>
+    		    <%= render_menu :private_menu %>
+    	            <%= render_project_jump_box %>
+    		    <%= render_main_menu(@project) %>
+    		    <%= yield :sidebar_left %>
+    		    <%= call_hook :view_layouts_base_sidebar %>
+    		  <% else %>
+    		    &nbsp;
+    		  <% end %>
+  	    	</div>
+  	    </div>
+  	    <div id="main" class="<%= (User.current.logged?) ? 'grid_10' : 'grid_10' %>">
+	        <%= breadcrumb_list({:max_crumblength => 80, :max_layerlenght => 120}) %>
+	        <%= yield %>
+	        <%= call_hook :view_layouts_base_content %>
+	        <div style="clear:both;"></div>
+          <div id="ajax-modal" style="display:none;"></div>
+  	    </div>
+  	    <div id="right" class="grid_3">
+  	    	<% if User.current.logged? %>
+  		    <div id="quick-search" <%= 'class=empty' if (!User.current.admin? && (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") %>>
+  	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
+  		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
+  		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
+  		        <%= submit_tag "" %>
+  	        <% end %>
+  		    </div>
+  		    <div id="sidebar_right" class="sidebar<%= ' empty' if (!User.current.admin? && (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") %>">
+  		    	<%#= render_menu :sidebarright_menu %>
+  		    	<% unless (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n" %>
+<!--  		    	<div class="splitter"><%= l(:label_specific) %></div> -->
+    		    	<div id="sitespecivic">
+    	        	<%= yield :sidebar_right %>
+    		    	</div>
+  		      <% end %>
+    		    <% if User.current.admin? %>
+              <div class="splitter">
+               <%= l :label_administration %>
+              </div>
+              <%= render_menu :admin_menu %>
+            <% end %>
+          </div>
+          <% else %>		    	
+  		    <div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div>
+  		    <% end %>
+          <%#= call_hook :view_layouts_base_sidebar %>
+  	    </div>
+  	    <div class="clear"></div>
+      </div>
+
+<% if params[:navigation_group].nil? %>
+    </div>    
+    <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
+    <div id="ajax-modal" style="display:none;"></div>
+  </div>
+  </div>
+  <div id="footer">
+  	<div style="background-color:#fff; height:3px; width:100%"></div>
+  	<div class="inside">
+  		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
+  		<div id="eu"><a href="http://europa.eu/" title="<%= l(:label_eu) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/eu.png" width="54" height="39" /></a></div>
+  		<div id="esf"><a href="http://www.esf.de/" title="<%= l(:label_esf) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/esf.png" width="89" height="39" /></a></div>
+  		<div id="sachsen"><a href="http://www.smwk.sachsen.de/" title="<%= l(:label_smwk) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/sachsen.png" width="32" height="39"/></a></div>
+  		<div id="miscellaneous">
+  		   <ul>
+  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+  		      <li class="withborder"><a href="/static/agb.html" title="<%= l(:label_termsconditions) %>"><%= l(:label_termsconditions) %></a></li>
+  		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
+  		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>
+  		   </ul>
+  		</div> 
+  	</div>
+  </div>
+  <%= call_hook :view_layouts_base_body_bottom %>
+  <%#= piwik_tracking_tag %>
+</body>
+</html>
+<%# End of AJAX-NAVIGATION %>
+<% end %>

@@ -1,25 +1,51 @@
 <%= error_messages_for 'time_entry' %>
 <%= back_url_hidden_field_tag %>
 
-<div class="box tabular">
-	<% if @time_entry.new_record? %>
-	  <% if params[:project_id] || @time_entry.issue %>
-	    <%= f.hidden_field :project_id %>
-	  <% else %>
-	    <p><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).all, :selected => @time_entry.project, :truncate => 90), :required => true %></p>
-	  <% end %>
-	<% end %>
-<!--	
-	<p><%= f.text_field :issue_id, :size => 6 %> <em><%= h("#{@time_entry.issue.tracker.name} ##{@time_entry.issue.id}: #{@time_entry.issue.subject}") if @time_entry.issue %></em></p>
--->
-	<p><%= f.text_field :spent_on, :size => 10, :required => true %><%= calendar_for('time_entry_spent_on') %></p>
-	<p><%= f.text_field :hours, :size => 6, :required => true %></p>
-	<p><%= f.text_field :comments, :size => 100 %></p>
-	<p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
-	<% @time_entry.custom_field_values.each do |value| %>
-	  <p><%= custom_field_tag_with_label :time_entry, value %></p>
-	<% end %>
+    <%= render :partial => 'conflict' if @conflict %>
+    <div class="box">
+    <%# if User.current.allowed_to?(:log_time, @project) %>
+        <fieldset class="tabular">
+          <legend><%= l(:button_log_time) %></legend>
+          <%= labelled_fields_for :time_entry, @time_entry do |time_entry| %>
+            <table width="100%">
+            	<% if @time_entry.new_record? %>
+            	  <% if params[:project_id] || @time_entry.issue %>
+            	    <%= f.hidden_field :project_id %>
+            	  <% else %>
+            	    <tr>
+            	     <td><%= l(:label_project) %><span class="required"> *</span></td>
+            	     <td><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).all, :selected => @time_entry.project, :truncate => 10), :no_label => true, :required => true %>
+            	     </td>
+            	    </tr>
+            	  <% end %>
+            	<% end %>
+              <tr>
+                <td width="16%"><%= l(:label_spent_time) %><span class="required"> *</span></td>
+                <td width="84%"><%= time_entry.text_field :hours, :size => 6, :no_label => true, :required => true %> <%= l(:field_hours) %></td>
+              <tr>
+                <td width="16%"><%= l(:field_spent_on) %><span class="required"> *</span></td>
+              	<td><%= f.text_field :spent_on, :size => 10, :no_label => true, :required => true %><%= calendar_for('time_entry_spent_on') %></td>
+              </tr>
+              <tr>
+                <td><%= l(:label_activity) %><span class="required"> *</span></td>
+                <td><%= time_entry.select :activity_id, activity_collection_for_select_options,:no_label => true, :required => true %></td>
+              </tr>
+              <tr>
+                <td><%= l(:label_comment) %></td>
+                <td><%= time_entry.text_field :comments, :style => 'width:100%', :maxsize=>'60',:no_label => true %></td>
+              </tr>
+              <% @time_entry.custom_field_values.each do |value| %>
+              <tr>
+                <td></td>
+                <td><%= custom_field_tag_with_label :time_entry, value %></td>
+              </tr>
+              <% end %>
+            </table>
+          <% end %>
+        </fieldset>
+    <%# end %>
+    </div>
 	<%= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
-</div>
+
 
 <%= javascript_tag "observeAutocompleteField('time_entry_issue_id', '#{escape_javascript auto_complete_issues_path(:project_id => @project, :scope => (@project ? nil : 'all'))}')" %>

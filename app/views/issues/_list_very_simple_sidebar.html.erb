@@ -1,0 +1,28 @@
+<% issues = Issue.visible.open.where(:parent_id => nil, :project_id => @project.id) %>
+<% if issues && issues.any? %>
+  <div class="orientation">
+    <ul style="width: 300px;">
+      <% issues.each do |issue| %>
+      <li>
+        <%= render :partial => 'issues/list_very_simple_sidebar_helper', :locals => { :issue => issue, :current => current } %>
+        <ul>
+        <% issue_list(Issue.find_all_by_parent_id(issue).sort_by(&:lft)) do |child| %>
+          <li class="child">
+            <%= render :partial => 'issues/list_very_simple_sidebar_helper', :locals => { :issue => child, :current => current } %>
+            <ul>
+            <% issue_list(Issue.find_all_by_parent_id(child).sort_by(&:lft)) do |childchild| %>
+              <li class="child">
+                <%= render :partial => 'issues/list_very_simple_sidebar_helper', :locals => {:issue => childchild, :current => current } %>
+              </li>
+            <% end %>
+            </ul>
+          </li>
+        <% end %>
+        </ul>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

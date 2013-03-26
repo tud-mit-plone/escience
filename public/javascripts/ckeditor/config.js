@@ -33,7 +33,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The default plugins included in the basic setup define some buttons that
 	// we don't want too have in a basic editor. We remove them here.
-	config.removeButtons = 'Anchor,Underline,Strike,Subscript,Superscript';
+	config.removeButtons = 'Anchor,Strike,Subscript,Superscript';
 
 	// Considering that the basic setup doesn't provide pasting cleanup features,
 	// it's recommended to force everything to be plain text.

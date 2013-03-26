@@ -210,13 +210,13 @@ class WikiController < ApplicationController
     @content.version = @page.content.version
 
     @text = @content.text
-    @puretext = replace_macros(@text)
     
     if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
       @section = params[:section].to_i
       @text, @section_hash = Redmine::WikiFormatting.formatter.new(@text).get_section(@section)
       render_404 if @text.blank?
     end
+    @puretext = replace_macros(@text)
   end
 
   # Creates a new page or updates an existing one

@@ -1,8 +1,8 @@
 <% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), request.env['HTTP_REFERER'], :class => 'icon icon-history' %>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
   <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
     <ul>
-      <li><%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'icon icon-time-add' %></li>
+      <li><%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue} %></li>
     </ul>
   <% end %>
 <% end %>

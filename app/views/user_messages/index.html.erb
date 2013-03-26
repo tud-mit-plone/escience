@@ -56,9 +56,12 @@
 
 <% content_for :sidebar_right do %>
   	<%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-add') %>
-  	<% if !@user_messages.empty? && @directory == "trash" %>
   	<ul>
+  	 <li><%= link_to("Gesendet", {:directory => "sent"}) %></li>
+  	 <li><%= link_to("Archiv", {:directory => "archive"}) %></li>
+  	 <li><%= link_to("Papierkorb", {:directory => "trash"}) %></li>
+  	<% if !@user_messages.empty? && @directory == "trash" %>
     	<li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
-  	</ul>
   	<% end %>
+  	</ul>
 <% end %>

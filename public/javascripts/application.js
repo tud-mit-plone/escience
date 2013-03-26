@@ -69,7 +69,7 @@ function toggleAllRowGroups(el) {
 function toggleFieldset(el) {
   var fieldset = $(el).parents('fieldset').first();
   fieldset.toggleClass('collapsed');
-  fieldset.children('div').toggle();
+  fieldset.children('div').toggle('fast');
 }
 
 function hideFieldset(el) {
@@ -572,7 +572,7 @@ function observeSearchfield(fieldId, targetId, url) {
     $this.attr('data-value-was', $this.val());
     var check = function() {
       var val = $this.val();
-      if ($this.attr('data-value-was') != val){
+      if ($this.attr('data-value-was') != val && val.length > 2) {
         $this.attr('data-value-was', val);
         $.ajax({
           url: url,
@@ -658,6 +658,7 @@ $(document).ready(function(){
 
 function hideOnLoad() {
   $('.hol').hide();
+  $('.collapsable.collapsed').find('div.content, div.wiki').toggle();
 }
 
 function addFormObserversForDoubleSubmit() {

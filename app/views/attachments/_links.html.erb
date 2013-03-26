@@ -10,7 +10,7 @@
     <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
   <% end %>
   <div class="options" style="display:none;">
-    <%= link_to_attachment attachment, :download => true, :target => '_self', :text => "", :title => l(:label_download_file), :class => "download" -%>
+    <%= link_to_attachment attachment, :download => true, :target => '_blank', :text => "", :title => l(:label_download_file), :class => "download" -%>
     <%= link_to("", attachment_path(attachment), 
                     :class => "delete", 
                     :title => l(:label_delete_file),
@@ -22,6 +22,22 @@
                 :id => attachment, :filename => attachment.filename %>
   <% end %>
   <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
+  
+    <% if filetype == 'pdf' %>
+    <%
+#      out = nil
+#      require 'rghost'
+#      require 'RMagick'
+#      url = url_for({:controller => 'attachments', :action => 'download', :id => attachment, :filename => attachment.filename})
+#      url = "/home/mapescience/redmine_remote/public/test2.pdf"
+#      pdf = Magick::ImageList.new(url)
+
+#      preview = RGhost::Convert.new(url)
+#      RGhost::Config::GS[:tmpdir] = '/home/mapescience/redmine_remote/public/tmp/'
+    #  out = preview.to :png
+    %>
+    <% end %>
+
   <% if options[:author] || !attachment.description.empty? %>
   <% file_information = ''
      file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(attachment), :height=>"64px") + "</div>".html_safe if mimetype == 'image'

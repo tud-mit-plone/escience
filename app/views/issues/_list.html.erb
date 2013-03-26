@@ -2,6 +2,7 @@
 <%= hidden_field_tag 'back_url', url_for(params), :id => nil %>
 <div class="autoscroll">
   <div class="list issues" id="content" width="97%" cellpadding="0" cellspacing="0">
+    <% if 1==0 %>
     <div class="sort_buttons">
       <%= content_tag('div', l(:label_sortby)+" :", :style => 'float:left', :class => 'sortby') %>
       <%#= content_tag('div', sort_link('id', 'ID', 'desc'), :style => 'float:left', :class => 'first') %>
@@ -12,42 +13,70 @@
       <%= content_tag('div', sort_link('created_on', l(:field_created_on), 'asc'), :style => 'float:left') %>
     </div>
     <div class="clear"></div>
-    <% previous_group = false %>
-    
-  <% col_nums = @query.columns.size %>
-  <% group_num = 0 %>
-  <% @issues_by_group.each do |key, issue_list| -%>
-    <% group_num = group_num+1 %>
-    <% if (@issues_by_group.size>1) || (!key.nil? && !key.empty?) %> 
-      <div class="group" valign="top">
-          <% unless @issues_by_group.size==1 %>
-            <div class="expander headline" onclick="toggleDivGroup(this, <%= group_num %>);"><%= key.strip %> (<%= issue_list.size %>)</div>
-          <% else %>
-            <div class="headline"><%= key.strip %> (<%= issue_list.size %>)</div>
+    <% end %>
+
+    <% @issues_by_group.each do |key, issue_list| -%>
+      <% is_open = @issues_by_group.size > 1 ? false : true %>
+      <fieldset class="collapsable" style="padding:5px 10px 10px 10px;">
+      <% if (@issues_by_group.size>1) || (!key.nil? && !key.empty? && params[:id].nil?) %> 
+        <legend <%= "onclick=toggleFieldset(this)" unless @issues_by_group.size==1 %>>
+          <%= key.strip %>
+        </legend>
+      <% end -%>
+      <div class="content">
+        <% if issue_list && issue_list.any? %>
+          <%= form_tag({}) do %>
+            <table class="list issues" width="100%" cellpadding="0" cellspacing="0">
+              <tbody>
+              <% issue_list.each do |issue| %>
+                <tr id="issue-<%= h(issue.id) %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
+                  <td>
+                    <%= render :partial => 'issues/list_helper', :locals => { :issue => issue, :open_element => is_open } %>
+                    <% issue_list(Issue.find_all_by_parent_id(issue).sort_by(&:lft)) do |child| %>
+                      <div class="child">
+                        <%= render :partial => 'issues/list_helper', :locals => { :issue => child, :open_element => is_open } %>
+                        <% issue_list(Issue.find_all_by_parent_id(child).sort_by(&:lft)) do |childchild| %>
+                          <div class="child">
+                            <%= render :partial => 'issues/list_helper', :locals => {:issue => childchild, :open_element => is_open } %>
+                          </div>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
           <% end %>
+        <% else %>
+          <p class="nodata"><%= l(:label_issues) %></p>
+        <% end %>
+  
       </div>
-    <% end -%>
-    <div class="listOfIssues element_<%= group_num %>">
-      <% issue_list.each do |issue| -%>
-          <% style = '' unless @issues_by_group.size==1 %>
-          <%= link_to(issue_path(issue), :style => "#{style}") do %>
-            <div id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>" valign="top" style="width:560px;">
-          <div class="id" style="font-size:14px;"><%= issue.subject+' (ID '+issue.id.to_s+')' %></div>
-          <div class="clear"></div>
-          <div style="width:250px; float:left;">
-            <label><%=l(:field_tracker)%>:</label> <span class="info"><%=h issue.tracker %></span><br/>
-            <label><%=l(:field_status)%>:</label> <span class="info"><%=h issue.status %></span><br/>
-            <label><%=l(:field_created_on)%>:</label> <span class="info"><%= format_date(issue.created_on) %></span>
-          </div>
-          <div style="width:300px; float:left;">
-            <span style="overflow:hidden; height:40px; display: block; font-weight: 500;" class="info"><%= strip_tags(textilizable issue, :description) %></span>
-          </div>
-        </div>
-          <% end %>
-      <% end %>
-    </div>
-    <div class="clear"></div>
+      </fieldset>
+      <div class="clear"></div>
   <% end -%>
   </div>
 </div>
 <% end -%>
+
+<% content_for :header_tags do %>
+  <%= javascript_tag '
+    $(function() {addToolTip_withTitle("#main fieldset .list.issues img.progress")});
+    $(function() {addToolTip_withTitle("#main fieldset .list.issues a.closed", "top")});
+  '%>
+  <%= javascript_tag '
+    $(document).ready(function() {
+      $(".list.issues .linkToIssue").each(function(){
+        var innerInfo = $(this).find(".innerInfo.collapsed");
+        $(this).hover(function(){
+          var height = innerInfo.height("auto").height();
+          innerInfo.height(height);
+        },
+        function() {
+          innerInfo.height(0);
+        });
+      });
+    });
+  ' %>  
+<% end %>

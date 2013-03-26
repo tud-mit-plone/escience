@@ -50,6 +50,7 @@ class Project < ActiveRecord::Base
   has_many :repositories, :dependent => :destroy
   has_many :changesets, :through => :repository
   has_one :wiki, :dependent => :destroy
+ 
   # Custom field for the project issues
   has_and_belongs_to_many :issue_custom_fields,
                           :class_name => 'IssueCustomField',
@@ -138,6 +139,10 @@ class Project < ActiveRecord::Base
   # non public projects will be returned only if user is a member of those
   def self.latest(user=nil, count=5)
     visible(user).find(:all, :limit => count, :order => "created_on DESC")	
+  end	
+
+  def self.own(user=User.current, order='name DESC')
+    visible(user).find(:all, :conditions => ["(creator = #{user.id})"], :order => order)
   end	
 
   # Returns true if the project is visible to +user+ or to the current user.

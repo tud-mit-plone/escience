@@ -1,4 +1,9 @@
 <%= labelled_form_for @project do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
-<%= submit_tag l(:button_save) %>
+<%= submit_tag l(:button_save), :class => "button_bottom" %>
+<% unless params[:show_project] %>
+  <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'index', :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+<% else %>
+  <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'show', :id => params[:show_project], :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+<% end %>
 <% end %>

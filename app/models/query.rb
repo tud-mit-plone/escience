@@ -275,8 +275,9 @@ class Query < ActiveRecord::Base
         project_values = []
         if User.current.logged? && User.current.memberships.any?
           project_values << ["<< #{l(:label_my_projects).downcase} >>", "mine"]
-        end
+        end        
         project_values += all_projects_values
+        
         @available_filters["project_id"] = {
           :type => :list, :order => 1, :values => project_values
         } unless project_values.empty?
@@ -378,8 +379,17 @@ class Query < ActiveRecord::Base
     json
   end
 
+  def setView(view=nil?)
+    @view = view
+  end
+
   def all_projects
-    @all_projects ||= Project.visible.all
+    if @view == "0"
+      @all_projects = Project.own
+    else
+      @all_projects ||= Project.visible.all
+    end
+    return @all_projects
   end
 
   def all_projects_values
@@ -690,7 +700,6 @@ class Query < ActiveRecord::Base
   def issues(options={})
     order_option = [group_by_sort_order, options[:order]].reject {|s| s.blank?}.join(',')
     order_option = nil if order_option.blank?
-
     issues = Issue.visible.scoped(:conditions => options[:conditions]).find :all, :include => ([:status, :project] + (options[:include] || [])).uniq,
                      :conditions => statement,
                      :order => order_option,

@@ -60,12 +60,22 @@ class TimelogController < ApplicationController
         # Paginate results
         @entry_count = scope.count
         @entry_pages = Paginator.new self, @entry_count, per_page_option, params['page']
-        @entries = scope.all(
-          :include => [:project, :activity, :user, {:issue => :tracker}],
-          :order => sort_clause,
-          :limit  =>  @entry_pages.items_per_page,
-          :offset =>  @entry_pages.current.offset
-        )
+        if !params[:sub].nil? && session[:current_view_of_eScience] == "0"
+          @entries = scope.all(
+            :include => [:project, :activity, :user, {:issue => :tracker}],
+            :conditions => ["(creator = #{User.current.id})"],
+            :order => sort_clause,
+            :limit  =>  @entry_pages.items_per_page,
+            :offset =>  @entry_pages.current.offset
+          )
+        else
+          @entries = scope.all(
+            :include => [:project, :activity, :user, {:issue => :tracker}],
+            :order => sort_clause,
+            :limit  =>  @entry_pages.items_per_page,
+            :offset =>  @entry_pages.current.offset
+          )
+        end
         @total_hours = scope.sum(:hours).to_f
 
         render :layout => !request.xhr?
@@ -159,7 +169,7 @@ class TimelogController < ApplicationController
   def edit
     @time_entry.safe_attributes = params[:time_entry]
   end
-
+  
   def update
     @time_entry.safe_attributes = params[:time_entry]
 

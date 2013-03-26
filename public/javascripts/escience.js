@@ -1,4 +1,38 @@
-// ToolTip - fügt neue Hiweisboxen mittels qTip2 hinzu
+$(document).ready(function() {
+	$(window).resize(checkDockNav);
+	$(window).scroll(checkDockNav);
+});
+
+function checkDockNav() {
+	if ($(window).scrollTop() > 165) {
+	 $('#navigation').css("position","fixed");
+	 $('#navigation').css("top","0");
+	 $('#navigation').css("width","100%");
+	 $('#navigation').css("z-index","16");
+	 $('#main_navigation').css("margin-bottom","25px");
+	 $('#navigation').css("background-color","#7DB414");
+	 $('#navigation a').css("color","#FFF");
+	 $('#quick-search input[type="submit"]').css('background','url(/images/arrow_collapsed_white.png) 20%');
+  } else {
+	 $('#navigation').css("position","relative");
+	 $('#main_navigation').css("margin-bottom","0px");
+	 $('#navigation').css("background-color","#E9E9E9");
+	 $('#navigation a').css("color","#707070");
+	 $('#quick-search input[type="submit"]').css('background','url(/images/arrow_collapsed.png) 20%');
+  }
+}
+
+function addToolTip_withTitle() {
+  selector = arguments[0];
+  position = 'right';
+  if (arguments.length == 2) {
+    position = arguments[1];
+  }
+  $(selector).each(function() {
+    addToolTip(selector, this.title, position);
+  });
+}
+
 function addToolTip() {
   selector = arguments[0];
   tooltip = arguments[1];

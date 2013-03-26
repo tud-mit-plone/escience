@@ -1,8 +1,13 @@
 <% reply_links = authorize_for('issues', 'edit') -%>
-<% for journal in journals %>
+<% is_first = true %>
+<% for journal in journals.reverse! %>
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
     <%= content_tag('a', '', :name => "note-#{journal.indice}")%>
-    <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
+    <% if session[:current_view_of_eScience] != '0' %>
+      <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
+    <% else %>
+      <%= authoring journal.created_on, nil , :label => :label_added_time %>
+    <% end %>
 
     <% if journal.details.any? %>
     <ul class="details">
@@ -12,8 +17,16 @@
     </ul>
     <% end %>
     <%= render_notes(issue, journal, :reply_links => reply_links) unless journal.notes.blank? %>
+    <% if is_first && journals.size > 1 %>
+      <hr>
+    <%  is_first = false
+       end %>
   </div>
   <%= call_hook(:view_issues_history_journal_bottom, { :journal => journal }) %>
 <% end %>
 
 <% heads_for_wiki_formatter if User.current.allowed_to?(:edit_issue_notes, issue.project) || User.current.allowed_to?(:edit_own_issue_notes, issue.project) %>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= stylesheet_link_tag 'ckeditor/editor' %>
+<% end %>

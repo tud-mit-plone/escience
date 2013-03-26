@@ -40,7 +40,7 @@ class CalendarsController < ApplicationController
     @month ||= Date.today.month
 
     @calendar = Redmine::Helpers::Calendar.new(Date.civil(@year, @month, 1), current_language, :month)
-    unless (@project.nil? || params['sub'].nil?)
+    unless (@project.nil? || params['sub'].nil? || session[:current_view_of_eScience] == "0")
       bufferProjectId = @project
       session[:query][:project_id] = nil unless session[:query].nil?
       @project = nil
@@ -54,7 +54,7 @@ class CalendarsController < ApplicationController
     if @query.valid?
       events = []
       events += @query.issues(:include => [:tracker, :assigned_to, :priority],
-                              :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?))", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
+                              :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) #{'AND creator='+User.current.id.to_s if session[:current_view_of_eScience]=="0"}", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
                               )
       events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
 

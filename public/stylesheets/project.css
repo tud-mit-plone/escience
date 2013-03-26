@@ -1,0 +1,312 @@
+#main a.link_to_project {
+  color: #707070;
+  text-decoration: none;
+}
+
+.action-index fieldset:hover {
+//  background-color: #F4F4F4;
+}
+
+#main fieldset a h2 {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#main fieldset .last_modified {
+  color: #c62500;
+  padding: 10px 0;
+}
+
+.action-index fieldset {
+  padding: 0px 30px 0px 10px;
+}
+
+#main fieldset p {
+  margin: 0px;
+  padding: 0px;
+}
+
+#main fieldset .day {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#main fieldset .innerInfo.collapsed {
+  height: 0px;
+  overflow: hidden;
+  transition: height .5s, padding .3s, margin .5s;
+  -moz-transition: height .5s, padding .3s, margin .5s;
+  -webkit-transition: height .5s, padding .3s, margin .5s;
+  -o-transition: height .5s, padding .3s, margin .5s;
+  transition-delay: .5s;
+  -moz-transition-delay: .5s;
+  -webkit-transition-delay: .5s;
+  -o-transition-delay: .5s;
+}
+
+#main fieldset .list.issues .text p {
+  margin-bottom: 5px;
+}
+
+#main fieldset .list.issues .text a {
+  font-weight: inherit;
+  font-style: italic;
+  font-size: inherit;
+}
+
+#main fieldset .list.issues .text .description {
+  padding-right: 20px;
+}
+
+#main fieldset .innerInfo.open {
+  height: auto;
+}
+
+#main fieldset .tools {
+  right: 0px;
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  transition: width 1s;
+  -moz-transition: width 1s;
+  -webkit-transition: width 1s;
+  -o-transition: width 1s;
+  transition-delay: .5s;
+  -moz-transition-delay: .5s;
+  -webkit-transition-delay: .5s;
+  -o-transition-delay: .5s;  
+  background-color: #EAEAEA;
+  -moz-border-radius: 0 5px 5px 0px;
+  -webkit-border-radius: 0 5px 5px 0px;
+  -khtml-border-radius: 0 5px 5px 0px;
+  border-radius: 0 5px 5px 0px;
+}
+
+#main fieldset.collapsed .tools, #main fieldset.has_collapsed .tools {
+  width: 0px;
+}
+
+#main fieldset.has_collapsed:hover {
+  background: #F5F5F5;  
+}
+
+#main fieldset.collapsed:hover .tools, #main fieldset.has_collapsed:hover .tools {
+  width: 25px;
+}
+
+#main fieldset .tools div {
+  border-bottom: solid 2px #E0E0E0;
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+#main fieldset .tools div img {
+  padding: 5px;
+}
+
+#main fieldset:hover .tools div:hover {
+  background-color: #E0E0E0;
+}
+
+#main fieldset .has_subproject {
+  padding:10px 2px 10px 0px; 
+  border-top: 1px solid #DDD;
+  font-weight: bold;
+}
+
+#main fieldset .has_subproject div {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px 2px 2px 10px;
+}
+
+#main fieldset .has_subproject div:hover {
+  background: #EEEEEE;
+}
+
+#main fieldset .has_subproject div div a {
+  display: inline-block;
+}
+
+#main fieldset .has_subproject div div a:hover {
+  background: #E4E4E4;
+}
+
+
+@-webkit-keyframes anim2 {from {margin-left: 2px;} to {margin-left: 7px;}}
+@-moz-keyframes anim2 {from {margin-left: 2px;} to {margin-left: 7px;}}
+@-o-keyframes anim2 {from {margin-left: 2px;} to {margin-left: 7px;}}
+@keyframes anim2 {from {margin-left: 2px;} to {margin-left: 7px;}}
+
+#main fieldset .newest_project {
+  -webkit-animation: anim2 ease-in .7s infinite alternate;
+  -moz-animation: anim2 ease-in-out .7s infinite alternate;
+  -o-animation: anim2 ease-in-out .7s infinite alternate;
+  animation: anim2 ease-in-out .7s infinite alternate;
+  color: #ffffff;
+  font-size: 10px;
+  position: absolute;
+  display: inline-block;
+  opacity: 0;
+  margin-top: -4px;
+  transition: opacity .7s;
+  -moz-transition: opacity .7s;
+  -webkit-transition: opacity .7s;
+  -o-transition: opacity .7s;
+  transition-delay: .5s;
+  -moz-transition-delay: .5s;
+  -webkit-transition-delay: .5s;
+  -o-transition-delay: .5s;
+}
+
+#main fieldset .newest_project .text {
+  background: #7DB414;
+  padding: 2px 10px 2px 10px !important;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#main fieldset .newest_project .arrow img {
+  padding: 2px 0px;
+  margin-right: -2px;
+}
+
+#main fieldset:hover .newest_project {
+  opacity: 1;
+}
+
+#main fieldset {
+  position: relative;
+}
+
+#main fieldset legend .last_modified {
+  position: absolute;
+  font-size: 12px;
+  background: #c62500;
+  color: #fff;
+  right: 10px;
+  margin-top: -32px;
+  padding: 4px 10px 2px 10px;
+  -moz-border-radius: 5px 5px 0 0px;
+  -webkit-border-radius: 5px 5px 0 0px;
+  -khtml-border-radius: 5px 5px 0 0px;
+  border-radius: 5px 5px 0 0px;
+}
+
+#main fieldset .list.issues td a {
+  font-weight: bold;
+  color: #707070;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#main fieldset .list.issues td a:hover {
+  color: #B61634;
+}
+
+#main fieldset .list.issues .innerInfo {
+  position: relative;
+  font-size: 12px;
+  font-weight: normal;
+  color: #707070;
+  -moz-border-radius: 0px 0px 10px 10px;
+  -webkit-border-radius: 0px 0px 10px 10px;
+  -khtml-border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 10px 10px;
+  background: #EFEFEF;
+}
+
+#main fieldset .list.issues .linkToIssue .innerInfo .text {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+#main fieldset .list.issues .linkToIssue .innerInfo .last_modified {
+  padding: 0px;
+}
+
+#main fieldset .list.issues .progress {
+  display: inline-block;
+}
+
+#main fieldset .list.issues .progress img {
+  margin-top: 3px;
+  margin-bottom: -3px;
+}
+
+#main fieldset .list.issues .child img.progress {
+  width: 10px;
+  height: 10px;
+  margin-top: 1px;
+  margin-bottom: -1px;
+  margin-left: 5px;
+}
+
+#main fieldset .list.issues a.closed {
+  text-decoration: line-through;
+}
+
+#main fieldset .list.issues .child {
+  padding-left: 20px;
+}
+
+#main fieldset .list.issues .child a {
+  font-size: 12px !important;
+}
+
+#main fieldset .list.issues .child .child a {
+  font-weight: 400;
+}
+
+	.controller-projects.action-show div.wiki p {
+  	font-style: italic;
+  	padding: 0 20px;
+  	text-justify: block;
+	}
+
+	.controller-projects.action-show div.wiki ul {
+	   padding-left: 20px !important;
+	}
+	
+	.controller-projects.action-index #main ul {
+  	margin: 0;
+  	padding: 0;
+	}  
+
+	.controller-projects.action-index ul.projects a.project {
+  	margin-bottom: 1em;
+  	display: block;	
+	}
+	
+	.controller-projects.action-index ul.projects a.project::before {
+  	content:"\2022";
+  	padding-right: 5px;
+  }
+		
+	.controller-projects.action-index #main div.root {
+  	margin-left: 0px;
+	}  
+		
+	fieldset.project {
+  	width: 535px;
+	}
+	#new_project fieldset p {
+	 padding: 2px 0;
+	}
+		
+	#new_project .cke_contents {
+  height: 200px !important;
+}
+
+.sorting ul {
+  float: right;
+}
+.sorting li {
+  float: left;
+}
