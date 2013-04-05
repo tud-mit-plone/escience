@@ -1,0 +1,5 @@
+<h2><%= l(:label_appointments) %></h2>
+ 
+<% @appointments.each do |appointment|  %>
+  <%= appointment.subject %>
+<% end %>

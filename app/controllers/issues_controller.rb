@@ -380,8 +380,6 @@ class IssuesController < ApplicationController
   end
 
   def destroy
-    p "huhu"
-
     @hours = TimeEntry.sum(:hours, :conditions => ['issue_id IN (?)', @issues]).to_f
     if @hours > 0
       case params[:todo]

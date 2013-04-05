@@ -9,5 +9,5 @@
                      :conditions => ["#{Issue.table_name}.project_id in (#{@user.projects.collect{|m| m.id}.join(',')}) AND ((start_date>=? and start_date<=?) or (due_date>=? and due_date<=?))", calendar.startdt, calendar.enddt, calendar.startdt, calendar.enddt],
                      :include => [:project, :tracker, :priority, :assigned_to] unless @user.projects.empty? %>
 
-<%= render :partial => 'common/calendar', :locals => {:calendar => calendar, :small => true }, :sub => "sub" %>
+<%= render :partial => 'common/calendar_small', :locals => {:calendar => calendar}, :sub => "sub" %>
 </div>

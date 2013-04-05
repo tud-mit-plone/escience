@@ -19,10 +19,31 @@
   </legend>
   <div class="wiki">
     <label><%=l(:label_spent_time)%>:</label><%= @total_hours ? (link_to @total_hours.to_s+" h", {:controller => 'timelog', :action => 'index', :project_id => @project}) : "" %>
+    <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
+      <div id="buttons" style="float:right">
+        <div id="save_button" style="display:none">
+          <%= link_to_function l(:button_cancel), "$('#edit_button').toggle();$('#save_button').toggle();$('#description').toggle();$('#project_description').toggle();" %>
+          <%= link_to_function l(:button_save), "CKEDITOR.instances.descr_edit.updateElement();$('.edit_project').submit();$('#description').toggle();$('#project_description').toggle();$('#edit_button').toggle();$('#save_button').toggle();" %>
+        </div>
+        <div id="edit_button">
+          <%= link_to_function image_tag('edit.png'), "$('#save_button').toggle();$('#edit_button').toggle();$('#description').toggle();$('#project_description').toggle();CKEDITOR.instances.descr_edit.resize(500, 200);" %>
+        </div>
+      </div>
+  <% end %>
+
     <table>
       <tr>
-        <td width="40" valign="top"><%= Date.parse(format_date(@project.created_on)).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
-    <%= content_tag('td', textilizable(@project.description, :project => @project), :class => 'wiki description', :valign => "top") %>
+        <td width="40" valign="top"><%= Date.parse(@project.created_on.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
+        <td class="wiki" valign="top">
+          <%= form_for(@project, :remote => true, :id=>"update_form") do %>
+          <div id="project_description" style="display:none;">
+              <textarea id="descr_edit" class="wiki-edit ckeditor" cols="40" name="project[description]" rows="5">
+                <%= textilizable @project, :description %>
+              </textarea>
+          </div>
+          <% end %>
+          <div id="description"><%= textilizable @project, :description %></div>
+        </td>
       </tr>
     </table>
     <% unless @project.homepage.blank? || @project.visible_custom_field_values.count == 0 %>
@@ -103,34 +124,25 @@
 <%= call_hook(:view_projects_show_right, :project => @project) %>
 
 <% content_for :sidebar_right do %>
-    <% if @total_hours.present? %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
     <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
   <% end %>
 	<% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
 		<%= link_to(l(:label_project_edit), {:controller => 'projects', :action => 'settings', :show_project => @project.id}, :class => 'icon icon-settings')%>
 	<% end %>
-  
-    <div class="splitter">
-     <%= l :label_forproject %>
-    </div>
-    <h4><%= l(:label_spent_time) %>:</h4>
-    <span class="icon icon-time"><%= l_hours(@total_hours) %></span>
-    <ul>
-      <li><%= link_to(l(:label_details), {:controller => 'timelog', :action => 'index', :project_id => @project}) %></li>
-      <li><%= link_to(l(:label_report), {:controller => 'timelog', :action => 'report', :project_id => @project}) %></li>
-    </ul>
-    <% end %>
-    <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
+  <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
 <% end %>
 
 
-<fieldset>
+<fieldset id="activities_fieldset">
+  <legend><%= @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %></legend>
 <%= render :partial => 'activities/index' %>
 </fieldset>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'project' %>
   <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
 <% html_title(l(:label_overview)) -%>

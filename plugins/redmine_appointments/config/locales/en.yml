@@ -1,0 +1,7 @@
+en:
+  cycles: [without,weekly,monthly,yearly]
+  field_end_date: End date
+  field_cycle: Repeating
+  label_appointment_new: Add a new appointment
+  label_appointment_edit: Edit Appointment
+  label_appointments: Appointments

@@ -25,7 +25,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tools' },
 		{ name: 'others' },
 		{ name: 'insert_page' },
-		{ name: 'about' }
 	];
 	config.height = 400;
 	config.extraPlugins = 'insert_page';

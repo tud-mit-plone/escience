@@ -1,36 +1,72 @@
-<h2><%= @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %></h2>
-<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to - @days), :end => format_date(@date_to-1)) %></p>
-
 <div id="activity">
-<% @events_by_day.keys.sort.reverse.each do |day| %>
-  <h3><%= format_activity_day(day) %></h3>
-  <dl>
-  <% @events_by_day[day].sort {|x,y| y.event_datetime <=> x.event_datetime }.each do |e| -%>
-    <dt class="<%= e.event_type %>  <%= User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author ? 'me' : nil %>">
-    <%= avatar(e.event_author, :size => "24") if e.respond_to?(:event_author) %>
-    <span class="time"><%= format_time(e.event_datetime, false) %></span>
-    <%= content_tag('span', h(e.project), :class => 'project') if @project.nil? || @project != e.project %>
-    <%= link_to format_activity_title(e.event_title), e.event_url %></dt>
-    <dd><span class="description"><%= format_activity_description(e.event_description) %></span>
-    <span class="author"><%= link_to_user(e.event_author) if e.respond_to?(:event_author) %></span></dd>
-  <% end -%>
-  </dl>
-<% end -%>
+<a href="#" onclick="console.log($('#filter'));$('#filter').toggleClass('active');return false;" class="button"><%= l(:description_filter) %></a>
+<div id="filter" style="background-color: #FAFAFA">
+  <%= form_tag(project_path(@project)+activity_path('js'), :method => :get, :remote => true) do %>
+    <div style="padding: 5px; width:240px">
+      <table>
+        <tr>
+          <td>
+            <% @activity.event_types.each do |t| %>
+            <%= check_box_tag "show_#{t}", 1, @activity.scope.include?(t), :style => 'float:left; clear:both;margin-right:15px;' %>
+            <label for="show_<%=t%>" style ='font-size:10px; float: left'><%= link_to(l("label_#{t.singularize}_plural"), {"show_#{t}" => 1, :user_id => params[:user_id]})%></label><br/>
+            <% end %>
+            <div class="clear"></div>
+            <% if @project && @project.descendants.active.any? %>
+                <%= hidden_field_tag 'with_subprojects', 0 %>
+                <p><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label>
+                </p>
+            <% end %>
+          </td>
+          <td valign="top">
+            <%= hidden_field_tag('user_id', params[:user_id]) unless params[:user_id].blank? %>
+            <%= submit_tag l(:button_apply), :name => nil, :style => "margin-right:10px;" %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="clear"></div>
+  <% end %>
 </div>
+<p class="subtitle" style="padding-bottom:5px;"><%= l(:label_period_of_time)+" "+l(:label_date_from_to_dative, :start => format_date(@date_to - @days), :end => format_date(@date_to-1)) %></p>
 
-<%= content_tag('p', l(:label_no_data), :class => 'nodata') if @events_by_day.empty? %>
+<% @events_by_day.keys.sort.reverse.each do |day| %>
+  <table>
+    <tr>
+      <% p day %>
+      <td width="40" valign="top"><%= Date.parse(day.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
+      <td valign="top">
+        <dl style="margin-top:2px">
+        <% @events_by_day[day].sort {|x,y| y.event_datetime <=> x.event_datetime }.each do |e| -%>
+          <dt class="<%= e.event_type %>  <%= User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author ? 'me' : nil %>">
+          <div style="margin-top:3px; position:absolute; background-color: #fff"><%= avatar(e.event_author, :size => "18") if e.respond_to?(:event_author) %></div>
 
+          <span class="time" style="padding-left:25px"><%= format_time(e.event_datetime, false) %></span>
+          <%= content_tag('span', h(e.project), :class => 'project') if @project.nil? || @project != e.project %>
+          <%= link_to format_activity_title(e.event_title), e.event_url %><%#= " ("+l(:field_status)+": #{e.status})" %></dt>
+          <dd>
+            <span class="description"><%= format_activity_description(e.event_description) %></span>
+            <% unless session[:current_view_of_eScience] == "0" %>
+            <span class="author"><%= link_to_user(e.event_author) if e.respond_to?(:event_author) %></span>
+            <% end %>
+          </dd>
+        <% end -%>
+        </dl>
+      </td>
+    </tr>
+  </table>
+<% end -%>
+
+<%= content_tag('div', l(:label_no_activity), :class => 'nodata', :style=>'padding:5px 0; font-size:13px;color:#ADADAD') if @events_by_day.empty? %>
+
+<hr style="color: #DDD; background-color: #DDD; border:none; height: 1px">
 <div style="float:left;">
-<%= link_to_content_update("\xc2\xab " + l(:label_previous),
-                   params.merge(:from => @date_to - @days - 1),
-                   :title => l(:label_date_from_to, :start => format_date(@date_to - 2*@days), :end => format_date(@date_to - @days - 1))) %>
+  <%= link_to "\xc2\xab " + l(:label_previous), project_path(@project)+activity_path('js',:from=>(@date_to - @days - 1)), :remote => true,:update => 'activity', :class => "button",:title => l(:label_date_from_to, :start => format_date(@date_to - 2*@days), :end => format_date(@date_to - @days - 1)), :style => 'margin-left: 0px !important' %>
 </div>
 <div style="float:right;">
-<%= link_to_content_update(l(:label_next) + " \xc2\xbb",
-                   params.merge(:from => @date_to + @days - 1),
-                   :title => l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to + @days - 1))) unless @date_to >= Date.today %>
+  <%= link_to(l(:label_next) + " \xc2\xbb", project_path(@project)+activity_path('js',:from=>(@date_to + @days - 1)), :remote => true,:update => 'activity', :class => "button",:title => l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to + @days - 1))) unless @date_to >= Date.today %>
 </div>
-&nbsp;
+<div class="clear" style="padding-bottom:10px;"></div>
+
 <% other_formats_links do |f| %>
   <%= f.link_to 'Atom', :url => params.merge(:from => nil, :key => User.current.rss_key) %>
 <% end %>
@@ -39,25 +75,6 @@
   <%= auto_discovery_link_tag(:atom, params.merge(:format => 'atom', :from => nil, :key => User.current.rss_key)) %>
 <% end %>
 
-<% content_for :sidebar_right do %>
-  <%= form_tag({}, :method => :get) do %>
-    <h4><%= l(:label_activity) %></h4>
-    <div style="margin-left: 10px;">
-    <% @activity.event_types.each do |t| %>
-    <%= check_box_tag "show_#{t}", 1, @activity.scope.include?(t), :style => 'float:left; clear:both;margin-right:15px;' %>
-    <label for="show_<%=t%>" style ='font-size:10px; float: left'><%= link_to(l("label_#{t.singularize}_plural"), {"show_#{t}" => 1, :user_id => params[:user_id]})%></label><br/>
-    <% end %>
-    </div>
-    <div class="clear"></div>
-    <% if @project && @project.descendants.active.any? %>
-        <%= hidden_field_tag 'with_subprojects', 0 %>
-        <p><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label>
-        </p>
-    <% end %>
-    <%= hidden_field_tag('user_id', params[:user_id]) unless params[:user_id].blank? %>
-    <p><%= submit_tag l(:button_apply), :name => nil, :style => "margin-right:10px;" %></p>
-    <div class="clear"></div>
-  <% end %>
-<% end %>
-
 <% html_title(l(:label_activity), @author) -%>
+</div>
+

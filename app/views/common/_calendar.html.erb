@@ -1,40 +1,5 @@
 <% day = calendar.startdt %>
 <table class="cal" width="100%">
-
-<% if small %>
-<thead>
-  <tr>
-    <td valign="top" class="week-number">
-      <%= "#{month_name(day.month)} #{day.year} ("+l(:label_week)+": #{(day+(11-day.cwday)%7).cweek})" %>
-      <hr>
-    </td>
-  </tr>
-</thead>      
-<tbody id="small">
-<%while day <= calendar.enddt 
-  weekend = (day.wday%7 == 6 || day.wday%7 == 0) %>
-  <tr>
-    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
-      <div class="td_box">
-        <p class="day-num"><%= format_date(day)[0..5] %> <%= day_name(day.wday%7) %></p>
-         <% calendar.events_on(day).each do |i| %>
-          <div>
-            <p class="linkToInfo" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(40)}) %></p>
-           <% if i.is_a? Issue %>
-           <div class="infobox" id="info_<%= i.id %>_<%= day %>" style="position:absolute;"><%= render_issue_tooltip i %></div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </td>
-<%= '</tr><tr>'.html_safe if day.cwday==calendar.last_wday and day!=calendar.enddt %>
-    <% day = day + 1
-    end %>
-  </tr>
-</tbody>
-
-<% else %>
-
 <thead>
   <tr>
     <th scope="col" title="<%= l(:label_week) %>" class="week-number">KW</th>
@@ -54,17 +19,17 @@
       </td>
 <%  end %>
     <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
-      <div class="td_box">
-        <p class="day-num"><%= day.day %></p>
-         <% calendar.events_on(day).each do |i| %>
-         <div style="float:left">        
-           <% if (calendar.events_on(day).size < 0) %>
-            <p class="linkToInfo <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(12)}) %></p>
+      <div class="td_box noSelect">
+        <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
+          <% calendar.events_on(day).each do |i| %>
+          <div style="float:left">        
+            <% if (calendar.events_on(day).size < 0) %>
+              <p class="linkToInfo <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(12)}) %></p>
            <% else %>
-            <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
+              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
            <% end %>
            <% if i.is_a? Issue %>
-           <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>
+             <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>
             <% end %>
           </div>
         <% end %>
@@ -75,10 +40,7 @@
     end %>
   </tr>
 </tbody>
-<% end %>
-
 </table>
-
 
 <%= javascript_tag "
   var $ = jQuery.noConflict();

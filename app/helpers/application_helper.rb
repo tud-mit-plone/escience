@@ -94,6 +94,17 @@ module ApplicationHelper
     decoder.decode(replaceElement(translation.root))
   end
 
+  def getControllerName(obj)
+    unless obj.nil?
+      return obj.class.to_s.pluralize.downcase
+    end
+    return 'welcome'
+  end
+  
+  def beautyfulDate(date)
+    s = Date.parse(date.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe  
+  end
+
   def replaceElement(elements)
     if elements.node_type == :element
       unless @replaceMap[elements.name.to_sym].nil?
@@ -1648,6 +1659,7 @@ module ApplicationHelper
   end
 
   def link_to_content_update(text, url_params = {}, html_options = {})
+    url_params[:remote] = true
     link_to(text, url_params, html_options)
   end
 

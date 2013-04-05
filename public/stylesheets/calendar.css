@@ -105,7 +105,12 @@
 }
 
 .controller-calendars table.cal td:hover {
-  border-color: #d0d0d0;  
+  border-color: #B0B0B0;  
+}
+
+.controller-calendars table.cal td.event:hover {
+  color: #7D7D7D;
+  background: #9fd835 !important;
 }
 
 .controller-calendars table.cal td p {
@@ -120,25 +125,29 @@
   background: #ffffff;
   padding: 10px;
   max-width: 400px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -khtml-border-radius: 10px;
-  border-radius: 10px;
+  -moz-border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0 5px 5px 5px;
+  -khtml-border-radius: 0 5px 5px 5px;
+  border-radius: 0 5px 5px 5px;
   border: 1px solid #DADADA;
   color: #707070;
   height: auto !important;
-  margin: 11px 0 0 11px;
+  margin: -10px 0 0 11px;
+}
+
+.controller-calendars .linkToInfo {
 }
 
 .controller-calendars .linkToInfo.box, .controller-calendars .legend div.box {
-  float:left; 
   margin-left:3px;
+  margin-bottom:3px;
   width:14px; 
-  height:15px; 
+  height:15px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   -khtml-border-radius: 3px;
   border-radius: 3px; 
+  cursor: pointer;
 }
 
 .controller-calendars .legend {
@@ -148,6 +157,7 @@
 .controller-calendars .legend div.box {
   background-color: #a8db4a;
   margin: 0 5px 2px 0;
+  float: left;
 }
 
 .controller-calendars .linkToInfo.box.starting, .controller-calendars .legend .starting div {
@@ -203,8 +213,6 @@ img.calendar-trigger {
 }
 
 div.calendar {
-//  position: relative; 
-//  z-index: 60;
   background-color: #FFFFFF;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -485,7 +493,47 @@ div.mypage-box .cal {
   border-color: #F0F0F0;
 }
 
-
 .cal #small .td_box {
   height: auto;
+}
+
+#addEvent {
+  display: none;
+}
+
+#addEvent .background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:0;
+  background-color: #000;
+  opacity: .5;
+  -moz-opacity:0.5;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  -khtml-opacity: 0.5;
+  z-index: 999;
+}
+
+#addEvent .content {
+  position: fixed;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  margin-left: -330px;
+  margin-top: -230px;
+  padding:20px;
+  width: 620px;
+  height: 460px;
+  background-color: #fff;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.controller-calendars table.cal td .day-num { /* Cell showing selected date */
+  margin: 0px;
+  padding: 2px 3px;
 }

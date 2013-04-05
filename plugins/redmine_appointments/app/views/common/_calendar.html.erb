@@ -1,0 +1,75 @@
+<% day = calendar.startdt %>
+<table class="cal" width="100%">
+<thead>
+  <tr>
+    <th scope="col" title="<%= l(:label_week) %>" class="week-number">KW</th>
+    <% 7.times do |i| %>
+      <th scope="col" width="14%" align="center"><%= day_name( (calendar.first_wday+i)%7 ) %></th>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+<% day = calendar.startdt
+  while day <= calendar.enddt
+    weekend = (day.wday%7 == 6 || day.wday%7 == 0)
+    if day.cwday == calendar.first_wday %>
+      <td valign="top" class="week-number" title="<%= l(:label_week) %>">
+        <p><%= (day+(11-day.cwday)%7).cweek %></p>
+      </td>
+<%  end %>
+    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
+      <div class="td_box noSelect">
+        <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
+          <% calendar.events_on(day).each do |i| %>
+          <div style="float:left">        
+            <% if (calendar.events_on(day).size < 3) %>
+              <p class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>" style="float:left; clear:left;margin:0px;padding:0px 0px 0px 2px;">
+                <% if i.is_a? Issue %>
+                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(13)}) %>
+                <% elsif i.is_a? Appointment %>
+                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(13)}) %>
+                <% end %>
+              </p>
+            <% else %>
+              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if format_date(day) == format_date(i.start_date) %> <%= 'ending' if (format_date(day) == format_date(i.due_date) || i.due_date.nil?) %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= i.project.nil? ? "7AdFd" : ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>" onclick="self.location.href='<%= url_for(:controller => getControllerName(i), :action => 'show', :id => i) %>'">
+                <%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %>
+              </div>
+            <% end %>
+            <% if i.is_a? Issue %>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 3 %>"><%= render_issue_tooltip i %></div>
+            <% elsif i.is_a? Appointment %>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 3 %>"><%= render_appointment_tooltip i %></div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </td>
+<%= '</tr><tr>'.html_safe if day.cwday==calendar.last_wday and day!=calendar.enddt %>
+    <% day = day + 1
+    end %>
+  </tr>
+</tbody>
+</table>
+
+<%= javascript_tag "
+  var $ = jQuery.noConflict();
+	$(function() {
+	  visiblity = 'visible';
+		$('.linkToInfo').each(function(obj) {
+		  $(this).hover(function() {
+		    infobox = $(this).parent().find('.infobox');
+		    infobox.css('visibility','visible');
+		    infobox.hover( function () {
+		      visiblity = 'visible';
+		    }, function () {
+		      $(this).css('visibility','hidden');
+		    });
+		  }, function () {
+		    visiblity = 'hidden';
+		    id = $(this).attr('id');
+		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
+		  });
+		});
+  });
+  "%>

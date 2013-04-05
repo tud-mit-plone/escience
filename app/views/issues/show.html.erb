@@ -1,4 +1,4 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %></h1></div>
 <h2><%= @issue.subject %><%#= issue_heading(@issue) %></h2>
 <% unless @subissue.nil? %>
   <div style="font-weight: 300; margin-top:-15px; margin-bottom:10px;">(<%= l(:label_subissue)%> <%= link_to(@subissue.subject, issue_path(@subissue)) %>)</div>
@@ -36,14 +36,13 @@
   <% end %>
   <%# -------------- deaktiviert ------------------ %>
   
-  <%= avatar(@issue.author, :size => "50") %>
-
 <fieldset class="collapsable collapsed">
   <legend onclick="toggleFieldset(this)"><%= l(:label_attribute_plural)%></legend>
   <div class="content">
     <label style="font-weight:bold"><%= l(:label_tracker)%>:</label> <%= Tracker.find(@issue.tracker_id) %>
     <p class="author">
       <% if session[:current_view_of_eScience] != '0' %>
+        <div style="float:right; margin-top: -30px;">  <%= avatar(@issue.author, :size => "30") %></div>
         <%= authoring @issue.created_on, @issue.author %>.
       <% else %>
         <%= authoring @issue.created_on, nil, :label => :label_added_time %>.

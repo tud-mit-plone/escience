@@ -713,6 +713,7 @@ div .add_attachment:hover {
 
 .sort_buttons a.desc {
     background: #77a600;
+    border-color: #7DB414;
     background: -moz-linear-gradient(top,  #bacea3 0%, #7DB414 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bacea3), color-stop(100%,#7DB414));
     background: -webkit-linear-gradient(top,  #bacea3 0%,#7DB414 100%);
@@ -725,6 +726,7 @@ div .add_attachment:hover {
 
 .sort_buttons a.asc {
     background: #77a600;
+    border-color: #bacea3;
     background: -moz-linear-gradient(top,  #7DB414 0%, #bacea3 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7DB414), color-stop(100%,#bacea3));
     background: -webkit-linear-gradient(top,  #7DB414 0%,#bacea3 100%);
@@ -977,4 +979,70 @@ ul.bc_submenu li {
 
 .progress div.closed, .progress div.done {
   background-color: #7DB414;
+}
+
+#ajax-indicator {
+  position: fixed;
+  padding: 10px 20px;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  margin-top: -15px;
+  margin-left: -45px;
+  text-align: center;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  opacity: .75;
+  -moz-opacity:0.75;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=750)";
+  filter: alpha(opacity=750);
+  -khtml-opacity: 0.75;
+  
+}
+
+#filter {
+  width:0px;
+  height: 0px;
+  left: 560px;
+  position: absolute;
+  overflow: hidden;
+  display: block;
+  transition: width .5s, border .5s, height .5s;
+  -moz-transition: width .5s, border .5s, height .5s;
+  -webkit-transition: width .5s, border .5s, height .5s;
+  -o-transition: width .5s, border .5s, height .5s;
+  background-color: #EAEAEA;
+  -moz-border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0 5px 5px 5px;
+  -khtml-border-radius: 0 5px 5px 5px;
+  border-radius: 0 5px 5px 5px;  
+  margin-top:-17px;
+  border: 0px solid #F0F0F0;
+  margin-top: 5px !important;
+  z-index: 99;
+}
+
+#filter.active {
+  width: 235px;
+  height: 160px;
+  border: 2px solid #F0F0F0;
+}
+
+#activities_fieldset #filter label {
+  clear: inherit;
+}
+
+#activities_fieldset #filter a {
+  text-decoration: none;
+  color: #707070;
+  display: block;
+  padding: 3px 2px;
+}
+
+.day {
+  font-size: 18px;
+  font-weight: bold;
 }

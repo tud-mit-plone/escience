@@ -1,0 +1,38 @@
+    <%= labelled_fields_for :appointment, @appointment do |f| %>
+      <div id="issue_is_private">
+        <%= f.check_box :is_private, :no_label => true %><label class="inline" for="issue_is_private" id="issue_is_private_label"><%= l(:field_is_private) %></label>
+      </div>
+      <p><%= f.text_field :subject, :size => 80, :required => true %></p>
+      <p>
+        <%= f.label_for_field :description, :required => false %>
+        <%= content_tag 'div', :style => 'margin-bottom:10px;', :class=>"description" do %>
+          <textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="appointment_description" name="appointment[description]" rows="<%= (@appointment.description.blank? ? 10 : [[10, @appointment.description.length / 50].max, 100].min) %>">
+            <%= textilizable @appointment, :description %>
+          </textarea>
+        <% end %>
+      </p>
+      <div id="attributes" class="attributes">
+        <div class="w33">
+        <%= f.text_field :start_date, :value => format_date(@appointment[:start_date]), :size => 10, :required => true %><%= calendar_for('appointment_start_date') %>
+        <%= f.text_field :start_time, :value => format_date_to_time(@appointment[:start_date]), :size => 5, :no_label => true, :onclick => "$(this).addClass('active')", :class => "timeEntry#{ " active" unless @appointment[:start_date].nil? || (@appointment[:start_date].hour.to_i == 0 && @appointment[:start_date].min.to_i == 0)}" %>
+        </div>
+        <div>
+        <%= f.select :cycle, options_for_select(options_for_cycle), :size => 10 %>
+        </div>
+        <div class="w33">
+        <%= f.text_field :due_date, :value => format_date(@appointment[:due_date]), :size => 10, :label => l(:field_end_date) %><%= calendar_for('appointment_due_date') %>
+        <%= f.text_field :due_time, :value => format_date_to_time(@appointment[:due_date]), :size => 5, :no_label => true, :onclick => "$(this).addClass('active')", :class => "timeEntry#{ " active" unless @appointment[:due_date].nil? || (@appointment[:due_date].hour.to_i == 0 && @appointment[:due_date].min.to_i == 0)}" %>
+        </div>
+        <div style="clear:both; height:5px;"></div>
+        <% include_calendar_headers_tags %>
+      </div>
+    <% end %>
+<% content_for :header_tags do %>
+  <style>
+    .cke_contents {height: 120px !important;}
+    .attributes label {width: 65px;}
+    .w33 {clear:left;float: left; padding-right: 70px;}
+    .timeEntry {opacity: .5;-moz-opacity:0.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter: alpha(opacity=50);-khtml-opacity: 0.5;}
+    .timeEntry.active {opacity: 100;-moz-opacity:100;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";filter: alpha(opacity=100);-khtml-opacity: 100;}
+  </style>
+<% end %>

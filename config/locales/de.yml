@@ -632,6 +632,8 @@ de:
   label_download: "%{count} Download"
   label_download_plural: "%{count} Downloads"
   label_no_data: Nichts anzuzeigen
+  label_no_activity: Keine Aktivitäten mit den ausgewählten Kriterien vorhanden
+  label_period_of_time: Im Zeitraum
   label_issues: Keine Aufgaben vorhanden
   label_change_status: Statuswechsel
   label_history: Verlauf
@@ -696,6 +698,7 @@ de:
   label_gantt: Gantt-Diagramm
   label_internal: Intern
   label_last_changes: "%{count} letzte Änderungen"
+  label_last_modified: geändert am
   label_change_view_all: Alle Änderungen anzeigen
   label_personalize_page: Übersicht anpassen
   label_comment: Kommentar
@@ -748,7 +751,6 @@ de:
   label_associated_revisions: Zugehörige Revisionen
   label_added: hinzugefügt
   label_modified: geändert
-  label_last_modified: geändert am
   label_newest_project: zuletzt geändert
   label_copied: kopiert
   label_renamed: umbenannt
@@ -890,6 +892,7 @@ de:
   label_ascending: Aufsteigend
   label_descending: Absteigend
   label_date_from_to: von %{start} bis %{end}
+  label_date_from_to_dative: vom %{start} bis %{end}
   label_wiki_content_added: Die Wiki-Seite wurde erfolgreich hinzugefügt.
   label_wiki_content_updated: Die Wiki-Seite wurde erfolgreich aktualisiert.
   label_group: Gruppe
@@ -921,6 +924,7 @@ de:
   button_login: Login
   button_submit: OK
   button_save: Speichern
+  button_save_and_continue: Speichern und zurück
   button_check_all: Alles auswählen
   button_uncheck_all: Alles abwählen
   button_delete: Löschen
@@ -989,6 +993,7 @@ de:
   text_regexp_info: z. B. ^[A-Z0-9]+$
   text_min_max_length_info: 0 heißt keine Beschränkung
   text_project_destroy_confirmation: Sind Sie sicher, dass sie das Projekt löschen wollen?
+  text_issue_destroy_confirmation: "Sie löschen hiermit auch alle Unteraufgaben!\nSind Sie sicher, dass sie diese Aufgabe löschen wollen?"
   text_subprojects_destroy_warning: "Dessen Unterprojekte (%{value}) werden ebenfalls gelöscht."
   text_workflow_edit: Workflow zum Bearbeiten auswählen
   text_are_you_sure: Sind Sie sicher?

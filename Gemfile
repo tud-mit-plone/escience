@@ -113,3 +113,4 @@ gem "dropbox-sdk"
 # htmlentities are needed for decoding wysiwyg into wiki
 gem "htmlentities"
 gem "rghost"
+gem 'render_parent', '>= 0.0.4'

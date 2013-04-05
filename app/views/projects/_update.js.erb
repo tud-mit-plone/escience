@@ -1,0 +1,2 @@
+$('#<%= @id %>').html('<%= escape_javascript(@content) %>');
+$('.last_modified').html('<%= escape_javascript(l(:label_last_modified) +": "+ format_time(@project.updated_on)) %>');

@@ -5,20 +5,22 @@
   </div>
   <div class="innerInfo collapsed">
     <div class="tools">
-    	<%# if User.current.allowed_to?(:edit_issue, nil, :global => true) %>
+        <% if User.current.allowed_to?(:edit_issues, @project) %>
         <div class="settings_project">
           <%= link_to(image_tag("/images/settings.png"), {:controller => 'issues', :action => 'edit', :id => issue.id}) %>
         </div>
+        <% end %>
+        <% if User.current.allowed_to?(:delete_issues, @project) %>
         <div class="settings_project">
-          <%= link_to(image_tag("/images/delete.png"), {:controller => 'issues',:id => issue.id}, :method => 'delete') %>
+          <%= link_to(image_tag("/images/delete.png"), {:controller => 'issues',:id => issue.id, :method => 'destroy'}, :confirm => self.l(:text_issue_destroy_confirmation)) %>
         </div>
-      <%# end %>
+        <% end %>
     </div>                 
     <div class="text">
       <table>
         <tr>
           <td width="40" valign="top">
-            <%= Date.parse(format_date(issue.created_on)).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %>
+            <%= Date.parse(issue.created_on.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %>
           </td>
           <td class="wiki description" valign = "top">
             <%= textilizable(issue.description.truncate(200)) if issue.description.present? %>

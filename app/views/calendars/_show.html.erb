@@ -1,0 +1,63 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
+
+<% content_for :sidebar_right do %>
+  <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
+    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
+  <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'icon icon-add' %>
+  <% end %>
+<% end %>
+
+<h2><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %></h2>
+
+<%= form_tag({:controller => 'calendars', :action => 'show', :project_id => @project},
+             :method => :get, :id => 'query_form') do %>
+  <%= hidden_field_tag 'set_filter', '1' %>
+  <fieldset id="filters" class="collapsible <%= @query.new_record? ? "" : "collapsed" %>">
+    <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
+    <div style="<%= @query.new_record? ? "" : "display: none;" %>">
+      <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
+    </div>
+    <div class="selectors">
+      <%= label_tag('month', l(:label_month)) %>
+      <%= select_month(@month, :prefix => "month", :discard_type => true) %>
+      <%= label_tag('year', l(:label_year)) %>
+      <%= select_year(@year, :prefix => "year", :discard_type => true) %>
+    </div>
+    <div class="buttons">
+      <div><%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %></div>
+      <div><%= submit_tag l(:button_apply) %></div>
+    </div>
+  </fieldset>
+  
+  <div id="changeMonth">
+    <div class="prev"><%= link_to_previous_month(@year, @month,:remote => true) %></div><div class="next"><%= link_to_next_month(@year, @month) %></div>
+  </div>
+<% end %>
+<div style="clear:both"></div>
+
+
+<%= error_messages_for 'query' %>
+<% if @query.valid? %>
+<div id="calendar">
+<%= render :partial => 'common/calendar', :locals => {:calendar => @calendar} %>
+</div>
+
+<div class="legend cal">
+  <div class="starting"><div class="box">&nbsp;</div><%= l(:text_tip_issue_begin_day) %></div>
+  <div class="clear"></div>
+  <div class="ending"><div class="box">&nbsp;</div><%= l(:text_tip_issue_end_day) %></div>
+  <div class="clear"></div>
+  <div class="starting ending"><div class="box">&nbsp;</div><%= l(:text_tip_issue_begin_end_day) %></div>
+</div>
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render :partial => 'issues/sidebar' %>
+<% end %>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'calendar' %>
+<% end %>
+
+<% html_title(l(:label_calendar)) -%>

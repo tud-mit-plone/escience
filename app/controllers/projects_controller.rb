@@ -169,6 +169,7 @@ class ProjectsController < ApplicationController
       end
       params[:project][:identifier] = identifier
     end
+    params[:project][:description] = convertHtmlToWiki(params[:project][:description])
     @project.safe_attributes = params[:project]
     @project.creator = User.current.id
     
@@ -185,7 +186,7 @@ class ProjectsController < ApplicationController
           flash[:notice] = l(:notice_successful_create)
           redirect_to(params[:continue] ?
             {:controller => 'projects', :action => 'new', :project => {:parent_id => @project.parent_id}.reject {|k,v| v.nil?}} :
-            {:controller => 'projects', :action => 'settings', :id => @project}
+            {:controller => 'projects', :action => 'show', :id => @project}
           )
         }
         format.api  { render :action => 'show', :status => :created, :location => url_for(:controller => 'projects', :action => 'show', :id => @project.id) }
@@ -297,9 +298,6 @@ class ProjectsController < ApplicationController
     @wiki ||= @project.wiki
   end
 
-  def edit
-  end
-
   def update
     params[:project][:description] = convertHtmlToWiki(params[:project][:description])
     @project.safe_attributes = params[:project]
@@ -309,6 +307,11 @@ class ProjectsController < ApplicationController
         format.html {
           flash[:notice] = l(:notice_successful_update)
           redirect_to :action => 'settings', :id => @project
+        }
+        format.js {
+          @id = 'description'
+          @content = textilizable(@project.description)
+          render :partial => 'update'
         }
         format.api  { render_api_ok }
       end

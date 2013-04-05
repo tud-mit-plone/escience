@@ -1,0 +1,46 @@
+  <%= form_for(@appointment,:url=>{:action=>'update'}, :html => {:id => 'appointment-form', :multipart => true}) do |f| %>
+
+  <h2 style="float:left; position:absolute"><%= l(:label_appointments) %></h2>
+  <%= link_to l(:button_cancel), @referer, :class => 'button', :style => '60px' %>
+  <%= submit_tag l(:button_save) %>
+  <%= hidden_field_tag 'referer', @referer %>
+  <div class="clear"></div>
+  <div class="box" style="padding-top: 10px;">
+    <fieldset class="tabular"><legend><%= l(:label_appointment_edit) %></legend>
+      <div id="all_attributes">
+        <%= render :partial => 'form', :locals => { :f => f } %>
+      </div>
+    </fieldset>
+
+    <p><%= render :partial => 'attachments/form', :locals => {:container => @appointment} %></p>
+    
+    <fieldset>
+      <% if @appointment.safe_attribute? 'watcher_user_ids' -%>
+      <label><%= l(:label_issue_watchers) %></label><br />
+        <p id="watchers_form">
+        <span id="watchers_inputs">
+          <%= watchers_checkboxes(@appointment, @available_watchers) %>
+        </span>
+        <span class="search_for_watchers">
+        <%= link_to l(:label_search_for_watchers),
+                    {:controller => 'watchers', :action => 'new'},
+                    :remote => true,
+  				  :method => 'get' %>
+        </span>
+        </p>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <%= link_to l(:button_cancel), @referer, :class => 'button', :style => '60px' %>
+  <%= submit_tag l(:button_save) %>
+  <%= javascript_tag "$('#appointment_subject').focus();" %>
+<% end %>
+
+
+<% content_for :header_tags do %>
+    <%= robot_exclusion_tag %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
+    <%= stylesheet_link_tag 'issues' %>
+<% end %>

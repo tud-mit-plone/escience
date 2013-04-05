@@ -30,6 +30,12 @@ class ActivitiesController < ApplicationController
             @events_by_day
             render :layout => false if request.xhr?
           }
+          format.js {
+            @events_by_day
+            @id = 'activity'
+            @partial = 'index'
+            render :partial => 'update'
+          }          
           format.atom {
             title = l(:label_activity)
             if @author

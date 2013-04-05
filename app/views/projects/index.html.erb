@@ -47,7 +47,13 @@
             <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/settings.png"), {:controller => 'projects', :action => 'settings', :id => project.id, :sub => params[:sub]}) %>
           </div>
         <% end %>
-        <% if User.current.allowed_to?(:view_issues, project) && !Issue.find_by_project_id(project.id).nil? && !Issue.find_by_project_id(project.id).visible? %>
+        <% visible_issues = false 
+           Issue.find(:all, :conditions => "project_id = #{project.id}").each do |e|
+             if e.visible? 
+               visible_issues = true
+             end 
+           end %>
+        <% if User.current.allowed_to?(:view_issues, project) && visible_issues %>
           <div class="issues_project">
             <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/todo.png"), {:controller => 'issues', :id => project.id, :sub=>params[:sub]}) %>
           </div>
@@ -59,7 +65,7 @@
           <div>
             <table>
               <tr>
-                <td width="40" valign="top"><%= Date.parse(format_date(project.created_on)).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
+                <td width="40" valign="top"><%= Date.parse(project.created_on.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
             <%= content_tag('td', textilizable(project.short_description.truncate(200), :project => project), :class => 'wiki description', :valign => "top") if project.description.present? %>
               </tr>
             </table>

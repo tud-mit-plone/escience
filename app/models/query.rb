@@ -274,7 +274,7 @@ class Query < ActiveRecord::Base
         # project filter
         project_values = []
         if User.current.logged? && User.current.memberships.any?
-          project_values << ["<< #{l(:label_my_projects).downcase} >>", "mine"]
+          project_values << ["<< #{l(:label_my_projects)} >>", "mine"]
         end        
         project_values += all_projects_values
         

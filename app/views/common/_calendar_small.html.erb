@@ -1,0 +1,55 @@
+<% day = calendar.startdt %>
+<table class="cal" width="100%">
+<thead>
+  <tr>
+    <td valign="top" class="week-number">
+      <%= "#{month_name(day.month)} #{day.year} ("+l(:label_week)+": #{(day+(11-day.cwday)%7).cweek})" %>
+      <hr>
+    </td>
+  </tr>
+</thead>      
+<tbody id="small">
+<%while day <= calendar.enddt 
+  weekend = (day.wday%7 == 6 || day.wday%7 == 0) %>
+  <tr>
+    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
+      <div class="td_box">
+        <p class="day-num"><%= format_date(day)[0..5] %> <%= day_name(day.wday%7) %></p>
+         <% calendar.events_on(day).each do |i| %>
+          <div>
+            <p class="linkToInfo" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(40)}) %></p>
+           <% if i.is_a? Issue %>
+           <div class="infobox" id="info_<%= i.id %>_<%= day %>" style="position:absolute;"><%= render_issue_tooltip i %></div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </td>
+<%= '</tr><tr>'.html_safe if day.cwday==calendar.last_wday and day!=calendar.enddt %>
+    <% day = day + 1
+    end %>
+  </tr>
+</tbody>
+</table>
+
+<%= javascript_tag "
+  var $ = jQuery.noConflict();
+	$(function() {
+	  visiblity = 'visible';
+		$('.linkToInfo').each(function(obj) {
+		  $(this).hover(function() {
+		    infobox = $(this).parent().find('.infobox');
+		    infobox.css('visibility','visible');
+		    infobox.hover( function () {
+		      visiblity = 'visible';
+		    }, function () {
+		      $(this).css('visibility','hidden');
+		    });
+		  }, function () {  
+		    visiblity = 'hidden';
+		    id = $(this).attr('id');
+		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
+		  });
+		});
+  });
+  "%>

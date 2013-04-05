@@ -25,7 +25,8 @@ class Journal < ActiveRecord::Base
   has_many :details, :class_name => "JournalDetail", :dependent => :delete_all
   attr_accessor :indice
 
-  acts_as_event :title => Proc.new {|o| status = ((s = o.new_status) ? " (#{s})" : nil); "#{o.issue.tracker} ##{o.issue.id}#{status}: #{o.issue.subject}" },
+#  acts_as_event :title => Proc.new {|o| status = ((s = o.new_status) ? " (#{s})" : nil); "#{o.issue.tracker} ##{o.issue.id}#{status}: #{o.issue.subject}" },
+  acts_as_event :title => Proc.new {|o| "#{o.issue.subject}" },
                 :description => :notes,
                 :author => :user,
                 :type => Proc.new {|o| (s = o.new_status) ? (s.is_closed? ? 'issue-closed' : 'issue-edit') : 'issue-note' },

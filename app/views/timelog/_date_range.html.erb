@@ -19,16 +19,16 @@
       <span>
       <%= l(:label_date_from_to,
               :start => ((label_tag "from", '', :class => "hidden-for-sighted") + 
-                  text_field_tag('from', @from, :size => 10, :disabled => !@free_period) + calendar_for('from')),
+                  text_field_tag('from', format_date(@from), :size => 10, :disabled => !@free_period) + calendar_for('from')),
               :end => ((label_tag "to", '', :class => "hidden-for-sighted") +
-                  text_field_tag('to', @to, :size => 10, :disabled => !@free_period) + calendar_for('to'))).html_safe %>
+                  text_field_tag('to', format_date(@to), :size => 10, :disabled => !@free_period) + calendar_for('to'))).html_safe %>
       </span>
     </div>
     <div class="clear"></div>
   </div>
 </div>
 <div class="buttons">
-  <%= link_to_function l(:button_apply), '$("query_form").submit()', :class => 'button' %>
+  <%= submit_tag l(:button_apply), :class => 'button' %>
   <%= link_to l(:button_clear), {:controller => controller_name, :action => action_name, :project_id => @project, :issue_id => @issue}, :class => 'button' %>
 </div>
 </fieldset>
