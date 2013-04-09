@@ -1,0 +1,55 @@
+<div class ='hentry' id ='profile_details'>
+  <h3>
+    <%= link_to @user.login, user_path(@user) %>
+  </h3>
+  <%#if @user.featured_writer? %>
+        <small><%= :featured_writer %></small>
+  <%#end%>
+</div>
+
+  <div class='centered'>
+<%  if @is_current_user %>
+  <%  if @user.avatar %>
+          <%#= @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>".html_safe : '' %>
+          <%#= @user.featured_writer ? "<div class='right_corner'><div class='featured_writer'></div></div>".html_safe : '' %>
+          <%= link_to l(:profile_photo_crop), crop_profile_photo_user_path(@user) %>
+  <%  else  %>
+          <%= l(:no_profile_photo)%>
+          <%= link_to l(:click_here_to_upload_one), edit_user_path(@user) %>
+  <%end%>
+<%end%>
+    <%= image_tag( @user.avatar_photo_url(:thumb), :class => "polaroid")     %>
+  </br>
+</div>
+<%  if User.current and User.current.can_request_friendship_with(@user) %>
+    <%= add_friend_link(@user) %>
+<%end%>
+  <h3><%= :my_details%></h3>
+  <div class='vcard author'>
+    <ul>
+      <li class='update'>
+        <a href='<%= user_path(@user) %>' rel='bookmark'>
+          <abbr class='published' title='<%= @user.created_on %>'>
+            <%= :member_since.to_s + " #{I18n.l(@user.created_on, :format => :short_published_date)}" %>
+          </abbr>
+        </a>
+      </li>
+      <!--
+      <li class='view'>
+        <%#= :view_count%>
+        <%#= "(#{@user.view_count})" %>
+      </li>
+<%#  if @user.tags.any? %>
+        <li class='tags'><%#= "#{:my_tags}: #{@user.tags.collect{|t| link_to t.name, tag_url(t) }.join(", ")}".html_safe %></li>
+<%#end%>
+<%#  if @user.metro_area %>
+        <li class='geo'><%#= link_to( @user.full_location, users_path(:metro_area_id => @user.metro_area_id, :state_id => @user.state_id, :country_id => @user.country_id ) )  %></li>
+      -->
+<%#end%>
+<%#  if User.current.logged? && @user != User.current %>
+      <li class='compose'><%= link_to(l(:send_me_a_message), new_user_message_path( :id =>@user.id)) %></li>
+<%#end%>
+    </ul>
+  </div>
+  <div class='clear'>
+  </div>

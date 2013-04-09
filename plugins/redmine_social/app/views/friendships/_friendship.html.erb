@@ -1,0 +1,18 @@
+<% user = friendship.friend %>
+<fieldset>
+  <div class='yui'>
+  <h3><%= link_to user.login, user_path(user) %></h3>   
+  <%= image_tag( user.avatar_photo_url(:thumb), :class => "polaroid" )%>
+    <div class='yui'>
+      <%# if user.metro_area %>     
+        <%#= "#{:from} #{user.location}" %>
+      <%#end%>
+      <p><%= l friendship.friendship_status.name %></p>
+      <p>
+        <%= l(:requested) %>
+        <%= time_ago_in_words friendship.created_on %>
+      </p>
+  </div>
+</div>
+<div class='yui'><%= friendship_control_links(friendship) if @is_current_user%></div>
+</fieldset>

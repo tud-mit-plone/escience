@@ -1,0 +1,13 @@
+<%content_for :sidebar_right do %>
+<div class='yui'>
+  <%= render :partial => 'users/profile_user_info_sidebar'%>
+</div>
+<%end%>
+
+<div id='yui'></div>
+  <div class='yui'>
+    <h3><%= l(:denied_friendships) %></h3>
+    <div class='user_list'>
+      <%= render :partial => "friendships/friendship", :collection => @friendships %>
+    </div>
+</div>

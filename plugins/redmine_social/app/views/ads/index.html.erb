@@ -1,0 +1,57 @@
+<div class='yui'>
+  <%#= render :partial => 'shared/admin_nav' %>
+  <h3><%= :search %></h3>
+    <%= form_for @search, :url => ads_path, :html => {:class => "MainForm"} do |f| %>
+
+      <label><%= :name %>
+      <%= f.text_field :name_starts_with %>
+      
+      <label><%= :location %>
+      <%= f.text_field :location_contains %>
+  </label>
+</label>
+
+      <p><%= f.submit :search %></p>
+<%end%>
+
+<div id='yui'>
+  <div class='yui'>  
+      <h3><%= :ads %></h3>
+      <%unless @search.nil?%>
+      <table width='100%'>
+        <tr>
+          <th><%= sort_link @search, :name, :name %>
+          <th>
+            <%= sort_link @search, :published, :published %>
+          </th>
+          <th>
+            <%= sort_link @search, :location, "location" %>
+          </th>
+          <th>&nbsp;</th>
+        </th>
+      </tr>
+    </table>
+    <%end%>
+</div>
+</div>
+
+<% for ad in @ads -%> 
+  <tr>
+    <td><%= link_to h(ad.name), ad_path(ad) %>
+    <td><%= h ad.published? %>
+    <td><%= h ad.location %>
+    <td>
+      <%= link_to :edit, edit_ad_path(ad) %>
+      <%= link_to :destroy, ad_path(ad), :confirm => :are_you_sure, :method => :delete %>
+    </td>
+    </td>
+    <div class='pagination'><%= will_paginate @ads %></div>
+      
+      <br>
+      </br>
+      <%= link_to :new_ad, new_ad_path  %>
+    </td>
+  </td>
+</tr>
+<%end unless @ads.nil?%>
+</div>

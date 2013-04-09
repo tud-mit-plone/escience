@@ -1,0 +1,9 @@
+<%content_for :sidebar_right do %>
+    <ul>
+      <li><%= link_to(l(:accepted_user_friendships),accepted_user_friendships_path)%></li>
+      <li><%= link_to(l(:pending_user_friendships),pending_user_friendships_path)%></li>
+      <li><%= link_to(l(:denied_user_friendships),denied_user_friendships_path)%></li>
+    </ul>
+<%end%>
+
+<%= link_to "&raquo; #{l(:click_here_to_view_as_a_list)}".html_safe, accepted_user_friendships_path(@user) %>
