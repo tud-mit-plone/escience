@@ -3,7 +3,6 @@
 <%= labelled_form_for @news, :html => { :id => 'news-form', :multipart => true, :method => :put } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_save) %>
-<<<<<<< HEAD
 <%= link_to l(:button_cancel), {:action => 'show'}, :class => 'button' %>
 <%#= link_to l(:button_cancel), "#", :onclick => 'Element.hide("edit-news");Element.show("preview"); return false;' %>
 <%#= link_to_remote l(:label_preview),
@@ -12,9 +11,7 @@
   #                   :update => 'preview',
   #                   :with => "Form.serialize('news-form')"
   #                 }, :accesskey => accesskey(:preview) %>
-=======
-<%= preview_link preview_news_path(:project_id => @project, :id => @news), 'news-form' %>
->>>>>>> 69c0e23d2a17c308d162bc26d3697314a356b665
+<%#= preview_link preview_news_path(:project_id => @project, :id => @news), 'news-form' %>
 <% end %>
 
 <div id="preview" class="wiki"></div>

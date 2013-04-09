@@ -75,6 +75,7 @@ RedmineApp::Application.routes.draw do
 
   match 'metatagssearch', :controller => 'meta_information', :action => 'retrieve_all_tags'
 
+  match 'users/online_live_count', :to => 'users#online_live_count', :via => :get 
   resources :users
   match 'usersearch', :controller => 'users', :action => 'user_search'
   match 'contact_membersearch', :controller => 'users', :action => 'contact_member_search'

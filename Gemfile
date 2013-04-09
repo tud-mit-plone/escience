@@ -114,3 +114,12 @@ gem "dropbox-sdk"
 gem "htmlentities"
 gem "rghost"
 gem 'render_parent', '>= 0.0.4'
+gem "xml-object"
+# Activities rendering 
+gem "nokogiri"
+# for redmine_social_plugin 
+gem "meta_search"
+gem "will_paginate"
+gem "power_enum"
+gem 'acts_as_commentable', '3.0.1'
+gem 'paperclip'

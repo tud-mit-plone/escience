@@ -196,27 +196,32 @@ module SortHelper
   # - the optional caption explicitly specifies the displayed link text.
   # - 2 CSS classes reflect the state of the link: sort and asc or desc
   #
+
   def sort_link(column, caption, default_order)
-    css, order = nil, default_order
+    if defined?(super) && column.class.to_s == "MetaSearch::Searches::Ad" 
+      super 
+     else  
+      css, order = nil, default_order
 
-    if column.to_s == @sort_criteria.first_key
-      if @sort_criteria.first_asc?
-        css = 'sort asc'
-        order = 'desc'
-      else
-        css = 'sort desc'
-        order = 'asc'
+      if column.to_s == @sort_criteria.first_key
+        if @sort_criteria.first_asc?
+          css = 'sort asc'
+          order = 'desc'
+        else
+          css = 'sort desc'
+          order = 'asc'
+        end
       end
-    end
-    caption = column.to_s.humanize unless caption
+      caption = column.to_s.humanize unless caption
 
-    sort_options = { :sort => @sort_criteria.add(column.to_s, order).to_param }
-    url_options = params.merge(sort_options)
+      sort_options = { :sort => @sort_criteria.add(column.to_s, order).to_param }
+      url_options = params.merge(sort_options)
 
-     # Add project_id to url_options
-    url_options = url_options.merge(:project_id => params[:project_id]) if params.has_key?(:project_id)
+       # Add project_id to url_options
+      url_options = url_options.merge(:project_id => params[:project_id]) if params.has_key?(:project_id)
 
-    link_to_content_update(h(caption), url_options, :class => css)
+      link_to_content_update(h(caption), url_options, :class => css)
+    end 
   end
 
   # Returns a table header <th> tag with a sort link for the named column

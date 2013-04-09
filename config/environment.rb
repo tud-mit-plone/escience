@@ -12,4 +12,5 @@ end
 
 # Initialize the rails application
 RedmineApp::Application.initialize!
+# for no sql query logging 
 ActiveRecord::Base.logger.level = Logger::INFO

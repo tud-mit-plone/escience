@@ -121,7 +121,7 @@ class UserMessagesController < ApplicationController
   def create
     noerror = true
     notice = ""
-    p params[:user_message]["receiver"]
+    
     if (params[:user_message]["receiver"].empty? || params[:user_message]["subject"].empty? || params[:user_message]["body"].empty?) 
       noerror = false;
       notice = l(:error_empty_message)
