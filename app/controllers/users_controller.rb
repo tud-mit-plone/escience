@@ -18,8 +18,8 @@
 class UsersController < ApplicationController
   layout 'admin'
 
-  before_filter :require_admin, :except => [:show, :user_search, :contact_member_search]
-  before_filter :require_login, :only => [:user_search, :contact_member_search,:show]
+  before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count]
+  before_filter :require_login, :only => [:user_search, :contact_member_search,:show,:online_live_count]
   before_filter :find_user, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership]
   accept_api_auth :index, :show, :create, :update, :destroy
 
@@ -299,6 +299,12 @@ class UsersController < ApplicationController
       format.html { redirect_to :controller => 'users', :action => 'edit', :id => @user, :tab => 'memberships' }
       format.js { render(:update) {|page| page.replace_html "tab-content-memberships", :partial => 'users/memberships'} }
     end
+  end
+
+  def online_live_count
+    respond_to do |format|
+      format.json{ render :json => {:success => true, :data => User.online_live_count.to_json }}
+    end 
   end
 
   private

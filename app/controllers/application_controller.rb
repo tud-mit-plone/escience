@@ -45,6 +45,29 @@ class ApplicationController < ActionController::Base
   include Redmine::MenuManager::MenuController
   helper Redmine::MenuManager::MenuHelper
 
+  before_filter :thread_safe_set_online_users
+  @@online_count_lock = Mutex.new
+
+  def thread_safe_set_online_users
+    @@online_count_lock.synchronize do 
+      set_online_users 
+    end
+  end
+
+  def set_online_users
+    return unless User.current.logged?
+
+    User.current.last_user_activity = Time.now
+    users = Rails.cache.fetch("online_users") { [User.current] }
+    @online_users = users.collect do |user|
+      user if user.last_user_activity > 5.minutes.ago
+    end.compact
+    unless @online_users.include?(User.current)
+      @online_users << User.current
+    end
+    Rails.cache.write("online_users", @online_users)
+  end
+
   def session_expiration
     if session[:user_id]
       if session_expired? && !try_to_autologin

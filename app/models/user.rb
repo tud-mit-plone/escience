@@ -685,6 +685,18 @@ class User < Principal
     end
   end
 
+  def last_user_activity=(time)
+   @last_user_activity ||= time 
+  end
+
+  def last_user_activity
+    @last_user_activity 
+  end
+
+  def self.online_live_count
+    Rails.cache.fetch("online_users").count
+  end
+
   protected
 
   def validate_password_length
