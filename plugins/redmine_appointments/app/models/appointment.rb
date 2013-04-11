@@ -52,27 +52,40 @@ class Appointment < ActiveRecord::Base
   end
   
   def self.getAllEventsWithCycle(startdt=Date.today,enddt=Date.today)
-    appointments = self.visible
+    if startdt == enddt
+      appointments = self.find(:all, :conditions => ["(DATE(start_date) >= ? AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? AND DATE(start_date) <= ? AND due_date IS NULL) OR (DATE(start_date) = ? AND cycle > 0)", startdt, enddt, startdt, enddt, startdt ])
+    else
+      appointments = self.find(:all, :conditions => ["(DATE(start_date) >= ? AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? AND DATE(start_date) <= ? AND due_date IS NULL)", startdt, enddt, startdt, enddt ])
+    end    
     events = appointments
-    listOfDaysBetween = {}
+    appointments = self.find(:all, :conditions => ["cycle > 0"])
     appointments.each do |appointment|
       if appointment[:cycle] == CYCLE_WEEKLY
         repeated_day = appointment[:start_date]+7.day
-        while repeated_day < enddt && repeated_day <= appointment[:due_date]
+        while (repeated_day < enddt && repeated_day <= appointment[:due_date]) || (enddt == startdt && repeated_day <= appointment[:due_date])
           event = appointment.clone
           event[:start_date] = repeated_day
-          events += [event]
+          events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
           repeated_day += 7.day
         end
       elsif appointment[:cycle] == CYCLE_MONTHLY
         repeated_day = appointment[:start_date]+1.month
-        while repeated_day < enddt
+        while (repeated_day < enddt && repeated_day <= appointment[:due_date]) || (enddt == startdt && repeated_day <= appointment[:due_date])
           event = appointment.clone
-          event[:start_date] = repeated_day
-          events += [event]
+          event[:start_date] = repeated_day 
+          events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
           repeated_day = repeated_day+1.month
         end
-      elsif appointment[:start_date] >= startdt && appointment[:start_date] < enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
+      end
+    end
+    return events
+  end
+  
+  def self.getListOfDaysBetween(startdt=Date.today,enddt=Date.today)
+    appointments = self.find(:all, :conditions => ["cycle = 0"])
+    listOfDaysBetween = {}
+    appointments.each do |appointment|
+      if appointment[:start_date] >= startdt && appointment[:start_date] < enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
         currentDate = appointment[:start_date].to_date.to_time + 1.day
         while currentDate < appointment[:due_date] && currentDate <= enddt
           listOfDaysBetween[currentDate.to_date.to_s] ||= appointment
@@ -80,7 +93,7 @@ class Appointment < ActiveRecord::Base
         end
       end
     end
-    return events,listOfDaysBetween
+    return listOfDaysBetween
   end
   
   def visible?(usr=nil)

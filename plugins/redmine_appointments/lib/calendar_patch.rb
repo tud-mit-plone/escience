@@ -1,5 +1,15 @@
 module Plugin
 module RedmineAppointmentExtension
+
+  events = Proc.new {
+    amount = Issue.where('(start_date <= ? AND due_date >= ?) AND ((assigned_to_id IS NULL AND author_id=?) OR assigned_to_id=?)',Date.today.to_s,Date.today.to_s,User.current.id,User.current.id).count
+    appointments = Appointment.getAllEventsWithCycle
+    amount += appointments.count
+  }
+  
+  Redmine::MenuManager.map(:account_menu).delete(:calendar_all)
+  Redmine::MenuManager.map(:account_menu).push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => {:value_behind => events, :text => :label_calendar }
+
   module CalendarsController
     module ClassMethods
     end
@@ -41,8 +51,8 @@ module RedmineAppointmentExtension
             events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
             
           end
-          appointment_events, @listOfDaysBetween = Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
-          events += appointment_events
+          events += Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
+          @listOfDaysBetween = Appointment.getListOfDaysBetween(@calendar.startdt,@calendar.enddt)
           @calendar.events = events
           @appointment = Appointment.new
           @available_watchers = (@appointment.watcher_users).uniq
