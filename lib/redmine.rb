@@ -157,6 +157,7 @@ end
 Redmine::MenuManager.map :top_menu do |menu|
   menu.push :home, :home_path, :html => {:class => "first"}, :if => Proc.new { !User.current.logged? }
   menu.push :my, { :controller => 'my', :action => 'page' },:caption => :label_home_logged, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
+  menu.push :help, "/static/hilfe.html" 
   menu.push :knowledge, { :controller => 'wiki', :action => 'show_all' }, :caption => :label_knowledge, :if => Proc.new { User.current.logged? }
   menu.push :news, { :controller => 'welcome', :action => 'news' }, :caption => :label_news_anonym, :if => Proc.new { !User.current.logged? }
   menu.push :events, { :controller => 'welcome', :action => 'events' }, :caption => :label_events, :if => Proc.new { !User.current.logged? }
@@ -168,11 +169,16 @@ Redmine::MenuManager.map :account_menu do |menu|
   menu.push :register, { :controller => 'account', :action => 'register' }, :if => Proc.new { !User.current.logged? && Setting.self_registration? }
   menu.push :my_account, { :controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => {"name" => Proc.new {"#{User.current.name}"}, "text" => :label_hello}, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
   menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {"value_behind"=>Proc.new {"#{UserMessage.get_number_of_messages}"},"text" => :label_usermessage }, :html => {:class => "newmessage"}
+  contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
+  text = "#{contacts}".to_i > 1 ? :pending_friendships : :pending_friendship
+  menu.push :user_contacts, { :controller => 'friendships', :action => 'pending', :user_id => Proc.new{"#{User.current.id}"}}, :caption => {"value"=>contacts,"text" => text}, :html => {:class => "newmessage"}, :if => Proc.new{"#{contacts.call}".to_i > 0}
+  
+  menu.push :user_contacts, { :controller => 'friendships', :action => 'pending'}, :caption => {"value"=>Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", true, FriendshipStatus[:pending].id).count}"},"text" => :accepted_friendships }, :html => {:class => "newmessage"}, :if => Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", true, FriendshipStatus[:pending].id).count > 0}"} 
+
 
   menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {"value"=>Proc.new {"#{UserMessage.get_number_of_messages}"},"text" => :label_usermessage_announce }, :html => {:class => "newmessage"}, :if => Proc.new { UserMessage.get_number_of_messages > 0 }
 #  menu.push :issues, { :controller => 'issues', :action => 'index', :show => "new", :sub => "issues_all" }, :param => :project_id, :id => "new_issues", :caption => {"value"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => [User.current.id]})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}, :if => Proc.new {Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)}) > 0}
   menu.push :doodle, { :controller => 'doodles', :action => 'list', :unanswered => "true" }, :caption => {"value"=>Proc.new {"#{User.current.open_answers.count()}"},"text" => :label_my_doodles}, :html => {:class => "newmessage"}, :if => Proc.new {User.current.open_answers.count()>0}
-  menu.push :help, "/static/hilfe.html" 
   menu.push :logout, :signout_path, :html => {:class => "last withnoborder"}, :last => true , :if => Proc.new { User.current.logged? }
 end
 
@@ -208,10 +214,6 @@ Redmine::MenuManager.map :private_menu do |menu|
   menu.push :my, { :controller => 'my', :action => 'page' },:caption => :label_organisation, :if => Proc.new { User.current.logged? }
   menu.push :my_account, {:controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => :label_my_account
   menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :caption => :label_myproject_plural
-#  menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {"value_behind"=>Proc.new {"#{UserMessage.get_number_of_messages}"},"text" => :label_usermessage }, :html => {:class => "newmessage"}
-#  menu.push :sent, { :controller => 'user_messages', :action => 'index', :directory => "sent" }, :caption => {"text" => :label_user_messages_sent }, :parent => :user_messages
-#  menu.push :archive, { :controller => 'user_messages', :action => 'index', :directory => "archive"}, :caption => {"text" => :label_user_messages_archive }, :parent => :user_messages
- # menu.push :trash, { :controller => 'user_messages', :action => 'index', :directory => "trash" }, :caption => {"text" => :label_user_messages_trash }, :parent => :user_messages
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' } , :caption => :label_mymessage, :html => {:class => "newmessage"}
   menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => :label_calendar
 #  menu.push :doodle_all, { :controller => 'doodles', :action => 'list', :sub => "doodle_all" }, :caption => :label_my_doodles_plural

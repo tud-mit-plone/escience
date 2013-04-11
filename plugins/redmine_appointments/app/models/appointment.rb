@@ -9,7 +9,7 @@ class Appointment < ActiveRecord::Base
                      :include => [:user, :visible_journals],
                      # sort by id so that limited eager loading doesn't break with postgresql
                      :order_column => "#{table_name}.id"
-  acts_as_event :subject => Proc.new {|o| "#{o.title}"},
+  acts_as_event :title => Proc.new {|o| "#{o.subject}"},
                 :url => Proc.new {|o| {:controller => 'appointment', :action => 'show', :id => o.id}}
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
   validates_presence_of :subject, :user

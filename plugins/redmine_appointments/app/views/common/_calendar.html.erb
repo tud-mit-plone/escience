@@ -18,17 +18,17 @@
         <p><%= (day+(11-day.cwday)%7).cweek %></p>
       </td>
 <%  end %>
-    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
+    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %><%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>" >
       <div class="td_box noSelect">
         <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
           <% calendar.events_on(day).each do |i| %>
-          <div style="float:left">        
+          <div style="float:left">
             <% if (calendar.events_on(day).size < 3) %>
               <p class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>" style="float:left; clear:left;margin:0px;padding:0px 0px 0px 2px;">
                 <% if i.is_a? Issue %>
-                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(13)}) %>
+                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(12)}) %>
                 <% elsif i.is_a? Appointment %>
-                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(13)}) %>
+                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(12)}) %>
                 <% end %>
               </p>
             <% else %>
@@ -56,19 +56,26 @@
   var $ = jQuery.noConflict();
 	$(function() {
 	  visiblity = 'visible';
+	  e_visiblity = true;
 		$('.linkToInfo').each(function(obj) {
 		  $(this).hover(function() {
 		    infobox = $(this).parent().find('.infobox');
 		    infobox.css('visibility','visible');
+		    id = $(this).attr('id').split('_')[1];
+		    $('.e_'+id).addClass('hoveredEvent')
 		    infobox.hover( function () {
 		      visiblity = 'visible';
+		      e_visiblity = true;
 		    }, function () {
 		      $(this).css('visibility','hidden');
+		      $('.e_'+e_id).removeClass('hoveredEvent')
 		    });
 		  }, function () {
 		    visiblity = 'hidden';
+		    e_visiblity = false;
 		    id = $(this).attr('id');
-		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
+		    e_id = $(this).attr('id').split('_')[1];
+		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity); if (!e_visiblity) $('.e_'+e_id).removeClass('hoveredEvent')\", 1);
 		  });
 		});
   });

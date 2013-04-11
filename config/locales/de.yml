@@ -578,6 +578,10 @@ de:
   label_my_inbox: Posteingang
   label_user_messages: Eigene Nachrichten
   label_user_messages_new: Neue Nachricht
+  label_user_messages_inbox: Posteingang
+  label_user_messages_sentbox: Gesendet
+  label_user_messages_archivebox: Archiv
+  label_user_messages_deletebox: Papierkorb
   label_user_messages_reply: Nachricht beantworten
   label_user_messages_emptytrash: Nachrichten entfernen
   label_user_messages_delete: Nachricht löschen

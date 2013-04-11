@@ -34,8 +34,12 @@ class AppointmentsController < ApplicationController
 
   def update
     params[:appointment][:description] = convertHtmlToWiki(params[:appointment][:description])
-    params[:appointment][:start_date] = params[:appointment][:start_date] + " " + params[:appointment][:start_time]
-    params[:appointment][:due_date] = params[:appointment][:due_date] + " " + params[:appointment][:due_time]
+    start_date = params[:appointment][:start_date] == "" ? nil : params[:appointment][:start_date]
+    due_date = params[:appointment][:due_date] == "" ? nil : params[:appointment][:due_date]
+    params[:appointment][:start_date] = Date.strptime(start_date,::I18n.t("date.formats.default")).to_s if start_date
+    params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if due_date
+    params[:appointment][:start_date] += " " + params[:appointment][:start_time]
+    params[:appointment][:due_date] += " " + params[:appointment][:due_time]
     params[:appointment].delete(:start_time)
     params[:appointment].delete(:due_time)
     @referer = params[:referer]
@@ -70,8 +74,12 @@ class AppointmentsController < ApplicationController
   def create
     @appointment = Appointment.new
     params[:appointment][:description] = convertHtmlToWiki(params[:appointment][:description])
-    params[:appointment][:start_date] = params[:appointment][:start_date] + " " + params[:appointment][:start_time]
-    params[:appointment][:due_date] = params[:appointment][:due_date] + " " + params[:appointment][:due_time]
+    start_date = params[:appointment][:start_date] == "" ? nil : params[:appointment][:start_date]
+    due_date = params[:appointment][:due_date] == "" ? nil : params[:appointment][:due_date]
+    params[:appointment][:start_date] = Date.strptime(start_date,::I18n.t("date.formats.default")).to_s if start_date
+    params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if due_date
+    params[:appointment][:start_date] += " " + params[:appointment][:start_time]
+    params[:appointment][:due_date] += " " + params[:appointment][:due_time]
     params[:appointment].delete(:start_time)
     params[:appointment].delete(:due_time)
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))

@@ -17,11 +17,29 @@
         <%= f.text_field :start_time, :value => format_date_to_time(@appointment[:start_date]), :size => 5, :no_label => true, :onclick => "$(this).addClass('active')", :class => "timeEntry#{ " active" unless @appointment[:start_date].nil? || (@appointment[:start_date].hour.to_i == 0 && @appointment[:start_date].min.to_i == 0)}" %>
         </div>
         <div>
-        <%= f.select :cycle, options_for_select(options_for_cycle), :size => 10 %>
+        <%= f.select :cycle, options_for_select(options_for_cycle, @appointment[:cycle]), :size => 10 %>
         </div>
         <div class="w33">
         <%= f.text_field :due_date, :value => format_date(@appointment[:due_date]), :size => 10, :label => l(:field_end_date) %><%= calendar_for('appointment_due_date') %>
+        <div id="due_date_wrapper" style="display:inline-block" <%= 'class=cycle' if !@appointment[:cycle].nil? && @appointment[:cycle]>0 %> >
         <%= f.text_field :due_time, :value => format_date_to_time(@appointment[:due_date]), :size => 5, :no_label => true, :onclick => "$(this).addClass('active')", :class => "timeEntry#{ " active" unless @appointment[:due_date].nil? || (@appointment[:due_date].hour.to_i == 0 && @appointment[:due_date].min.to_i == 0)}" %>
+        <%= javascript_tag ('
+          $("#appointment_due_date").datepicker(
+            $.extend(datepickerOptions,{
+              beforeShow: function(el,obj) {
+                startDate = new Date($("#appointment_start_date").val());
+                $(this).datepicker("option", "minDate",startDate);
+              }
+            })
+          );
+          $("#appointment_cycle").change(function() {
+            if ($(this).val() > 0) {
+              $("#appointment_due_time").parent().addClass("cycle");
+            } else {
+              $("#appointment_due_time").parent().removeClass("cycle");
+            }
+          });
+        ') %>
         </div>
         <div style="clear:both; height:5px;"></div>
         <% include_calendar_headers_tags %>
@@ -29,6 +47,10 @@
     <% end %>
 <% content_for :header_tags do %>
   <style>
+    .hoveredEvent {background: #DEDEDE !important}
+    #due_date_wrapper.cycle {top: -26px;margin-left: 58px;position: relative;display: inherit;}
+    @-moz-document url-prefix() {#due_date_wrapper.cycle {top: -24px;margin-left: 54px;}}
+    #due_date_wrapper.cycle:before {content: "-";}
     .cke_contents {height: 120px !important;}
     .attributes label {width: 65px;}
     .w33 {clear:left;float: left; padding-right: 70px;}

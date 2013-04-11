@@ -38,8 +38,8 @@ module Redmine
     def format_date(date)
       return nil unless date
       options = {}
-#      options[:format] = Setting.date_format unless Setting.date_format.blank?
-      options[:format] = ::I18n.t("date.formats.default")
+#      options[:format] = ::I18n.t("date.formats.default")
+      options[:format] = Setting.date_format unless Setting.date_format.blank?
       options[:locale] = User.current.language unless User.current.language.blank?
       ::I18n.l(date.to_date, options)
     end
@@ -47,8 +47,8 @@ module Redmine
     def format_time(time, include_date = true)
       return nil unless time
       options = {}
-#      options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
-      options[:format] = t("time.formats.time")
+      options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
+#      options[:format] = t("time.formats.time")
       options[:locale] = User.current.language unless User.current.language.blank?
       time = time.to_time if time.is_a?(String)
       zone = User.current.time_zone

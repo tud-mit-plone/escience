@@ -28,7 +28,7 @@
     </fieldset>
   </div>
   
-  <%= link_to_function l(:button_cancel), "$('#addEvent').fadeOut()", :class => 'button', :style => '60px' %>
+  <%= link_to_function l(:button_cancel), "$('#addEvent').fadeOut();", :class => 'button', :style => '60px' %>
   <%= submit_tag l(:button_create) %>
   <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
   <%= javascript_tag "$('#appointment_subject').focus();" %>

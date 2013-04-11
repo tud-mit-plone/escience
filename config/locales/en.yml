@@ -608,6 +608,10 @@ en:
   label_my_doodles_plural: Surveys  
   label_user_messages: Own messages
   label_user_messages_new: New message
+  label_user_messages_inbox: Inbox
+  label_user_messages_sentbox: Sent
+  label_user_messages_archivebox: Archive
+  label_user_messages_deletebox: Trash
   label_user_messages_reply: Answer message
   label_user_messages_emptytrash: Delete messages
   label_user_messages_delete: Delete message

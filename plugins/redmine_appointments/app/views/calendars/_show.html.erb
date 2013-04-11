@@ -18,6 +18,8 @@
 	$(function() {
 	  $('.td_box').dblclick(function () {
 	    $('#appointment_start_date').val($(this).find('.day-num').attr('title'));
+	    $('#appointment_due_time').parent().removeClass('cycle');
+	    $('#appointment_cycle').val(0).attr('selected',true);
 	    $('#addEvent').fadeIn();
 	    $('#appointment_subject').focus();
 	  });

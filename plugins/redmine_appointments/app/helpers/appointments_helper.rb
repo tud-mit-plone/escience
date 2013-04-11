@@ -56,28 +56,47 @@ module AppointmentsHelper
     out << '<div style="float:right;">'.html_safe+link_to(image_tag('delete.png'), {:controller => 'appointments', :action => 'destroy', :id => a.id, :view => 'calendar'}, :remote => true, :method => :delete, :confirm => l(:text_are_you_sure)).html_safe+'</div>'.html_safe
     out << '<div class="clear"></div>'.html_safe
     out << textilizable(truncate(a.description, :length => 400)).html_safe unless h(a.description) == ''
-    unless sd.hour.to_i == 0 && sd != ed && ed.nil?
+    if a.cycle > 0
       out << '<table cellspacing="0" cellpadding="0"><tr>'.html_safe
-      if sd.hour.to_i == 0 && sd.min.to_i == 0
-        out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
-      else 
-        out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important; border-right:none !important; -moz-border-radius: 5px 0 0 5px;-webkit-border-radius: 5px 0 0 5px;-khtml-border-radius: 5px 0 0 5px;border-radius: 5px 0 0 5px;">'.html_safe
+          out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
+      out << l(:cycles)[a.cycle].html_safe+'<br>'.html_safe
+      unless sd.hour.to_i == 0
+        out << format_date_to_time(sd).html_safe
       end
-      out << beautyfulDate(sd)+"</td>".html_safe
-      out << '<td valign="top" style="padding:4px;border-top: 1px solid #DADADA !important; border-bottom: 1px solid #DADADA !important; border-right:2px solid #606060 !important; -moz-border-radius: 0 5px 5px 0px;-webkit-border-radius: 0 5px 5px 0px;-khtml-border-radius: 0 5px 5px 0px;border-radius: 0 5px 5px 0px;">'.html_safe+format_date_to_time(sd).html_safe+'</td>'.html_safe unless (sd.hour.to_i == 0 && sd.min.to_i == 0)
-    end
-    unless sd == ed || ed.nil?
-      out << '<td>'.html_safe+image_tag('arrow.png')+'</td>'.html_safe
-      if ed.hour.to_i == 0 && ed.min.to_i == 0
+      unless ed.hour.to_i == 0
+        out << " - "+format_date_to_time(ed).html_safe
+      end
+      out << "</td>".html_safe
+      unless ed.nil?
+        out << '<td>'.html_safe+image_tag('arrow.png')+'</td>'.html_safe
         out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
-      else 
-        out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important; border-right:none !important; -moz-border-radius: 5px 0 0 5px;-webkit-border-radius: 5px 0 0 5px;-khtml-border-radius: 5px 0 0 5px;border-radius: 5px 0 0 5px;">'.html_safe
+        out << beautyfulDate(ed)+"</td>".html_safe
       end
-      out << beautyfulDate(ed)+"</td>".html_safe
-      out << '<td valign="top" style="padding:4px;border-top: 1px solid #DADADA !important; border-bottom: 1px solid #DADADA !important; border-right:2px solid #606060 !important; -moz-border-radius: 0 5px 5px 0px;-webkit-border-radius: 0 5px 5px 0px;-khtml-border-radius: 0 5px 5px 0px;border-radius: 0 5px 5px 0px;">'.html_safe+format_date_to_time(ed).html_safe+'</td>'.html_safe unless (ed.hour.to_i == 0 && ed.min.to_i == 0)
-    end
-    unless sd.hour.to_i == 0 && sd != ed  && ed.nil?
-        out << '</tr></table>'.html_safe
+      out << '</tr></table>'.html_safe
+    else
+      unless sd.hour.to_i == 0 && sd != ed && ed.nil?
+        out << '<table cellspacing="0" cellpadding="0"><tr>'.html_safe
+        if sd.hour.to_i == 0 && sd.min.to_i == 0
+          out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
+        else 
+          out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important; border-right:none !important; -moz-border-radius: 5px 0 0 5px;-webkit-border-radius: 5px 0 0 5px;-khtml-border-radius: 5px 0 0 5px;border-radius: 5px 0 0 5px;">'.html_safe
+        end
+        out << beautyfulDate(sd)+"</td>".html_safe
+        out << '<td valign="top" style="padding:4px;border-top: 1px solid #DADADA !important; border-bottom: 1px solid #DADADA !important; border-right:2px solid #606060 !important; -moz-border-radius: 0 5px 5px 0px;-webkit-border-radius: 0 5px 5px 0px;-khtml-border-radius: 0 5px 5px 0px;border-radius: 0 5px 5px 0px;">'.html_safe+format_date_to_time(sd).html_safe+'</td>'.html_safe unless (sd.hour.to_i == 0 && sd.min.to_i == 0)
+      end
+      unless sd == ed || ed.nil?
+        out << '<td>'.html_safe+image_tag('arrow.png')+'</td>'.html_safe
+        if ed.hour.to_i == 0 && ed.min.to_i == 0
+          out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
+        else 
+          out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important; border-right:none !important; -moz-border-radius: 5px 0 0 5px;-webkit-border-radius: 5px 0 0 5px;-khtml-border-radius: 5px 0 0 5px;border-radius: 5px 0 0 5px;">'.html_safe
+        end
+        out << beautyfulDate(ed)+"</td>".html_safe
+        out << '<td valign="top" style="padding:4px;border-top: 1px solid #DADADA !important; border-bottom: 1px solid #DADADA !important; border-right:2px solid #606060 !important; -moz-border-radius: 0 5px 5px 0px;-webkit-border-radius: 0 5px 5px 0px;-khtml-border-radius: 0 5px 5px 0px;border-radius: 0 5px 5px 0px;">'.html_safe+format_date_to_time(ed).html_safe+'</td>'.html_safe unless (ed.hour.to_i == 0 && ed.min.to_i == 0)
+      end
+      unless sd.hour.to_i == 0 && sd != ed  && ed.nil?
+          out << '</tr></table>'.html_safe
+      end
     end
     out.html_safe
   end
