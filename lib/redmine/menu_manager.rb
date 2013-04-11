@@ -148,7 +148,10 @@ module Redmine
       end
 
       def render_single_menu_node(item, caption, url, selected)
-        link_to(h(caption), url, item.html_options(:selected => selected))
+        if url.is_a?(::Hash) && !url[:user_id].nil? && url[:user_id].is_a?(::Proc)
+          url[:user_id] = url[:user_id].call()
+        end
+        return link_to(h(caption), url, item.html_options(:selected => selected))
       end
 
       def render_unattached_menu_item(menu_item, project)
