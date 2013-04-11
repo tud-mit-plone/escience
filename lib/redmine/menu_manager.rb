@@ -421,24 +421,24 @@ module Redmine
 
       def caption(project=nil)
       	if @caption.is_a?(Hash)
-      	  unless @caption["value"].nil?
-  	      	@value = @caption["value"]
+      	  unless @caption[:value].nil?
+  	      	@value = @caption[:value]
   	        c = @value.call(project).to_i
   	        plural = (c > 1) ? "_plural" : "";
   	      end
-          unless @caption["name"].nil?
-  	      	@value = @caption["name"]
+          unless @caption[:name].nil?
+  	      	@value = @caption[:name]
   	        e = @value.call(project).to_s
           end
-          unless @caption["text"].nil?
-          	@text = @caption["text"]
+          unless @caption[:text].nil?
+          	@text = @caption[:text]
           	d = @text.is_a?(Symbol) ? l(:"#{@text}#{plural}") : @text
           end
-      	  unless @caption["value_behind"].nil?
-  	      	@value_behind = @caption["value_behind"]
+      	  unless @caption[:value_behind].nil?
+  	      	@value_behind = @caption[:value_behind]
   	      	c = @value_behind.call(project).to_i
   	      	if (c > 0) 
-    	      	return "#{d} (#{c})"
+    	      	return "#{d} <div class=\"announcment\">#{c}</div>".html_safe
   	      	else 
     	      	return "#{d}"
     	      end

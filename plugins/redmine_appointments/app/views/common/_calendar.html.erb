@@ -23,23 +23,23 @@
         <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
           <% calendar.events_on(day).each do |i| %>
           <div style="float:left">
-            <% if (calendar.events_on(day).size < 3) %>
-              <p class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>" style="float:left; clear:left;margin:0px;padding:0px 0px 0px 2px;">
+            <% if (calendar.events_on(day).size < 5) %>
+              <div class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>" style="float:left; clear:left;margin-top:1px;margin-left:2px;">
                 <% if i.is_a? Issue %>
-                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(12)}) %>
+                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(17)}) %>
                 <% elsif i.is_a? Appointment %>
-                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(12)}) %>
+                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(17)}) %>
                 <% end %>
-              </p>
+              </div>
             <% else %>
               <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if format_date(day) == format_date(i.start_date) %> <%= 'ending' if (format_date(day) == format_date(i.due_date) || i.due_date.nil?) %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= i.project.nil? ? "7AdFd" : ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>" onclick="self.location.href='<%= url_for(:controller => getControllerName(i), :action => 'show', :id => i) %>'">
                 <%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %>
               </div>
             <% end %>
             <% if i.is_a? Issue %>
-              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 3 %>"><%= render_issue_tooltip i %></div>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 5 %>"><%= render_issue_tooltip i %></div>
             <% elsif i.is_a? Appointment %>
-              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 3 %>"><%= render_appointment_tooltip i %></div>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 5 %>"><%= render_appointment_tooltip i %></div>
             <% end %>
           </div>
         <% end %>
@@ -59,9 +59,10 @@
 	  e_visiblity = true;
 		$('.linkToInfo').each(function(obj) {
 		  $(this).hover(function() {
+		    $('.infobox').css('visibility','hidden');
 		    infobox = $(this).parent().find('.infobox');
 		    infobox.css('visibility','visible');
-		    id = $(this).attr('id').split('_')[1];
+		    id = $(this).attr('id').split('_')[0];
 		    $('.e_'+id).addClass('hoveredEvent')
 		    infobox.hover( function () {
 		      visiblity = 'visible';
@@ -74,7 +75,7 @@
 		    visiblity = 'hidden';
 		    e_visiblity = false;
 		    id = $(this).attr('id');
-		    e_id = $(this).attr('id').split('_')[1];
+		    e_id = $(this).attr('id').split('_')[0];
 		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity); if (!e_visiblity) $('.e_'+e_id).removeClass('hoveredEvent')\", 1);
 		  });
 		});

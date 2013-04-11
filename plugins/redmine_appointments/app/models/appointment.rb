@@ -24,6 +24,8 @@ class Appointment < ActiveRecord::Base
   CYCLE_WEEKLY  = 2
   CYCLE_MONTHLY = 3
   CYCLE_YEARLY  = 4
+  
+  listOfDaysBetween = {}
 
   def initialize(attributes=nil, *args)
     super
@@ -47,6 +49,38 @@ class Appointment < ActiveRecord::Base
 
   def to_s
     "#{subject}"
+  end
+  
+  def self.getAllEventsWithCycle(startdt=Date.today,enddt=Date.today)
+    appointments = self.visible
+    events = appointments
+    listOfDaysBetween = {}
+    appointments.each do |appointment|
+      if appointment[:cycle] == CYCLE_WEEKLY
+        repeated_day = appointment[:start_date]+7.day
+        while repeated_day < enddt && repeated_day <= appointment[:due_date]
+          event = appointment.clone
+          event[:start_date] = repeated_day
+          events += [event]
+          repeated_day += 7.day
+        end
+      elsif appointment[:cycle] == CYCLE_MONTHLY
+        repeated_day = appointment[:start_date]+1.month
+        while repeated_day < enddt
+          event = appointment.clone
+          event[:start_date] = repeated_day
+          events += [event]
+          repeated_day = repeated_day+1.month
+        end
+      elsif appointment[:start_date] >= startdt && appointment[:start_date] < enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
+        currentDate = appointment[:start_date].to_date.to_time + 1.day
+        while currentDate < appointment[:due_date] && currentDate <= enddt
+          listOfDaysBetween[currentDate.to_date.to_s] ||= appointment
+          currentDate += 1.day
+        end
+      end
+    end
+    return events,listOfDaysBetween
   end
   
   def visible?(usr=nil)

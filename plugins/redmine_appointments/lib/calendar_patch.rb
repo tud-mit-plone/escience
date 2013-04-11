@@ -41,34 +41,8 @@ module RedmineAppointmentExtension
             events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
             
           end
-          appointments = Appointment.visible
-          events += appointments
-          @listOfDaysBetween = {}
-          appointments.each do |appointment|
-            if appointment[:cycle] == Appointment::CYCLE_WEEKLY
-              repeated_day = appointment[:start_date]+7.day
-              while repeated_day < @calendar.enddt && repeated_day <= appointment[:due_date]
-                event = appointment.clone
-                event[:start_date] = repeated_day
-                events += [event]
-                repeated_day += 7.day
-              end
-            elsif appointment[:cycle] == Appointment::CYCLE_MONTHLY
-              repeated_day = appointment[:start_date]+1.month
-              while repeated_day < @calendar.enddt
-                event = appointment.clone
-                event[:start_date] = repeated_day
-                events += [event]
-                repeated_day = repeated_day+1.month
-              end
-            elsif appointment[:start_date] >= @calendar.startdt && appointment[:start_date] < @calendar.enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
-              currentDate = appointment[:start_date].to_date.to_time + 1.day
-              while currentDate < appointment[:due_date] && currentDate <= @calendar.enddt
-                @listOfDaysBetween[currentDate.to_date.to_s] ||= appointment
-                currentDate += 1.day
-              end
-            end
-          end
+          appointment_events, @listOfDaysBetween = Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
+          events += appointment_events
           @calendar.events = events
           @appointment = Appointment.new
           @available_watchers = (@appointment.watcher_users).uniq

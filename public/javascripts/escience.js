@@ -81,3 +81,27 @@ function tagItForUs(el,text,id) {
      placeholderText: text
   });
 }
+
+	function addUserToReceivers(message, id) {
+		var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
+		var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
+		 var id = $(this).attr('class').split(' ')[1].substring(8);
+		 var olddata_arr = $("#user_message_receiver").val().split(',');
+		 if (olddata_arr.length == 0) {
+		   $("#user_message_receiver").val("");
+		 } else {
+			 olddata_arr.splice($.inArray(id, olddata_arr), 1 );
+			 $("#user_message_receiver").val(olddata_arr.join(','));
+			 $(this).parent().remove();
+		 }
+	  });
+		var oldelements = $("#recipient_autocomplete").find(".name_element");
+		if (oldelements.length < 1) element.prependTo( "#recipient_autocomplete" );
+		else element = oldelements.last().after(element);
+		$( "#recipient_autocomplete" ).scrollTop( 0 );
+		var olddata = $("#user_message_receiver").val();
+		if (olddata != "") olddata = olddata+","+id;
+		else olddata = id;
+		$("#user_message_receiver").val(olddata);
+		$("#user_message_receiver_visible").val("");
+	}

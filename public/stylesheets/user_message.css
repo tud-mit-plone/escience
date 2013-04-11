@@ -19,6 +19,10 @@
   background-color: #F4F4F4;
 }
 
+.link_to_message.selected .user_message {
+  background-color: rgba(125,181,21,0.3) !important;
+}
+
 .user_message.unread {
   background-image: -moz-linear-gradient(left, #60a6ec 2%, #FAFAFA 2%);
   background-image: -webkit-linear-gradient(left, #60a6ec 2%, #FAFAFA 2%);

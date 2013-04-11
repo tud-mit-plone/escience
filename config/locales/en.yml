@@ -523,6 +523,7 @@ en:
   label_specific: Site specific
   label_specific_none: no specific links
   label_usermessage: Messages
+  label_new_usermessage: Send a message
   label_usermessage_announce: new message
   label_usermessage_announce_plural: new messages
   label_mymessage: My issues
