@@ -12,4 +12,9 @@ Redmine::Plugin.register :redmine_appointments do
   version '0.0.1'
   url 'http://example.com/path/to/plugin'
   author_url 'https://escience.htwk-leipzig.de'
+
+  activity_provider :appointments, :default => false, :class_name => ['Appointment']
+  project_module :user_calendar do 
+    permission :appointments_create, :calendars => :show_user_calendar
+  end
 end

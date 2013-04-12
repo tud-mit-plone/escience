@@ -21,7 +21,14 @@ module RedmineAppointmentExtension
       
         helper Appointment::AppointmentsHelper
         self.prepend_view_path( "#{Rails.root}/plugins/redmine_appointments/app/views/appointments/index.html.erb")
-        def show
+
+        before_filter :require_login, :only => [:show, :index,:show_user_calendar]
+        before_filter :find_optional_project, :except => [:show_user_calendar]
+
+        def show_user_calendar
+
+          return render_403 unless User.current.allowed_to?(:appointments_create,nil, {:global => true}) || User.current.admin?
+
           if params[:year] and params[:year].to_i > 1900
             @year = params[:year].to_i
             if params[:month] and params[:month].to_i > 0 and params[:month].to_i < 13
@@ -43,7 +50,7 @@ module RedmineAppointmentExtension
             session[:query][:project_id] = @project.id
           end
           @query.group_by = nil
-          if @query.valid?
+          if @query.valid? &&  !(@project.nil?)
             events = []
             events += @query.issues(:include => [:tracker, :assigned_to, :priority],
                                     :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) #{'AND creator='+User.current.id.to_s if session[:current_view_of_eScience]=="0"}", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
@@ -51,6 +58,7 @@ module RedmineAppointmentExtension
             events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
             
           end
+		  events ||= []
           events += Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
           @listOfDaysBetween = Appointment.getListOfDaysBetween(@calendar.startdt,@calendar.enddt)
           @calendar.events = events
@@ -58,7 +66,7 @@ module RedmineAppointmentExtension
           @available_watchers = (@appointment.watcher_users).uniq
 
           respond_to do |format|
-            format.html { render :controller=> 'calendars',:action => 'show', :layout => false if request.xhr? }
+            format.html { render :controller=> 'calendars',:action => 'show_user_calendar', :layout => false if request.xhr? }
             format.js { 
               render :partial => 'update' 
             }
