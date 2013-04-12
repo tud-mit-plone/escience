@@ -53,6 +53,9 @@ class Photo < ActiveRecord::Base
     self.user.photos.where('created_on > ? and album_id = ?', created_on, self.album_id).last
   end
 
+  def self.file_exists?(photo_obj,style = :original)
+    return File.exists?(photo_obj.photo.path(style))
+  end
 
   def self.find_recent(options = {:limit => 3})
     self.new_this_week.find(:all, :limit => options[:limit])
@@ -72,7 +75,9 @@ class Photo < ActiveRecord::Base
 
   def photo_geometry(style = :original)
     @geometry ||= {}
-    @geometry[style] ||= Paperclip::Geometry.from_file(photo.path(style))
+    if File.exist?(photo.path(style))
+      @geometry[style] ||= Paperclip::Geometry.from_file(photo.path(style))
+    end
   end
 
   private

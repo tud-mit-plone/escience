@@ -172,7 +172,6 @@ class PhotosController < ApplicationController
     end
   end
 
-
   protected
 
   def description_for_rss(photo)

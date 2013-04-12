@@ -62,8 +62,7 @@
           if @avatar.save
             @user.avatar_id  = @avatar.id
             @user.save!
-            redirect_to upload_profile_photo_user_path(@user)
-            #redirect_to crop_profile_photo_user_path(@user)
+            redirect_to crop_profile_photo_user_path(@user)
           end
         end
         
@@ -74,7 +73,11 @@
              redirect_to upload_profile_photo_user_path(@user) and return
            end
            return unless request.put?
-           @photo.update_attributes(:crop_x => params[:crop_x], :crop_y => params[:crop_y], :crop_w => params[:crop_w], :crop_h => params[:crop_h])
+           logger.info(":crop_x =>#{ params[:photo][:crop_x]}, :crop_y => #{params[:photo][:crop_y]}, :crop_w => #{params[:photo][:crop_w]}, :crop_h => #{params[:photo][:crop_h]}")
+           @photo.update_attributes(:crop_x => params[:photo][:crop_x], 
+                                                      :crop_y => params[:photo][:crop_y], 
+                                                      :crop_w => params[:photo][:crop_w], 
+                                                      :crop_h => params[:photo][:crop_h])
            redirect_to user_path(@user)
          end
       end
