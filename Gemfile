@@ -122,4 +122,5 @@ gem "meta_search"
 gem "will_paginate"
 gem "power_enum"
 gem 'acts_as_commentable', '3.0.1'
-gem 'paperclip'
+gem 'cocaine','0.3.2'
+gem 'paperclip','3.1.4'
