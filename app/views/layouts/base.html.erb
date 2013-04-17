@@ -8,7 +8,9 @@
      session[:current_view_of_eScience] = '0'
    end 
    
-   if User.current.logged? %>
+   unless User.current.logged? %>
+  <%= render :file => "layouts/public" %>
+<% else %>
   <% case session[:current_view_of_eScience]
        when '0' %>
        <%= render :file => "layouts/private" %>
@@ -18,7 +20,5 @@
        <%= render :file => "layouts/community" %>
     <% when '3' %>
        <%= render :file => "layouts/admin" %>
-  <% end 
-   else %>
-  <%= render :file => "layouts/public" %>
+  <% end %>
 <% end %>

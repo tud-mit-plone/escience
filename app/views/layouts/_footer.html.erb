@@ -1,0 +1,21 @@
+  <div id="footer">
+  	<div style="background-color:#fff; height:3px; width:100%"></div>
+  	<div class="inside">
+  		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
+  		<div id="eu"><a href="http://europa.eu/" title="<%= l(:label_eu) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/eu.png" width="54" height="39" /></a></div>
+  		<div id="esf"><a href="http://www.esf.de/" title="<%= l(:label_esf) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/esf.png" width="89" height="39" /></a></div>
+  		<div id="sachsen"><a href="http://www.smwk.sachsen.de/" title="<%= l(:label_smwk) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/sachsen.png" width="32" height="39"/></a></div>
+  		<div id="miscellaneous">
+  		   <ul>
+  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+  		      <li class="withborder"><a href="/static/agb.html" title="<%= l(:label_termsconditions) %>"><%= l(:label_termsconditions) %></a></li>
+  		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
+  		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>
+  		   </ul>
+  		</div> 
+  	</div>
+  </div>
+  <%= call_hook :view_layouts_base_body_bottom %>
+  <%#= piwik_tracking_tag %>
+</body>
+</html>
