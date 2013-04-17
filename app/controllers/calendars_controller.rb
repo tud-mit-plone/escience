@@ -52,15 +52,16 @@ class CalendarsController < ApplicationController
     end
     @query.group_by = nil
     if @query.valid?
-      events = []
       events += @query.issues(:include => [:tracker, :assigned_to, :priority],
-                              :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) #{'AND creator='+User.current.id.to_s if session[:current_view_of_eScience]=="0"}", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
-                              )
+                              :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) #{'AND creator='+User.current.id.to_s if session[:current_view_of_eScience]=="0"}", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt])
       events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
 
       @calendar.events = events
     end
 
-    render :action => 'show', :layout => false if request.xhr?
+    respond_to do |format|
+      format.html { render :action => 'show', :layout => false if request.xhr? }
+      format.js { render :partial => 'update' }
+    end
   end
 end

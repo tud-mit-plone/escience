@@ -1,14 +1,14 @@
 <div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
 
-<% content_for :sidebar_right do %>
-  <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
-    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
-  <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
-    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'icon icon-add' %>
-  <% end %>
+<h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %></h2>
+<div style="float:right">
+<% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'button' %>
+<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'button' %>
 <% end %>
-
-<h2><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %></h2>
+</div>
+<div class="clear"></div>
 
 <%= form_tag({:controller => 'calendars', :action => 'show', :project_id => @project},
              :method => :get, :id => 'query_form') do %>
