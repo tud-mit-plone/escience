@@ -23,27 +23,40 @@ Redmine::Plugin.register :redmine_social do
   description 'Extend your Redmine with social media'
   version '0.0.1'
 
-  settings :default => { 'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'], 'photo_max_size' => '5' , 
-                                    'photo_paperclip_options' => {:styles => { 
-                                                                                                :thumb => { 
-                                                                                                      :geometry => "100x100#", 
-                                                                                                      :processors => [:cropper]},
-                                                                                                :medium => "290x320#",
-                                                                                                :large => "465>"}, 
-                                                                                      :path => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
-                                                                                      :url => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
-                                    'photo_missing_thumb' => '',
-                                    'photo_missing_medium' => '' },
-                                   :partial =>'settings/redmine_social'
+  settings :default => { 
+    'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
+    'photo_max_size' => '5' , 
+    'photo_paperclip_options' => {
+        :styles => {
+            :thumb => {
+              :geometry => "100x100#",
+              :processors => [:cropper]
+            },
+            :medium => "180x180#",
+            :large => "465>"
+        },
+        :path => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
+        :url => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
+        'photo_missing_thumb' => '',
+        'photo_missing_medium' => '',
+    },
+    :partial =>'settings/redmine_social'
 
-  # settings :default => {'bbb_server' => '', 'bbb_salt' => ''}, :partial => 'settings-bbb/settings'
+  contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
+  menu :account_menu, :user_contacts, {:controller => 'friendships', :action => 'pending', :user_id => Proc.new{"#{User.current.id}"}}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}
+  menu :account_menu, :user_contacts2, {:controller => 'friendships', :action => 'accepted', :user_id => Proc.new{"#{User.current.id}"}}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
+end
+
   
-  # project_module :bigbluebutton do
-  #   permission :bigbluebutton_join, :bbb => :start
-  #   permission :bigbluebutton_start, :bbb => :start_form
-  #   permission :bigbluebutton_moderator, :bbb => :create
-  # end
-
-  # Project.has_and_belongs_to_many(:bbb_servers)
-
+require_dependency 'application_helper'
+ApplicationHelper.class_eval do
+  DEFAULT_OPTIONS = {:size => 30,:alt => '',:title => '',:class => 'rounded_image'}
+    def avatar(user, options = { })
+      scale = options[:scale].nil? ? :thumb : options[:scale]
+      options.delete(:scale)
+      src = user.avatar ? user.avatar_photo_url(scale) : 'avatar.png'
+      options[:size] = "#{options[:size]}x#{options[:size]}"
+      options = DEFAULT_OPTIONS.merge(options)
+      return image_tag src, options
+    end
 end

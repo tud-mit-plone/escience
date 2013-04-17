@@ -1,0 +1,23 @@
+<div id="write_message">
+<h1><%= l(:label_user_messages_new) %></h1>
+
+<%= form_for(@user_message, :remote => true) do |f| %>
+	<%= f.hidden_field :receiver %>
+	<%= hidden_field_tag("buffer", @user_message_reply_id) %>
+	<%= hidden_field_tag("reply_mail", @user_message_reply_mail) %>
+  <p>
+    <%= f.label l(:label_user_messages_subject) %><br />
+    <%= f.text_field :subject %>
+  </p>
+  <p>
+    <%= f.label l(:label_user_messages_body) %><br />
+    <%= f.text_area :body, :class => 'ckeditor' %>
+  </p>
+  <p>
+    <%= f.submit l(:label_user_messages_send) %>
+    <%= link_to_function l(:button_cancel), "$(write_message).html('')" ,:class => 'button' %>
+  </p>
+<% end %>
+
+<%= javascript_tag @user_message_reply %>
+</div>

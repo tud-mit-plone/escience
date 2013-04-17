@@ -35,17 +35,14 @@ class FriendshipsController < ApplicationController
   def accept
     @user = User.find(params[:user_id])    
     @friendship = @user.friendships_not_initiated_by_me.where(:id => params[:id]).first
- 
+     
     respond_to do |format|
       if @friendship.update_attributes(:friendship_status => FriendshipStatus[:accepted]) && 
-          @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:accepted])
-        
+          @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:accepted])        
         flash[:notice] = :the_friendship_was_accepted
-        format.html { 
-          redirect_to accepted_user_friendships_path(@user) 
-        }
+        format.html { redirect_to accepted_user_friendships_path(@user) }
       else
-        format.html { render :action => "index" }
+        format.html { redirect_to({ :action => "index"}) }
       end
     end
   end
@@ -59,12 +56,28 @@ class FriendshipsController < ApplicationController
     end
   end
 
+  def write_message
+    @user_message = UserMessage.new
+    @user_message_reply_mail = params[:reply]
+    @user_message_reply = ""
+    if !params[:id].nil?
+      user = User.find(params[:id])
+      if !user.nil?
+        @user_message_reply_id = user.id
+        @user_message_reply = " addUserToReceivers('#{user.firstname} #{user.lastname}', '#{user.id}');"
+      end
+    end
+    respond_to do |format|
+      format.html {render :partial => 'write_message'}
+      format.js {render :partial => 'write_message'}
+    end
+  end
 
   def accepted
     @user = User.find(params[:user_id])    
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
-          
+
     @friendships = @user.friendships.accepted.paginate(:page => params[:page], :per_page => 20)
     
     respond_to do |format|

@@ -23,6 +23,7 @@ RedmineApp::Application.routes.draw do
           get :accepted
           get :pending
           get :denied
+          get :write_message
         end
         member do
           put :accept

@@ -961,8 +961,14 @@ en:
   password: Password
   #en: pending: pending
   pending: pending
+  friendships: Contacts
+  you_have_friends:
+    one: You have one contact
+    other: "You have %{contacts} Contacts"
   #en: pending_friendships: Pending Friendships
-  pending_friendships: Pending Friendships
+  pending_friendship: Contact request
+  pending_friendships: Contact requests
+  pending_friendships_title: Pending contact requests
   wait_for_pending_friendships: Wait for acceptance
   accepted_user_friendships: accepted friendships
   pending_user_friendships: pending friendships
@@ -1566,8 +1572,8 @@ en:
   you_could_tag_yourself: You could tag yourself
   #en: you_have_friends: You have %{count} friends
   you_have_friends:
-    one: You have 1 friend.
-    other: "You have %{count} friends."
+    one: You have one contact.
+    other: "You have %{count} contacts."
   #en: you_have_added_clippings: You have added %{count} clippings
   you_have_added_clippings:
     one: You have added 1 clipping.

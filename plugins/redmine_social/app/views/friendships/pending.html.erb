@@ -1,17 +1,9 @@
 <% content_for :sidebar_right do %> 
 <div  class="yui-b"><%= render :partial => 'users/profile_user_info_sidebar' %></div>
 <%end%>
-<div id="yui-main">
-  <div class="yui-b">
-    <%# @friendships.each do %>
-      <h3><%= l(:pending_friendships)%>(<%= @friendships.length %>)</h3>
-      <div class="user_list"><%= render :partial => "friendships/friendship", :collection => @friendships%></div>
-    <%#end%>
-  </div>
-   <div class="yui-b">
-    <%# @friendships.each do %>
-      <h3><%= l(:wait_for_pending_friendships)%>(<%= @waiting_friendships.length %>)</h3>
-      <div class="user_list"><%= render :partial => "friendships/friendship", :collection => @waiting_friendships%></div>
-    <%#end%>
-  </div>
-</div>
+
+<h1><%= l(:pending_friendships_title)%> (<%= @friendships.length %>)</h1>
+<div class="user_list"><%= render :partial => "friendships/friendship", :collection => @friendships%></div>
+
+<h1><%= l(:wait_for_pending_friendships)%> (<%= @waiting_friendships.length %>)</h1>
+<div class="user_list"><%= render :partial => "friendships/friendship", :collection => @waiting_friendships%></

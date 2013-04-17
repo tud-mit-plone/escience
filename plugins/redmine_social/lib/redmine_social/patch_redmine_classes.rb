@@ -46,7 +46,7 @@
         end
       end
     end
-
+    
     module UsersController
       module ClassMethods
 
@@ -85,6 +85,10 @@
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
+        receiver.class_eval do
+          before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count, :crop_profile_photo, :upload_profile_photo]
+          layout 'base'
+        end
       end
     end
   end

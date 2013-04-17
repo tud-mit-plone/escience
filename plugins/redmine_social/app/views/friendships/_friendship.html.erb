@@ -1,18 +1,34 @@
 <% user = friendship.friend %>
 <fieldset>
-  <div class='yui'>
-  <h3><%= link_to user.login, user_path(user) %></h3>   
-  <%= image_tag( user.avatar_photo_url(:thumb), :class => "polaroid" )%>
-    <div class='yui'>
-      <%# if user.metro_area %>     
-        <%#= "#{:from} #{user.location}" %>
-      <%#end%>
-      <p><%= l friendship.friendship_status.name %></p>
-      <p>
-        <%= l(:requested) %>
-        <%= time_ago_in_words friendship.created_on %>
-      </p>
-  </div>
-</div>
+  <legend>
+    <%= (!user.salutation.empty?) ? l("field_salutation_vals.#{user.salutation}")+" " : "" %>
+    <%= (!user.title.empty?) ? l("field_title_vals.#{user.title}") : "" %>
+    <%= h user.name %>
+  </legend>
+  <%= render :partial => "users/show",:locals => {:user => user, :memberships => user.memberships.all(:conditions => Project.visible_condition(user))} %>
+  <p><%= l friendship.friendship_status.name %></p>
+  <p>
+    <%= l(:requested) %>
+    <%= time_ago_in_words friendship.created_on %>
+  </p>
 <div class='yui'><%= friendship_control_links(friendship) if @is_current_user%></div>
 </fieldset>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'user_message' %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= javascript_tag '
+	$(function() {
+    $("a.write_message").each(function() {
+      $(this).click(function() {
+        pageToLoad = $(this).attr("href");
+        pageToContent = $(this).parent().find(".write_message_form")
+        $.get(pageToLoad, { id: $(this).attr("id")}, function(pageContent) {
+          pageToContent.html(pageContent);
+        });
+  		  return false;
+  		});
+    });
+  });
+ ' %>
+<% end %>

@@ -1,0 +1,32 @@
+<%= image_tag( user.avatar_photo_url(:thumb), :size => "100x100", :class => "rounded_image" )%>
+
+<div class="user_information_main">
+  <% unless user.pref.hide_mail %>
+    <label><%=l(:field_mail)%>:</label> <%= mail_to(h(user.mail), nil, :encode => 'javascript') %><br/>
+  <% end %>
+    <label><%=l(:field_department)%>:</label> <%= user.department %><br/>
+    <% unless user.street.blank? %><label><%=l(:field_adress)%>:</label> <%= h(user.street) %><br/><% end %>
+    <% unless user.city.blank? %><label>&nbsp;</label> <%= h(user.zipcode) %> <%= h(user.city) %><br/><% end %>
+    <% unless user.phone.blank? %><label><%=l(:field_phone)%>:</label> <%= h(user.phone) %><br/><% end %>
+    <% unless user.fax.blank? %><label><%=l(:field_fax)%>:</label> <%= h(user.fax) %><br/><% end %>
+  <% user.visible_custom_field_values.each do |custom_value| %>
+    <% if !custom_value.value.blank? %>
+      <%=h custom_value.custom_field.name%>: <%=h show_value(custom_value) %>
+    <% end %>
+  <% end %>
+</div>
+<div>
+  <%#= link_to "Nachricht schreiben", {:controller => "user_messages", :action => 'new', :id => user.id} %>
+  <a href="<%= url_for(:controller => "friendships", :action => "write_message") %>" id="<%= user.id %>" class="write_message"><%= l(:label_new_usermessage) %></a>
+  <div class="write_message_form"></div>
+</div>
+
+<% unless memberships.empty? %>
+  <h2><%=l(:label_project_plural)%></h2>
+  <ul>
+  <% for membership in memberships %>
+    <li><%= link_to_project(membership.project) %>
+      (<%=h membership.roles.sort.collect(&:to_s).join(', ') %>)</li>
+  <% end %>
+  </ul>
+<% end %>
