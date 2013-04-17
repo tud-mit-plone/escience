@@ -29,7 +29,7 @@
       </div>
       <div class="date"><%= format_time(user_message.created_at) %></div>
       <div class="subject"><%= user_message.subject %></div>
-      <div class="message"><%=h user_message.body %></div>
+      <div class="message"><%= user_message.body.html_safe %></div>
     </div>
     <% end %>
     <div class="user_message_links">
@@ -54,12 +54,20 @@
   <%= stylesheet_link_tag 'user_message' %>
 <% end %>
 
+<%#= javascript_tag "
+#	$(function() {
+#	  $('.link_to_message').click(function() {$(this).toggleClass('selected');return false;});
+#	  $('.link_to_message').dblclick(function() {alert('hui');});
+#  });
+#" %>
+
 <% content_for :sidebar_right do %>
-  	<%= link_to(l(:label_user_messages_new), {:action => 'new'}, :class => 'icon icon-add') %>
   	<ul>
-  	 <li><%= link_to("Gesendet", {:directory => "sent"}) %></li>
-  	 <li><%= link_to("Archiv", {:directory => "archive"}) %></li>
-  	 <li><%= link_to("Papierkorb", {:directory => "trash"}) %></li>
+  	 <li><%= link_to(l(:label_user_messages_new), {:action => "new"}) %></li>
+  	 <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' unless params[:directory]}") %></li>
+  	 <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
+  	 <li><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
+  	 <li><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
   	<% if !@user_messages.empty? && @directory == "trash" %>
     	<li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
   	<% end %>

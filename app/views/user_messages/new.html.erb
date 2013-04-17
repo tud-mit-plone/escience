@@ -1,6 +1,10 @@
 <h1><%= l(:label_user_messages_new) %></h1>
 
 <%= form_for(@user_message) do |f| %>
+  <div style="top:-40px; position:relative;">
+    <%= f.submit l(:label_user_messages_send) %>
+    <%= link_to l(:button_cancel), user_messages_path, :class => "icon icon-history", :class => 'button' %>
+  </div>
   <%#= f.error_messages %>
   <p>
     <%= f.label l(:label_user_messages_receiver) %><br />
@@ -19,10 +23,11 @@
   </p>
   <p>
     <%= f.label l(:label_user_messages_body) %><br />
-    <%= f.text_area :body %>
+    <%= f.text_area :body, :class => 'ckeditor' %>
   </p>
   <p>
     <%= f.submit l(:label_user_messages_send) %>
+    <%= link_to l(:button_cancel), user_messages_path, :class => "icon icon-history", :class => 'button' %>
   </p>
 <% end %>
 
@@ -32,35 +37,12 @@
   <%= javascript_include_tag 'visualsearch/jquery.ui.position.js' %>
   <%= javascript_include_tag 'visualsearch/jquery.ui.widget.js' %>
   <%= javascript_include_tag 'visualsearch/jquery.ui.autocomplete.js' %>
-  <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
-  <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%#= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
+  <%#= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
   
   <%= javascript_tag '
   	$(function() {
-		function log(message, id) {
-			var element = $( "<div class=\'name_element element_"+id+"\' />" ).text( message );
-			var delete_item = $( "<div class=\'delete_button element_"+id+"\' />" ).prependTo( element ).click(function(){
-			 var id = $(this).attr(\'class\').split(\' \')[1].substring(8);
-			 var olddata_arr = $("#user_message_receiver").val().split(\',\');
-			 if (olddata_arr.length == 0) {
-			   $("#user_message_receiver").val("");
-			 } else {
-  			 olddata_arr.splice($.inArray(id, olddata_arr), 1 );
-  			 $("#user_message_receiver").val(olddata_arr.join(\',\'));
-  			 $(this).parent().remove();
-			 }
-		  });
-			var oldelements = $("#recipient_autocomplete").find(".name_element");
-			if (oldelements.length < 1) element.prependTo( "#recipient_autocomplete" );
-			else element = oldelements.last().after(element);
-			$( "#recipient_autocomplete" ).scrollTop( 0 );
-			var olddata = $("#user_message_receiver").val();
-			if (olddata != "") olddata = olddata+","+id;
-			else olddata = id;
-			$("#user_message_receiver").val(olddata);
-			$("#user_message_receiver_visible").val("");
-		}
-
 		$( "#recipient_autocomplete" ).click(function() {
 		  user_message_receiver_visible.focus();
 		});
@@ -86,7 +68,7 @@
 			},
 			minLength: 2,
 			select: function( event, ui ) {
-				log(ui.item.label, ui.item.id);
+				addUserToReceivers(ui.item.label, ui.item.id);
 				return false;
 			},
 			open: function() {
@@ -100,7 +82,12 @@
 	      ' %>
 <% end %>
 
-
 <% content_for :sidebar_right do %>
-  	<%= link_to l(:label_back), user_messages_path, :class => "icon icon-history" %>
-<%end%>
+  	<ul>
+  	 <li><%= link_to("Nachricht verfassen", {:action => "index"}, :class => 'selected') %></li>
+  	 <li><%= link_to("Posteingang", {:action => "index"}) %></li>
+  	 <li><%= link_to("Gesendet", {:directory => "sent"}) %></li>
+  	 <li><%= link_to("Archiv", {:directory => "archive"}) %></li>
+  	 <li><%= link_to("Papierkorb", {:directory => "trash"}) %></li>
+  	</ul>
+<% end %>

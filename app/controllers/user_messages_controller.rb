@@ -102,7 +102,7 @@ class UserMessagesController < ApplicationController
       user = User.find(params[:id])
       if !user.nil?
         @user_message_reply_id = user.id
-        @user_message_reply = " log('#{user.firstname} #{user.lastname}', '#{user.id}');"
+        @user_message_reply = " addUserToReceivers('#{user.firstname} #{user.lastname}', '#{user.id}');"
       end
     end
     respond_to do |format|
@@ -177,6 +177,7 @@ class UserMessagesController < ApplicationController
         end
         flash[:notice] = l(:text_message_sent_done)
         format.html { redirect_to(request.referer) }
+        format.js { render :partial => 'update' }
         format.xml  { render :xml => @user_message, :status => :created, :location => @user_message }
       end
     end
