@@ -25,6 +25,7 @@ class IssuesController < ApplicationController
   before_filter :authorize, :except => [:index, :new_with_decision]
   before_filter :find_optional_project, :only => [:index, :new_with_descision]
   before_filter :check_for_default_issue_status, :only => [:new, :create]
+  before_filter :correct_time_format, :only => [:new, :create]
   before_filter :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
   accept_api_auth :index, :show, :create, :update, :destroy
@@ -238,6 +239,7 @@ class IssuesController < ApplicationController
       end
       return
     else
+      flash[:notice] = l(:notice_issue_error_create)+"<br>"+@issue.errors.full_messages * '<br>'
       respond_to do |format|
         format.html {
           if params[:form] == 'new_with_decision'
@@ -414,6 +416,29 @@ class IssuesController < ApplicationController
   end
 
 private
+
+  def formated_date_to_db(date)
+    return nil if date.nil?
+    d = nil
+    unless Setting.date_format.blank?
+      d = Date.strptime(date, Setting.date_format )
+    else
+      d = Date.strptime(date,::I18n.t("date.formats.default",{ :locale => User.current.language }))
+    end
+    return d 
+  end
+
+  def correct_time_format()
+    return if params.nil? || params[:issue].nil? 
+    
+    unless params[:issue][:start_date].nil?
+      params[:issue][:start_date] = formated_date_to_db(params[:issue][:start_date])
+    end
+    unless params[:issue][:due_date].nil?
+      params[:issue][:due_date] = formated_date_to_db(params[:issue][:due_date])
+    end
+  end
+
   # Retrieve query from session or build a new query
   def column_plain_content(column_name, issue)
     column = @query.columns.find{|c| c.name == column_name}

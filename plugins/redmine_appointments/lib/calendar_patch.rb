@@ -28,7 +28,6 @@ module RedmineAppointmentExtension
         def show_user_calendar
 
           return render_403 unless User.current.allowed_to?(:appointments_create,nil, {:global => true}) || User.current.admin?
-
           if params[:year] and params[:year].to_i > 1900
             @year = params[:year].to_i
             if params[:month] and params[:month].to_i > 0 and params[:month].to_i < 13
@@ -49,19 +48,34 @@ module RedmineAppointmentExtension
             @project = bufferProjectId
             session[:query][:project_id] = @project.id
           end
-          @query.group_by = nil
-          if @query.valid? &&  !(@project.nil?)
-            events = []
-            events += @query.issues(:include => [:tracker, :assigned_to, :priority],
-                                    :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) #{'AND creator='+User.current.id.to_s if session[:current_view_of_eScience]=="0"}", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
-                                    )
-            events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])
-            
+
+          events ||= []
+
+          if params.nil? || (params[:show].nil? || params[:show][:community_issues] )
+            new_events = get_community_issues_for_calendar()
+            events += new_events unless new_events.nil? 
           end
-		  events ||= []
-          events += Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
-          @listOfDaysBetween = Appointment.getListOfDaysBetween(@calendar.startdt,@calendar.enddt)
-          @calendar.events = events
+          if params.nil? || (params[:show].nil?) || params[:show][:private_appointments] 
+            new_appointments = get_user_appointments()
+            events += new_appointments unless new_appointments.nil? 
+          end
+
+          if params.nil? || (params[:show].nil?) || params[:show][:private_issues]
+            new_events = get_private_issues_for_calendar()
+            events += new_events unless new_events.nil? 
+          end
+
+          if params.nil? || (params[:show].nil?) || params[:show][:watched_issues]
+            new_events = get_watched_issues_for_calendar()
+            events += new_events unless new_events.nil? 
+          end
+
+          if params.nil? || (params[:show].nil?) || params[:show][:watched_appointments]
+            new_events = get_watched_appointments_for_calendar()
+            events += new_events unless new_events.nil? 
+          end
+
+	    @calendar.events = events
           @appointment = Appointment.new
           @available_watchers = (@appointment.watcher_users).uniq
 
@@ -71,6 +85,52 @@ module RedmineAppointmentExtension
               render :partial => 'update' 
             }
           end
+        end
+        private 
+
+        def get_private_issues_for_calendar()
+          @query.group_by = nil
+          if @query.valid? &&  !(@project.nil?)
+            events = []
+            events += @query.issues(:include => [:tracker, :assigned_to, :priority],
+                              :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?)) AND creator=?", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt,creator])  
+            events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt])    
+          end
+
+          return events 
+        end
+
+        def get_community_issues_for_calendar()
+          @query.group_by = nil
+          if @query.valid? 
+            events = []
+            tp = @project 
+            Project.find(:all).select{|p| p.visible?}.each do |p| 
+              @project = p 
+              events += @query.issues(:include => [:tracker, :assigned_to, :priority],
+                                      :conditions => ["((start_date BETWEEN ? AND ?) OR (due_date BETWEEN ? AND ?))", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt]
+                                      )
+              events += @query.versions(:conditions => ["effective_date BETWEEN ? AND ?", @calendar.startdt, @calendar.enddt]) 
+            end
+          end
+          @project = tp 
+          logger.info "issues_community : #{events}"
+          return events 
+        end
+
+        def get_watched_issues_for_calendar()
+          return Issue.watched_by(User.current.id) 
+        end
+
+        def get_user_appointments() 
+          events = Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
+          @listOfDaysBetween = Appointment.getListOfDaysBetween(@calendar.startdt,@calendar.enddt)
+          logger.info "user_appointments : #{events}"
+          return events
+        end
+
+        def get_watched_appointments_for_calendar()
+          return Appointment.watched_by(User.current.id)
         end
       end
     end

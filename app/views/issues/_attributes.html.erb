@@ -10,7 +10,7 @@
 <div class="floatleft"><label><%= l(:field_status) %></label> <%= h(@issue.status.name) %></div>
 <% end %>
 
-<% if @issue.safe_attribute? 'priority_id' && @issue.project.nil? %>
+<% if @issue.safe_attribute? 'priority_id' #&& @issue.project.nil? %>
 <div class="w33"><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></div>
 <% end %>
 

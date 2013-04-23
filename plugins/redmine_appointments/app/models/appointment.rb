@@ -59,13 +59,23 @@ class Appointment < ActiveRecord::Base
   end
   
   def self.getAllEventsWithCycle(startdt=Date.today,enddt=Date.today)
+    visible_appointments = self.find(:all).select{|a| a.visible? || a.author == User.current}
+    visible_appointments = visible_appointments - self.watched_by(User.current)
+
     if startdt == enddt
-      appointments = self.find(:all, :conditions => ["(DATE(start_date) >= ? AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? AND DATE(start_date) <= ? AND due_date IS NULL) OR (DATE(start_date) = ? AND cycle > 0)", startdt, enddt, startdt, enddt, startdt ])
+      appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
+                                                                                              AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
+                                                                                              AND DATE(start_date) <= ? 
+                                                                                              AND due_date IS NULL) OR (DATE(start_date) = ? 
+                                                                                              AND cycle > 0)", visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt, startdt ])
     else
-      appointments = self.find(:all, :conditions => ["(DATE(start_date) >= ? AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? AND DATE(start_date) <= ? AND due_date IS NULL)", startdt, enddt, startdt, enddt ])
+      appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
+                                                                                              AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
+                                                                                              AND DATE(start_date) <= ? 
+                                                                                              AND due_date IS NULL)",visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt ])
     end    
     events = appointments
-    appointments = self.find(:all, :conditions => ["cycle > 0"])
+    appointments = self.find(:all, :conditions => ["id in (?) AND cycle > 0", visible_appointments.map{|i| i.id }])
     appointments.each do |appointment|
       if appointment[:cycle] == CYCLE_WEEKLY
         repeated_day = appointment[:start_date]+7.day
@@ -103,7 +113,7 @@ class Appointment < ActiveRecord::Base
     return listOfDaysBetween
   end
   
-  def visible?(usr=nil)
+  def visible?(user=nil)
     user ||= User.current
     if user.logged?
       !self.is_private? || self.user == user || self.watched_by?(user)

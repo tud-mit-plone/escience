@@ -32,7 +32,6 @@
 <% @events_by_day.keys.sort.reverse.each do |day| %>
   <table>
     <tr>
-      <% p day %>
       <td width="40" valign="top"><%= Date.parse(day.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
       <td valign="top">
         <dl style="margin-top:2px">

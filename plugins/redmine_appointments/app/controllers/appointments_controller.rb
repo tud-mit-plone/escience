@@ -32,6 +32,12 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  def edit
+    respond_to do |f| 
+      f.html {render :action => 'edit'}
+    end
+  end
+
   def update
     params[:appointment][:description] = convertHtmlToWiki(params[:appointment][:description])
     start_date = params[:appointment][:start_date] == "" ? nil : params[:appointment][:start_date]

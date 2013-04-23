@@ -15,7 +15,7 @@
     <p><%= render :partial => 'attachments/form', :locals => {:container => @appointment} %></p>
     
     <fieldset>
-      <% if @appointment.safe_attribute? 'watcher_user_ids' -%>
+      <% if (@appointment.safe_attribute?('watcher_user_ids') || @appointment.author == User.current)-%>
       <label><%= l(:label_issue_watchers) %></label><br />
         <p id="watchers_form">
         <span id="watchers_inputs">
@@ -23,7 +23,7 @@
         </span>
         <span class="search_for_watchers">
         <%= link_to l(:label_search_for_watchers),
-                    {:controller => 'watchers', :action => 'new'},
+                    {:controller => 'watchers', :action => 'new', :from_controller => "#{controller.controller_name}", :to_action => "add_watchers"},
                     :remote => true,
   				  :method => 'get' %>
         </span>

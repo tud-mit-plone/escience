@@ -1,4 +1,5 @@
 class FriendshipsController < ApplicationController
+  unloadable
   before_filter :require_login, :except => [:accepted, :index]
   before_filter :find_user, :only => [:accepted, :pending, :denied]
   before_filter :require_current_user, :only => [:accept, :deny, :pending, :destroy]

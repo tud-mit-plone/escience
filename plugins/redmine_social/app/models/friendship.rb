@@ -1,5 +1,5 @@
 class Friendship < ActiveRecord::Base
-
+  unloadable
   @@daily_request_limit = 12
   cattr_accessor :daily_request_limit
 

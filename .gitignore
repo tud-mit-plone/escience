@@ -1,3 +1,5 @@
+/.codeintel/config
+*.orig
 *.svn
 /changed_files
 /backup

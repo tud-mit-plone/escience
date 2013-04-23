@@ -1,4 +1,13 @@
 <% day = calendar.startdt %>
+<%= form_tag(url_for(:controller => 'calendars', :action => 'show_user_calendar'), :method=>'post', :remote => true) do %>
+  <fieldset>
+    <p><%= check_box_tag '[show][private_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural) %></p>
+    <p><%= check_box_tag '[show][private_appointments]', true, (checked = true) %><%= label_tag l(:label_appointments) %></p>
+    <p><%= check_box_tag '[show][community_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural) %></p>
+    <p><%= check_box_tag '[show][watched_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural_watched)%>
+    <p><%= check_box_tag '[show][watched_appointments]', true, (checked = true) %><%= label_tag l(:label_appointments_plural_watched)%>
+  </fieldset>
+<%end%> 
 <table class="cal" width="100%">
 <thead>
   <tr>
@@ -20,10 +29,10 @@
 <%  end %>
     <td class="
       <%= 'today' if Date.today == day %>
-      <%= ' event' if !calendar.events_on(day).empty? %>
+      <%= ' event' if !(calendar.events_on(day).empty?) %>
       <% unless @listOfDaysBetween.nil? %>
-      <%= ' weekend' if weekend %><%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>" 
-      <%end%>
+      <%= ' weekend' if weekend %><%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>
+      <%end%>"
       >
       <div class="td_box noSelect">
         <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
@@ -87,3 +96,26 @@
 		});
   });
   "%>
+  <%= javascript_tag "
+    $('#_show_private_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_private_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_community_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_watched_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_watched_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+"
+  %>

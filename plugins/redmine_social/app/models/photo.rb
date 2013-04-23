@@ -1,4 +1,5 @@
 class Photo < ActiveRecord::Base
+  unloadable
   acts_as_commentable
   belongs_to :album
   

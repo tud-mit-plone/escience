@@ -541,7 +541,7 @@ en:
   label_project_new: New project
   label_project_edit: Settings
   label_project_plural: Projects
-  label_myproject_plural: My mrojects
+  label_myproject_plural: My projects
   label_projects_list: List of projects
 
   label_x_projects:
@@ -762,6 +762,8 @@ en:
   label_in_the_past_days: in the past
   label_greater_or_equal: '>='
   label_less_or_equal: '<='
+
+  notice_issue_error_create: 'Issue creation failed. Please check the input fields'
   label_between: between
   label_in: in
   label_today: today
