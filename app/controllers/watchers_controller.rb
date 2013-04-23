@@ -18,7 +18,7 @@
 class WatchersController < ApplicationController
   before_filter :find_project
   before_filter :require_login, :check_project_privacy, :only => [:watch, :unwatch]
-  before_filter :authorize, :only => [:new, :destroy]
+  before_filter :only => [:new, :destroy] { |c| c.authorize(params[:from_controller],params[:to_action]) unless User.current.admin? }
 
   def watch
     if @watched.respond_to?(:visible?) && !@watched.visible?(User.current)

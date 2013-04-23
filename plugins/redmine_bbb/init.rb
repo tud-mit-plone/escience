@@ -17,8 +17,10 @@ Redmine::Plugin.register :redmine_bbb do
   
   project_module :bigbluebutton do
     permission :bigbluebutton_join, :bbb => :start
-    permission :bigbluebutton_start, {}
-    permission :bigbluebutton_moderator, {}
+    permission :bigbluebutton_start, :bbb => :start_form
+    permission :bigbluebutton_moderator, :bbb => :create
   end
+
+  Project.has_and_belongs_to_many(:bbb_servers)
 
 end
