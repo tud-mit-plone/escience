@@ -3,25 +3,37 @@
 	<%#= render :partial => 'sidebar' %>
 <% end %>
 
-<%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'button') if @user.change_password_allowed? %>
-<h2><%=l(:label_my_account)%></h2>
-<%= error_messages_for 'user' %>
+<div id="change_avatar_wrapper">
+  <% @avatar = @user.avatar %>
+  <% @photo = @user.avatar %>
+  <%= render :partial => 'users/crop_profile_photo' %>
+</div>
 
 <%= labelled_form_for :user, @user,
                      :url => { :action => "account" },
                      :html => { :id => 'my_account_form',
                                 :method => :post } do |f| %>
+
+<%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'button') if @user.change_password_allowed? %>
+<%= link_to(l(:preview), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'button', :target => '_blank') %>
+<%= submit_tag l(:button_save) %>
+<h2><%=l(:label_my_account)%></h2>
+<%= error_messages_for 'user' %>
+
 <div id="profile">
 <fieldset id="information" class="box tabular">
   <legend><%=l(:label_information_plural)%></legend>
   <div style="float:right;">
     <p>Avatar</p>
-    <div style="margin-top: 10px;">
-    <% if @user.avatar %>
-      <%= link_to avatar(@user, :size => 180, :scale => :medium), crop_profile_photo_user_path(@user) %>
-    <% else %>
-      <%= link_to avatar(@user, :size => 180, :scale => :medium), upload_profile_photo_user_path(@user) %>
-    <% end %>
+    <!-- div style="margin-top: 10px;" -->
+    <div id="avatar_preview">
+    <a href="#" onclick="show_change_avatar();">
+      <% if @user.avatar %>
+        <%= image_tag( @user.avatar.photo(:medium), :height => '180', :id => 'preview') %>
+      <% else %>
+        <%= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
+      <% end %>
+    </a>  
     </div>
   </div>
   <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
@@ -61,4 +73,30 @@
 <% html_title(l(:label_my_account)) -%>
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'profile' %>
+  <%= stylesheet_link_tag 'jquery.Jcrop.css', :plugin => 'redmine_social'%>
+  <%= javascript_include_tag 'jquery.Jcrop.min.js', :plugin => 'redmine_social' %>
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>  
 <% end %>
+
+<script type="text/Javascript" charset="utf-8">
+function hide_change_avatar() {
+  $('#preview').css({
+    width:180, 
+    height:180,
+    margin: 0
+  });
+  $('#preview').attr('src','<%= @user.avatar.photo(:medium) %>');
+  $('#change_avatar_wrapper').fadeOut();
+}
+function show_change_avatar() {
+  $('#change_avatar_wrapper').fadeIn();
+  $('#preview').attr('src','<%= @user.avatar.photo(:original) %>'); 
+  $("#cropbox").Jcrop({
+    onChange: update_crop,
+    onSelect: update_crop, 
+    setSelect: [0,0,500,500],
+    aspectRatio: 1
+  });
+  return false;  
+}
+</script>

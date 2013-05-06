@@ -5,5 +5,11 @@ en:
   label_appointment_new: Add a new appointment
   label_appointment_edit: Edit Appointment
   label_appointments: Appointments
+  label_private_appointments: Own appointments
+  label_watched_appointments: Watched appointments
+  label_private_issue_plural:  Own Issues
+  label_community_issue_plural: Joint appointments
+  label_watched_issue_plural: Watched Issues
+  label_headline_sidebar: Calendar types
   notice_appointment_successful_create: Appointment saved
   notice_appointment_fail_create: There is an error in your appointment.

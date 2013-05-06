@@ -6,11 +6,7 @@
     <%= h user.name %>
   </legend>
   <%= render :partial => "users/show",:locals => {:user => user, :memberships => user.memberships.all(:conditions => Project.visible_condition(user))} %>
-  <p><%= l friendship.friendship_status.name %></p>
-  <p>
-    <%= l(:requested) %>
-    <%= time_ago_in_words friendship.created_on %>
-  </p>
+  <p>seit <%= time_ago_in_words friendship.created_on %> in Kontakt</p>
 <div class='yui'><%= friendship_control_links(friendship) if @is_current_user%></div>
 </fieldset>
 

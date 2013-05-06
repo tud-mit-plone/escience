@@ -51,7 +51,8 @@ module AppointmentsHelper
   def render_appointment_tooltip(a)
     sd = a.start_date
     ed = a.due_date
-    out = '<div style="float:left;margin-right:20px;">'.html_safe+link_to_appointment(a, {:subject => false, :link_text => a.subject})+"</div>".html_safe
+#    out = '<div style="float:left;margin-right:20px;">'.html_safe+link_to_appointment(a, {:subject => false, :link_text => a.subject})+"</div>".html_safe
+    out = "<div style=\"float:left;margin-right:20px;\"><h2>#{truncate(a.subject, :length => 60)}</h2></div>".html_safe
     out << '<div style="float:right;">'.html_safe+link_to(image_tag('edit.png'),{:controller => 'appointments', :action => 'edit', :id => a.id}).html_safe+'</div>'.html_safe
     out << '<div style="float:right;">'.html_safe+link_to(image_tag('delete.png'), {:controller => 'appointments', :action => 'destroy', :id => a.id, :view => 'calendar'}, :remote => true, :method => :delete, :confirm => l(:text_are_you_sure)).html_safe+'</div>'.html_safe
     out << '<div class="clear"></div>'.html_safe

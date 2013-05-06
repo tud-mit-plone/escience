@@ -51,6 +51,25 @@ function addToolTip() {
   $(selector).qtip({content: {text: tooltip}, style: {classes: 'ui-tooltip-shadow ui-tooltip-green'}, position: {at:''+position+' center', my:''+direction+' center'}});
 }
 
+function update_crop(coords) {
+  var rx = 180/coords.w;
+  var ry = 180/coords.h;
+  var img_width = $("#cropbox").width()
+  var img_height = $("#cropbox").height()
+  var ox = $("#original_width").val() / img_width;
+  var oy = $("#original_height").val() / img_height;
+  $('#preview').css({
+    width: Math.round(rx * img_width) + 'px',
+    height: Math.round(ry * img_height) + 'px',
+    marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+    marginTop: '-' + Math.round(ry * coords.y) + 'px'
+  });
+  $("#crop_x").val(Math.round(coords.x * ox));
+  $("#crop_y").val(Math.round(coords.y * oy));
+  $("#crop_w").val(Math.round(coords.w * ox));
+  $("#crop_h").val(Math.round(coords.h * oy));
+}
+
 function toggleDivGroup(el, num) {
   var div = $(el).parent();
   div.toggleClass('open');

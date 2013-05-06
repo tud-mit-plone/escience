@@ -1,14 +1,13 @@
-<% content_for :sidebar_right do %>
+<% content_for :sidebar do %>
   <%= render :partial => 'users/profile_user_info_sidebar'%>
 <%end%>
 
 <h1>
-  <%= l(:friendships)%>
+  <%= l(:friendships)+" (#{@friend_count})"%>
 </h1>
 <% pending_text = @pending_friendships_count > 1 ? l(:pending_friendships) : l(:pending_friendship) %>
 <%= link_to "(#{@pending_friendships_count} "+pending_text+")", pending_user_friendships_path(@user) if  (@pending_friendships_count > 0)%>
 <%= will_paginate @friendships %>
-<div style="margin-bottom:5px;"><%= l(:you_have_friends, @friend_count) %></div>
 <div class="user_list"> 
   <%= render :partial => "friendships/friendship", :collection => @friendships%>
 </div>

@@ -1,13 +1,19 @@
 <% day = calendar.startdt %>
+<%# content_for :sidebar_left do %>
+<div style="position:absolute; width:160px; overflow:hidden; margin-left: -180px; margin-top: 40px" class="sidebar">
 <%= form_tag(url_for(:controller => 'calendars', :action => 'show_user_calendar'), :method=>'post', :remote => true) do %>
-  <fieldset>
-    <p><%= check_box_tag '[show][private_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural) %></p>
-    <p><%= check_box_tag '[show][private_appointments]', true, (checked = true) %><%= label_tag l(:label_appointments) %></p>
-    <p><%= check_box_tag '[show][community_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural) %></p>
-    <p><%= check_box_tag '[show][watched_issues]', true, (checked = true) %><%= label_tag l(:label_issue_plural_watched)%>
-    <p><%= check_box_tag '[show][watched_appointments]', true, (checked = true) %><%= label_tag l(:label_appointments_plural_watched)%>
-  </fieldset>
-<%end%> 
+  <div class="headline"><%= l(:label_headline_sidebar) %></div>
+  <ul class="selectCalendarOptions" style="margin-top:10px">
+    <li><%= check_box_tag '[show][private_appointments]', true, (checked = @show_params[:private_appointments]) %><%= label_tag '[show][private_appointments]', l(:label_private_appointments) %></li>
+    <li><%= check_box_tag '[show][watched_appointments]', true, (checked = @show_params[:watched_appointments]) %><%= label_tag '[show][watched_appointments]', l(:label_watched_appointments)%></li>
+    <li><%= check_box_tag '[show][community_issues]', true, (checked = @show_params[:community_issues]) %><%= label_tag '[show][community_issues]', l(:label_community_issue_plural) %></li>
+    <li><%= check_box_tag '[show][private_issues]', true, (checked = @show_params[:private_issues]) %><%= label_tag '[show][private_issues]', l(:label_private_issue_plural) %></li>
+    <li><%= check_box_tag '[show][watched_issues]', true, (checked = @show_params[:watched_issues]) %><%= label_tag '[show][watched_issues]', l(:label_watched_issue_plural)%></li>
+  </ul>
+  <div class="clear" style="padding-bottom:10px;"></div>
+<% end %>
+</div>
+<%#end%> 
 <table class="cal" width="100%">
 <thead>
   <tr>
@@ -30,8 +36,10 @@
     <td class="
       <%= 'today' if Date.today == day %>
       <%= ' event' if !(calendar.events_on(day).empty?) %>
-      <% unless @listOfDaysBetween.nil? %>
-      <%= ' weekend' if weekend %><%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>
+      <% unless @listOfDaysBetween.nil? || @listOfDaysBetween[day.to_date.to_s].nil? || @listOfDaysBetween[day.to_date.to_s].empty? %>
+      <%= ' weekend' if weekend %><% @listOfDaysBetween[day.to_date.to_s].each do |d| %>
+        <%="e_#{d[:id].to_s} "%>
+      <% end %>" valign="top" id="day_<%= day.day%>
       <%end%>"
       >
       <div class="td_box noSelect">
@@ -39,15 +47,15 @@
           <% calendar.events_on(day).each do |i| %>
           <div style="float:left">
             <% if (calendar.events_on(day).size < 5) %>
-              <div class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>" style="float:left; clear:left;margin-top:1px;margin-left:2px;">
+              <div class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>">
                 <% if i.is_a? Issue %>
-                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(17)}) %>
+                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(15)}) %>
                 <% elsif i.is_a? Appointment %>
-                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(17)}) %>
+                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(15)}) %>
                 <% end %>
               </div>
             <% else %>
-              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if format_date(day) == format_date(i.start_date) %> <%= 'ending' if (format_date(day) == format_date(i.due_date) || i.due_date.nil?) %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= i.project.nil? ? "7AdFd" : ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>" onclick="self.location.href='<%= url_for(:controller => getControllerName(i), :action => 'show', :id => i) %>'">
+              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if format_date(day) == format_date(i.start_date) %> <%= 'ending' if (format_date(day) == format_date(i.due_date) || i.due_date.nil?) %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= i.project.nil? ? "7AdFd" : ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 12) %>" onclick="self.location.href='<%= url_for(:controller => getControllerName(i), :action => 'show', :id => i) %>'">
                 <%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %>
               </div>
             <% end %>

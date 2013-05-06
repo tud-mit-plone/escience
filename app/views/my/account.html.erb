@@ -8,6 +8,7 @@
 <% end %>
 
 <%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'button') if @user.change_password_allowed? %>
+<%= link_to(l(:preview), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'button') %>
 <h2><%=l(:label_my_account)%></h2>
 <%= error_messages_for 'user' %>
 

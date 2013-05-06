@@ -51,6 +51,8 @@ class CalendarsController < ApplicationController
       session[:query][:project_id] = @project.id
     end
     @query.group_by = nil
+    events = []
+    @listOfDaysBetween = {}
     if @query.valid?
       creator = User.current.id.to_s if session[:current_view_of_eScience]== "0"
       events ||=[]

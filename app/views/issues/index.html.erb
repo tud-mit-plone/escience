@@ -9,8 +9,18 @@
   <%= render_sidebar_queries %>
 <%end%>
 
-<h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
+<h2 style="float:left;"><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
+<div style="float:right">
+<% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'button' %>
+<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'button' %>
+<% end %>
+</div>
+<div class="clear"></div>
+
 <% html_title(@query.new_record? ? l(:label_issue_plural) : @query.name) %>
+
 
 <%= form_tag({ :controller => 'issues', :action => 'index', :project_id => @project },
             :method => :get, :id => 'query_form') do %>

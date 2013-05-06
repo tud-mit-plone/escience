@@ -50,7 +50,8 @@ module IssuesHelper
     @cached_label_project ||= l(:field_project)
     @cached_label_tracker ||= l(:field_tracker)
 
-    out = link_to_issue(issue, {:subject => false, :link_text => issue.subject}) + "<br /><br />".html_safe
+#    out = link_to_issue(issue, {:subject => false, :link_text => issue.subject}) + "<br /><br />".html_safe
+    out = "<div style=\"margin-right:20px;\"><h2>#{truncate(issue.subject, :length => 60)}</h2></div>".html_safe
     out << "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />".html_safe unless (params['sub'].nil?)
     out << "<strong>#{@cached_label_tracker}</strong>: #{issue.tracker}<br />".html_safe
     out << "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />".html_safe

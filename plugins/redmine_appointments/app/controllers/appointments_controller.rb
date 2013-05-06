@@ -80,12 +80,12 @@ class AppointmentsController < ApplicationController
   def create
     @appointment = Appointment.new
     params[:appointment][:description] = convertHtmlToWiki(params[:appointment][:description])
-    start_date = params[:appointment][:start_date] == "" ? nil : params[:appointment][:start_date]
-    due_date = params[:appointment][:due_date] == "" ? nil : params[:appointment][:due_date]
+    start_date = params[:appointment][:start_date].empty? ? nil : params[:appointment][:start_date]
+    due_date = params[:appointment][:due_date].empty? ? nil : params[:appointment][:due_date]
     params[:appointment][:start_date] = Date.strptime(start_date,::I18n.t("date.formats.default")).to_s if start_date
     params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if due_date
-    params[:appointment][:start_date] += " " + params[:appointment][:start_time]
-    params[:appointment][:due_date] += " " + params[:appointment][:due_time]
+    params[:appointment][:start_date] += " " + params[:appointment][:start_time] unless params[:appointment][:start_date].empty?
+    params[:appointment][:due_date] += " " + params[:appointment][:due_time] unless params[:appointment][:due_date].empty?
     params[:appointment].delete(:start_time)
     params[:appointment].delete(:due_time)
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))
@@ -103,7 +103,7 @@ class AppointmentsController < ApplicationController
         }
         format.js {
           if params[:view] == 'calendar'
-            redirect_to({:controller => 'calendars', :action => 'show', :format => 'js', :new => params[:continue]})
+            redirect_to({:controller => 'calendars', :action => 'show_user_calendar', :format => 'js', :new => params[:continue]})
           else
             render :action => 'new'
           end
@@ -136,7 +136,7 @@ class AppointmentsController < ApplicationController
         format.api  { render_validation_errors(@appointment) }
         format.js {
           if params[:view] == 'calendar'
-            redirect_to({:controller => 'calendars', :action => 'show', :format => 'js'})
+            redirect_to({:controller => 'calendars', :action => 'show_user_calendar', :format => 'js'})
           else
             render :action => 'new'
           end

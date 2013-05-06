@@ -32,8 +32,14 @@ Redmine::Plugin.register :redmine_social do
               :geometry => "100x100#",
               :processors => [:cropper]
             },
-            :medium => "180x180#",
-            :large => "465>"
+            :medium => {
+              :geometry => "180x180#",
+              :processors => [:cropper]
+            },
+            :large => {
+              :geometry => "465>",
+              :processors => [:cropper]
+            }
         },
         :path => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
         :url => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 

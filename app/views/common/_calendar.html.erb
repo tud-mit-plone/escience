@@ -1,4 +1,3 @@
-asdfsdafsdfsdf
 <% day = calendar.startdt %>
 <table class="cal" width="100%">
 <thead>
@@ -19,7 +18,9 @@ asdfsdafsdfsdf
         <p><%= (day+(11-day.cwday)%7).cweek %></p>
       </td>
 <%  end %>
-    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %><%= ' weekend' if weekend %>" valign="top" id="day_<%= day.day%>" >
+    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %>
+    <% unless @listOfDaysBetween.nil? %><%= ' weekend' if weekend %>
+    <%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>"<%end%>>
       <div class="td_box noSelect">
         <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
         <%= calendar.events_on(day) %>

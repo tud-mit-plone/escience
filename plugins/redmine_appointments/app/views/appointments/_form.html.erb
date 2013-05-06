@@ -46,15 +46,5 @@
       </div>
     <% end %>
 <% content_for :header_tags do %>
-  <style>
-    .hoveredEvent {background: #DEDEDE !important}
-    #due_date_wrapper.cycle {top: -26px;margin-left: 58px;position: relative;display: inherit;}
-    @-moz-document url-prefix() {#due_date_wrapper.cycle {top: -24px;margin-left: 54px;}}
-    #due_date_wrapper.cycle:before {content: "-";}
-    .cke_contents {height: 120px !important;}
-    .attributes label {width: 65px;}
-    .w33 {clear:left;float: left; padding-right: 70px;}
-    .timeEntry {opacity: .5;-moz-opacity:0.5;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter: alpha(opacity=50);-khtml-opacity: 0.5;}
-    .timeEntry.active {opacity: 100;-moz-opacity:100;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";filter: alpha(opacity=100);-khtml-opacity: 100;}
-  </style>
+    <%= stylesheet_link_tag 'appointments', :plugin => 'redmine_appointments' %>
 <% end %>

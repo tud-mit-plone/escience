@@ -203,15 +203,15 @@ de:
   #en: cancel: Cancel
   cancel: Abbrechen
   #en: cancel_and_go_back_to: cancel and go back to
-  cancel_and_go_back_to: "abbrechen und zur\xC3\xBCck gehen"
+  cancel_and_go_back_to: "Abbrechen"
   #en: cancel_and_go_back_to_all_features: cancel and go back to all features
-  cancel_and_go_back_to_all_features: "abbrechen und zur\xC3\xBCck gehen"
+  cancel_and_go_back_to_all_features: "Abbrechen"
   #en: cancel_and_go_back_to_my_clippings: cancel and go back to my clippings
-  cancel_and_go_back_to_my_clippings: "abbrechen und zur\xC3\xBCck gehen"
+  cancel_and_go_back_to_my_clippings: "Abbrechen"
   #en: cancel_and_go_back_to_my_photos: cancel and go back to my photos
-  cancel_and_go_back_to_my_photos: "abbrechen und zur\xC3\xBCck gehen"
+  cancel_and_go_back_to_my_photos: "Abbrechen"
   #en: cancel_and_go_back_to_my_posts: cancel and go back to my posts
-  cancel_and_go_back_to_my_posts: "abbrechen und zur\xC3\xBCck gehen"
+  cancel_and_go_back_to_my_posts: "Abbrechen"
   #en: categories: Categories
   categories: Kategorien
   #en: category: Category
@@ -221,11 +221,11 @@ de:
   #en: choises: Choices
   choises: Auswahl
   #en: choose_a_photo_for_your_profile: "Choose a photo for your profile:"
-  choose_a_photo_for_your_profile: "W\xC3\xA4hle ein Foto f\xC3\xBCr dein Profil aus:"
+  choose_a_photo_for_your_profile: "Wählen Sie ein Foto für Ihr Profil aus:"
   #en: choose_a_photo_to_upload: "Choose a photo to upload:"
-  choose_a_photo_to_upload: "W\xC3\xA4hle ein Foto zum hochladen aus:"
+  choose_a_photo_to_upload: "Wähle ein Foto zum hochladen aus:"
   #en: choose_your_location: Choose your location
-  choose_your_location: "W\xC3\xA4hle deinen Ort"
+  choose_your_location: "Wähle deinen Ort"
   #en: click_here: click here
   click_here: klicke hier
   #en: click_here_to_retrieve_it: Click here to retrieve it
@@ -887,6 +887,8 @@ de:
   profile_comments: Profilkommentare
   #en: profile_photo: Profile Photo
   profile_photo: Profilfoto
+  profile_photo_crop: Bildausschnitt festlegen
+  change_profile_photo: Profilfoto ändern
   #en: profile_privacy: Profile Privacy
   profile_privacy: Privatsphäre
   #en: profile_views: profile views
@@ -1186,7 +1188,7 @@ de:
   #en: uncategorized: Uncategorized
   uncategorized: Unkategorisiert
   #en: update: Update
-  update: "Änderung"
+  update: "Ändern"
   #en: update_profile_and_tag_yourself: Update your profile and tag yourself
   update_profile_and_tag_yourself: "Änder dein Profil und ergänze deine Tags."
   #en: update_your_profile: update your profile

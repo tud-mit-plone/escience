@@ -88,19 +88,17 @@
 }
 
 .controller-calendars table.cal td.today {
-  border-color: #7DB414;
-}
-
-.controller-calendars table.cal td.today p.day-num {
-  color: #7DB414;
+  background: url('../images/current_day.png');
+  background-repeat: repeat-x;
 }
 
 .controller-calendars table.cal td.today.event {
   background-color: #9fd835 !important;
+  background: url('../images/current_day_active.png');
 }
 
 .controller-calendars table.cal td.today.event p.day-num {
-  color: #7D7D7D;
+  color: #FFF;
   font-weight: bold;
 }
 
@@ -136,6 +134,10 @@
 }
 
 .controller-calendars .linkToInfo {
+  float:left;
+  clear:left;
+  margin-top:1px;
+  margin-left:2px;
 }
 
 .controller-calendars .linkToInfo.box, .controller-calendars .legend div.box {
@@ -496,21 +498,6 @@ div.mypage-box .cal {
   display: none;
 }
 
-#addEvent .background {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top:0;
-  left:0;
-  background-color: #000;
-  opacity: .5;
-  -moz-opacity:0.5;
-  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-  filter: alpha(opacity=50);
-  -khtml-opacity: 0.5;
-  z-index: 999;
-}
-
 #addEvent .content {
   position: fixed;
   z-index: 1000;
@@ -528,9 +515,16 @@ div.mypage-box .cal {
   border-radius: 3px;
 }
 
-.controller-calendars table.cal td .day-num { /* Cell showing selected date */
+.controller-calendars table.cal td .day-num {
   margin: 0 0 -3px 0;
   padding: 2px 3px;
+}
+
+.cal tbody td {
+  -webkit-transition: background-color 0.3s ease-out, border 0.2s ease-out;
+  -moz-transition: background-color 0.3s ease-out, border 0.2s ease-out;
+  -o-transition: background-color 0.3s ease-out, border 0.2s ease-out;
+  transition: background-color 0.3s ease-out, border 0.2s ease-out;
 }
 
 .hoveredEvent {

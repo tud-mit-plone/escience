@@ -1,26 +1,23 @@
-(function( jQuery, undefined ) {
-   jQuery.notification = function(options) {
-	var opts = jQuery.extend({}, {type: 'notice', time: 5000}, options);
-      var o            = opts;
-      timeout          = setTimeout('jQuery.notification.removebar()', o.time);
-      var message_span = jQuery('<span />').addClass('jbar-content').html(o.message);
-      var wrap_bar     = jQuery('<div />').addClass('jbar jbar-top '+o.type).css("cursor", "pointer");
+(function( $, undefined ) {
+  $.notification = function(options) {
+    var opts         = $.extend({}, {type: 'notice', time: 5000}, options);
+    var o            = opts;
+    timeout          = setTimeout('$.notification.removebar()', o.time);
+    var message_span = $('<table style="width:100%; height:100%" />').append($('<tr />').append($('<td />').addClass('jbar-content').html(o.message)));
+    var wrap_bar     = $('<div />').addClass('jbar jbar-top '+o.type).css("cursor", "pointer");
 
-wrap_bar.click(function(){
-      	jQuery.notification.removebar()
-      });
+    wrap_bar.click(function(){$.notification.removebar()});
+    wrap_bar.append(message_span).insertBefore($('#container'));
+    wrap_bar.hide();
+    wrap_bar.fadeIn(1000);
+  };
 
-    	wrap_bar.append(message_span).hide().insertBefore(jQuery('#container')).slideDown(600);
-    };
-
-    var timeout;
-    jQuery.notification.removebar    = function(txt) {
-        if(jQuery('.jbar-top').length){
-            clearTimeout(timeout);
-            jQuery('.jbar-top').slideUp('slow',function(){
-                jQuery(this).hide();
-            });
-        }   
-    };
+  var timeout;
+  $.notification.removebar    = function(txt) {
+    if($('.jbar-top').length){
+      clearTimeout(timeout);
+      $('.jbar-top').fadeOut();
+    }   
+  };
 })(jQuery);
 

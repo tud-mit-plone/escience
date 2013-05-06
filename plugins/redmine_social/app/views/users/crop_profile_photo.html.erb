@@ -1,63 +1,6 @@
-
-
-    
-<div class='yui'></div>
-
-  <div class="alt first_alt" >
-    <%= link_to l(:profile_photo_change), upload_profile_photo_user_path(@user) %>
-  </div>
-    <h3><%= l(:profile_photo) %></h3>
-    <div id='previewWrap'></div>
-
-<div id='yui'></div>
-    <h3><%= l(:profile_photo_crop)   %></h3>
-    
-      <%if Photo.file_exists?(@photo,:large) %>
-        <div style="width:100px; height:100px; overflow:hidden">
-          <%= image_tag( @photo.photo.url(:large), :id => "preview") %>        
-        </div>
-          <%= image_tag( @photo.photo.url(:large), :id => 'cropbox' ) %>
-      <%else%>
-         <%= link_to l(:cancel_and_go_back_to_my_photos), user_photos_path(@user) %>
-      <%end%>
-    <div style='clear:both'></div>
-    <%= error_messages_for @photo %>
-
-    <%= form_for(:photo, :url => crop_profile_photo_user_path(@user), :method => :put, :html => { :class => "MainForm" }) do |f| %>
-      <% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>
-        <%= f.hidden_field attribute, :id => attribute%>
-      <%end%>
-      <p>
-        <%= submit_tag l(:update) %>
-        <%= l(:or) %>
-        <%= link_to l(:cancel_and_go_back_to_my_photos), user_photos_path(@user) %>
-      </p>
-    <%end%>
+<%#= render :partial => 'upload_profile_photo' %>
+<%= render :partial => 'crop_profile_photo' %>
 
 <%= stylesheet_link_tag 'jquery.Jcrop.css', :plugin => 'redmine_social'%>
 <%= javascript_include_tag 'jquery.Jcrop.min.js', :plugin => 'redmine_social' %>
-<script type="text/Javascript" charset="utf-8">
-$(function() {
-  $("#cropbox").Jcrop({
-    onChange: update_crop,
-    onSelect: update_crop, 
-    setSelect: [0,0,500,500],
-    aspectRatio: 1
-  });
-});
-function update_crop(coords) {
-  var rx = 100/coords.w;
-  var ry = 100/coords.h;
-  $('#preview').css({
-    width: Math.round(rx * <%= @user.avatar.photo_geometry(:large).nil? ? 1 : @user.avatar.photo_geometry(:large).width %>) + 'px',
-    height: Math.round(ry * <%= @user.avatar.photo_geometry(:large).nil? ? 1 : @user.avatar.photo_geometry(:large).height %>) + 'px',
-    marginLeft: '-' + Math.round(rx * coords.x) + 'px',
-    marginTop: '-' + Math.round(ry * coords.y) + 'px'
-  });
-var ratio = <%= @user.avatar.photo_geometry(:original).nil? ? 0 : @user.avatar.photo_geometry(:original).width %> / <%= @user.avatar.photo_geometry(:large).nil? ? 1 : @user.avatar.photo_geometry(:large).width %>;
-  $("#crop_x").val(Math.round(coords.x * ratio));
-  $("#crop_y").val(Math.round(coords.y * ratio));
-  $("#crop_w").val(Math.round(coords.w * ratio));
-  $("#crop_h").val(Math.round(coords.h * ratio));
-}
-</script>
+<%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>

@@ -1046,3 +1046,46 @@ ul.bc_submenu li {
   font-size: 18px;
   font-weight: bold;
 }
+
+#change_avatar_wrapper {
+  display:none;
+  z-index:900
+}
+
+#change_avatar {
+  position:absolute;
+  top:500px;
+  left:50%;
+  width:500px; 
+  height:400px; 
+  z-index:1000;
+  margin-left: -225px;
+}
+#change_avatar .change_avatar_background {
+  padding: 20px;
+  background: #fff;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  float: left;
+  width: 430px;
+}
+#change_avatar .arrow_to_avatar {
+  background-image: url('../images/arrow_right.png');
+  float: left;
+  width: 20px;
+  height:40px;
+  margin-top: 280px;
+}
+#avatar_preview {
+  margin-top: 10px; 
+  width:180px; 
+  height:180px; 
+  overflow:hidden;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -khtml-border-radius: 8px;
+  border-radius: 8px;
+  border: 1px solid #DBDBDB
+}

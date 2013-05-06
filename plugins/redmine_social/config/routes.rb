@@ -17,6 +17,7 @@ RedmineApp::Application.routes.draw do
         put 'crop_profile_photo'
         get 'upload_profile_photo'
         put 'upload_profile_photo'
+        post 'upload_profile_photo.js' => 'users#upload_profile_photo', :as => :upload_profile_photo, :format => 'js'
       end
       resources :friendships do
         collection do

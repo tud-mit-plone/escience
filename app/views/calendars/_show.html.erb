@@ -1,6 +1,6 @@
 <div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
 
-<h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %></h2>
+<h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %> (<%= month_name(@month)%> <%= @year%>)</h2>
 <div style="float:right">
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'button' %>
@@ -13,18 +13,18 @@
 <%= form_tag({:controller => 'calendars', :action => 'show', :project_id => @project},
              :method => :get, :id => 'query_form') do %>
   <%= hidden_field_tag 'set_filter', '1' %>
-  <fieldset id="filters" class="collapsible <%= @query.new_record? ? "" : "collapsed" %>">
+  <fieldset id="filters" class="collapsible">
     <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
-    <div style="<%= @query.new_record? ? "" : "display: none;" %>">
+    <div style="display: none;">
       <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
     </div>
-    <div class="selectors">
+    <div class="selectors" style="display: none;">
       <%= label_tag('month', l(:label_month)) %>
       <%= select_month(@month, :prefix => "month", :discard_type => true) %>
       <%= label_tag('year', l(:label_year)) %>
       <%= select_year(@year, :prefix => "year", :discard_type => true) %>
     </div>
-    <div class="buttons">
+    <div class="buttons" style="display: none;">
       <div><%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %></div>
       <div><%= submit_tag l(:button_apply) %></div>
     </div>
@@ -51,6 +51,7 @@
   <div class="starting ending"><div class="box">&nbsp;</div><%= l(:text_tip_issue_begin_end_day) %></div>
 </div>
 <% end %>
+<%= javascript_tag "$('document').ready(function(){$('.cal a').attr('title','')});" %>
 
 <% content_for :sidebar do %>
     <%= render :partial => 'issues/sidebar' %>

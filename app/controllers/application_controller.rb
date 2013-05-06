@@ -113,6 +113,7 @@ class ApplicationController < ActionController::Base
         return true
       end
     end
+    session[:last_page_visited] = request.url unless params[:action] == 'logout' || params[:action] == 'login'
     false
   end
 
@@ -120,6 +121,10 @@ class ApplicationController < ActionController::Base
     session[:user_id] = user.id
     session[:ctime] = Time.now.utc.to_i
     session[:atime] = Time.now.utc.to_i
+    if params[:back_url].nil?
+        goto_page = user.pref[:last_page_visited].nil? ? url_for(:controller => 'my', :action => 'page') : user.pref[:last_page_visited]
+        params[:back_url] = goto_page
+    end
   end
 
   def user_setup
@@ -179,10 +184,14 @@ class ApplicationController < ActionController::Base
   # Logs out current user
   def logout_user
     if User.current.logged?
+      unless session[:last_page_visited].nil?
+          User.current .pref[:last_page_visited] = session[:last_page_visited]
+          User.current.pref.save
+      end
       cookies.delete :autologin
       Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'autologin'])
       self.logged_user = nil
-    end
+   end
   end
 
   # check if login is globally required to access the application

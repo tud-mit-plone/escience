@@ -22,7 +22,7 @@
 </div>
 
 <% unless memberships.empty? %>
-  <h2><%=l(:label_project_plural)%></h2>
+  <h3 style="margin-bottom:-5px;"><%=l(:label_project_plural)%></h3>
   <ul>
   <% for membership in memberships %>
     <li><%= link_to_project(membership.project) %>

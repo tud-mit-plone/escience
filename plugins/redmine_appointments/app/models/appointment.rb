@@ -17,7 +17,7 @@ class Appointment < ActiveRecord::Base
   acts_as_activity_provider :find_options => {:include => [:author]},
                             :author_key => :author_id, :type => "appointments"
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
-  validates_presence_of :subject, :user
+  validates_presence_of :subject, :user, :start_date
   validates_length_of :subject, :maximum => 255
   
   scope :visible, lambda {|*args| { :include => :user,
@@ -105,7 +105,11 @@ class Appointment < ActiveRecord::Base
       if appointment[:start_date] >= startdt && appointment[:start_date] < enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
         currentDate = appointment[:start_date].to_date.to_time + 1.day
         while currentDate < appointment[:due_date] && currentDate <= enddt
-          listOfDaysBetween[currentDate.to_date.to_s] ||= appointment
+          if listOfDaysBetween[currentDate.to_date.to_s].nil?
+            listOfDaysBetween[currentDate.to_date.to_s] = [appointment]
+          else listOfDaysBetween[currentDate.to_date.to_s].is_a?(Array)
+            listOfDaysBetween[currentDate.to_date.to_s] = [listOfDaysBetween[currentDate.to_date.to_s],appointment]
+          end
           currentDate += 1.day
         end
       end

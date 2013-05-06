@@ -46,7 +46,7 @@
         end
       end
     end
-    
+        
     module UsersController
       module ClassMethods
 
@@ -55,30 +55,40 @@
         def upload_profile_photo
           @user = User.find(params[:id])
           @avatar = Photo.new(params[:photo])
-          return unless request.put?
 
           @avatar.name = params[:photo][:filename] 
           @avatar.user  = @user
           if @avatar.save
-            @user.avatar_id  = @avatar.id
-            @user.save!
-            redirect_to crop_profile_photo_user_path(@user)
+#            @user.avatar_id  = @avatar.id
+#            @user.save!
+            @photo = @avatar
+            respond_to do |format|
+              format.html { render :action => 'show', :layout => false if request.xhr? }
+              format.js { render :partial => 'crop_profile_photo' }
+            end
           end
         end
         
         def crop_profile_photo
           @user = User.find(params[:id])
+          @avatar = Photo.new(params[:photo])
+          unless params[:avatar_id].nil?
+            @user.avatar_id  = params[:avatar_id]
+            @user.save!
+          end
            unless @photo = @user.avatar
              flash[:notice] = l(:no_profile_photo)
              redirect_to upload_profile_photo_user_path(@user) and return
            end
            return unless request.put?
-           logger.info(":crop_x =>#{ params[:photo][:crop_x]}, :crop_y => #{params[:photo][:crop_y]}, :crop_w => #{params[:photo][:crop_w]}, :crop_h => #{params[:photo][:crop_h]}")
            @photo.update_attributes(:crop_x => params[:photo][:crop_x], 
                                                       :crop_y => params[:photo][:crop_y], 
                                                       :crop_w => params[:photo][:crop_w], 
                                                       :crop_h => params[:photo][:crop_h])
-           redirect_to user_path(@user)
+            respond_to do |format|
+              format.html { redirect_to my_account_path }
+              format.js { render :partial => 'users/update_profile_photo' }
+            end
          end
       end
       
