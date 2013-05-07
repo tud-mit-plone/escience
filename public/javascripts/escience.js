@@ -1,6 +1,23 @@
 $(document).ready(function() {
 	$(window).resize(checkDockNav);
 	$(window).scroll(checkDockNav);
+  $.fn.qtip.styles.eScience = { // Last part is the name of the style
+     background: '#AAE06F',
+     color: 'black',
+     textAlign: 'block',
+     border: {
+        width: 2,
+        radius: 2,
+        color: '#7DB414'
+     },
+     tip: { // Now an object instead of a string
+       color: '#7DB414',
+       size: {
+          x: 8, // Be careful that the x and y values refer to coordinates on screen, not height or width.
+          y : 8 // Depending on which corner your tooltip is at, x and y could mean either height or width!
+       }
+     }
+  }
 });
 
 function checkDockNav() {
@@ -36,7 +53,11 @@ function addToolTip_withTitle() {
 function addToolTip() {
   selector = arguments[0];
   tooltip = arguments[1];
-  
+  if ($.type(tooltip) === "string") {
+    content = {text: tooltip};
+  } else {
+    content = tooltip;
+  }
   position = 'right';
   if (arguments.length == 3) {
     position = arguments[2];
@@ -47,8 +68,19 @@ function addToolTip() {
     case 'top': direction = 'bottom'; break;
     case 'bottom': direction = 'top'; break;
   }
-  
-  $(selector).qtip({content: {text: tooltip}, style: {classes: 'ui-tooltip-shadow ui-tooltip-green'}, position: {at:''+position+' center', my:''+direction+' center'}});
+  $(selector).qtip({
+    content: content, 
+    style: {
+      name: 'eScience',
+      tip: ''+direction+'Middle',
+    }, 
+    position: {
+      corner: {
+        target:''+position+'Middle', 
+        tooltip:''+direction+'Middle'
+      }
+    }
+  });
 }
 
 function update_crop(coords) {

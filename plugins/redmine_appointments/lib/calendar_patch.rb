@@ -2,9 +2,9 @@ module Plugin
 module RedmineAppointmentExtension
 
   events = Proc.new {
-#    today = Date.today
-#    amount = Issue.find(:all, :conditions => ["((start_date <= ? AND due_date >= ?) OR (start_date = ?)) IN (?)", today, today, today, Issue.visible]).count
-
+    today = Date.today
+    amount = Issue.find(:all, :conditions => ["((due_date = ?) OR (start_date = ?)) AND id IN (#{Issue.visible.map {|e| e.id}.join(', ')})", today, today]).count
+    amount += Appointment.getAllEventsWithCycle().count
     #.where('(start_date <= ? AND due_date >= ?) AND ((assigned_to_id IS NULL AND author_id=?) OR assigned_to_id=?)',Date.today.to_s,Date.today.to_s,User.current.id,User.current.id).count
 #    appointments = Appointment.getAllEventsWithCycle
 #    amount += appointments.count
@@ -23,8 +23,29 @@ module RedmineAppointmentExtension
       receiver.class_eval do
       
         helper Appointment::AppointmentsHelper
-        before_filter :require_login, :only => [:show, :index,:show_user_calendar]
-        before_filter :find_optional_project, :except => [:show_user_calendar]
+        before_filter :require_login, :only => [:show, :index,:show_user_calendar, :get_events_on_current_day]
+        before_filter :find_optional_project, :except => [:show_user_calendar, :get_events_on_current_day]
+        
+        def get_events_on_current_day
+          today = Date.today
+          events = Issue.find(:all, :conditions => ["((due_date = ?) OR (start_date = ?)) AND id IN (#{Issue.visible.map {|e| e.id}.join(', ')})", today, today])
+          events += Appointment.getAllEventsWithCycle(today, today)
+          event_list = '<table cellspacing="0" cellpadding="0"><tr>'
+          event_list += events.map{ |e| 
+            if (e[:start_date].hour.to_i != 0 || e[:start_date].min.to_i != 0)
+              '<td>'+format('%02d',e[:start_date].hour.to_i) + ':' + format('%02d',e[:start_date].min.to_i) + '</td><td style="padding-left:5px;">&nbsp;</td><td>' + e[:subject]+'</td>'
+            else 
+              '<td colspan="2">&nbsp;</td><td>' + e[:subject] + '</td>'
+            end
+          }.join('</tr><tr>')
+          event_list += "</tr></table>"
+          respond_to do |format|
+            format.html { render :xml => event_list}
+            format.xml { render :xml => event_list}
+            format.js # user_search.js.erb
+            format.json { render :json => event_list}
+          end
+        end
 
         def show_user_calendar
           return render_403 unless User.current.allowed_to?(:appointments_create,nil, {:global => true}) || User.current.admin?

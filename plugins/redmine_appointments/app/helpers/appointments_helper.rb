@@ -85,7 +85,7 @@ module AppointmentsHelper
         out << beautyfulDate(sd)+"</td>".html_safe
         out << '<td valign="top" style="padding:4px;border-top: 1px solid #DADADA !important; border-bottom: 1px solid #DADADA !important; border-right:2px solid #606060 !important; -moz-border-radius: 0 5px 5px 0px;-webkit-border-radius: 0 5px 5px 0px;-khtml-border-radius: 0 5px 5px 0px;border-radius: 0 5px 5px 0px;">'.html_safe+format_date_to_time(sd).html_safe+'</td>'.html_safe unless (sd.hour.to_i == 0 && sd.min.to_i == 0)
       end
-      unless sd == ed || ed.nil?
+      unless sd == ed || ed.nil? || ed.hour.to_i != 0
         out << '<td>'.html_safe+image_tag('arrow.png')+'</td>'.html_safe
         if ed.hour.to_i == 0 && ed.min.to_i == 0
           out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe

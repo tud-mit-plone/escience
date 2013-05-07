@@ -11,10 +11,6 @@
      end
      tooltip_user_messages = user_messages > 0 ? l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}") : l(:tooltip_sidebar_user_messages)
      tooltip_events = "<ul class='tooltip'>"
-     Issue.where('(start_date >= ? AND due_date <= ?) AND ((assigned_to_id IS NULL AND author_id=?) OR assigned_to_id=?)',Date.today.to_s,Date.today.to_s,User.current.id,User.current.id).each { |i|
-       tooltip_events += "<li>"+i.subject + "</li>"
-     }
-     Appointment.getAllEventsWithCycle.each { |a| tooltip_events += "<li>"+a.subject + "</li>"}
      tooltip_events += "</ul>"
   %>
 
@@ -35,7 +31,6 @@
   <%= stylesheet_link_tag 'public', :media => 'all' unless User.current.logged?%>
   <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
-  <%= stylesheet_link_tag 'jquery.qtip.min', :media => 'all' %>
   <%= javascript_heads %>
   <%= yield :jquery_tags -%>
   <%= yield :header_tags -%>
@@ -67,7 +62,7 @@
     addToolTip(".sidebar .my-members","'+l(:tooltip_sidebar_contactlist)+'");
     addToolTip("#navigation .issues .announcment","'+l(:tooltip_navbar_issues_explain, :position => "#{issues}")+'", "bottom");
     addToolTip("#navigation .user-messages .announcment","'+l(:tooltip_navbar_user_messages_count, :count => "#{user_messages}", :persons => "#{persons}")+'", "bottom");
-    addToolTip("#navigation .calendar-all .announcment","'+" #{tooltip_events}"+'", "bottom");
+    addToolTip("#navigation .calendar-all .announcment",{ url: "'+url_for(:controller => 'calendars', :action => 'get_events_on_current_day')+'" }, "bottom");
     addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom");
     addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom");
     addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom");
