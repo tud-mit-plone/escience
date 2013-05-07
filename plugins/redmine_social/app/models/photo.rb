@@ -1,6 +1,5 @@
 class Photo < ActiveRecord::Base
   unloadable
-  acts_as_commentable
   belongs_to :album
   
   has_attached_file :photo, Setting.plugin_redmine_social['photo_paperclip_options'].to_hash
@@ -8,12 +7,14 @@ class Photo < ActiveRecord::Base
   validates_attachment_content_type :photo, :content_type => Setting.plugin_redmine_social['photo_content_type']
   validates_attachment_size :photo, :less_than => Setting.plugin_redmine_social['photo_max_size'].to_i.megabytes
 
+   has_many :comments, :as => :commented, :dependent => :delete_all, :order => "created_on"
+
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
   after_update :reprocess_photo, :if => :cropping?
   
   acts_as_taggable
 
- acts_as_activity_provider :find_options => {:include => [:user]},
+  acts_as_activity_provider :find_options => {:include => [:user]},
                             :author_key => :user_id
   
   validates_presence_of :user
@@ -23,11 +24,11 @@ class Photo < ActiveRecord::Base
   
   #Named scopes
   scope :recent, :order => "photos.created_at DESC"
-  scope :new_this_week, :order => "photos.created_at DESC", :conditions => ["photos.created_on > ?", 7.days.ago.iso8601]
+  scope :new_this_week, :order => "photos.created_at DESC", :conditions => ["photos.created_at > ?", 7.days.ago.iso8601]
   attr_accessible :name, :description, :photo, :crop_x, :crop_y, :crop_w, :crop_h, :user_id
 
   def display_name
-    (self.name && self.name.length>0) ? self.name : "#{:created_on.l.downcase}: #{I18n.l(self.created_on, :format => :published_date)}"
+    (self.name && self.name.length>0) ? self.name : "#{:created_at.l.downcase}: #{I18n.l(self.created_at, :format => :published_date)}"
   end
 
   def description_for_rss
@@ -39,19 +40,19 @@ class Photo < ActiveRecord::Base
   end
 
   def previous_photo
-    self.user.photos.where('created_on < ?', created_on).first
+    self.user.photos.where('created_at < ?', created_at).first
   end
   def next_photo
-    self.user.photos.where('created_on > ?', created_on).last
+    self.user.photos.where('created_at > ?', created_at).last
   end
 
   def previous_in_album
     return nil unless self.album
-    self.user.photos.where('created_on < ? and album_id = ?', created_on, self.album.id).first
+    self.user.photos.where('created_at < ? and album_id = ?', created_at, self.album.id).first
   end
   def next_in_album
     return nil unless self.album
-    self.user.photos.where('created_on > ? and album_id = ?', created_on, self.album_id).last
+    self.user.photos.where('created_at > ? and album_id = ?', created_at, self.album_id).last
   end
 
   def self.file_exists?(photo_obj,style = :original)

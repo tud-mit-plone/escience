@@ -1,0 +1,12 @@
+-box do
+  <h3><%= :recent_photos.l %>
+</h3>
+
+  <div class='pagination'><%= paginating_links @photos if @photos.total_count > 1 %>
+</div>
+
+  <ul>
+    - @photos.each do |photo|
+      <li><%= image_tag photo.photo.url(:thumb)  %>
+  </li>
+</ul>

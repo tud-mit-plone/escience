@@ -1,0 +1,29 @@
+<div class='profile'>
+  <%#= render :partial => 'posts/author_profile', :locals => {:user => @album.user} %>
+  <%#= link_to l(:back_to_photo_manager), user_photo_manager_index_path(@album.user)  %>
+</div>
+
+<div id='yui'>
+  <div class='yui'>
+    <h3><%= h @album.title %></h3>
+    <p><%= h @album.description %></p>
+  </div>
+</div>
+
+<h3><%= l(:photos_of_this_album) %></h3>
+  <div id='photos' class='yui'>
+    <% @album_photos.each do |photo| %>
+      <%= link_to(image_tag(photo.photo.url(:thumb), :class => "polaroid"), user_photo_path(photo.user, photo)) %>
+    <%end%>
+    <%= will_paginate @album_photos %>
+  </div>
+
+<h3><%= l(:album_comments) %></h3>
+<h4><%= l(:add_your_comment) %></h4>
+<p><%= render :partial => 'comments/comments', :locals => {:form_hash => {:action => 'create_general_comment', :controller => 'comments' ,:album_id => @album}, :comments => @album.comments} %></p>
+<a "id='newest_comment'">
+  <%#= render :partial => 'comments/comment', :collection => @album.comments %>
+</a>
+<span id='more_comments_links'>
+  <%#= more_comments_links(@album) %>
+</span>

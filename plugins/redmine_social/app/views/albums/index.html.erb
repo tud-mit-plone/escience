@@ -1,0 +1,10 @@
+
+<h3><%= "#{l(:album)}"%></h3>
+<% @albums.each do |album| %>
+  <%next if album.nil?%>
+  <frameset>
+    <%unless album.title.empty?%>
+      <p><%=album.title%></p>
+    <%end%>
+</frameset>
+<%end%>

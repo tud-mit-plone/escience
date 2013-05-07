@@ -12,7 +12,8 @@ class CreatePhotos < ActiveRecord::Migration
       t.column "parent_id",  :integer 
       t.column "thumbnail", :string      
       t.column "width", :integer  
-      t.column "height", :integer      
+      t.column "height", :integer
+      t.integer :comments_count
     end
     add_column "users", "avatar_id", :integer
   end

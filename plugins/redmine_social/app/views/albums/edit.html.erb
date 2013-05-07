@@ -1,0 +1,20 @@
+<div class='yui'>
+  <frameset>
+    <h3>Tips</h3>
+      <p>
+      <%= l(:album_tip) :community_name => configatron.community_name %>
+      </p>
+  </frameset>
+</div>
+<div class = 'alt'>
+    <%= link_to l(:back_to_photo_manager), user_photo_manager_index_path(current_user) %>
+<div>
+<div id='yui'>-main</div>
+<div class='yui'>
+  <div id = "single_upload", class = ".yui-b" >
+      <h3><%= l(:new_album) %></h3>
+      <%= form_for(@album, :url => user_album_path(current_user, @album),:html => {:class => "MainForm"}) do |f|   %>
+        <%= render :partial => 'form', :locals => {:f => f, :button1 => l(:edit_and_add_photos), :button2 => l(:edit_album) } %>
+      <%end%>
+</div>
+</div>

@@ -1,0 +1,46 @@
+<%= link_to "&raquo; ".html_safe + l(:back_to_my_photos), user_photos_path(@user) %>
+
+ <div class='yui'>
+      <h3><%= l(:new_photo) %></h3>
+</div>
+<%= error_messages_for @photo %>
+<%= form_for(@photo, :url => user_photos_path(:user_id => User.current.id, :album_id => params[:album_id]), 
+                         :html => {:multipart =>true, :class => "MainForm"} ) do |f| %>
+  <%= f.file_field :photo %>
+  <label>
+    <em><%#= " " + l(:megabyte_upload_limit, :count => "10") %></em>
+  </label>
+  <label><%= l(:title) + ":" %><br />
+    <%= f.text_field :name, :size => 35 %>
+  </label>
+
+  <label>
+    <%= l(:tags) %><br /> 
+    <em>
+        <%= "(#{l(:optional_keywords_describing_this_photo_separated_by_commas)})" %>
+        <%= text_field_tag 'tag_list', @photo.tag_list, {:autocomplete => "off", :size => 35} %>
+    </em>
+  </label>
+
+  <div "id='tag_list_auto_complete'" "class='auto_complete'">
+  <%#content_for :end_javascript do %>
+    <%#= auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+  <%#end%>
+  </div>
+
+  <label><%= l(:description) + ":" %><br /> 
+    <%= f.text_area :description, :size => "58x5" %>
+  </label>
+
+  <% unless params[:album_id] || User.current.albums.empty? %>
+  <label>
+    <%= l(:assign_album) + ":" %>
+    <%= select_tag 'album_selected', options_for_select([''] +User.current.albums.collect{ |album| [album.title, album.id] }) %>
+  </label>
+  <%end%>
+  <p>
+    <%= submit_tag l(:create) %>
+    <%#= link_to l(:cancel_and_go_back_to_photo_manager), user_photo_manager_index_path(User.current) %>
+  </p>
+  <%end%>
+

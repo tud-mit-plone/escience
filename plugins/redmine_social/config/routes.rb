@@ -2,7 +2,9 @@ RedmineApp::Application.routes.draw do
   
 
 # automatic insertion for ads model
-  resources :ads
+  resources :ads 
+# automatic insertion for photo_manager model
+    resources :photo_manager
 # automatic insertion for friendship model
     get '/friendships.xml' => 'friendships#index', :as => :friendships_xml, :format => 'xml'
     get '/friendships' => 'friendships#index', :as => :friendships
@@ -43,4 +45,15 @@ RedmineApp::Application.routes.draw do
 		end
 	  end
     end
+
+    controller :comments do 
+      post '/comments/create', :action => :create_general_comment, :as => 'create_general_comments'
+    end
+    resources :photos do
+      post 'add_comment', :action => :add_comment
+    end
+    resources :albums do
+      get 'show', :action => :show 
+    end
 end
+

@@ -1,15 +1,15 @@
 require 'pp'
 
-class PhotosController < ApplicationController
+class PhotosController < ApplicationSocialController
   unloadable
-  include Viewable  
+  #include Viewable  
   before_filter :require_login, :only => [:new, :edit, :update, :destroy, :create, :swfupload]
   before_filter :find_user, :only => [:new, :edit, :index, :show]
 
-  cache_sweeper :taggable_sweeper, :only => [:create, :update, :destroy]    
+  #cache_sweeper :taggable_sweeper, :only => [:create, :update, :destroy]    
 
   def recent
-    @photos = Photo.recent.page(params[:page])
+    @photos = Photo.recent.paginate(:page => params[:page])
   end
   
   def index
@@ -20,7 +20,7 @@ class PhotosController < ApplicationController
       @photos = @photos.where('tags.name = ?', params[:tag_name])
     end
     
-    @photos = @photos.recent.page(params[:page]).per(20)
+    @photos = @photos.recent.paginate(:page => params[:page], :per_page => 20)
   
     @tags = Photo.includes(:taggings).where(:user_id => @user.id).tag_counts(:limit => 20)
   
@@ -44,8 +44,8 @@ class PhotosController < ApplicationController
 
   def manage_photos
     if logged_in?
-      @user = current_user      
-      @photos = current_user.photos.recent.includes(:tags)      
+      @user = User.current      
+      @photos = User.current.photos.recent.includes(:tags)      
       if params[:tag_name]
         @photos = @photos.where('tags.name = ?', params[:tag_name])
       end
@@ -61,10 +61,10 @@ class PhotosController < ApplicationController
   # GET /photos/1.xml
   def show
     @photo = @user.photos.find(params[:id])
-    update_view_count(@photo) if current_user && current_user.id != @photo.user_id
+    update_view_count(@photo) if User.current && User.current.id != @photo.user_id
     
-    @is_current_user = @user.eql?(current_user)
-    @comment = Comment.new(params[:comment])
+    @is_current_user = @user.eql?(User.current)
+    @comments = @photo.comments 
 
     @previous = @photo.previous_photo
     @next = @photo.next_photo
@@ -94,7 +94,7 @@ class PhotosController < ApplicationController
   # POST /photos
   # POST /photos.xml
   def create
-    @user = current_user
+    @user = User.current
     @photo = Photo.new(params[:photo])
     @photo.user = @user
     @photo.tag_list = params[:tag_list] || ''
@@ -105,12 +105,12 @@ class PhotosController < ApplicationController
 
     respond_to do |format|
       if @photo.save
-        flash[:notice] = :photo_was_successfully_created.l
+        flash[:notice] = l(:photo_was_successfully_created)
 
         format.html {      
           render :action => 'inline_new', :layout => false and return if params[:inline]
           if params[:album_id]
-            redirect_to user_album_path(current_user,params[:album_id])
+            redirect_to user_album_path(User.current,params[:album_id])
           else  
             redirect_to user_photo_url(:id => @photo, :user_id => @photo.user)
           end
@@ -130,7 +130,7 @@ class PhotosController < ApplicationController
         format.js {
           responds_to_parent do
             render :update do |page|
-              page.alert(:sorry_there_was_an_error_uploading_the_photo.l)
+              page.alert(l(:sorry_there_was_an_error_uploading_the_photo))
             end
           end
         }
@@ -156,6 +156,21 @@ class PhotosController < ApplicationController
     end
   end
 
+  def add_comment
+    @photo = Photo.find(params[:photo_id])
+    @comment = Comment.new(params[:comment])
+    @comment.author = User.current
+    if @photo.comments << @comment
+      flash[:notice] = l(:label_comment_added)
+      respond_to do |format| 
+        format.html {redirect_to :action => 'show', :id => @photo, :user_id => @photo.user}
+      end
+    else
+      respond_to do |format| 
+        format.html {render :action => 'show'} 
+      end
+    end
+  end
 
   # DELETE /photos/1
   # DELETE /photos/1.xml
