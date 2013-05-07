@@ -1,4 +1,6 @@
 <% user = friendship.friend %>
+<tr>
+<td>
 <fieldset>
   <legend>
     <%= (!user.salutation.empty?) ? l("field_salutation_vals.#{user.salutation}")+" " : "" %>
@@ -9,6 +11,8 @@
   <p>seit <%= time_ago_in_words friendship.created_on %> in Kontakt</p>
 <div class='yui'><%= friendship_control_links(friendship) if @is_current_user%></div>
 </fieldset>
+</td>
+</tr>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'user_message' %>

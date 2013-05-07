@@ -18,8 +18,11 @@ class Friendship < ActiveRecord::Base
   
   # named scopes
   scope :accepted, lambda {
-    #hack: prevents FriendshipStatus[:accepted] from getting called before the friendship_status records are in the db (only matters in testing ENV)
-    {:conditions => ["friendship_status_id = ?", FriendshipStatus[:accepted].id]    }
+    {
+      :joins => ',users',
+      :conditions => ["friendship_status_id = ? AND friend_id = users.id", FriendshipStatus[:accepted].id],
+      :order => 'users.lastname ASC'
+    }
   }
   
   def cannot_request_if_daily_limit_reached  

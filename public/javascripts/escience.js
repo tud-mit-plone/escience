@@ -1,8 +1,8 @@
 $(document).ready(function() {
 	$(window).resize(checkDockNav);
 	$(window).scroll(checkDockNav);
-  $.fn.qtip.styles.eScience = { // Last part is the name of the style
-     background: '#AAE06F',
+  $.fn.qtip.styles.eScience = {
+     background: '#c7da9c',
      color: 'black',
      textAlign: 'block',
      border: {
@@ -10,11 +10,11 @@ $(document).ready(function() {
         radius: 2,
         color: '#7DB414'
      },
-     tip: { // Now an object instead of a string
+     tip: {
        color: '#7DB414',
        size: {
-          x: 8, // Be careful that the x and y values refer to coordinates on screen, not height or width.
-          y : 8 // Depending on which corner your tooltip is at, x and y could mean either height or width!
+          x: 8,
+          y : 8
        }
      }
   }

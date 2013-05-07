@@ -2,12 +2,21 @@
   <%= render :partial => 'users/profile_user_info_sidebar'%>
 <%end%>
 
-<h1>
-  <%= l(:friendships)+" (#{@friend_count})"%>
-</h1>
+<h1 style="float: left"><%= l(:friendships)+" (#{@friend_count})"%></h1>
+<div style="float: right"><%= l(:label_search) %>: <input type="text" id="search"></div>
+<div class="clear"></div>
 <% pending_text = @pending_friendships_count > 1 ? l(:pending_friendships) : l(:pending_friendship) %>
 <%= link_to "(#{@pending_friendships_count} "+pending_text+")", pending_user_friendships_path(@user) if  (@pending_friendships_count > 0)%>
 <%= will_paginate @friendships %>
 <div class="user_list"> 
-  <%= render :partial => "friendships/friendship", :collection => @friendships%>
+  <table width="100%">
+      <tbody>
+        <%= render :partial => "friendships/friendship", :collection => @friendships%>
+      </tbody>
+  </table>
 </div>
+<%= javascript_tag "$('input#search').quicksearch('table tr');" %>
+
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'jquery.quicksearch.js', :plugin => 'redmine_social' %>
+<% end %>

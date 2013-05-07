@@ -46,7 +46,6 @@ class AppointmentsController < ApplicationController
     params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if (due_date && due_date != "00:00")
     params[:appointment][:start_date] += " " + params[:appointment][:start_time]
     params[:appointment][:due_date] += " " + params[:appointment][:due_time] if (due_date && due_date != "00:00")
-    p params[:appointment][:due_date]
     params[:appointment].delete(:start_time)
     params[:appointment].delete(:due_time)
     @referer = params[:referer]
