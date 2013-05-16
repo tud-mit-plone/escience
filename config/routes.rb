@@ -101,6 +101,7 @@ RedmineApp::Application.routes.draw do
       post 'unarchive'
       post 'close'
       post 'reopen'
+      post 'add_attachment'
       match 'copy', :via => [:get, :post]
     end
 

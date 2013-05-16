@@ -115,7 +115,13 @@
 <% end %>
 <%= call_hook(:view_projects_show_left, :project => @project) %>
 
-<%= render :partial => 'attachments/form' %>
+<fieldset>
+  <legend>Dokumente</legend>
+  <div id="attachments" style="margin-bottom:10px;"><%= link_to_attachments @project %></div>
+  <%= form_tag({:action => 'add_attachment', :id => @project}, :remote => true, :id=>"attachments_form", :multipart => true) do %>
+    <div id="content_of_form"><%= render :partial => 'attachments/form' %></div>
+  <% end %>
+</fieldset>
 
 <% unless session[:current_view_of_eScience] == "0" %>
   <%= render :partial => 'members_box' %>
@@ -144,5 +150,6 @@
   <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :id => @project, :format => 'atom', :key => User.current.rss_key}) %>
   <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
   <%= stylesheet_link_tag 'ckeditor/editor' %>
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>
 <% end %>
 <% html_title(l(:label_overview)) -%>

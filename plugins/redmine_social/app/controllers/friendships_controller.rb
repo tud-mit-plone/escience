@@ -8,9 +8,8 @@ class FriendshipsController < ApplicationSocialController
     @body_class = 'friendships-browser'
     
     @user = User.current
-    @friendships = Friendship.find(:all, :conditions => ['user_id = ? OR friend_id = ?', @user.id, @user.id], :limit => 40)
-    @users = User.find(:all, :conditions => ['users.id in (?)', @friendships.collect{|f| f.friend_id }],:order => "users.name DESC")    
-    
+    @friendships = Friendship.find(:all, :conditions => ['user_id = ? OR friend_id = ?', @user.id, @user.id])
+    @users = User.find(:all, :conditions => ['users.id in (?)', @friendships.collect{|f| f.friend_id }],:order => "users.name DESC")
     respond_to do |format|
       format.html 
       format.xml { render :action => 'index.rxml', :layout => false}    
@@ -78,7 +77,7 @@ class FriendshipsController < ApplicationSocialController
     @user = User.find(params[:user_id])    
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
-    @friendships = @user.friendships.accepted.paginate(:page => params[:page], :per_page => 20)
+    @friendships = @user.friendships.accepted
     
     respond_to do |format|
       format.html

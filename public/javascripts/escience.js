@@ -2,23 +2,31 @@ $(document).ready(function() {
 	$(window).resize(checkDockNav);
 	$(window).scroll(checkDockNav);
   $.fn.qtip.styles.eScience = {
-     background: '#c7da9c',
-     color: 'black',
-     textAlign: 'block',
-     border: {
-        width: 2,
-        radius: 2,
-        color: '#7DB414'
-     },
-     tip: {
-       color: '#7DB414',
-       size: {
-          x: 8,
-          y : 8
-       }
-     }
+    background: '#c7da9c',
+    color: 'black',
+    textAlign: 'block',
+    border: {width: 2, radius: 2, color: '#7DB414'},
+    tip: {color: '#7DB414', size: {x: 8, y : 8}}
   }
 });
+
+function upload_attachment() {
+  $('#attachments_form').ajaxSubmit({
+    beforeSubmit: function(a,f,o) {o.dataType = 'json';},
+    complete: function(XMLHttpRequest, textStatus) {
+      eval(XMLHttpRequest.responseText);
+    }
+  });
+}
+
+function updateDraggableMessages() {
+  $('.draggable').draggable({
+    cursor: 'alias', 
+    revert: 'invalid',
+    cursorAt: { top: 5, left: 5 },
+    helper: function( event ) {return $("<div class='mail_icon\'></div>");}
+  });
+}
 
 function checkDockNav() {
 	if ($(window).scrollTop() > 165) {

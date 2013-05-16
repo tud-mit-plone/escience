@@ -4,3 +4,73 @@
  *= require lightbox
  *= require prototip 
 */
+#right td div {
+  cursor: alias;
+}
+
+.dataTable {
+  margin: -5px 0px 8px 5px;
+  width: 150px;
+}
+
+.dataTable td {
+  border-bottom: solid 1px #dadada;
+}
+
+.dataTables_filter input {
+  width: 150px
+}
+
+.dataTables_paginate a {
+  display: inline-block;
+}
+
+.draggable:hover {
+  color: #B61634; 
+}
+
+.dataTables_info {
+  font-size: 10px;
+  text-align: center;
+}
+
+.dataTables_paginate.paging_two_button {
+  height: 8px;
+}
+
+.dataTables_paginate.paging_two_button a {
+  display: block;
+  margin-top: -14px;
+  padding: 0 7px;
+  cursor: pointer;
+}
+
+.paginate_disabled_next {
+  float: right;
+  color: #D8D8D8 !important;
+  cursor: default !important;
+}
+
+.paginate_disabled_previous {
+  float: left;
+  color: #D8D8D8 !important;
+  cursor: default !important;
+}
+
+.paginate_enabled_next {
+  float: right;
+}
+
+.paginate_enabled_previous {
+  float: left;
+}
+
+.collapsable.collapsed {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collapsable.collapsed legend {
+  font-size: 12px;
+}

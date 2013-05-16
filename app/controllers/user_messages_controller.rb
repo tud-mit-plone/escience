@@ -8,6 +8,14 @@ class UserMessagesController < ApplicationController
   # GET /user_messages
   # GET /user_messages.xml
   def index
+    get_directory_and_messages()
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @user_messages }
+    end
+  end
+
+  def get_directory_and_messages 
     dir = "received"
     if !params[:directory].nil?
       dir = case params[:directory]
@@ -25,11 +33,6 @@ class UserMessagesController < ApplicationController
       @user_messages << msgs
     else
       @user_messages = msgs
-    end
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @user_messages }
     end
   end
 
@@ -210,9 +213,14 @@ class UserMessagesController < ApplicationController
       @user_message.directory = UserMessage.trash_directory
       @user_message.save
     end
-
+    get_directory_and_messages()
+    
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_delete_done)) }
+      format.json  {
+        self.formats = [:html]
+        render :partial => 'list_of_messages'
+      }
       format.xml  { head :ok }
     end
   end
@@ -225,7 +233,8 @@ class UserMessagesController < ApplicationController
     end
     @user_message.save
     #@user_message.destroy
-
+    get_directory_and_messages()
+    
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_archive_done)) }
       format.xml  { head :ok }

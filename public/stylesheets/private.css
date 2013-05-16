@@ -402,6 +402,16 @@ select#membership_project_id {
 	  margin-left: 30px;
 	}
 
+	.controller-friendships .user_information_main label {
+	 width: 55px;
+	 display: inline-block;
+  }
+  
+  .controller-friendships ul {
+    padding-left: 0;
+    margin-left: 0;
+  }
+  
 	.controller-projects.action-show #subprojects {
   	margin-top: 10px;
   	font-size: 16px;
@@ -538,8 +548,8 @@ select#values_project_id_1 {
 
 #attachments_fields .editfilename input.userinput {
   float: left;
-  width: 83%;
-  padding: 5px;
+  width: 88%;
+  padding: 5px 0px;
   z-index: 10;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -633,14 +643,16 @@ select#values_project_id_1 {
 }
 
 div.add_attachment {
+  float: left;
   display: block;
-  margin-left:25px;
+  margin-left:20px;
   background-color: #7DB414;
   color: #ffffff;
   width: 60px;
-  height: 30px;
+  height: 25px;
   text-align: center;
   margin-top: -25px;
+  margin-bottom: 10px;
   background-image: url(../images/plus.png);
   background-repeat: no-repeat;
   background-position: 50% 40%;
@@ -654,6 +666,11 @@ div.add_attachment {
 div .add_attachment:hover {
   text-decoration: none;
   background-color: #E9E9E9;
+}
+
+.fileselected.collapsed {
+  border: none;
+  padding: 0px 5px;
 }
 
 
@@ -1054,7 +1071,7 @@ ul.bc_submenu li {
 
 #change_avatar {
   position:absolute;
-  top:500px;
+  top:150px;
   left:50%;
   width:500px; 
   height:400px; 
@@ -1088,4 +1105,69 @@ ul.bc_submenu li {
   -khtml-border-radius: 8px;
   border-radius: 8px;
   border: 1px solid #DBDBDB
+}
+
+#main fieldset .innerInfo.collapsed {
+  height: 0px;
+  overflow: hidden;
+  transition: height .5s, padding .3s, margin .5s;
+  -moz-transition: height .5s, padding .3s, margin .5s;
+  -webkit-transition: height .5s, padding .3s, margin .5s;
+  -o-transition: height .5s, padding .3s, margin .5s;
+  transition-delay: .5s;
+  -moz-transition-delay: .5s;
+  -webkit-transition-delay: .5s;
+  -o-transition-delay: .5s;
+}
+
+#main fieldset .innerInfo.open {
+  height: auto;
+}
+
+#main fieldset .tools {
+  right: 0px;
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  transition: width 1s;
+  -moz-transition: width 1s;
+  -webkit-transition: width 1s;
+  -o-transition: width 1s;
+  transition-delay: .5s;
+  -moz-transition-delay: .5s;
+  -webkit-transition-delay: .5s;
+  -o-transition-delay: .5s;  
+  background-color: #EAEAEA;
+  -moz-border-radius: 0 5px 5px 0px;
+  -webkit-border-radius: 0 5px 5px 0px;
+  -khtml-border-radius: 0 5px 5px 0px;
+  border-radius: 0 5px 5px 0px;
+}
+
+#main fieldset.collapsed .tools, #main fieldset.has_collapsed .tools {
+  width: 0px;
+}
+
+#main fieldset.has_collapsed:hover {
+  background: #F5F5F5;  
+}
+
+#main fieldset.collapsed:hover .tools, #main fieldset.has_collapsed:hover .tools {
+  width: 25px;
+}
+
+#main fieldset .tools div {
+  border-bottom: solid 2px #E0E0E0;
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+#main fieldset .tools div img {
+  padding: 5px;
+}
+
+#main fieldset:hover .tools div:hover {
+  background-color: #E0E0E0;
 }

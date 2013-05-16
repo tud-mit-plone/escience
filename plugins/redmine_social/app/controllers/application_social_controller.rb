@@ -1,17 +1,18 @@
 class ApplicationSocialController < ApplicationController
   unloadable
   def find_user
-      if @user = User.active.find(params[:user_id] || params[:id])
+      @user = User.current
+      unless @user.anonymous?
         @is_current_user = (@user && @user.eql?(User.current))
         unless User.current.logged? || @user.profile_public?
-          flash[:error] = :private_user_profile_message.l
+          flash[:error] = l(:private_user_profile_message)
           access_denied 
         else
           return @user
         end
       else
-        flash[:error] = :please_log_in.l
-        access_denied
+        flash[:error] = l(:please_log_in)
+        redirect_to :controller => "welcome", :action => "index", :back_url => url_for(params)
       end
     end
   

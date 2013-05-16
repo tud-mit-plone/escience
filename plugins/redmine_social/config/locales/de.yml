@@ -49,6 +49,9 @@ de:
     attributes:
       photo:
         created_at: "erstellt am: "
+  please_wait: "Bitte warten..."
+  no_entries: "Keine Einträge vorhanden."
+  entry_info: "_START_ bis _END_ von _TOTAL_ Einträgen"
   greeting: "Hallo %{name}"
   #en: a_few_seconds_ago:  a few seconds ago
   a_few_seconds_ago:  vor ein paar Sekunden
@@ -280,6 +283,7 @@ de:
   compose_messages: Nachrichten verfassen
   #en: confirm_password: Confirm Password
   confirm_password: Kennwort bestätigen
+  contact_list: Kontaktliste
   #en: country: Country
   country: Land
   #en: create: Create
@@ -456,6 +460,7 @@ de:
   female: Weiblich
   #en: filename: Filename
   filename: Dateiname
+  filter: "Einschränken"
   #en: find_an_expert: Find an Expert
   find_an_expert: Finde einen Experten
   #en: find_an_expert_in: Find an Expert in

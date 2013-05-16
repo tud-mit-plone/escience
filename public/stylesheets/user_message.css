@@ -12,15 +12,19 @@
   background-color: #FAFAFA;
   padding: 10px 20px;
   margin-bottom: 5px;
-  width: 510px;
+  width: 513px;
 }
 
-.user_message:hover {
-  background-color: #F4F4F4;
+.ui-droppable-hover {
+  background-color: #B61634;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
 }
 
-.link_to_message.selected .user_message {
-  background-color: rgba(125,181,21,0.3) !important;
+.ui-droppable-hover a {
+  color: #fff;
 }
 
 .user_message.unread {
@@ -51,14 +55,37 @@
   background-image: -o-linear-gradient(left, rgba(201,227,189,0.5) 2%, #F4F4F4 2%);
 }
 
+.mail_icon {
+  width: 30px;
+  height: 20px;
+  background: url(../images/new_message.png) center center no-repeat;
+}
 
 a.link_to_message {
   text-decoration: none;
   color: #707070;
 }
 
-.user_message, .user_message_links {
+.user_message {
   float: left;
+}
+
+.user_message_links {
+  float: right;
+  width: 0px;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s;
+  -webkit-transition: width 0.5s;
+  -o-transition: width 0.5s;
+  overflow: hidden;
+}
+
+.link_to_message:hover .user_message {
+  background-color: #F4F4F4;
+}
+
+.link_to_message.selected .user_message_links, .link_to_message:hover .user_message_links {
+  width: 26px;
 }
 
 .user_message .author {
@@ -82,6 +109,14 @@ a.link_to_message {
   max-height: 26px;
   overflow: hidden;
   color: #9d9d9d;
+  transition: max-height 1s ease-in-out;
+  -moz-transition: max-height 1s ease-in-out;
+  -webkit-transition: max-height 1s ease-in-out;
+  -o-transition: max-height 1s ease-in-out; 
+}
+
+.link_to_message.selected .user_message .message {
+  max-height: 500px;
 }
 
 .user_message_links {

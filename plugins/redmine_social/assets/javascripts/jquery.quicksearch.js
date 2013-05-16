@@ -118,7 +118,6 @@
 			if (typeof options.loader === "string" && options.loader !== "") {
 				 (bool) ? $(options.loader).show() : $(options.loader).hide();
 			}
-			return this;
 		};
 		
 		this.cache = function () {

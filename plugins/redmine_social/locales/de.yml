@@ -1,4 +1,4 @@
-de-DE:
+de:
   authorizations:
     create:
       success_existing_user: "Erfolgreich %{provider} Anmeldung hinzugefügt."
@@ -280,6 +280,7 @@ de-DE:
   compose_messages: Nachrichten verfassen
   #en: confirm_password: Confirm Password
   confirm_password: Kennwort bestätigen
+  contact_list: Kontaktliste
   #en: country: Country
   country: Land
   #en: create: Create
@@ -456,6 +457,7 @@ de-DE:
   female: Weiblich
   #en: filename: Filename
   filename: Dateiname
+  filter: "Einschränken"
   #en: find_an_expert: Find an Expert
   find_an_expert: Finde einen Experten
   #en: find_an_expert_in: Find an Expert in

@@ -20,8 +20,9 @@ require "digest/md5"
 class Attachment < ActiveRecord::Base
   belongs_to :container, :polymorphic => true
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
+  has_many :meta_information, :foreign_key => :attachment_id
 
-  validates_presence_of :filename, :author
+  validates_presence_of :filename, :author, :meta_information
   validates_length_of :filename, :maximum => 255
   validates_length_of :disk_filename, :maximum => 255
   validates_length_of :description, :maximum => 255
@@ -242,26 +243,24 @@ class Attachment < ActiveRecord::Base
     for count in 1..len
       next if attachments.nil?
       next if attachments[count.to_s].nil?
-      next if attachments[count.to_s]["meta_information"].nil? || attachments[count.to_s]["meta_information"] == ''
+#      next if attachments[count.to_s]["meta_information"].nil? || attachments[count.to_s]["meta_information"] == ''
       saveable[count.to_s] = attachments[count.to_s]
     end
 
     result = obj.save_attachments(saveable, User.current)
     obj.attach_saved_attachments
 
-    result[:files].each_with_index do |att,count|
-      
-
-      result[:meta_informations].each do |tags|
-        JSON.parse(tags).each do |tag|
-          meta = MetaInformation.new
-          meta.meta_information = tag
-          meta.attachment = att
-          meta.user = User.current
-          meta.save!
-        end
-      end
-    end if !(result[:files].nil?)
+#    result[:files].each_with_index do |att,count|
+#      result[:meta_informations].each do |tags|
+#       JSON.parse(tags).each do |tag|
+#          meta = MetaInformation.new
+#          meta.meta_information = tag
+#          meta.attachment = att
+#          meta.user = User.current
+#          meta.save!
+#        end
+#      end
+#    end if !(result[:files].nil?)
 
     return result
   end

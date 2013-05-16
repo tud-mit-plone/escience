@@ -24,7 +24,6 @@ module AttachmentsHelper
   #   :thumbails -- display thumbnails if enabled in settings
   def link_to_attachments(container, options = {})
     options.assert_valid_keys(:author, :thumbnails)
-
     if container.attachments.any?
       options = {:deletable => container.attachments_deletable?, :author => true}.merge(options)
       render :partial => 'attachments/links',

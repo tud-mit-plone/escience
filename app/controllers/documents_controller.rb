@@ -58,7 +58,16 @@ class DocumentsController < ApplicationController
     if @document.save
       render_attachment_warning_if_needed(@document)
       flash[:notice] = l(:notice_successful_create)
-      redirect_to :action => 'index', :project_id => @project
+      respond_to do |format|
+        format.html {
+          redirect_to :action => 'index', :project_id => @project
+        }
+        format.js {
+          @id = 'add_attachments'
+          @content = render :partial => 'attachments/form'
+          render :partial => 'update'
+        }
+      end
     else
       render :action => 'new'
     end

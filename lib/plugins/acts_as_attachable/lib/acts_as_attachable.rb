@@ -63,8 +63,22 @@ module Redmine
         def saved_meta_informations
           @saved_meta_informations ||=[]
         end
+        
+        def get_meta_informations(meta_informations)
+          return [] if meta_informations.empty?
+          collection_of_meta = []
+          JSON.parse(meta_informations).each do |tag|
+            meta = MetaInformation.new
+            meta.meta_information = tag
+            meta.user = User.current
+            meta.save!
+            collection_of_meta << meta
+          end
+          return collection_of_meta
+        end
 
         def save_attachments(attachments, author=User.current)
+          errormsgs = []
           if attachments.is_a?(Hash)
             attachments = attachments.values
           end
@@ -84,7 +98,11 @@ module Redmine
               a.description = attachment['description'].to_s.strip
               unless attachment['newname'].nil?
                 a.filename = attachment['newname']
-                a.save!
+                a.meta_information << get_meta_informations(attachment["meta_information"].to_s.strip)
+                unless a.save
+#                  errormsgs << a.errors.full_messages
+                   errormsgs << a.errors.messages
+                end
               end
               if a.new_record?
                 unsaved_attachments << a
@@ -94,7 +112,7 @@ module Redmine
               end
             end
           end
-          {:files => saved_attachments, :unsaved => unsaved_attachments, :meta_informations => saved_meta_informations}
+          {:files => saved_attachments, :unsaved => unsaved_attachments, :meta_informations => saved_meta_informations, :errors => errormsgs}
         end
 
         def attach_saved_attachments

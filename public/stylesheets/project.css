@@ -26,19 +26,6 @@
   padding: 0px;
 }
 
-#main fieldset .innerInfo.collapsed {
-  height: 0px;
-  overflow: hidden;
-  transition: height .5s, padding .3s, margin .5s;
-  -moz-transition: height .5s, padding .3s, margin .5s;
-  -webkit-transition: height .5s, padding .3s, margin .5s;
-  -o-transition: height .5s, padding .3s, margin .5s;
-  transition-delay: .5s;
-  -moz-transition-delay: .5s;
-  -webkit-transition-delay: .5s;
-  -o-transition-delay: .5s;
-}
-
 #main fieldset .list.issues .text p {
   margin-bottom: 5px;
 }
@@ -51,58 +38,6 @@
 
 #main fieldset .list.issues .text .description {
   padding-right: 20px;
-}
-
-#main fieldset .innerInfo.open {
-  height: auto;
-}
-
-#main fieldset .tools {
-  right: 0px;
-  position: absolute;
-  height: 100%;
-  overflow: hidden;
-  display: block;
-  transition: width 1s;
-  -moz-transition: width 1s;
-  -webkit-transition: width 1s;
-  -o-transition: width 1s;
-  transition-delay: .5s;
-  -moz-transition-delay: .5s;
-  -webkit-transition-delay: .5s;
-  -o-transition-delay: .5s;  
-  background-color: #EAEAEA;
-  -moz-border-radius: 0 5px 5px 0px;
-  -webkit-border-radius: 0 5px 5px 0px;
-  -khtml-border-radius: 0 5px 5px 0px;
-  border-radius: 0 5px 5px 0px;
-}
-
-#main fieldset.collapsed .tools, #main fieldset.has_collapsed .tools {
-  width: 0px;
-}
-
-#main fieldset.has_collapsed:hover {
-  background: #F5F5F5;  
-}
-
-#main fieldset.collapsed:hover .tools, #main fieldset.has_collapsed:hover .tools {
-  width: 25px;
-}
-
-#main fieldset .tools div {
-  border-bottom: solid 2px #E0E0E0;
-  width: 25px;
-  height: 25px;
-  display: block;
-}
-
-#main fieldset .tools div img {
-  padding: 5px;
-}
-
-#main fieldset:hover .tools div:hover {
-  background-color: #E0E0E0;
 }
 
 #main fieldset .has_subproject {

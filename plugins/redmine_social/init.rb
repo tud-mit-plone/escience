@@ -43,8 +43,8 @@ Redmine::Plugin.register :redmine_social do
         },
         :path => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
         :url => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
-        'photo_missing_thumb' => '',
-        'photo_missing_medium' => '',
+        'photo_missing_thumb' => "avatar.png",
+        'photo_missing_medium' => "avatar.png",
     },
     :partial =>'settings/redmine_social'
 

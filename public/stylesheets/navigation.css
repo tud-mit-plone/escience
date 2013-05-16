@@ -232,7 +232,7 @@
 
 /* sidebar-definitions */
 .sidebar #sitespecivic {
-  padding: 5px 0; 
+  padding: 0 0 5px 0; 
 }
 
 .sidebar, .sidebar_nav {
@@ -295,10 +295,10 @@
 
 .sidebar li.active, .sidebar li:hover, .sidebar .selected, #sitespecivic a.icon-add:hover {
 	background-color:#DEDEDE;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
 	border: 0 solid;
-	border-radius:10px;
+	border-radius:6px;
 	color:#B61634;
 }
 

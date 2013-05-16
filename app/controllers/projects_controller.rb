@@ -21,7 +21,7 @@ class ProjectsController < ApplicationController
   menu_item :settings, :only => :settings
 
   before_filter :find_project, :except => [ :index, :list, :new, :create, :copy ]
-  before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy]
+  before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :add_attachment]
   before_filter :require_login, :only => [:show]
   before_filter :authorize_global, :only => [:new, :create]
   before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy ]
@@ -44,6 +44,7 @@ class ProjectsController < ApplicationController
   helper :repositories
   include RepositoriesHelper
   include ProjectsHelper
+  include AttachmentsHelper
   include ApplicationHelper
 
   # Lists visible projects
@@ -326,6 +327,30 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def add_attachment
+    attachments = Attachment.attach_files(@project, params[:attachments])
+#    p attachments[:errors]
+    errors = (attachments[:files].empty? && attachments[:unsaved].empty?) ? [l(:no_file_given)] : []
+    attachments[:errors].each do |error|
+      error.each do |k,v| 
+        errors << l(k) + " #{v.first}" if (k != :base)
+        errors << v.flatten if (k == :base)
+      end
+    end 
+    if errors.empty?
+      respond_to do |format|
+        format.js { render :partial => 'update_attachment'}
+      end
+    else
+      respond_to do |format|
+        format.json {
+          render :js => "$.notification({ message:'#{errors.join('\\n')}', type:'error' })";
+        }
+      end
+    end
+  end
+
+  
   def modules
     @project.enabled_module_names = params[:enabled_module_names]
     flash[:notice] = l(:notice_successful_update)

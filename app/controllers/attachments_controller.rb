@@ -103,7 +103,10 @@ class AttachmentsController < ApplicationController
     end
     # Make sure association callbacks are called
     @attachment.container.attachments.delete(@attachment)
-    redirect_to_referer_or project_path(@project)
+    respond_to do |format|
+      format.html {redirect_to_referer_or project_path(@project)}
+      format.js { render :partial => 'projects/update_attachment'}
+    end
   end
 
 private

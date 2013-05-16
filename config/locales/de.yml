@@ -115,6 +115,10 @@ de:
 
   activerecord:
     errors:
+      models:
+        attachment:
+          attributes:
+            meta_information: "Verschlagwortung"
       template:
         header:
           one:    "Dieses %{model}-Objekt konnte nicht gespeichert werden: %{count} Fehler."
@@ -148,6 +152,7 @@ de:
         cant_link_an_issue_with_a_descendant: "Eine Aufgabe kann nicht mit einer ihrer Unteraufgaben verlinkt werden"
 
   actionview_instancetag_blank_option: Bitte auswählen
+  meta_information: Verschlagwortung
 
   general_text_No: 'Nein'
   general_text_Yes: 'Ja'
@@ -212,7 +217,7 @@ de:
   error_projectname_exists: Der Projektname existiert bereits. Bitte wählen Sie einen anderen.
   error_projectname_tolong: Der Projektname ist zu lang. (Maximal 50 Zeichen.)
   error_project_crate: Es trat ein Fehler beim Erstellen des Projekts auf.
-  
+
   warning_attachments_not_saved: "%{count} Datei(en) konnten nicht gespeichert werden."
   warning_attachments_error: Datei(en) konnten nicht gespeichert werden.
 

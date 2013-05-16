@@ -72,6 +72,18 @@ function toggleFieldset(el) {
   fieldset.children('div').toggle('fast');
 }
 
+function toggleFieldsetCloseOthers(el) {
+  var fieldsets = $('fieldset.collapsable');
+  var fieldset = $(el).parents('fieldset').first();
+  var isactive = fieldset.hasClass('collapsed');
+  fieldsets.addClass('collapsed');
+  fieldsets.children('div').hide('fast');
+  if (isactive) {
+    $(fieldset).toggleClass('collapsed');
+    $(fieldset).find('div').show('fast');
+  }
+}
+
 function hideFieldset(el) {
   var fieldset = $(el).parents('fieldset').first();
   fieldset.toggleClass('collapsed');
