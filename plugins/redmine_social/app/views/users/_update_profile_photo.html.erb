@@ -1,3 +1,3 @@
-$('#avatar_img').attr('src','<%= @user.avatar.photo(:medium) %>')
+$('#avatar_img').attr('src','<%= @user.avatar.photo(:medium) if @user.avatar %>')
 $('#avatar_img').css({width:180, height:180}); 
 $('#change_avatar,.background_hider').fadeOut();

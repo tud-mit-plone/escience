@@ -75,25 +75,22 @@
         
         def crop_profile_photo
           @user = User.find(params[:id])
-          @avatar = Photo.new(params[:photo])
+          @avatar = @user.avatar ? @user.avatar : Photo.new(params[:photo]) 
+          @photo = @avatar
           unless params[:avatar_id].nil?
             @user.avatar_id  = params[:avatar_id]
             @user.save!
           end
-           unless @photo = @user.avatar
-             flash[:notice] = l(:no_profile_photo)
-             redirect_to upload_profile_photo_user_path(@user) and return
-           end
-           return unless request.put?
-           @photo.update_attributes(:crop_x => params[:photo][:crop_x], 
-                                                      :crop_y => params[:photo][:crop_y], 
-                                                      :crop_w => params[:photo][:crop_w], 
-                                                      :crop_h => params[:photo][:crop_h])
-            respond_to do |format|
-              format.html { redirect_to my_account_path }
-              format.js { render :partial => 'users/update_profile_photo' }
-            end
-         end
+          return unless request.put?
+          @photo.update_attributes(:crop_x => params[:photo][:crop_x], 
+                                                    :crop_y => params[:photo][:crop_y], 
+                                                    :crop_w => params[:photo][:crop_w], 
+                                                    :crop_h => params[:photo][:crop_h])
+          respond_to do |format|
+            format.html { redirect_to my_account_path }
+            format.js { render :partial => 'users/update_profile_photo' }
+          end
+        end
       end
       
       def self.included(receiver)

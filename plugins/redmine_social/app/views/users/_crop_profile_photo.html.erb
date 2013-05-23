@@ -1,10 +1,12 @@
+<% @avatar = @avatar ? @avatar : @user.avatar %>
+<% @photo = @photo ? @photo : @user.avatar %>
 <div class="background_hider" onclick="hide_change_avatar()"></div>
 <div id="change_avatar">
   <div class="change_avatar_background">
     <h1><%= l(:change_profile_photo) %></h1>
     
     <div class="alt first_alt" >
-      <%= form_for @avatar, :url => upload_profile_photo_user_path(@user), :remote => true, :multipart =>true, :html => {:id => 'upload_avatar_form'} do |form| %>
+      <%= form_for Photo.new, :url => upload_profile_photo_user_path(@user), :remote => true, :multipart =>true, :html => {:id => 'upload_avatar_form'} do |form| %>
         <label>
           <%= l(:choose_a_photo_for_your_profile) %>
           <%= form.file_field :photo, :id => 'uploadFile' %>
@@ -15,12 +17,10 @@
     <%if !@photo.nil? && Photo.file_exists?(@photo,:large) %>
       <h3 style="margin-bottom:4px;"><%= l(:profile_photo_crop) %></h3>
       <%= image_tag( @photo.photo.url(:original), :id => 'cropbox', :style=>"max-width:430px") %>
-      <%= hidden_field_tag( 'original_height', "#{@user.avatar.photo_geometry(:original).height}") %>
-      <%= hidden_field_tag( 'original_width', "#{@user.avatar.photo_geometry(:original).width}") %>
-      <%= hidden_field_tag( 'avatar_id', "#{@photo.id}") %>
-      <%#= error_messages_for @photo %>
-    
-      <%= form_for(:photo, :url => crop_profile_photo_user_path(@user), :remote => 'true', :method => :put, :html => { :id => "crop_form" }) do |f| %>
+      <%= hidden_field_tag( 'original_height', "#{@photo.photo_geometry(:original).height}") %>
+      <%= hidden_field_tag( 'original_width', "#{@photo.photo_geometry(:original).width}") %>
+      <%= form_for(@photo, :url => crop_profile_photo_user_path(@user), :remote => 'true', :method => :put, :html => { :id => "crop_form" }) do |f| %>
+        <%= hidden_field_tag( 'avatar_id', "#{@photo.id}") %>
         <% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>
           <%= f.hidden_field attribute, :id => attribute%>
         <%end%>
