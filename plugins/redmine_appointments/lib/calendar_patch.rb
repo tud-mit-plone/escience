@@ -4,7 +4,7 @@ module RedmineAppointmentExtension
   events = Proc.new {
     today = Date.today
     visible_issues = Issue.visible
-    amount = visible_issues ? Issue.find(:all, :conditions => ["((due_date = ?) OR (start_date = ?)) AND id IN (#{visible_issues.map {|e| e.id}.join(', ')})", today, today]).count : 0
+    amount = visible_issues.empty? ? 0 : Issue.find(:all, :conditions => ["((due_date = ?) OR (start_date = ?)) AND id IN (#{visible_issues.map {|e| e.id}.join(', ')})", today, today]).count
     amount += Appointment.getAllEventsWithCycle().count
     #.where('(start_date <= ? AND due_date >= ?) AND ((assigned_to_id IS NULL AND author_id=?) OR assigned_to_id=?)',Date.today.to_s,Date.today.to_s,User.current.id,User.current.id).count
 #    appointments = Appointment.getAllEventsWithCycle
