@@ -1,0 +1,12 @@
+<% content_for :sidebar_right do %>
+    <ul>
+     <li><%= link_to(l(:label_user_messages_new), {:action => "new"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'new'}") %></li>
+     <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'index'}") %></li>
+     <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
+     <li><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
+     <li><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
+    <% if !@user_messages.nil? && !@user_messages.empty? && @directory == "trash" %>
+      <li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
+    <% end %>
+    </ul>
+<% end %>
