@@ -55,5 +55,11 @@ RedmineApp::Application.routes.draw do
     resources :albums do
       get 'show', :action => :show 
     end
+    resources :group_invitations, :except => [:show, :new, :edit, :update] do 
+        member do 
+          post 'create', :action => :create 
+          post 'selection', :action => :selection
+        end
+    end
 end
 

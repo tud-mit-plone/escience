@@ -1,0 +1,15 @@
+<fieldset>
+<%= form_tag url_for(:controller => 'group_invitations', :action => 'selection', :id => invitation.id), :remote => true do%> 
+  <h2>
+    <%= l(:group_invitation_for) %>
+    <%= l("label_#{invitation.group.class.name.singularize.downcase}".to_sym) %><%= " #{invitation.group.name}" %>
+  </h2>
+  <% if invitation.friendship_status_id == FriendshipStatus["pending"].id %>
+    <%=submit_tag(l(:label_accept),:name => "true")%>
+    <%=submit_tag(l(:label_cancel),:name => "false")%>
+  <%else%>
+    <%=submit_tag(l(:label_accept),:name => "true",:disable_with => "pressed")%>
+    <%=submit_tag(l(:label_cancel),:name => "false")%>    
+  <%end%>
+<%end%>
+</fieldset>

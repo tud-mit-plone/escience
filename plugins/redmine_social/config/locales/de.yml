@@ -1378,3 +1378,9 @@ de:
 
   #en: zippostal_code: "ZIP/Postal code:"
   zippostal_code: "Postleitzahl:"
+  group_invitation_send_project_invitation: "lade ein"
+  group invitation: "Einladung"
+  group_invitation_one_sender_one_receiver_needed: "Es muss ein Empfänger angegeben werden"
+  group_invitation_for: "Einladung zum"
+  label_cancel: "Ablehnen"
+  label_accept: "Annehmen"

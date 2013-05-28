@@ -20,3 +20,9 @@
 </div>
 
 <%= render :partial => "user_message_side_menu"%>
+
+<%if @user_message.group_invitations.any? %>
+  <% @user_message.group_invitations.each do |inv| %>
+      <%= render :partial => "group_invitations/selection", :locals => {:invitation => inv} %>
+  <%end%>
+<%end%>

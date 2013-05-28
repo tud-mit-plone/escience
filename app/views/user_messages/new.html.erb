@@ -82,12 +82,4 @@
 	      ' %>
 <% end %>
 
-<% content_for :sidebar_right do %>
-  	<ul>
-  	 <li><%= link_to("Nachricht verfassen", {:action => "index"}, :class => 'selected') %></li>
-  	 <li><%= link_to("Posteingang", {:action => "index"}) %></li>
-  	 <li><%= link_to("Gesendet", {:directory => "sent"}) %></li>
-  	 <li><%= link_to("Archiv", {:directory => "archive"}) %></li>
-  	 <li><%= link_to("Papierkorb", {:directory => "trash"}) %></li>
-  	</ul>
-<% end %>
+<%= render :partial => "user_message_side_menu"%>
