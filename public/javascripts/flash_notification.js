@@ -9,7 +9,7 @@
     wrap_bar.click(function(){$.notification.removebar()});
     wrap_bar.append(message_span).insertBefore($('#container'));
     wrap_bar.hide();
-    wrap_bar.fadeIn(1000);
+    wrap_bar.fadeIn(700);
   };
 
   var timeout;
