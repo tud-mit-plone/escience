@@ -1,9 +1,14 @@
+<% if @attachment.nil? %>
  $('#attachments').html('<%= escape_javascript(link_to_attachments(@project)) %>');
-<% with_format('html') do %>
- $('#content_of_form').html('<%= escape_javascript(render :partial => 'attachments/form', :formats => [:html] )%>');
+<% else %>
+ if ($('#content_of_form'))
+   $('#content_of_form').html('<% self.formats = [:html] %><%= escape_javascript(render :partial => 'attachments/form', :formats => [:html] )%><% self.formats = [:js] %>');
+ else if ($('#attachments'))
+    console.log("din1");
+   $('#attachments').replaceWith('<% self.formats = [:html] %><%= escape_javascript(render :partial => 'attachments/links', :locals => {:attachments => @attachment.container.attachments, :options => {}}, :formats => [:html] )%><% self.formats = [:js] %>');
+<% end %>
  var label_meta_information_description = '<%= l(:label_meta_information_description) %>';
  jQuery(document).ready(function ($) {
    tagItForUs($(".meta_information"),label_meta_information_description,1);
    $(".userinput").keydown(function(event) {if (event.which == 13) return false;});
  });
-<% end %>

@@ -1,5 +1,5 @@
 <% javascriptString = "" %>
-<div class="attachments">
+<div class="attachments" id="attachments">
 <% attachments.each do |attachment| %>
   <div class="attachement">
     <% mimetype = Redmine::MimeType.main_mimetype_of(attachment.filename) 
@@ -15,7 +15,8 @@
                       :class => "delete", 
                       :title => l(:label_delete_file),
                       :data => {:confirm => l(:text_are_you_sure)}, 
-                      :method => :delete, :remote => true) if options[:deletable] %>
+                      :method => :delete, :remote => true) if attachment.author_id == User.current.id || User.current.admin? %>
+<%#                      :method => :delete, :remote => true) if options[:deletable] %>
     <% if attachment.is_text? %>
       <%= link_to image_tag('magnifier.png'),
                   :controller => 'attachments', :action => 'show',
