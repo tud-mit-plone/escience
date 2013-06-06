@@ -65,19 +65,11 @@
   <%= javascript_tag '
     $(function() {addToolTip_withTitle("#main fieldset .list.issues img.progress")});
     $(function() {addToolTip_withTitle("#main fieldset .list.issues a.closed", "top")});
-  '%>
+  ' %>
   <%= javascript_tag '
     $(document).ready(function() {
-      $(".list.issues .linkToIssue").each(function(){
-        var innerInfo = $(this).find(".innerInfo.collapsed");
-        $(this).hover(function(){
-          var height = innerInfo.height("auto").height();
-          innerInfo.height(height);
-        },
-        function() {
-          innerInfo.height(0);
-        });
-      });
+      $(".linkToIssue a.link_href").click(function(e) {$(this).parent().toggleClass("selected"); e.preventDefault();});
+      $(".linkToIssue a.link_href").dblclick(function() {self.location.href=$(this).attr("href");});
     });
   ' %>  
 <% end %>

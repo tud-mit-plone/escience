@@ -1,5 +1,5 @@
 <div class="linkToIssue<%= ' closed' if issue.closed?%>">
-  <%= link_to(h(truncate(issue.subject, :length => 60)),{:controller => 'issues', :action => 'show', :id => issue}, :class => "#{issue.closed? ? 'closed' : nil}", :title => "#{l(:label_closed_issues) if issue.closed?}") %>
+  <%= link_to(h(truncate(issue.subject, :length => 60)),{:controller => 'issues', :action => 'show', :id => issue}, :class => "link_href #{issue.closed? ? 'closed' : nil}", :title => "#{l(:label_closed_issues) if issue.closed?}") %>
   <div class="progress">
     <img src="/images/battery-<%= issue.closed? ? '110' : (roundup((issue.done_ratio/10).ceil*10)).to_s %>.png" class="progress" title="<%= issue.closed? ? l(:label_closed_issues) : issue.done_ratio.to_s + l(:field_done_ratio) %>" /><%= "#{issue.done_ratio}%" %>
   </div>
@@ -12,7 +12,7 @@
         <% end %>
         <% if User.current.allowed_to?(:delete_issues, project) %>
         <div class="settings_project">
-          <%= link_to(image_tag("/images/delete.png"), {:controller => 'issues', :method => 'destroy', :id => issue.id}, :confirm => self.l(:text_issue_destroy_confirmation).html_safe) %>
+          <%= link_to(image_tag("/images/delete.png"), {:controller => 'issues', :action => 'destroy', :id => issue.id},:method => 'delete', :confirm => self.l(:text_issue_destroy_confirmation).html_safe) %>
         </div>
         <% end %>
     </div>                 
