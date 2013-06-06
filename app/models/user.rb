@@ -600,6 +600,7 @@ class User < Principal
     'salutation',
     'title',
     'phone',
+    'confirm',
     'fax',
     'custom_field_values',
     'custom_fields',

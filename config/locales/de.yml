@@ -156,8 +156,7 @@ de:
 
   general_text_No: 'Nein'
   general_text_Yes: 'Ja'
-  general_text_no: 'nein'
-  general_text_yes: 'ja'
+  general_text_dialog: 'Rückfrage'
   general_lang_name: 'Deutsch'
   general_csv_separator: ';'
   general_csv_decimal_separator: ','
@@ -589,11 +588,11 @@ de:
   label_user_messages_archivebox: Archiv
   label_user_messages_deletebox: Papierkorb
   label_user_messages_reply: Nachricht beantworten
-  label_user_messages_emptytrash: Nachrichten entfernen
+  label_user_messages_emptytrash: Papierkorb leeren
   label_user_messages_delete: Nachricht löschen
-  label_user_messages_trash: gelöscht
-  label_user_messages_sent: gesendet
-  label_user_messages_archive: archiviert
+  label_user_messages_trash: Papierkorb
+  label_user_messages_sent: Gesendet
+  label_user_messages_archive: Archiv
   label_user_messages_receiver: Empfänger
   label_user_messages_subject: Thema
   label_user_messages_body: Inhalt (max 2000 Zeichen)
@@ -1229,9 +1228,9 @@ de:
   tooltip_project_message_public: Durch aktivieren dieser Option wird Ihr Projekt für jeden der Gemeinschaft sichbar.
 
   tooltip_user_message_archive: Archivieren Sie diese Nachricht.
-  tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Ordner <i>gelöscht</i> verschoben.)
+  tooltip_user_message_delete: Löschen Sie diese Nachricht. (Sie wird dabei in den Papierkorb verschoben.)
   tooltip_user_message_deleteFin: Löschen Sie diese Nachricht entgültig.
-  tooltip_user_message_emptyTrash: Leeren Sie den <i>gelöscht</i> Ordner. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
+  tooltip_user_message_emptyTrash: Leeren Sie den Papierkorb. Dabei werden alle Nachrichten in diesem Ordner endgültig entfernt.
   tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.
   tooltip_navbar_issues_count: "Sehen Sie die Aufgaben, die Ihnen in den einzelnen Projekt zugeordnet wurden."
   tooltip_and: und

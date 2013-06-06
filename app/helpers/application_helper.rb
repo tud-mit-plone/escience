@@ -23,7 +23,7 @@ require 'cgi'
 module ApplicationHelper
   include Redmine::WikiFormatting::Macros::Definitions
   include Redmine::I18n
-  include GravatarHelper::PublicMethods
+#  include GravatarHelper::PublicMethods
 
   extend Forwardable
   def_delegators :wiki_helper, :wikitoolbar_for, :heads_for_wiki_formatter
@@ -1598,6 +1598,9 @@ module ApplicationHelper
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
     tags = javascript_include_tag('jquery-1.7.2-ui-1.8.21-ujs-2.0.3', 'application')
+#    tags = javascript_include_tag("jquery-1.9.1.js")
+#    tags = javascript_include_tag("application")
+#    tags << javascript_include_tag("jquery-ui-1.10.3.min.js")
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.jbar.js")
     tags << "\n".html_safe
@@ -1610,6 +1613,7 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.event.drag-2.2.js")
     tags << javascript_include_tag("jquery.event.drop-2.2.js")
     tags << javascript_include_tag("jquery.roundabout-shapes.min.js")
+    tags << javascript_include_tag("jquery.confirm.js")
     tags << javascript_tag(flash_notifications)
 
     tags << "\n".html_safe

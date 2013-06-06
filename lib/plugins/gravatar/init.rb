@@ -1,2 +1,2 @@
-require 'gravatar'
-ActionView::Base.send :include, GravatarHelper::PublicMethods
+#require 'gravatar'
+#ActionView::Base.send :include, GravatarHelper::PublicMethods
