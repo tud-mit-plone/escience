@@ -202,8 +202,6 @@ class UserMessagesController < ApplicationController
     end
   end
 
-  # DELETE /user_messages/1
-  # DELETE /user_messages/1.xml
   def destroy
     @user_message = UserMessage.find(params[:id])
     if !params[:directory].nil? && params[:directory] == UserMessage.trash_directory
@@ -217,10 +215,7 @@ class UserMessagesController < ApplicationController
     
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_delete_done)) }
-      format.json  {
-        self.formats = [:html]
-        render :partial => 'list_of_messages'
-      }
+      format.js  { @update_messages = true; render :partial => 'update'}
       format.xml  { head :ok }
     end
   end
@@ -232,11 +227,11 @@ class UserMessagesController < ApplicationController
       @user_message.state = 0
     end
     @user_message.save
-    #@user_message.destroy
     get_directory_and_messages()
     
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_archive_done)) }
+      format.js  { @update_messages = true; render :partial => 'update'}
       format.xml  { head :ok }
     end
   end
