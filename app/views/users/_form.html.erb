@@ -8,7 +8,7 @@
   <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
   <%= f.select :title, title_options_for_select, :required => true %><br />
   <p><%= f.text_field :mail, :required => true, :onblur => "$('user_login').value = $('user_mail').value;" %></p>
-  <p><%= f.hidden_field :login, :required => true, :size => 25, :label => "Login"  %></p>
+  <p><%= f.hidden_field :login, :size => 25, :label => "Login"  %></p>
   <p><%= f.text_field :firstname, :required => true %><span class="distanceholder"></span><%= f.text_field :lastname, :required => true %></p>
   <p><%= f.text_field :phone, :required => false %><span class="distanceholder"></span>
   <%= f.text_field :fax, :required => false %></p>
