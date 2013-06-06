@@ -7,12 +7,12 @@ class GroupInvitationsController < ApplicationSocialController
    before_filter :get_group_invitation, :except => [:create]
    before_filter :require_receiver_user, :only => [:selection]
    before_filter :authorized, :only => [:create]
-   before_filter :user_already_in_group?, :only => [:create]
+#   before_filter :user_already_in_group?, :only => [:create]
 
   #Todo create permission to role for inviting people to groups etc. 
   def create
-    sender_u_msg = UserMessage.new({ :body => params[:user_message]["body"],
-                                                                 :subject => params[:user_message]["subject"],
+    sender_u_msg = UserMessage.new({ :body => "Wie sieht's aus?",
+                                                                 :subject => "kommste mit?",
                                                                  :user => User.current,
                                                                  :author => User.current,
                                                                  :receiver_id => params[:receiver_id],
@@ -20,7 +20,7 @@ class GroupInvitationsController < ApplicationSocialController
                                                                  :directory => UserMessage.sent_directory})
     if sender_u_msg.save 
       receiver_u_msg = sender_u_msg.generate_sent_receiver_copy()
-      receiver_u_msg.save
+#      receiver_u_msg.save
     else 
       render_404
     end
@@ -38,23 +38,32 @@ class GroupInvitationsController < ApplicationSocialController
     end
 
     logger.info inv.errors.full_messages
-    
     flash[:notice] = inv.errors.full_messages 
-    redirect_to :controller =>  @model_name.pluralize
+#    redirect_to :controller =>  @model_name.pluralize
+  
+    respond_to do |format|
+      flash[:notice] = :the_friendship_was_accepted
+      format.html { redirect_to :controller =>  @model_name.pluralize }
+      format.js {
+        render :js => "$.notification({ message:'Es funktioniert', type:'error' })";
+      }
+#      format.js { render :js => "alert('geiler scheiß')" }
+    end
+    
   end  
 
   def selection 
     unless params[:true].nil?
       @group_invitation.friendship_status_id = FriendshipStatus[:accepted].id
       m = Member.new(:user_id => @user.id, :project => @group_invitation.group, :role_ids => [Setting.plugin_redmine_social[:invitation_default_role_id]])
-      m.save
+      m.save!
       @group_invitation.group.members << m
-      @group_invitation.save
-      flash[:notice] = "All systems nominal" 
+      @group_invitation.save!
+      flash[:notice] = "You accepted" 
     else 
       @group_invitation.friendship_status_id = FriendshipStatus[:denied].id
-      @group_invitation.save
-      flash[:notice] = "You sh!#head won't join, ok!"   
+      @group_invitation.save!
+      flash[:notice] = "You denied!"   
     end
     redirect_to request.referer   
   end

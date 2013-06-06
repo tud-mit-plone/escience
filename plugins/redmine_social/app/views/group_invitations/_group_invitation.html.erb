@@ -1,10 +1,5 @@
-<%= form_tag({:controller => 'group_invitations', :action => 'create'}) do %>
-  <%= label_tag( l(:group_invitation_add_project_member))%>
-  <%= text_field_tag 'receiver_id'%>
-  <%= label_tag( l(:group_invitation_message_subject))%>
-  <%= text_field_tag 'user_message[subject]'%>
-  <%= label_tag( l(:group_invitation_message_body))%>
-  <%= text_area_tag 'user_message[body]'%>
-  <%= submit_tag(l(:group_invitation_send_project_invitation)) %>
+<%= form_tag({:controller => 'group_invitations', :action => 'create'}, :remote => true) do %>
+  <%= hidden_field_tag 'receiver_id'%>
   <%= hidden_field_tag("#{group}_id", group_id )%>
+  <%= submit_tag(l(:group_invitation_send_project_invitation), :confirm => self.l(:text_message_archive_confirmation)) %>
 <%end%>

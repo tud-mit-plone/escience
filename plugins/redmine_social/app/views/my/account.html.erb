@@ -83,18 +83,20 @@ function hide_change_avatar() {
     height:180,
     margin: 0
   });
-  $('#preview').attr('src','<%= @user.avatar.photo(:medium) if @user.avatar %>');
+  $('#preview').attr('src','<%= @user.avatar ? @user.avatar.photo(:medium) : '/images/avatar.png' %>');
   $('#change_avatar_wrapper').fadeOut();
 }
 function show_change_avatar() {
   $('#change_avatar_wrapper').fadeIn();
-  $('#preview').attr('src','<%= @user.avatar.photo(:original) if @user.avatar %>'); 
+  <% if @user.avatar %>
+  $('#preview').attr('src','<%= @user.avatar.photo(:original) %>'); 
   $("#cropbox").Jcrop({
     onChange: update_crop,
     onSelect: update_crop, 
     setSelect: [0,0,500,500],
     aspectRatio: 1
   });
+  <% end %>
   return false;  
 }
 </script>

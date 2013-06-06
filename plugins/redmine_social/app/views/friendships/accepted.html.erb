@@ -1,9 +1,9 @@
 <% content_for :sidebar do %>
   <%= render :partial => 'users/profile_user_info_sidebar'%>
 <%end%>
-
+  
 <h1 style="float: left"><%= l(:friendships)+" (#{@friend_count})"%></h1>
-<div style="float: right"><%= l(:label_search) %>: <input type="text" id="search" size="60" style="margin"></div>
+<div style="float: right"><input placeholder="<%= l(:filter) %>" type="text" id="search" size="60" style="margin"></div>
 <div class="clear"></div>
 <% pending_text = @pending_friendships_count > 1 ? l(:pending_friendships) : l(:pending_friendship) %>
 <%= link_to "(#{@pending_friendships_count} "+pending_text+")", pending_user_friendships_path(@user) if  (@pending_friendships_count > 0)%>
@@ -22,14 +22,12 @@
 %>
   <div class="user_list"> 
 <% sorted_users.each do |letter, users| %>
-<fieldset>
-  <legend><%= letter %></legend>
-  <table width="100%" style="margin-top: -8px;">
+  <div style="font-size:16px; padding: 2px 10px"><%= letter %></div>
+  <table width="100%" style="margin-bottom:4px;">
     <% users.each do |user| %>
       <%= render :partial => "friendships/friendship", :locals => {:friendship => user} %>
     <% end %>
   </table>
-</fieldset>
 <% end %>
 </div>
 <%= javascript_tag "$('input#search').quicksearch('table tr',{

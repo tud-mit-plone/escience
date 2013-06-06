@@ -576,6 +576,9 @@ de:
   #en: invite_your_friends_to_join: Invite Your Friends To Join!
   invite_your_friends_to_join: Lade deine Freunde ein, sich zu beteiligen!
   #en: is_great_check_it_out_youll_love_it: is great, check it out you'll love it!
+  invite_friend_to_project_first: "Möchten Sie <i>"
+  invite_friend_to_project_second: "</i> zum Projekt <strong>"
+  invite_friend_to_project_third: "</strong> einladen?"
   is_great_check_it_out_youll_love_it: ist großartig, du wirst es lieben!
   #en: items: Items
   items: Inhalt
@@ -934,6 +937,7 @@ de:
   remove_moderator: Moderator wegnehmen
   #en: remove_this_friend: Remove this friend
   remove_this_friend: Diesen Freund löschen
+  remove_this_friend_question: Sind Sie sicher, dass Sie diesen Kontakt aus Ihrer Liste entfernen möchten?
   #en: reply: Reply
   reply: Antworten
   #en: reply_to_topic: Reply

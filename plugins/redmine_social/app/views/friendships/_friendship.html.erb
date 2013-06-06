@@ -1,20 +1,7 @@
 <% user = friendship.friend %>
-<tr>
-<td>
-<fieldset class="collapsable  collapsed">
-  <legend onclick="toggleFieldsetCloseOthers(this)">
-    <%= (!user.salutation.empty?) ? l("field_salutation_vals.#{user.salutation}")+" " : "" %>
-    <%= (!user.title.empty?) ? l("field_title_vals.#{user.title}") : "" %>
-    <%= h user.name %>
-  </legend>
-  <div class="content">
     <%= render :partial => "users/show",:locals => {:user => user, :memberships => user.memberships.all(:conditions => Project.visible_condition(user))} %>
     <div style='float: right'><%= friendship_control_links(friendship) if @is_current_user%></div>
     <p>seit <%= time_ago_in_words friendship.created_on %> in Kontakt</p>
-  </div>
-</fieldset>
-</td>
-</tr>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'user_message' %>

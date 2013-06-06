@@ -12,7 +12,7 @@
 
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'community_engine', :plugin => 'redmine_social' %>
-    <%= javascript_include_tag 'jquery.dataTables.min.js', :plugin => 'redmine_social' %>
+    <%= javascript_include_tag 'jquery.dataTables.min.js' %>
 <% end %>
 
 <% content_for :sidebar_right do %>
@@ -20,56 +20,65 @@
   </div>
   <div class="clear" style="margin-top:10px"></div>
   <div class="sidebar">
-    <div class="headline"><%= l(:contact_list) %></div>
-    <div class="user_list"> 
-      <table id="list_of_friends">
-        <thead><tr><th></th></tr></thead>
-        <tbody>
-      <% sorted_users.each do |letter, users| %>
-        <% users.each do |usr| %>
-          <tr><td><div class="draggable" id="<%= usr.friend.id %>"><%= "#{usr.friend.lastname} #{usr.friend.firstname}" %></div></td></tr>
+    <div id="contact_list_wrapper">
+      <div class="headline"><%= l(:contact_list) %></div>
+      <div class="user_list"> 
+        <table id="list_of_friends">
+          <thead><tr><th></th></tr></thead>
+          <tbody>
+        <% sorted_users.each do |letter, users| %>
+          <% users.each do |usr| %>
+            <tr><td><div class="draggable" id="<%= usr.friend.id %>"><%= "#{usr.friend.lastname} #{usr.friend.firstname}" %></div></td></tr>
+          <% end %>
         <% end %>
-      <% end %>
-        </tbody>
-      </table>
-    </div>
-    <%= javascript_tag '
-        $(document).ready(function() {
-          $(".draggable").draggable({ 
-            cursor: "alias", 
-            revert: "invalid",
-            helper: "clone"
-          });
-          $("#list_of_friends").dataTable({
-            "iDisplayLength": 5,
-            "bLengthChange": false,
-            "sPaginationType": "two_button",
-            "oLanguage": {
-              "sProcessing":   "'+l(:please_wait)+'",
-                "sLengthMenu":   "",
-                "sZeroRecords":  "'+l(:no_entries)+'",
-                "sInfo":         "'+l(:entry_info)+'",
-                "sInfoEmpty":    "&nbsp;",
-                "sInfoFiltered": "",
-                "sInfoPostFix":  "",
-                "sSearch":       "",
-                "sUrl":          "",
-                "oPaginate": {
-                    "sFirst":    "|",
-                    "sPrevious": "<",
-                    "sNext":     ">",
-                    "sLast":     "|"
+          </tbody>
+        </table>
+      </div>
+      <%= javascript_tag '
+          $(document).ready(function() {
+            $(".draggable").draggable({ 
+              cursor: "alias", 
+              revert: "invalid",
+              helper: "clone"
+            });
+            $("#list_of_friends").dataTable({
+              "iDisplayLength": 5,
+              "bLengthChange": false,
+              "sPaginationType": "two_button",
+              "fnDrawCallback": function(){
+                if ($(".paginate_disabled_previous").length === 1 && $(".paginate_disabled_next").length === 1) {
+                  $("#list_of_friends_info").hide();
+                  $("#list_of_friends_paginate").hide();
+                } else {
+                  $("#list_of_friends_info").show();
+                  $("#list_of_friends_paginate").show();
                 }
-              }
-          });
-          $("#recipient_autocomplete").droppable({ 
-             accept: ".draggable",
-             snap: true,
-             drop: function(event, ui) {
-                addUserToReceivers(ui.helper.context.innerHTML, ui.helper.context.id);
-             }
-          });
-        $(".dataTables_filter input").attr("placeholder", "'+l(:filter)+'");
-      });
-    ' %>
+              },
+  
+              "oLanguage": {
+                "sProcessing":   "'+l(:please_wait)+'",
+                  "sLengthMenu":   "",
+                  "sZeroRecords":  "'+l(:no_entries)+'",
+                  "sInfo":         "'+l(:entry_info)+'",
+                  "sInfoEmpty":    "&nbsp;",
+                  "sInfoFiltered": "",
+                  "sInfoPostFix":  "",
+                  "sSearch":       "",
+                  "oPaginate": {
+                      "sPrevious": "<",
+                      "sNext":     ">",
+                  }
+                }
+            });
+            $("#recipient_autocomplete").droppable({ 
+               accept: ".draggable",
+               snap: true,
+               drop: function(event, ui) {
+                  addUserToReceivers(ui.helper.context.innerHTML, ui.helper.context.id);
+               }
+            });
+          $(".dataTables_filter input").attr("placeholder", "'+l(:filter)+'");
+        });
+      ' %>
+    </div>
 <% end %>

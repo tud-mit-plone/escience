@@ -67,10 +67,59 @@
 
 .collapsable.collapsed {
   border: none;
-  padding: 0;
-  margin: 0;
+  padding: 2px 20px;
+  margin: -2px 0;
+  background-color: #fff;
 }
 
 .collapsable.collapsed legend {
   font-size: 12px;
+}
+
+.openUser, .sendMessage, .addUser, .deleteUser {
+  float: right;
+	width:13px;
+	height: 10px;
+	margin-left: 5px;
+	background-position: 50% 0%;
+}
+.openUser {
+	background-image: url("/images/show.png");
+}
+
+.sendMessage {
+	background-image: url("/images/sendmessage.png");
+}
+
+.addUser {
+	background-image: url("/images/adduser.png");
+}
+
+.deleteUser {
+	background-image: url("/images/deleteuser.png");
+}
+
+.openUser:hover, .sendMessage:hover, .deleteUser:hover, .addUser:hover {
+	background-position: 50% 100%;
+}
+
+#member_search {
+	width: 85%;
+	margin-top: -3px;
+	float: right;
+}
+
+#ausgabe {
+	margin-top: 20px;
+}
+
+#tab-content-accepted.tab-content {
+  padding-bottom: 20px;
+}
+
+#tab-content-pending .button {
+  background-color: #e8ffde;
+}
+#tab-content-pending .button.negative {
+  background-color: #ffdfdf;
 }

@@ -1,6 +1,6 @@
 <% @avatar = @avatar ? @avatar : @user.avatar %>
 <% @photo = @photo ? @photo : @user.avatar %>
-<div class="background_hider" onclick="hide_change_avatar()"></div>
+<div class="background_hider" onclick="<%= @avatar ? 'hide_change_avatar()' : "$('#change_avatar_wrapper').fadeOut();" %> "></div>
 <div id="change_avatar">
   <div class="change_avatar_background">
     <h1><%= l(:change_profile_photo) %></h1>
@@ -29,6 +29,10 @@
           <%= link_to_function l(:cancel_and_go_back_to_my_photos), "hide_change_avatar()", :class => 'button' %>
         </p>
       <%end%>
+    <% else %>  
+      <h3 style="margin-bottom:4px;">&nbsp;</h3>
+      <%= image_tag( 'avatar.png', :style=>"max-width:430px") %>
+      <p><%= link_to_function l(:cancel_and_go_back_to_my_photos), "$('#change_avatar_wrapper').fadeOut();", :class => 'button' %></p>
     <% end %>
   </div>
   <div class="arrow_to_avatar"></div>

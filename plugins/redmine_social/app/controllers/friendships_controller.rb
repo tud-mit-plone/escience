@@ -1,31 +1,44 @@
 class FriendshipsController < ApplicationSocialController
   unloadable
   before_filter :require_login, :except => [:accepted, :index]
-  before_filter :find_user, :only => [:accepted, :pending, :denied]
+  before_filter :find_user, :only => [:accepted, :pending, :denied, :index]
   before_filter :require_current_user, :only => [:accept, :deny, :pending, :destroy]
 
   def index
-    @body_class = 'friendships-browser'
+    @user = User.find(params[:user_id])    
+    @friend_count = @user.accepted_friendships.count
+    @pending_friendships_count = @user.pending_friendships.count
+    @friendships = @user.friendships.accepted
+    @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
     
-    @user = User.current
-    @friendships = Friendship.find(:all, :conditions => ['user_id = ? OR friend_id = ?', @user.id, @user.id])
-    @users = User.find(:all, :conditions => ['users.id in (?)', @friendships.collect{|f| f.friend_id }],:order => "users.name DESC")
     respond_to do |format|
-      format.html 
-      format.xml { render :action => 'index.rxml', :layout => false}    
+      format.html
     end
   end
   
   def deny
     @user = User.find(params[:user_id])    
+    @friend_count = @user.accepted_friendships.count
+    @pending_friendships_count = @user.pending_friendships.count
+    @friendships = @user.friendships.accepted
     @friendship = @user.friendships.find(params[:id])
+    @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
     
     respond_to do |format|
       if @friendship.update_attributes(:friendship_status => FriendshipStatus[:denied]) &&
          @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:denied]) && 
          @friendship.reverse.save! && @friendship.save! 
         flash[:notice] = l(:the_friendship_was_denied)
-        format.html { redirect_to denied_user_friendships_path(@user) }
+        format.html { 
+            if @waiting_friendships.count > 0 
+              redirect_to({:action => "index", :tab => 'pending'}) 
+            else
+              redirect_to({:action => "index"})
+            end
+        }
+        format.js {
+          render :partial => 'update'
+        }
       else
         format.html { redirect_to({ :action => "index"})}
       end
@@ -34,13 +47,25 @@ class FriendshipsController < ApplicationSocialController
 
   def accept
     @user = User.find(params[:user_id])    
+    @friend_count = @user.accepted_friendships.count
+    @pending_friendships_count = @user.pending_friendships.count
+    @friendships = @user.friendships.accepted
     @friendship = @user.friendships_not_initiated_by_me.where(:id => params[:id]).first
-     
+    @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
     respond_to do |format|
       if @friendship.update_attributes(:friendship_status => FriendshipStatus[:accepted]) && 
           @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:accepted])        
-        flash[:notice] = :the_friendship_was_accepted
-        format.html { redirect_to accepted_user_friendships_path(@user) }
+        flash[:notice] = l(:the_friendship_was_accepted)
+        format.html { 
+            if @waiting_friendships.count > 0 
+              redirect_to({:action => "index", :tab => 'pending'}) 
+            else
+              redirect_to({:action => "index"})
+            end
+        }
+        format.js {
+          render :partial => 'update'
+        }
       else
         format.html { redirect_to({ :action => "index"}) }
       end
@@ -95,11 +120,12 @@ class FriendshipsController < ApplicationSocialController
   end
   
   def show
-    @friendship = Friendship.find(params[:id])
-    @user = @friendship.user
-    
+    @friendship = User.current.friendships.where("user_id = ? AND friend_id = ?", params[:user_id], params[:id]).first    
     respond_to do |format|
-      format.html
+      format.html {
+#        render :partial => "users/show",:locals => {:user => @friendship.user, :memberships => @friendship.user.memberships.all(:conditions => Project.visible_condition(@friendship.user))}
+        render :partial => "friendships/friendship", :locals => {:friendship => @friendship}
+      }
     end
   end
   

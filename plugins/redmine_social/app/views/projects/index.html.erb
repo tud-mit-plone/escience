@@ -35,7 +35,7 @@
   <% @projects.each do |project_element| %>
     <% project = project_element[:project] %>
     <% date = project_element[:date] %>
-    <fieldset class="has_collapsed">
+    <fieldset class="has_collapsed project">
       <div class="tools">
         <% if User.current.allowed_to?(:close_project, nil, :global => true) %>
           <div class="delete_project">
@@ -60,7 +60,7 @@
         <% end %>
       </div>
       <%= link_to({:controller => 'projects', :action => 'show', :id => project, :sub => params[:sub]}, :class => "link_to_project") do %>
-        <h2><%= h(truncate(project.name, :length => 300)) %></h2>
+        <h2 class="title_of_project"><%= h(truncate(project.name, :length => 300)) %></h2>
         <div class="innerInfo<%= ' collapsed' unless @projects.count < 5 %>">
           <div>
             <table>
@@ -104,7 +104,9 @@
           
         </div>
       <% end %>
-      <%= render :partial => 'group_invitations/group_invitation', :locals => {:group => "project", :group_id => project.id}%>
+      <div class="invitation" style="display:none">
+        <%= render :partial => 'group_invitations/group_invitation', :locals => {:group => "project", :group_id => project.id}%>
+      </div>
     </fieldset>
   <% end %>
 
@@ -124,6 +126,22 @@
     $(function() {addToolTip(".issues_project","'+l(:tooltip_project_message_issues)+'","left")});' if User.current.confirm %>
   <%= javascript_tag '
     $(document).ready(function() {
+      $(".project").droppable({ 
+         accept: ".draggable",
+         snap: true,
+         drop: function(event, ui) {
+           $(event.target).find(".invitation #receiver_id").val(ui.helper.context.id);
+           $(event.target).find(".invitation input[type=submit]").click();
+           $("#dialog-confirm").html("'+l(:invite_friend_to_project_first)+'"+ui.helper.context.innerHTML+"'+l(:invite_friend_to_project_second)+'"+$(event.target).find("h2.title_of_project").html()+"'+l(:invite_friend_to_project_third)+'");
+         }
+      });
+      $(".invite").each(function(){
+        $(this).click(function() {
+          $(".invite").parent().find(".invitation").toggleClass("visible");
+          $("#contact_list_wrapper").show();
+          return false;
+        });
+      });
       $("fieldset").each(function(){
         var innerInfo = $(this).find(".innerInfo.collapsed");
         $(this).hover(function(){
@@ -136,4 +154,8 @@
       });
     });
   ' %>
+<% end %>
+
+<% content_for :sidebar_right do %>
+  <%= render :partial => "friendships/contact_list" if User.current.logged? %>
 <% end %>

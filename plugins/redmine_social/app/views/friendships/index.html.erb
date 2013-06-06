@@ -1,4 +1,4 @@
-<%content_for :sidebar_right do %>
+<%content_for :sidebar do %>
     <ul>
       <li><%= link_to(l(:accepted_user_friendships),accepted_user_friendships_path)%></li>
       <li><%= link_to(l(:pending_user_friendships),pending_user_friendships_path)%></li>
@@ -6,4 +6,15 @@
     </ul>
 <%end%>
 
-<%= link_to "&raquo; #{l(:click_here_to_view_as_a_list)}".html_safe, accepted_user_friendships_path(@user) %>
+<h1><%= l(:friendships)%></h1>
+<%= render_tabs [
+    {:name=>'accepted',:partial =>'accepted',:label=>:friendships},
+    {:name=>'search',:partial=>'users/contact_membersearch',:label=>:label_memberlist_search},    
+    {:name=>'pending',:partial =>'pending',:label=>:pending_friendships},
+  ] %>
+<div class="clear"></div>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'community_engine', :plugin => 'redmine_social' %>
+    <%= javascript_include_tag 'jquery.quicksearch.js', :plugin => 'redmine_social' %>
+<% end %>

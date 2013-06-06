@@ -2,7 +2,7 @@
 
 <div class="user_information_main">
   <% unless user.pref.hide_mail %>
-    <label><%=l(:field_mail)%>:</label> <%= mail_to(h(user.mail), nil, :encode => 'javascript') %><br/>
+    <label><%=l(:field_mail)%>:</label> <%= mail_to(h(user.mail), nil, :encode => 'hex') %><br/>
   <% end %>
     <label><%=l(:field_department)%>:</label> <%= user.department %><br/>
     <% unless user.street.blank? %><label><%=l(:field_adress)%>:</label> <%= h(user.street) %><br/><% end %>

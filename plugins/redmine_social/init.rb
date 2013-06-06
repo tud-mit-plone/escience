@@ -4,7 +4,6 @@ require 'redmine'
 Dir::foreach(File.join(File.dirname(__FILE__), 'lib')) do |file|
   next if /\.{1,2}/ =~ file
   next unless File.exist?(File.join(File.dirname(__FILE__), 'lib',file,"init.rb"))
-  p "redmine_social requires #{File.join(File.dirname(__FILE__), 'lib',file,"init.rb")}"
   require File.join(File.dirname(__FILE__), 'lib',file,"init.rb")
 end
 
@@ -24,6 +23,7 @@ Redmine::Plugin.register :redmine_social do
   version '0.0.1'
 
   settings :default => { 
+    :invitation_default_role_id => 3,
     'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
     'photo_max_size' => '5' , 
     'photo_paperclip_options' => {
@@ -49,8 +49,9 @@ Redmine::Plugin.register :redmine_social do
     :partial =>'settings/redmine_social'
 
   contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
-  menu :account_menu, :user_contacts, {:controller => 'friendships', :action => 'pending', :user_id => Proc.new{"#{User.current.id}"}}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}
-  menu :account_menu, :user_contacts2, {:controller => 'friendships', :action => 'accepted', :user_id => Proc.new{"#{User.current.id}"}}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
+  menu :account_menu, :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}
+#  menu :account_menu, :user_contacts2, {:controller => 'friendships', :action => 'accepted', :user_id => Proc.new{"#{User.current.id}"}}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
+  menu :account_menu, :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
 
   project_module :user_calendar do 
     permission :appointments_add_watchers, :appointments => :add_watchers
@@ -60,7 +61,7 @@ end
   
 require_dependency 'application_helper'
 ApplicationHelper.class_eval do
-  DEFAULT_OPTIONS = {:size => 30,:alt => '',:title => '',:class => 'rounded_image'}
+  DEFAULT_OPTIONS = {:size => 25,:alt => '',:title => '',:class => 'rounded_image'}
     def avatar(user, options = { })
       scale = options[:scale].nil? ? :thumb : options[:scale]
       options.delete(:scale)

@@ -1,0 +1,8 @@
+<% message = flash[:error] || flash[:notice] || flash[:warning]
+   if message
+     type = flash.keys[0].to_s %>
+     $.notification({ message:"<%= message%>", type:"<%= type %>" });
+<% end %>
+$('#tab-content-pending').html('<%= escape_javascript(render :partial => 'pending') %>')
+$('#tab-content-accepted').html('<%= escape_javascript(render :partial => 'accepted') %>')
+$('#navigation .user-contacts .announcment').html('<%= @waiting_friendships.count %>');

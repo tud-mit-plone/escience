@@ -1,0 +1,26 @@
+<h3><%= l(:wait_for_pending_friendships)%> (<%= @waiting_friendships.length %>)</h3>
+<div class="user_list">
+  <table width="100%" cellpadding="0" cellspacing="0">
+  <% @waiting_friendships.each do |friends| %>
+    <% user = friends.friend %>
+    <tr>
+      <td>
+        <fieldset <%= 'class="collapsable collapsed"'.html_safe if @waiting_friendships.length > 1 %>>
+          <legend <%= 'onclick="toggleFieldsetCloseOthers(this)"'.html_safe if @waiting_friendships.length > 1 %> class='link_to_contact'>
+            <%= hidden_field_tag 'link_to_contact', url_for({:controller => 'users', :action => 'show', :id => user.id}), :id => user.id %>
+            <%= (!user.salutation.empty?) ? l("field_salutation_vals.#{user.salutation}")+" " : "" %>
+            <%= (!user.title.empty?) ? l("field_title_vals.#{user.title}") : "" %>
+            <span><%= user.name %> <%= (!user.department.empty?) ? "(#{user.department})" : "" %></span>
+          </legend>
+          <div class="content">
+            <%= render :partial => "friendships/friendship", :locals => {:friendship => friends}%>
+          </div>
+        </fieldset>
+      </td>
+      <td align="right" valign="top" width="40">
+        <%= link_to( image_tag('true.png'), accept_user_friendship_path(friends.user, friends), :remote => true, :method => :put, :title => l(:accept)) unless friends.initiator? %>
+        <%= link_to(image_tag('false.png'), deny_user_friendship_path(friends.user, friends), :method => :put, :remote => true, :title => l(:deny)) %> 
+      </td>
+  <% end %>
+  </table>
+</div>

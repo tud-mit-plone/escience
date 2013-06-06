@@ -49,6 +49,7 @@ RedmineApp::Application.routes.draw do
     controller :comments do 
       post '/comments/create', :action => :create_general_comment, :as => 'create_general_comments'
     end
+    match 'my/render_block/:blockname', :controller => 'my', :action => 'render_block', :via => :get, :blockname => /\w+/
     resources :photos do
       post 'add_comment', :action => :add_comment
     end
