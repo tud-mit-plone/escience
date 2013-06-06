@@ -23,14 +23,6 @@
     <p>Avatar</p>
     <div style="border: 1px solid #ABABAB;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;border-radius: 5px; margin-top: 10px; background-color:#ffffff">
     <%= avatar(@user, :size => "180") %>
-    <!--
-    <%# if attachment.nil? %>
-      <%#= image_tag('/images/avatar.png', :width => '180px', :height => '180px', :style => '-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;border-radius: 5px;') %>
-    <%# else %>
-      <%#= image_tag(url_for({:controller => 'attachments', :action => 'show', :id => attachment, :filename => attachment.filename}), :width => '180px', :height => '180px', :style => '-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;border-radius: 5px;') 
-     %>
-    <%# end %>
-    -->
     </div>
   </div>
   <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
