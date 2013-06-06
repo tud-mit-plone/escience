@@ -5,8 +5,8 @@
 	</ul>
 	<%end%>
 <%end%>
-
-<h2><%= avatar @user, :size => "150" %>
+<div style="float:right"><%= avatar @user, :size => "150" %></div>
+<h2>
   <%= (!@user.salutation.empty?) ? l("field_salutation_vals.#{@user.salutation}")+" " : "" %>
   <%= (!@user.title.empty?) ? l("field_title_vals.#{@user.title}") : "" %>
   <%= h @user.name %>

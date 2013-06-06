@@ -107,10 +107,20 @@ class UsersController < ApplicationController
                                  AND m.user_id = u.id
                                  AND p.status=1
                                  AND p.id = m.project_id
-                                 AND p.id IN (#{User.current.projects.map{|p| "'#{p.id}'"}.join(",")})
                                  AND u.id <> ?
                                  ","#{params[:q]}%", "#{params[:q]}%",
                                  User.current.id])
+                                 
+#      others = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id, p.name
+#                                 FROM users u, projects p, members m
+#                                 WHERE (u.lastname LIKE ? OR u.firstname LIKE ?)
+#                                 AND m.user_id = u.id
+#                                 AND p.status=1
+#                                 AND p.id = m.project_id
+#                                 AND p.id IN (#{User.current.projects.map{|p| "'#{p.id}'"}.join(",")})
+#                                 AND u.id <> ?
+#                                 ","#{params[:q]}%", "#{params[:q]}%",
+#                                 User.current.id])
     end
     @projects = []
     @allusers = []
@@ -176,6 +186,8 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(:language => Setting.default_language, :mail_notification => Setting.default_notification_option)
+    p params[:user]
+    params[:user][:login] = params[:user][:mail]
     @user.safe_attributes = params[:user]
     @user.admin = params[:user][:admin] || false
     @user.login = params[:user][:login]
@@ -197,7 +209,8 @@ class UsersController < ApplicationController
             {:controller => 'users', :action => 'edit', :id => @user}
           )
         }
-        format.api  { render :action => 'show', :status => :created, :location => user_url(@user) }
+        format.api  {
+        render :action => 'show', :status => :created, :location => user_url(@user) }
       end
     else
       @auth_sources = AuthSource.find(:all)
