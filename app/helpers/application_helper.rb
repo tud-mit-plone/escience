@@ -1598,9 +1598,6 @@ module ApplicationHelper
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
     tags = javascript_include_tag('jquery-1.7.2-ui-1.8.21-ujs-2.0.3', 'application')
-#    tags = javascript_include_tag("jquery-1.9.1.js")
-#    tags = javascript_include_tag("application")
-#    tags << javascript_include_tag("jquery-ui-1.10.3.min.js")
     tags << "\n".html_safe
     tags << javascript_include_tag("jquery.jbar.js")
     tags << "\n".html_safe
