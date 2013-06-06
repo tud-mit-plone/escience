@@ -123,16 +123,8 @@
     $(function() {addToolTip(".issues_project","'+l(:tooltip_project_message_issues)+'","left")});' if User.current.confirm %>
   <%= javascript_tag '
     $(document).ready(function() {
-      $("fieldset").each(function(){
-        var innerInfo = $(this).find(".innerInfo.collapsed");
-        $(this).hover(function(){
-          var height = innerInfo.height("auto").height();
-          innerInfo.height(height);
-        },
-        function() {
-          innerInfo.height(0);
-        });
-      });
+      $(".link_to_project").click(function(e) {$(this).parent().toggleClass("selected"); e.preventDefault();});
+      $(".link_to_project").dblclick(function() {self.location.href=$(this).attr("href");});
     });
-  ' %>
+  ' unless @projects.count < 5 %>
 <% end %>
