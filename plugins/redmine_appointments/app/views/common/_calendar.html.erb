@@ -1,6 +1,6 @@
 <% day = calendar.startdt %>
 <%# content_for :sidebar_left do %>
-<div style="position:absolute; width:160px; overflow:hidden; margin-left: -180px; margin-top: 40px" class="sidebar">
+<div id="calendar_sidebar"style="position:absolute; width:160px; overflow:hidden; margin-left: -180px;top:0;" class="sidebar">
 <%= form_tag(url_for(:controller => 'calendars', :action => 'show_user_calendar'), :method=>'post', :remote => true) do %>
   <div class="headline"><%= l(:label_headline_sidebar) %></div>
   <ul class="selectCalendarOptions" style="margin-top:10px">
@@ -76,8 +76,8 @@
 </table>
 
 <%= javascript_tag "
-  var $ = jQuery.noConflict();
 	$(function() {
+    $('#calendar_sidebar').css('top',$('#sidebar_left').offset().top+$('#sidebar_left').height()+10);
 	  visiblity = 'visible';
 	  e_visiblity = true;
 		$('.linkToInfo').each(function(obj) {

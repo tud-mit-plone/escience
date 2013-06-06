@@ -64,7 +64,7 @@ module AppointmentsHelper
       unless sd.hour.to_i == 0
         out << format_date_to_time(sd).html_safe
       end
-      unless ed.hour.to_i == 0
+      unless ed.nil? || ed.hour.to_i == 0
         out << " - "+format_date_to_time(ed).html_safe
       end
       out << "</td>".html_safe

@@ -64,35 +64,42 @@ class Appointment < ActiveRecord::Base
 
     if startdt == enddt
       appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
-                                                                                              AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
-                                                                                              AND DATE(start_date) <= ? 
-                                                                                              AND due_date IS NULL) OR (DATE(start_date) = ? 
-                                                                                              AND cycle > 0)", visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt, startdt ])
+                    AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
+                    AND DATE(start_date) <= ? 
+                    AND due_date IS NULL) OR (DATE(start_date) = ? 
+                    AND cycle > 0)", visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt, startdt ])
     else
       appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
-                                                                                              AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
-                                                                                              AND DATE(start_date) <= ? 
-                                                                                              AND due_date IS NULL)",visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt ])
+                    AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
+                    AND DATE(start_date) <= ? 
+                    AND due_date IS NULL)",visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt ])
     end    
     events = appointments
     appointments = self.find(:all, :conditions => ["id in (?) AND cycle > 0", visible_appointments.map{|i| i.id }])
     appointments.each do |appointment|
-      if appointment[:cycle] == CYCLE_WEEKLY
-        repeated_day = appointment[:start_date]+7.day
-        while (repeated_day < enddt && repeated_day <= appointment[:due_date]) || (enddt == startdt && repeated_day <= appointment[:due_date])
-          event = appointment.clone
-          event[:start_date] = repeated_day
-          events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
-          repeated_day += 7.day
+      begin
+        if appointment[:cycle] == CYCLE_WEEKLY
+          repeated_day = appointment[:start_date]+7.day
+          while (repeated_day < enddt && repeated_day <= (appointment[:due_date] || enddt)) || (enddt == startdt && repeated_day <= (appointment[:due_date] || enddt))
+            event = appointment.clone
+            event[:start_date] = repeated_day
+            events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
+            repeated_day += 7.day
+          end
+        elsif appointment[:cycle] == CYCLE_MONTHLY
+          repeated_day = appointment[:start_date]+1.month
+          while (repeated_day < enddt && repeated_day <= (appointment[:due_date] || enddt)) || (enddt == startdt && repeated_day <= (appointment[:due_date] || enddt))
+            event = appointment.clone
+            event[:start_date] = repeated_day 
+            events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
+            repeated_day = repeated_day+1.month
+          end
         end
-      elsif appointment[:cycle] == CYCLE_MONTHLY
-        repeated_day = appointment[:start_date]+1.month
-        while (repeated_day < enddt && repeated_day <= appointment[:due_date]) || (enddt == startdt && repeated_day <= appointment[:due_date])
-          event = appointment.clone
-          event[:start_date] = repeated_day 
-          events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
-          repeated_day = repeated_day+1.month
-        end
+      rescue => e 
+        e.backtrace.map{ |x|   
+          x.match(/^(.+?):(\d+)(|:in `(.+)')$/); 
+          p [$1,$2,$4] 
+        }
       end
     end
     return events
