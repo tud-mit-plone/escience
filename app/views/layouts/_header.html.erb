@@ -17,7 +17,7 @@
 <% selectedChild = params[:navigation_group].nil? ? '0' : params[:navigation_group] %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title><%=h html_title %></title>
@@ -31,13 +31,16 @@
   <%= stylesheet_link_tag 'public', :media => 'all' unless User.current.logged?%>
   <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
+  <%= stylesheet_link_tag 'jquery.confirm', :media => 'all' if User.current.logged?%>
   <%= javascript_heads %>
   <%= yield :jquery_tags -%>
   <%= yield :header_tags -%>
   
   <%= javascript_tag '
   function externalLinks() {return $("a[href^=\'http\']:not([href^=\'http://" + window.location.host + "\'])");}
-  
+  var message_yes = "'+l(:general_text_Yes)+'";
+  var message_cancel = "'+l(:general_text_No)+'";
+  var message_title = "'+l(:general_text_dialog)+'";
   $(document).ready(function() {
     externalLinks().attr({target: "_blank"});
     addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
@@ -82,6 +85,7 @@
     if (param=="2") url = "/projects/escience";
     self.location.href = url+"?navigation_group="+param;
   }'%>
+  
   <%= heads_for_theme %>
   <!--[if IE 6]>
       <style type="text/css">
@@ -94,6 +98,7 @@
 </head>
 
 <body class="<%=h body_css_classes %>">
+  <div id="confirm" style="width:300px; height:200px; position:absolute"></div>
   <div id="wrapper">
     <div id="separate_footer">
       <header id="header">
