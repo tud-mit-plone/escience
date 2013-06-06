@@ -4,15 +4,16 @@
 
 .user_message {
   clear: both;
-  -moz-border-radius: 10px 0 10px 10px;
-  -webkit-border-radius: 10px 0 10px 10px;
-  -khtml-border-radius: 10px 0 10px 10px;
-  border-radius: 10px 0 10px 10px;
+  -moz-border-radius: 10px 0 0 10px;
+  -webkit-border-radius: 10px 0 0 10px;
+  -khtml-border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
   border: 1px solid #F4F4F4;
   background-color: #FAFAFA;
   padding: 10px 20px;
   margin-bottom: 5px;
   width: 513px;
+  min-height: 37px;
 }
 
 .ui-droppable-hover {
@@ -106,13 +107,13 @@ a.link_to_message {
 }
 
 .user_message .message {
-  max-height: 26px;
+  max-height: 0px;
   overflow: hidden;
   color: #9d9d9d;
-  transition: max-height 1s ease-in-out;
-  -moz-transition: max-height 1s ease-in-out;
-  -webkit-transition: max-height 1s ease-in-out;
-  -o-transition: max-height 1s ease-in-out; 
+  transition: max-height .5s ease-in-out;
+  -moz-transition: max-height .5s ease-in-out;
+  -webkit-transition: max-height .5s ease-in-out;
+  -o-transition: max-height .5s ease-in-out; 
 }
 
 .link_to_message.selected .user_message .message {
@@ -136,33 +137,31 @@ a.link_to_message {
 }
 
 .user_message_links div.delete {
-  background: #FAFAFA url(../images/close.png) center center no-repeat;
+  background: #F4F4F4 url(../images/close.png) center center no-repeat;
 }
 
 .user_message_links div.delete:hover {
   background: url(../images/close_hl.png) center center no-repeat;
-  background-color: #F4F4F4;  
 }
 
 .user_message_links div.archive {
-  background: #FAFAFA url(../images/archive.png) center center no-repeat;
+  background: #F4F4F4 url(../images/archive.png) center center no-repeat;
   height: 20px;
   margin-top: 3px;
 }
 
 .user_message_links div.archive:hover {
   background: url(../images/archive_hl.png) center center no-repeat;
-  background-color: #F4F4F4;  
 }
 
 #new_user_message_link, #emptytrash_user_message_link {
-  float: right;
-  margin-top: 5px;
+  float: left;
+  margin-left: 15px;
 }
 
 #new_user_message_link div {
   width: 30px;
-  height: 20px;
+  height: 25px;
   background: url(../images/new_message.png) center center no-repeat;
 }
 
@@ -260,8 +259,8 @@ div.name_element {
 }
 
 .ui-autocomplete li a.ui-state-hover {
-		background-color:#DEDEDE;
-		color:#B61634;		
+	background-color:#DEDEDE;
+	color:#B61634;		
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;

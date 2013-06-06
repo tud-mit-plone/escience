@@ -140,6 +140,10 @@
   color: #B61634;
 }
 
+#main fieldset.selected .innerInfo, #main .linkToIssue.selected .innerInfo {
+  max-height: 400px;
+}
+
 #main fieldset .list.issues .innerInfo {
   position: relative;
   font-size: 12px;

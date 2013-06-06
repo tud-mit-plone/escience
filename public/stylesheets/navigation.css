@@ -232,8 +232,12 @@
 
 /* sidebar-definitions */
 .sidebar #sitespecivic {
-  padding: 0 0 5px 0; 
+  padding: 0 0 5px 0;
 }
+
+.sidebar #sitespecivic a.icon {
+  margin-top: 5px;
+  margin-bottom: -5px;}
 
 .sidebar, .sidebar_nav {
 	background-color:#F4F4F4;
