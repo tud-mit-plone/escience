@@ -11,6 +11,8 @@ module RedmineSocialExtends
         receiver.send :include, InstanceMethods
         receiver.class_eval do
           acts_as_invitable
+
+          has_one :exclusive_user, :class_name => 'User', :foreign_key => 'private_project'
         end
       end
     end

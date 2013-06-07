@@ -28,6 +28,19 @@
         def has_reached_daily_friend_request_limit?
           friendships_initiated_by_me.count(:conditions => ['created_on > ?', Time.now.beginning_of_day]) >= Friendship.daily_request_limit
         end
+
+        def create_private_project(user=self)
+          if user.private_project.nil? 
+            prj = Project.new({:name => user.login, :is_public => false, :identifier => Digest::MD5.hexdigest(Time.now.to_i.to_s).to_s, :is_private_project => true})
+            prj.enabled_modules = []
+            prj.tracker_ids = []
+            prj.custom_value_ids=[] 
+            prj.save!
+            m = Member.new(:user_id => user.id, :project => prj, :role_ids => [Setting.plugin_redmine_social[:private_project_default_role_id]])
+            m.save!
+            prj.exclusive_user = user 
+          end
+        end
       end
       
       def self.included(receiver)
@@ -47,6 +60,8 @@
           has_many :friendships_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', true], :dependent => :destroy
           has_many :friendships_not_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', false], :dependent => :destroy
           has_many :occurances_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
+          #private project 
+          belongs_to :private_project, :class_name => "Project", :dependent => :destroy
         end
       end
     end
@@ -99,6 +114,57 @@
         receiver.class_eval do
           before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count, :crop_profile_photo, :upload_profile_photo]
           layout 'base'
+          
+
+          def update
+            @user.admin = params[:user][:admin] if params[:user][:admin]
+            @user.login = params[:user][:login] if params[:user][:login]
+            @user.confirm = params[:user][:confirm] if params[:user][:confirm]
+            if params[:user][:password].present? && (@user.auth_source_id.nil? || params[:user][:auth_source_id].blank?)
+              @user.password, @user.password_confirmation = params[:user][:password], params[:user][:password_confirmation]
+            end
+            @user.safe_attributes = params[:user]
+            # Was the account actived ? (do it before User#save clears the change)
+            was_activated = (@user.status_change == [User::STATUS_REGISTERED, User::STATUS_ACTIVE])
+            # TODO: Similar to My#account
+            @user.pref.attributes = params[:pref]
+            @user.pref[:no_self_notified] = (params[:no_self_notified] == '1')
+
+            if @user.save
+              @user.pref.save
+              @user.notified_project_ids = (@user.mail_notification == 'selected' ? params[:notified_project_ids] : [])
+
+              @user.create_private_project()
+
+              if was_activated
+                Mailer.account_activated(@user).deliver
+              elsif @user.active? && params[:send_information] && !params[:user][:password].blank? && @user.auth_source_id.nil?
+                Mailer.account_information(@user, params[:user][:password]).deliver
+              end
+
+              respond_to do |format|
+                format.html {
+                  flash[:notice] = l(:notice_successful_update)
+                  redirect_to_referer_or edit_user_path(@user)
+                }
+                format.api  { render_api_ok }
+              end
+            else
+              @auth_sources = AuthSource.find(:all)
+              @membership ||= Member.new
+              # Clear password input
+              @user.password = @user.password_confirmation = nil
+
+              respond_to do |format|
+               
+                format.html { 
+                 flash[:notice] = @user.errors.full_messages
+                 render :action => :edit }
+                format.api  { render_validation_errors(@user) }
+              end
+            end
+          end
+
         end
       end
     end

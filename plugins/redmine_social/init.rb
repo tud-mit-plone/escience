@@ -23,7 +23,8 @@ Redmine::Plugin.register :redmine_social do
   version '0.0.1'
 
   settings :default => { 
-    :invitation_default_role_id => 3,
+    :invitation_default_role_id => '3',
+    :private_project_default_role_id => '4',
     'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
     'photo_max_size' => '5' , 
     'photo_paperclip_options' => {
