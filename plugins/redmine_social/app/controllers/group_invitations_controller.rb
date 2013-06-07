@@ -102,6 +102,10 @@ class GroupInvitationsController < ApplicationSocialController
     end
   end
 
+  def user_already_in_group?
+    raise 
+  end
+
   def get_user
     if params[:user_id]
       @user = User.find(params[:user_id])

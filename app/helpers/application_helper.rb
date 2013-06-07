@@ -32,6 +32,16 @@ module ApplicationHelper
   require 'rexml/document'
   require 'htmlentities'
   include REXML
+
+  
+  def with_format(format, &block)
+    old_format = @template_format
+    @template_format = format
+    result = block.call
+    @template_format = old_format
+    return result
+  end
+
   def convertHtmlToWiki(html)
     html = "<toplevel>#{html}</toplevel>"
     translation = Document.new(html)

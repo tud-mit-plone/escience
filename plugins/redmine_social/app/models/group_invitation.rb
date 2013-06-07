@@ -14,9 +14,10 @@ class GroupInvitation < ActiveRecord::Base
 
   @@invitation_groups = [] 
 
-  def self.add_invitation_group(group)
-    @@invitation_groups << group    
-  end
+   def self.add_invitation_group(group)
+     @@invitation_groups << group    
+   end
+   
    def self.get_invitation_group
     @@invitation_groups    
   end
