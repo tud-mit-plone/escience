@@ -1,5 +1,6 @@
 class Album < ActiveRecord::Base
   unloadable
+  acts_as_watchable
   has_many :photos, :dependent => :destroy
   belongs_to :user
   validates_presence_of :user_id

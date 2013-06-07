@@ -76,11 +76,12 @@ module Redmine
     class Mapper
       def initialize
         @project_module = nil
+        @user_module = nil 
       end
 
       def permission(name, hash, options={})
         @permissions ||= []
-        options.merge!(:project_module => @project_module)
+        @project_module.nil? ?  options.merge!(:user_module => @user_module) : options.merge!(:project_module => @project_module)
         @permissions << Permission.new(name, hash, options)
       end
 
@@ -89,6 +90,12 @@ module Redmine
         yield self
         @project_module = nil
       end
+      
+      def user_module(name, options={})
+        @user_module = name 
+        yield self
+        @user_module = nil 
+      end
 
       def mapped_permissions
         @permissions
@@ -96,7 +103,7 @@ module Redmine
     end
 
     class Permission
-      attr_reader :name, :actions, :project_module
+      attr_reader :name, :actions, :project_module, :user_module
 
       def initialize(name, hash, options)
         @name = name
@@ -105,6 +112,7 @@ module Redmine
         @require = options[:require]
         @read = options[:read] || false
         @project_module = options[:project_module]
+        @user_module = options[:user_module]
         hash.each do |controller, actions|
           if actions.is_a? Array
             @actions << actions.collect {|action| "#{controller}/#{action}"}

@@ -1,0 +1,11 @@
+<%= javascript_include_tag 'endless_page', :plugin => 'redmine_social' %>
+<%#= javascript_include_tag 'endless_page', 'jquery.annotation.js', :plugin => 'redmine_social' %>
+<div id="render_show_images">
+  <%= render :partial => 'render_show', :locales => {:attachment => @attachment} %>
+</div>
+<%#= javascript_tag ' 
+    function blackNote() {
+      return $(document.createElement(\'span\')).addClass(\'black circle note\');
+    }
+    $("#render_show_images").annotatableImage(blackNote);
+'%> 

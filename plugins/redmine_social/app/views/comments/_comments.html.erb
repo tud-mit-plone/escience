@@ -1,8 +1,11 @@
+<%= stylesheet_link_tag 'arrow.css', :plugin => 'redmine_social'%>
+
 <div id="comments" style="margin-bottom:16px;">
 <h3 class="icon22 icon22-comment"><%= l(:label_comment_plural) %></h3>
-<fieldset>
+
   <% comments.each do |comment| %>
       <% next if comment.new_record? %>
+      <blockquote class="rectangle-speech-border">
       <div class="contextual">
       <%= link_to_if_authorized l(:button_delete),
                                 { :controller => 'blogs',
@@ -15,13 +18,15 @@
                                 :class => 'icon icon-del',
                                 :title => l(:button_delete) %>
       </div>
-      <h4><%= authoring comment.created_on, comment.author %></h4>
         <div class="wiki">
           <%= textilizable(comment, :comments) %>
         </div>
+      </blockquote>
+      <div style="position: relative; top: -20px;">
+        <h4><%= authoring comment.created_on, comment.author %></h4>
+      </div>
   <% end if !(comments.nil?) && comments.any? %>
   </div>
-</fieldset>
   <%# if authorize_for 'blogs', 'add_comment', true %>
     <p><%= toggle_link l(:label_comment_add), "add_comment_form", :focus => "comment_comments" %></p>
     <%= form_tag( form_hash, :id => "add_comment_form", :style => "display:none;") do %>

@@ -168,6 +168,7 @@ class Project < ActiveRecord::Base
   # * :member => limit the condition to the user projects
   def self.allowed_to_condition(user, permission, options={})
     base_statement = "#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"
+    base_statement << " AND (#{Project.table_name}.is_private_project!=#{connection.quoted_true} OR #{Project.table_name}.is_private_project IS NULL)"
     if perm = Redmine::AccessControl.permission(permission)
       unless perm.project_module.nil?
         # If the permission belongs to a project module, make sure the module is enabled

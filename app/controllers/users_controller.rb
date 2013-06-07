@@ -18,7 +18,7 @@
 class UsersController < ApplicationController
   layout 'admin'
 
-  before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count]
+  before_filter :require_admin, :except => [:create, :show, :user_search, :contact_member_search, :online_live_count]
   before_filter :require_login, :only => [:user_search, :contact_member_search,:show,:online_live_count]
   before_filter :find_user, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership]
   accept_api_auth :index, :show, :create, :update, :destroy
@@ -267,7 +267,10 @@ class UsersController < ApplicationController
       @user.password = @user.password_confirmation = nil
 
       respond_to do |format|
-        format.html { render :action => :edit }
+       
+        format.html { 
+         flash[:notice] = @user.errors.full_messages
+         render :action => :edit }
         format.api  { render_validation_errors(@user) }
       end
     end

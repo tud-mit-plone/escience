@@ -4,6 +4,7 @@ require 'redmine'
 Dir::foreach(File.join(File.dirname(__FILE__), 'lib')) do |file|
   next if /\.{1,2}/ =~ file
   next unless File.exist?(File.join(File.dirname(__FILE__), 'lib',file,"init.rb"))
+  p "redmine_social requires #{File.join(File.dirname(__FILE__), 'lib',file,"init.rb")}"
   require File.join(File.dirname(__FILE__), 'lib',file,"init.rb")
 end
 
@@ -23,7 +24,8 @@ Redmine::Plugin.register :redmine_social do
   version '0.0.1'
 
   settings :default => { 
-    :invitation_default_role_id => 3,
+    :invitation_default_role_id => '3',
+    :private_project_default_role_id => '4',
     'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
     'photo_max_size' => '5' , 
     'photo_paperclip_options' => {
@@ -55,6 +57,9 @@ Redmine::Plugin.register :redmine_social do
 
   project_module :user_calendar do 
     permission :appointments_add_watchers, :appointments => :add_watchers
+  end
+  user_module :user_clandar do 
+    permission :view_calendar, {:calendar => [:show, :update]}, :read => true
   end
 end
 

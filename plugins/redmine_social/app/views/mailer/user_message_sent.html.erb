@@ -1,0 +1,7 @@
+<h1>
+  <%=h @user_message.subject %>: 
+  <%#= link_to(h(@user_message.subject), @user_message_url) %>
+</h1>
+<em><%=h @user_message.author %></em>
+
+<%= textilizable(@user_message, :body, :only_path => false) %>
