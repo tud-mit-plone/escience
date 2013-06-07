@@ -1388,3 +1388,6 @@ de:
   group_invitation_for: "Einladung zum"
   label_cancel: "Ablehnen"
   label_accept: "Annehmen"
+
+  label_user_message: "Plattform-Nachricht"
+  label_from: "von"
