@@ -31,4 +31,8 @@ Rails.configuration.to_prepare do
 #  require_dependency 'mailer'
 #  require File.join(File.dirname(__FILE__),'patch_mailer' )
 #  Mailer.send(:include, ::RedmineSocialExtends::MailerExtension)
+  require_dependency 'attachment'
+  require File.join(File.dirname(__FILE__),'patch_attachment' )
+  Attachment.send(:include, ::RedmineSocialExtends::AttachmentExtension)
+  AttachmentsController.send(:include, ::RedmineSocialExtends::AttachmentsControllerExtension)
 end

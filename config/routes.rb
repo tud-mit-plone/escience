@@ -274,7 +274,7 @@ RedmineApp::Application.routes.draw do
   match 'attachments/:id/:filename', :controller => 'attachments', :action => 'show', :id => /\d+/, :filename => /.*/, :via => :get
   match 'attachments/download/:id/:filename', :controller => 'attachments', :action => 'download', :id => /\d+/, :filename => /.*/, :via => :get
   match 'attachments/download/:id', :controller => 'attachments', :action => 'download', :id => /\d+/, :via => :get
-  match 'attachments/thumbnail/:id(/:size)', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get, :size => /\d+/
+  match 'attachments/thumbnail/:id(/:size)', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get, :size => /\d+/, :as => :thumbnail_attachment
   resources :attachments, :only => [:show, :destroy]
 
   resources :contents, :only => [:show, :destroy]

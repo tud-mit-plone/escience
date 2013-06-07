@@ -1,5 +1,6 @@
 RedmineApp::Application.routes.draw do
   
+  match 'attachments/thumbnail/:id(/:size)', :controller => 'attachments', :action => 'thumbnail', :id => /\d+/, :via => :get, :size => /\d+/, :as => :thumbnail_attachment
 
 # automatic insertion for ads model
   resources :ads 
