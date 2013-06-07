@@ -1,6 +1,6 @@
 class AlbumsController < ApplicationSocialController
 
-  before_filter :require_login, :except => [:show]
+  before_filter :require_login
   before_filter :find_user, :only => [:new, :edit, :index]
   before_filter :require_current_user, :only => [:new, :edit, :update, :destroy, :create]
 
@@ -8,7 +8,7 @@ class AlbumsController < ApplicationSocialController
   # GET /albums/1.xml
   def show
     @album = Album.find(params[:id])
-    update_view_count(@album) if User.current && User.current.id != @album.user_id
+    #update_view_count(@album) if User.current && User.current.id != @album.user_id
     @album_photos = @album.photos.paginate(:page => params[:page], :per_page => 1)
     
     respond_to do |format|

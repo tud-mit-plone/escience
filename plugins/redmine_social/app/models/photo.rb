@@ -1,7 +1,7 @@
 class Photo < ActiveRecord::Base
   unloadable
   belongs_to :album
-  
+  acts_as_watchable
   has_attached_file :photo, Setting.plugin_redmine_social['photo_paperclip_options'].to_hash
   validates_attachment_presence :photo
   validates_attachment_content_type :photo, :content_type => Setting.plugin_redmine_social['photo_content_type']

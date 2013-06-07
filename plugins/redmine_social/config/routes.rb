@@ -63,5 +63,24 @@ RedmineApp::Application.routes.draw do
           post 'selection', :action => :selection
         end
     end
+  resources :albums do
+	resources :photos do
+	  collection do
+	    post :swfupload
+	    get :slideshow
+	  end
+	end
+  end
+  end
+
+  controller :comments do 
+    post '/comments/create', :action => :create_general_comment, :as => 'create_general_comments'
+  end
+  resources :photos do
+    post 'add_comment', :action => :add_comment
+  end
+  resources :albums do
+    get 'show', :action => :show 
+  end
 end
 
