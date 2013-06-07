@@ -284,6 +284,11 @@ module Redmine #:nodoc:
       @project_module = nil
     end
 
+    def user_module(name, &block)
+      @user_module = name
+      self.instance_eval(&block)
+      @user_module = nil
+    end
     # Registers an activity provider.
     #
     # Options:
