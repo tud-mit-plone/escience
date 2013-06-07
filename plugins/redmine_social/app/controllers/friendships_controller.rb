@@ -141,11 +141,16 @@ class FriendshipsController < ApplicationSocialController
     respond_to do |format|
       if @friendship.save && reverse_friendship.save
         #UserNotifier.friendship_request(@friendship).deliver if @friendship.friend.notify_friend_requests?
+        flash[:notice] = l(:friendship_requested, :friend => @friendship.friend) 
+        @friend_count = @user.accepted_friendships.count
+        @pending_friendships_count = @user.pending_friendships.count
+        @friendships = @user.friendships.accepted
+        @friendship = @user.friendships_not_initiated_by_me.where(:id => params[:id]).first
+        @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
         format.html {
-          flash[:notice] = l(:friendship_requested, :friend => @friendship.friend.login.to_s) 
           redirect_to accepted_user_friendships_path(@user)
         }
-        format.js { render( :inline => l(:requested_friendship_with) + " #{@friendship.friend.login}." ) }        
+        format.js { render :partial => 'update' }        
       else
         flash[:error] = l(:friendship_could_not_be_created)
         format.html { redirect_to user_friendships_path(@user) }
@@ -155,7 +160,7 @@ class FriendshipsController < ApplicationSocialController
   end
     
   def destroy
-    if(User.current.id == params[:user_id] || User.current.admin?)
+    if(User.current.id.to_s == params[:user_id] || User.current.admin?)
 
       @user = User.find(params[:user_id])    
       @friendship = Friendship.find(params[:id])
@@ -163,8 +168,15 @@ class FriendshipsController < ApplicationSocialController
         @friendship.destroy
         @friendship.reverse.destroy
       end
+      @friend_count = @user.accepted_friendships.count
+      @pending_friendships_count = @user.pending_friendships.count
+      @friendships = @user.friendships.accepted
+      @friendship = @user.friendships_not_initiated_by_me.where(:id => params[:id]).first
+      @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
       respond_to do |format|
+        flash[:notice] ="#{l(:deleted_this_user)}"
         format.html { redirect_to accepted_user_friendships_path(@user) }
+        format.js { render :partial => 'update' }
       end
     else
       back_to_where_you_came

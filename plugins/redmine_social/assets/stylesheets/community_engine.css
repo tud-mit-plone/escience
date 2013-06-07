@@ -76,33 +76,6 @@
   font-size: 12px;
 }
 
-.openUser, .sendMessage, .addUser, .deleteUser {
-  float: right;
-	width:13px;
-	height: 10px;
-	margin-left: 5px;
-	background-position: 50% 0%;
-}
-.openUser {
-	background-image: url("/images/show.png");
-}
-
-.sendMessage {
-	background-image: url("/images/sendmessage.png");
-}
-
-.addUser {
-	background-image: url("/images/adduser.png");
-}
-
-.deleteUser {
-	background-image: url("/images/deleteuser.png");
-}
-
-.openUser:hover, .sendMessage:hover, .deleteUser:hover, .addUser:hover {
-	background-position: 50% 100%;
-}
-
 #member_search {
 	width: 85%;
 	margin-top: -3px;
@@ -122,4 +95,29 @@
 }
 #tab-content-pending .button.negative {
   background-color: #ffdfdf;
+}
+
+.letter {
+  background-color: #E9E9E9;
+  font-size:16px; 
+  padding: 2px 5px;
+  margin-bottom: 2px;
+}
+
+.ui-icon {
+	background-image: url(../../../images/ui-icons_888888_256x240.png);
+}
+
+.ui-icon:hover {
+	background-image: url(../../../images/ui-icons_72b42d_256x240.png);
+}
+
+.ui-icon {
+  float: right;
+  width: 16px;
+  height: 16px;
+}
+
+.ui-autocomplete.ui-menu.ui-widget.ui-widget-content {
+  display: none !important;
 }

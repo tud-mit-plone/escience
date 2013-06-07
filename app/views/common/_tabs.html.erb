@@ -3,10 +3,10 @@
 <div class="tabs">
   <ul>
   <% tabs.each do |tab| -%>
-    <li><%= link_to l(tab[:label]), { :tab => tab[:name] },
+    <li><%= link_to "#{l(tab[:label])} #{tab[:num] unless tab[:num].nil? }".html_safe, { :tab => tab[:name] },
                                     :id => "tab-#{tab[:name]}",
                                     :class => (tab[:name] != selected_tab ? nil : 'selected'),
-                                    :onclick => "showTab('#{tab[:name]}'); this.blur(); return false;" %></li>
+                                    :onclick => "showTab('#{tab[:name]}'); this.blur();#{tab[:onclick]+';' unless tab[:onclick].nil? } return false;" %></li>
   <% end -%>
   </ul>
   <div class="tabs-buttons" style="display:none;">

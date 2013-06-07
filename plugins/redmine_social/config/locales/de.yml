@@ -151,6 +151,7 @@ de:
   are_you_sure_you_want_to_permanently_delete_this_comment: "Bist du dir sicher, den Kommentar permanent zu löschen?"
   #en: are_you_sure_you_want_to_permanently_delete_this_user: Are you sure you want to permanently delete this user?
   are_you_sure_you_want_to_permanently_delete_this_user: Bist du dir sicher, den Benutzer dauerhaft zu löschen?
+  are_you_sure_you_want_to_create_a_friendship_with_this_user: Sind Sie sicher, dass Sie diesem Mitglied eine Kontaktanfrage zusenden wollen?
   #en: assume_id: Assume ID
   assume_id: "ID \xC3\xBCbernehmen"
   #en: assume_user_id: "Assume this user's ID"
@@ -336,12 +337,13 @@ de:
   delete_this_topic_forever: Das Thema für immer löschen?
   #en: delete_this_user: Delete this user
   delete_this_user: Benutzer löschen
+  deleted_this_user: Das Mitglied wurder aus Ihrer Kontaktliste entfernt.
   #en: deny: Deny
   deny: Ablehnen
   #en: denied: denied
   denied: abgelehnt
   #en: denied_friendships: Denied Friendships
-  denied_friendships: abgelehnte Freundschaften
+  denied_friendships: abgelehnte Kontaktanfragen
   #en: description: Description
   description: Beschreibung
   #en: destroy: Destroy
@@ -488,15 +490,15 @@ de:
   #en: frequently_asked_questions: Frequently Asked Questions
   frequently_asked_questions: "Häufig gestellte Fragen und Antworten"
   #en: friend: friend
-  friend: Freund
+  friend: Kontakt
   #en: friends: Friends
-  friends: Freunde
+  friends: Kontakt
   #en: friendship_could_not_be_created: Friendship could not be created
-  friendship_could_not_be_created: Freundschaft konnte nicht angelegt werden
+  friendship_could_not_be_created: Kontaktanfrage konnte nicht abgeschickt werden.<br> Vielleicht haben Sie bereits eine Anfrage erhalten und diese abgeleht oder das Mitglied hatte eine Anfrage Ihrerseits abgelehnt.
   #en: friendship_request_detail: Friendship request detail
-  friendship_request_detail: Details der Freundschaftsanfrage
+  friendship_request_detail: Details der Kontaktanfrage
   #en: friendship_requested: Requested friendship with %{friend}.
-  friendship_requested: Freundschaft von %{friend} angefragt.
+  friendship_requested: Kontaktanfrage bei %{friend} erfolgt.
   #en: from: From
   from: Von
   #en: from2: From
@@ -565,6 +567,8 @@ de:
   inbox: Inbox
   #en: insert: Insert
   insert: Einfügen
+  invitation_for_project_subject: Ich möchte Sie in ein Projekt einladen.
+  invitation_for_project_message: "Möchten Sie am Projekt %{project} teilnehmen?"
   #en: invite_a_friend: Invite a friend
   invite_a_friend: Lade einen Freund ein
   #en: invitation_was_successfully_created: Invitation was successfully created.
@@ -807,9 +811,10 @@ de:
   #en: pending_friendships: Pending Friendships
   friendships: Kontakte
   pending_friendship: Kontaktanfrage
-  pending_friendships: Kontaktanfragen
+  pending_friendships: Kontaktanfragen 
   pending_friendships_title: Eingegangene Kontaktanfragen
-  wait_for_pending_friendships: Offene Kontaktanfragen
+  wait_for_pending_friendship: Ein Mitglied hat Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
+  wait_for_pending_friendships: Mehrere Mitglieder haben Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
   accepted_user_friendships: Angenommene Kontaktanfragen
   pending_user_friendships: Ausstehenende Kontaktanfragen
   denied_user_friendships: Zurückgewiesene Kontaktanfragen
@@ -901,6 +906,9 @@ de:
   profile_privacy: Privatsphäre
   #en: profile_views: profile views
   profile_views: Profilansichten
+  project_invitation_sent: Projekteinladung wurde versandt.
+  project_invitation_denied: Es wurde zur Kenntnis genommen, dass Sie am Projekt nicht teilnehmen möchten.
+  project_invitation_accdepted: Herzlich willkommne im Projekt.<br> Sollten Sie sich noch nicht in der Ansicht befinden, so können Sie durch Klicken auf »Gruppe« in der Navigation oben links zu Ihren Gruppenprojekten navigieren.
   #en: pros: Pros
   pros: Profis
   #en: published: Published
@@ -943,13 +951,13 @@ de:
   #en: reply_to_topic: Reply
   reply_to_topic: Antworte auf das Thema
   #en: request_friendship: Request friendship
-  request_friendship: Freundschaftsanfrage
+  request_friendship: Kontaktanfrage
   #en: requested: requested
   requested: angefragt
   #en: requested_friendship_with: Requested friendship with
-  requested_friendship_with: Freundschaft angefragt bei
+  requested_friendship_with: Kontakt angefragt bei
   #en: requesting_friendship: Requesting friendship
-  requesting_friendship: Freundschaftsanfrage
+  requesting_friendship: Kontaktsanfrage
   #en: required: (required)
   required: (erforderlich)
   #en: required_we_will_send_a_confirmation_e_mail_to_the_address_you_enter: "(Required: We will send a confirmation e-mail to the address you enter.)"
@@ -1115,9 +1123,9 @@ de:
   #en: the_comment_was_deleted: The comment was deleted.
   the_comment_was_deleted: "Der Kommentar wurde gelöscht."
   #en: the_friendship_was_accepted: The friendship was accepted.
-  the_friendship_was_accepted: Die Freundschaft wurde angenommen.
+  the_friendship_was_accepted: Die Kontaktanfrage wurde angenommen. Sie können sich beide nun in Ihrer Kontaktliste finden.
   #en: the_friendship_was_denied: The friendship was denied.
-  the_friendship_was_denied: Die Freundschaft wurde abgelehnt.
+  the_friendship_was_denied: Die Kontaktanfrage wurde abgelehnt.
   #en: the_more_people_you_invite_the_better: The more people you invite, the better
   the_more_people_you_invite_the_better: Je mehr Menschen davon wissen, desto besser kann
   #en: the_service_was_deleted: The service was deleted.
@@ -1133,7 +1141,7 @@ de:
   #en: this_forum_is_still_getting_started: "This forum is still getting started ... here are some blog posts to get you thinking ..."
   this_forum_is_still_getting_started: "Dieses Forum ist gerade erst gestartet ... hier ein paar Blogeinträge zur Anregung ..."
   #en: this_friendship_is_pending: This Friendship is pending.
-  this_friendship_is_pending: Diese Freundschaft ist noch nicht bestätigt.
+  this_friendship_is_pending: Diese Kontaktanfrage ist noch nicht bestätigt.
   #en: this_is_your_dashboard: This is your dashboard.
   this_is_your_dashboard: "Das ist deine Übersicht."
   #en: this_month_best: "This month's Best"
@@ -1249,7 +1257,7 @@ de:
   #en: view_all_my_clippings: View all my clippings
   view_all_my_clippings: Alle meine Clippings
   #en: view_all_my_friend_requests: View all my friend requests
-  view_all_my_friend_requests: Meine Freundschaftsanfragen
+  view_all_my_friend_requests: Meine Kontaktanfragen
   #en: view_all_my_photos: View all my photos
   view_all_my_photos: Alle meine Fotos
   #en: view_comment: View Comment
@@ -1349,7 +1357,7 @@ de:
   #en: you_have_no_network_activity_yet: You have no network activity yet.
   you_have_no_network_activity_yet: "Du hast noch keine Aktivität in deinem Netzwerk."
   #en: you_have_pending_friendship_requests: You have pending friendship requests.
-  you_have_pending_friendship_requests: Du hast ausstehende Freundschaftsanfragen
+  you_have_pending_friendship_requests: Sie haben ausstehende Kontaktanfragen
   #en: you_have_uploaded: You have uploaded
   you_have_uploaded: "Uploads:"
   #en: you_have_written: You have written

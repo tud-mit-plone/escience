@@ -1240,7 +1240,7 @@ de:
   tooltip_navbar_logout: Zum Abmelden bitte hier klicken... Bis zum nächsten Mal.
   tooltip_navbar_help: Sie haben Fragen und kommen nicht weiter? Schauen Sie zunächst hier nach einer Antwort. Sollten Sie nicht fündig werde stehen wir Ihnen gern zur Verfügung.
   
-  tooltip_addUser: Mitglied zur Kontaktliste hinzufügen
+  tooltip_addUser: Mitglied Anfrage für Kontakt senden
   tooltip_deleteUser: Mitglied aus Kontaktliste entfernen
   tooltip_openUser: Mitgliedinformationen anzeigen
   tooltip_sendMessage: Mitglied eine Nachricht senden

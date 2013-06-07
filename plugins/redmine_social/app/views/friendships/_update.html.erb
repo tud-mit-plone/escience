@@ -5,4 +5,8 @@
 <% end %>
 $('#tab-content-pending').html('<%= escape_javascript(render :partial => 'pending') %>')
 $('#tab-content-accepted').html('<%= escape_javascript(render :partial => 'accepted') %>')
+<% if @waiting_friendships.count > 0 %>
 $('#navigation .user-contacts .announcment').html('<%= @waiting_friendships.count %>');
+<% else %>
+$('#navigation .user-contacts .announcment').hide();
+<% end %>

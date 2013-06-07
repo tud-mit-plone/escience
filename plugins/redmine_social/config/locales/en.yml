@@ -177,6 +177,7 @@ en:
   are_you_sure_you_want_to_permanently_delete_this_comment: "Are you sure you want to permanently delete this comment?"
   #en: are_you_sure_you_want_to_permanently_delete_this_user: Are you sure you want to permanently delete this user?
   are_you_sure_you_want_to_permanently_delete_this_user: Are you sure you want to permanently delete this user?
+  are_you_sure_you_want_to_create_a_friendship_with_this_user: Are you sure you want to send this member a contact request?
   #en: assume_id: Assume ID
   assume_id: Assume ID
   #en: assume_user_id: "Assume this user's ID"
@@ -403,6 +404,7 @@ en:
   delete_this_topic_forever: Delete this topic forever?
   #en: delete_this_user: Delete this user
   delete_this_user: Delete this user
+  deleted_this_user: The member was deleted from your contact list.
   #en: deny: Deny
   deny: Deny
   #en: denied: denied
@@ -545,6 +547,7 @@ en:
   female: Female
   #en: filename: Filename
   filename: Filename
+  filter: Filter
   #en: find_an_expert: Find an Expert
   find_an_expert: Find an Expert
   #en: find_an_expert_in: Find an Expert in
@@ -591,6 +594,7 @@ en:
   from2: From
   #en: gender: Gender
   gender: Gender
+  general_text_dialog: Enquiry
   #en: get_help_from_someone_who_knows: Get help from someone who knows
   get_help_from_someone_who_knows: Get help from someone who knows
   #en: get_popular: Get popular.
@@ -668,7 +672,12 @@ en:
   #en: insert: Insert
   insert: Insert
   #en: invite_a_friend: Invite a friend
+  invitation_for_project_subject: I want to ivite you to a project.
+  invitation_for_project_message: "Do you want to accept the invitation to the project %{project}."
   invite_a_friend: Invite a friend
+  invite_friend_to_project_first: "Do you want to invite <i>"
+  invite_friend_to_project_second: "</i> to the project <strong>"
+  invite_friend_to_project_third: "</strong> ?"
   #en: invitation_was_successfully_created: Invitation was successfully created.
   invitation_was_successfully_created: Invitation was successfully created.
   #en: invite_message: The more people you invite the better %{site} becomes.
@@ -1089,6 +1098,9 @@ en:
   #en: profile_views: profile views
   profile_views: profile views
   #en: pros: Pros
+  project_invitation_sent: Project invitation was sent.
+  project_invitation_denied: It was noted that you do not wish to participate in the project.
+  project_invitation_accdepted: Welcome to the Project <br>. If you are not already in the view, you can navigate to your group projects by clicking on »Team« in the navigation at the top left.
   pros: Pros
   #en: published: Published
   published: Published
@@ -1126,18 +1138,19 @@ en:
   remove_moderator: Remove moderator
   #en: remove_this_friend: Remove this friend
   remove_this_friend: Remove this friend
+  remove_this_friend_question: Are sure you want to remove this member from your contact list?
   #en: reply: Reply
   reply: Reply
   #en: reply_to_topic: Reply
   reply_to_topic: Reply
   #en: request_friendship: Request friendship
-  request_friendship: Request friendship
+  request_friendship: Request contact
   #en: requested: requested
   requested: requested
   #en: requested_friendship_with: Requested friendship with
-  requested_friendship_with: Requested friendship with
+  requested_friendship_with: Requested contact with
   #en: requesting_friendship: Requesting friendship
-  requesting_friendship: Requesting friendship
+  requesting_friendship: Requesting contact
   #en: required: required
   required: required
   #en: required_we_will_send_a_confirmation_e_mail_to_the_address_you_enter: "(Required: We will send a confirmation e-mail to the address you enter.)"

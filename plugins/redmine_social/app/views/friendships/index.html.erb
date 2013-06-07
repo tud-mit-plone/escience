@@ -7,10 +7,13 @@
 <%end%>
 
 <h1><%= l(:friendships)%></h1>
+
+<%#{:name=>'pending',:partial =>'pending',:label=>:pending_friendships, :num => "#{' ('+@waiting_friendships.length.to_s+')' if @waiting_friendships.length>0}", :onclick=>"hideOnLoad();"}'%>
+
 <%= render_tabs [
     {:name=>'accepted',:partial =>'accepted',:label=>:friendships},
+    {:name=>'pending',:partial =>'pending',:label=>:pending_friendships, :onclick=>"hideOnLoad();"},
     {:name=>'search',:partial=>'users/contact_membersearch',:label=>:label_memberlist_search},    
-    {:name=>'pending',:partial =>'pending',:label=>:pending_friendships},
   ] %>
 <div class="clear"></div>
 

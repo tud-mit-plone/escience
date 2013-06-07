@@ -15,11 +15,6 @@
     <% end %>
   <% end %>
 </div>
-<div>
-  <%#= link_to "Nachricht schreiben", {:controller => "user_messages", :action => 'new', :id => user.id} %>
-  <a href="<%= url_for(:controller => "friendships", :action => "write_message") %>" id="<%= user.id %>" class="write_message"><%= l(:label_new_usermessage) %></a>
-  <div class="write_message_form"></div>
-</div>
 
 <% unless memberships.empty? %>
   <h3 style="margin-bottom:-5px;"><%=l(:label_project_plural)%></h3>

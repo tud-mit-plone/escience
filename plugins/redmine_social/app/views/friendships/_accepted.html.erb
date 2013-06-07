@@ -18,7 +18,7 @@
 %>
 <div class="user_list"> 
   <% sorted_users.each do |letter, users| %>
-    <div style="font-size:16px; padding: 2px 10px"><%= letter %></div>
+    <div class="letter"><%= letter %></div>
     <table width="100%" cellpadding="0" cellspacing="0">
     <% users.each do |usr| %>
       <% user = usr.friend %>
@@ -35,9 +35,9 @@
           </fieldset>
         </td>    
         <td width="55" valign="top">
-          <%= link_to({:controller => 'friendships', :action => 'deny', :id => user.id}, :data => {:confirm => l(:remove_this_friend_question)}) do %><div class="deleteUser"></div><% end %>
-          <%= link_to(:controller => 'user_messages', :action => 'new', :id => user.id) do %><div class="sendMessage"></div><% end %>
-          <%= link_to(:controller => 'users', :action => 'show', :id => user.id) do %><div class="openUser"></div><% end %>
+          <%= link_to('<div class="ui-icon-closethick ui-icon"></div>'.html_safe, {:controller => 'friendships', :action => 'destroy', :id => usr.id}, :method => 'delete', :remote => true, :data => {:confirm => l(:remove_this_friend_question)}) %>
+          <%= link_to('<div class="ui-icon ui-icon-mail-closed"></div>'.html_safe, :controller => 'user_messages', :action => 'new', :id => user.id) %>
+          <%= link_to('<div class="ui-icon ui-icon-person"></div>'.html_safe, :controller => 'users', :action => 'show', :id => user.id) %>
         </td>
       </tr>
     <% end %>
@@ -68,7 +68,6 @@
       if ($(this).parent().parent().find('.content').html() == '') {
         id = $(this).parent().find('input[type=hidden]').attr('id');
         $.get('/users/"+User.current.id.to_s+"/friendships/'+id, function(data) {
-          console.log($('#'+id).parent().parent());
           $('#'+id).parent().parent().find('.content').html(data);
           $('#'+id+' a.write_message').click(function() {
             pageToLoad = $(this).attr('href');

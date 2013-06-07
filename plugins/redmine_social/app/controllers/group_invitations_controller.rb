@@ -11,8 +11,8 @@ class GroupInvitationsController < ApplicationSocialController
 
   #Todo create permission to role for inviting people to groups etc. 
   def create
-    sender_u_msg = UserMessage.new({ :body => "Wie sieht's aus?",
-                                                                 :subject => "kommste mit?",
+    sender_u_msg = UserMessage.new({ :body => l(:invitation_for_project_message,:project => Project.find(params[:project_id])),
+                                                                 :subject => l(:invitation_for_project_subject),
                                                                  :user => User.current,
                                                                  :author => User.current,
                                                                  :receiver_id => params[:receiver_id],
@@ -42,12 +42,11 @@ class GroupInvitationsController < ApplicationSocialController
 #    redirect_to :controller =>  @model_name.pluralize
   
     respond_to do |format|
-      flash[:notice] = :the_friendship_was_accepted
+      flash[:notice] = :project_invitation_sent
       format.html { redirect_to :controller =>  @model_name.pluralize }
       format.js {
-        render :js => "$.notification({ message:'Es funktioniert', type:'error' })";
+        render :js => "$.notification({ message:'"+l(:project_invitation_sent)+"', type:'notice' })";
       }
-#      format.js { render :js => "alert('geiler scheiß')" }
     end
     
   end  
@@ -59,13 +58,17 @@ class GroupInvitationsController < ApplicationSocialController
       m.save!
       @group_invitation.group.members << m
       @group_invitation.save!
-      flash[:notice] = "You accepted" 
+      flash[:notice] = l(:project_invitation_denied)
     else 
       @group_invitation.friendship_status_id = FriendshipStatus[:denied].id
       @group_invitation.save!
-      flash[:notice] = "You denied!"   
+      flash[:notice] = l(:project_invitation_accepted)
     end
-    redirect_to request.referer   
+    respond_to do |format|
+      format.html {render :partial => 'update'}
+      format.js {render :partial => 'update'}
+    end
+#    redirect_to request.referer   
   end
 
   private 
