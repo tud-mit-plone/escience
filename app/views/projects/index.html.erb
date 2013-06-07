@@ -126,5 +126,5 @@
       $(".link_to_project").click(function(e) {$(this).parent().toggleClass("selected"); e.preventDefault();});
       $(".link_to_project").dblclick(function() {self.location.href=$(this).attr("href");});
     });
-  ' unless @projects.count < 5 %>
+  ' unless @projects.nil? || @projects.count < 5 %>
 <% end %>
