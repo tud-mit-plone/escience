@@ -82,8 +82,12 @@ class AppointmentsController < ApplicationController
     params[:appointment][:description] = convertHtmlToWiki(params[:appointment][:description])
     start_date = params[:appointment][:start_date].empty? ? nil : params[:appointment][:start_date]
     due_date = params[:appointment][:due_date].empty? ? nil : params[:appointment][:due_date]
-    params[:appointment][:start_date] = Date.strptime(start_date,::I18n.t("date.formats.default")).to_s if start_date
-    params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if due_date
+    begin
+      params[:appointment][:start_date] = Date.strptime(start_date,::I18n.t("date.formats.default")).to_s if start_date
+      params[:appointment][:due_date] = Date.strptime(due_date,::I18n.t("date.formats.default")).to_s if due_date
+    rescue => e
+      logger.error(e.message)
+    end
     params[:appointment][:start_date] += " " + params[:appointment][:start_time] unless params[:appointment][:start_date].empty?
     params[:appointment][:due_date] += " " + params[:appointment][:due_time] unless params[:appointment][:due_date].empty?
     params[:appointment].delete(:start_time)

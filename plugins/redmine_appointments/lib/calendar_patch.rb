@@ -33,8 +33,8 @@ module RedmineAppointmentExtension
           events += Appointment.getAllEventsWithCycle(today, today)
           event_list = '<table cellspacing="0" cellpadding="0"><tr>'
           event_list += events.map{ |e| 
-            if (e[:start_date].hour.to_i != 0 || e[:start_date].min.to_i != 0)
-              '<td>'+format('%02d',e[:start_date].hour.to_i) + ':' + format('%02d',e[:start_date].min.to_i) + '</td><td style="padding-left:5px;">&nbsp;</td><td>' + e[:subject]+'</td>'
+            if (e[:start_date].strftime("%H").to_i != 0 || e[:start_date].strftime("%M").to_i != 0)
+              '<td>'+format('%02d',e[:start_date].strftime("%H").to_i) + ':' + format('%02d',e[:start_date].strftime("%M").to_i) + '</td><td style="padding-left:5px;">&nbsp;</td><td>' + e[:subject]+'</td>'
             else 
               '<td colspan="2">&nbsp;</td><td>' + e[:subject] + '</td>'
             end

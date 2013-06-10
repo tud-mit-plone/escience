@@ -38,7 +38,7 @@
       <%= ' event' if !(calendar.events_on(day).empty?) %>
       <% unless @listOfDaysBetween.nil? || @listOfDaysBetween[day.to_date.to_s].nil? || @listOfDaysBetween[day.to_date.to_s].empty? %>
       <%= ' weekend' if weekend %><% @listOfDaysBetween[day.to_date.to_s].each do |d| %>
-        <%="e_#{d[:id].to_s} "%>
+        <%="e_#{d[:id].to_s} " unless d.class == Array%>
       <% end %>" valign="top" id="day_<%= day.day%>
       <%end%>"
       >
@@ -127,3 +127,4 @@
     });
 "
   %>
+
