@@ -1,0 +1,161 @@
+<% content_for :header_tags do %>
+    <%= auto_discovery_link_tag(:atom, {:action => 'index', :format => 'atom', :key => User.current.rss_key}) %>
+<% end %>
+
+<% content_for :sidebar_right do %>
+  <% if User.current.logged? %>
+    <% if User.current.allowed_to?(:add_project, nil, :global => true) %>
+      <%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new', :sub => params[:sub]}, :class => 'icon icon-add')%>
+    <% end %>
+    <ul>
+    <% if User.current.allowed_to?(:view_issues, nil, :global => true) && 1==0 %>
+        <li><%= link_to(l(:label_issue_view_all), issues_path) %></li>
+      <% end %>
+    <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
+        <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}) %></li>
+    <% end %>
+    <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
+      <li><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }) %></li>
+    <% end %>
+    </ul>
+  <% else %>
+    <%  @user = session[:user].nil? ? User.new : session[:user] %>
+    <%= render :partial => 'welcome/sidebar' %>
+  <% end%>
+<% end %>
+
+<h2><%=l(:label_project_plural)%></h2>
+<div class="sort_buttons" style="float:right; margin-top:-44px;">
+      <div class="sortby"><%= l(:label_sort) %></div>
+      <div class="first"><%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "#{@newest_dir if params[:order] == 'created_on'}") %></div>
+      <div><%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "#{@name_dir if params[:order].nil? || params[:order] == 'name'}") %></div>
+</div>
+<div class="clear"></div>
+<% unless @projects.nil? %>
+  <% @projects.each do |project_element| %>
+    <% project = project_element[:project] %>
+    <% date = project_element[:date] %>
+    <fieldset class="has_collapsed project">
+      <div class="tools">
+        <% if User.current.allowed_to?(:close_project, nil, :global => true) %>
+          <div class="delete_project">
+            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/delete.png"), project_path(project), :data => {:confirm => l(:text_project_destroy_confirmation)}, :method => :delete) %>
+          </div>
+        <% end %>
+        <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
+          <div class="settings_project">
+            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/settings.png"), {:controller => 'projects', :action => 'settings', :id => project.id, :sub => params[:sub]}) %>
+          </div>
+        <% end %>
+        <% visible_issues = false 
+           Issue.find(:all, :conditions => "project_id = #{project.id}").each do |e|
+             if e.visible? 
+               visible_issues = true
+             end 
+           end %>
+        <% if User.current.allowed_to?(:view_issues, project) && visible_issues %>
+          <div class="issues_project">
+            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/todo.png"), {:controller => 'issues', :id => project.id, :sub=>params[:sub]}) %>
+          </div>
+        <% end %>
+      </div>
+      <%= link_to({:controller => 'projects', :action => 'show', :id => project, :sub => params[:sub]}, :class => "link_to_project") do %>
+        <h2 class="title_of_project"><%= h(truncate(project.name, :length => 300)) %></h2>
+        <div class="innerInfo<%= ' collapsed' unless @projects.count < 5 %>">
+          <div>
+            <table>
+              <tr>
+                <td width="40" valign="top"><%= Date.parse(project.created_on.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %></td>
+            <%= content_tag('td', textilizable(project.short_description.truncate(200), :project => project), :class => 'wiki description', :valign => "top") if project.description.present? %>
+              </tr>
+            </table>
+          </div>
+          <div class="clear"></div>
+          <%= content_tag('div', l(:label_last_modified) +": "+ format_time(date), :class => 'last_modified') %>
+  
+          <div <%= 'class=has_subproject' if project.children().count > 0 %>>
+          <% project.children().each_with_index do |subproject, i| 
+              if subproject.visible? %>
+              <div>
+              <%= link_to(subproject.name, {:controller => 'projects', :action => 'show', :id => subproject}, :class => "link_to_project") %>
+                <% if subproject.id==project_element[:newest] %>
+                <div class="newest_project">
+                  <table cellpadding="0" cellspacing="0"><tr><td valign="middle" class="arrow"><img src="/images/arrow-left.png" /></td><td class="text"><%= l(:label_newest_project) %></td></tr></table>
+                </div>
+                <% end %>
+                <div>
+                <% subproject.children().each_with_index do |subsubproject, i| 
+                    if subsubproject.visible? %>
+                    <div>
+                      <%= link_to(subsubproject.name, {:controller => 'projects', :action => 'show', :id => subsubproject}, :class => "link_to_project") %>
+                      <% if subsubproject.id==project_element[:newest] %>
+                        <div class="newest_project">
+                          <table cellpadding="0" cellspacing="0"><tr><td valign="middle" class="arrow"><img src="/images/arrow-left.png" /></td><td class="text"><%= l(:label_newest_project) %></td></tr></table>
+                        </div>
+                      <% end %>
+                    </div>
+                <%  end
+                   end %>
+                </div>
+              </div>
+          <%  end
+             end %>
+          </div>
+          
+        </div>
+      <% end %>
+      <div class="invitation" style="display:none">
+        <%= render :partial => 'group_invitations/group_invitation', :locals => {:group => "project", :group_id => project.id}%>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <% other_formats_links do |f| %>
+    <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+  <% end %>
+<% end %>
+
+
+
+<% html_title(l(:label_project_plural)) -%>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'project' %>
+  <%= javascript_tag '
+    $(function() {addToolTip(".delete_project","'+l(:tooltip_project_message_delete)+'","left")});
+    $(function() {addToolTip(".settings_project","'+l(:tooltip_project_message_settings)+'","left")});
+    $(function() {addToolTip(".issues_project","'+l(:tooltip_project_message_issues)+'","left")});' if User.current.confirm %>
+  <%= javascript_tag '
+    $(document).ready(function() {
+      $(".project").droppable({ 
+         accept: ".draggable",
+         snap: true,
+         drop: function(event, ui) {
+           $(event.target).find(".invitation #receiver_id").val(ui.helper.context.id);
+           $(event.target).find(".invitation input[type=submit]").click();
+           $("#dialog-confirm").html("'+l(:invite_friend_to_project_first)+'"+ui.helper.context.innerHTML+"'+l(:invite_friend_to_project_second)+'"+$(event.target).find("h2.title_of_project").html()+"'+l(:invite_friend_to_project_third)+'");
+         }
+      });
+      $(".invite").each(function(){
+        $(this).click(function() {
+          $(".invite").parent().find(".invitation").toggleClass("visible");
+          $("#contact_list_wrapper").show();
+          return false;
+        });
+      });
+      $("fieldset").each(function(){
+        var innerInfo = $(this).find(".innerInfo.collapsed");
+        $(this).hover(function(){
+          var height = innerInfo.height("auto").height();
+          innerInfo.height(height);
+        },
+        function() {
+          innerInfo.height(0);
+        });
+      });
+    });
+  ' %>
+<% end %>
+
+<% content_for :sidebar_right do %>
+  <%= render :partial => "friendships/contact_list" if User.current.logged? %>
+<% end %>

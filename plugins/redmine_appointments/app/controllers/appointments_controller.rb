@@ -51,7 +51,11 @@ class AppointmentsController < ApplicationController
     @referer = params[:referer]
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))
     @appointment.attributes = params[:appointment]
-    @appointment.user = User.current
+    unless @appointment.user == User.current
+      @appointment = @appointment.clone 
+      @appointment.id = nil
+      @appointment.user = User.current
+    end
     if @appointment.save
       flash[:notice] = l(:notice_appointment_successful_create)    
       respond_to do |format|
