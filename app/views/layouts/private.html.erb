@@ -27,6 +27,8 @@
     		    <div class="headline"><%= l(:label_communication) %></div>
     		    <%= render_menu :private_menu %>
     		    <%= call_hook :view_layouts_base_sidebar %>
+		    <div class="splitter"><%= l :label_projectspec %></div>
+    		    <%= render_main_menu(@project) %>
   	    	</div>
 		    	<% unless (yield :sidebar_left) == "" || (yield :sidebar_left) == "  \n" %>
     	    	<div class="sidebar_nav">
