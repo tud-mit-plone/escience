@@ -65,22 +65,12 @@ class UsersController < ApplicationController
   def user_search
     if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
       @users = []
-    elsif User.current.admin
+    else
+	# User.current.admin
       @users = User.find(:all,
         :select => "firstname, lastname, id",
         :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ?',
         "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}"],:limit => 5, :order => 'lastname')
-    else
-      @users = User.find_by_sql(["SELECT DISTINCT u.firstname, u.lastname, u.id
-                                   FROM users u, projects p, members m
-                                   WHERE (lastname LIKE ? OR firstname LIKE ?)
-                                   AND m.user_id = u.id
-                                   AND p.status=1
-                                   AND p.id = m.project_id
-                                   AND p.id IN ( #{User.current.projects.map{|p| p.id}.join(",")})
-                                   AND u.id <> ?
-                                   ","#{params[:q]}%", "#{params[:q]}%",
-                                   User.current.id])
     end
     respond_to do |format|
       format.xml { render :xml => @users }
@@ -95,21 +85,11 @@ class UsersController < ApplicationController
     others = []
     if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
       others = []
-    elsif User.current.admin
+    else
       others = User.find(:all,
         :select => "firstname, lastname, id",
         :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ?',
         "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}"],:limit => 5, :order => 'lastname')
-    else
-      others = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id, p.name
-                                 FROM users u, projects p, members m
-                                 WHERE (u.lastname LIKE ? OR u.firstname LIKE ?)
-                                 AND m.user_id = u.id
-                                 AND p.status=1
-                                 AND p.id = m.project_id
-                                 AND u.id <> ?
-                                 ","#{params[:q]}%", "#{params[:q]}%",
-                                 User.current.id])
                                  
 #      others = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id, p.name
 #                                 FROM users u, projects p, members m
