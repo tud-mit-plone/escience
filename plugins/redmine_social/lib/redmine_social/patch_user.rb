@@ -30,6 +30,7 @@
         end
 
         def create_private_project(user=self)
+          logger.info ("user.private_project.nil? :: #{user.private_project}")
           if user.private_project.nil? 
             prj = Project.new({:name => user.login, :is_public => false, :identifier => Digest::MD5.hexdigest(Time.now.to_i.to_s).to_s, :is_private_project => true})
             prj.enabled_modules = []
@@ -61,7 +62,8 @@
           has_many :friendships_not_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', false], :dependent => :destroy
           has_many :occurances_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
           #private project 
-          belongs_to :private_project, :class_name => "Project", :dependent => :destroy
+          #belongs_to :private_project, :autosave => true, :dependent => :destroy, :class_name => 'Project', :foreign_key => 'id'
+          belongs_to :private_project, :class_name => "Project", :foreign_key => "private_project_id"
         end
       end
     end
@@ -114,7 +116,6 @@
         receiver.class_eval do
           before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count, :crop_profile_photo, :upload_profile_photo]
           layout 'base'
-          
 
           def update
             @user.admin = params[:user][:admin] if params[:user][:admin]
