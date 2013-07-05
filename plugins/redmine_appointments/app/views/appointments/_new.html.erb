@@ -1,3 +1,4 @@
+  <% unless @appointment.nil? %>
   <%= form_for(@appointment,:url=>{:controller => 'appointments',:action=>'create', :view => 'calendar'}, :remote => true, :html => {:id => 'issue-form', :multipart => true}) do |f| %>
 
   <h2 style="margin-bottom:0px;"><%= l(:label_appointment_new) %></h2>
@@ -33,7 +34,7 @@
   <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
   <%= javascript_tag "$('#appointment_subject').focus();" %>
 <% end %>
-
+<%end%>
 
 <% content_for :header_tags do %>
     <%= robot_exclusion_tag %>

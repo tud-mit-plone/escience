@@ -47,7 +47,7 @@ end
 
 platforms :mri_19, :mingw_19 do
   group :mysql do
-    gem "mysql2", "~> 0.3.11"
+    #gem "mysql2", "~> 0.3.11"
   end
 end
 
@@ -125,3 +125,4 @@ gem 'acts_as_commentable', '3.0.1'
 gem 'cocaine','0.3.2'
 gem 'paperclip','3.1.4'
 gem 'docsplit'
+gem 'iconv'
