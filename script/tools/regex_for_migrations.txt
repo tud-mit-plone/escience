@@ -1,0 +1,9 @@
+^\s*-(/.*?)
+^\s*-(/d+) # regex for finding misconverted haml tags
+
+(:\w+)\.l # search regex for :symbol.l for i18n
+l(\1) # replace regex for convertion to l(:symbol)
+
+current_user => User.current
+
+BaseController => ApplicationSocialController

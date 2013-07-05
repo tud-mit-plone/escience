@@ -1,3 +1,6 @@
+/redmine_polls/
+/redmine_multi_calendar/
+/redmine_blocks/
 /.codeintel/config
 *.orig
 *.svn
@@ -44,4 +47,4 @@ test/functional/.fuse_hidden00000e7900000005
 public/images/logo_e-science_network.png
 public/system/attachments/development/files/*
 *.haml
-plugins/reddrop/
+plugins/redmine_reddrop/
