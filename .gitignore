@@ -43,3 +43,5 @@ app/views/timelog/.fuse_hidden00000d6f00000002
 test/functional/.fuse_hidden00000e7900000005
 public/images/logo_e-science_network.png
 public/system/attachments/development/files/*
+*.haml
+plugins/reddrop/
