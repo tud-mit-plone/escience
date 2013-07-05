@@ -29,7 +29,7 @@
       <% if @user.avatar %>
         <%= image_tag( @user.avatar.photo(:medium), :height => '180', :id => 'preview') %>
       <% else %>
-        <%= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
+        <%#= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
       <% end %>
     </a>  
     </div>
@@ -63,6 +63,11 @@
   <%= render :partial => 'users/preferences' %>
 </fieldset>
 
+<fieldset>
+<% @project = User.current.private_project%>
+<%= render_tabs private_project_settings_tabs %>  
+</fieldset>
+
 <%= submit_tag l(:button_save) %>
 
 </div>
@@ -75,7 +80,6 @@
   <%= javascript_include_tag 'jquery.Jcrop.min.js', :plugin => 'redmine_social' %>
   <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>  
 <% end %>
-
 <script type="text/Javascript" charset="utf-8">
 function hide_change_avatar() {
   $('#preview').css({

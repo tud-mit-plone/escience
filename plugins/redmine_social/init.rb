@@ -23,32 +23,32 @@ Redmine::Plugin.register :redmine_social do
   description 'Extend your Redmine with social media'
   version '0.0.1'
 
-  settings :default => { 
-    :invitation_default_role_id => '3',
-    :private_project_default_role_id => '4',
+  settings(:default => { 
+    'invitation_default_role_id' => '3',
+    'private_project_default_role_id' => '4',
     'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
     'photo_max_size' => '5' , 
     'photo_paperclip_options' => {
-        :styles => {
-            :thumb => {
-              :geometry => "100x100#",
-              :processors => [:cropper]
+        "styles" => {
+            "thumb" => {
+              "geometry" => "100x100#",
+              "processors" => [:cropper]
             },
-            :medium => {
-              :geometry => "180x180#",
-              :processors => [:cropper]
+            "medium" => {
+              "geometry" => "180x180#",
+              "processors" => [:cropper]
             },
-            :large => {
-              :geometry => "465>",
-              :processors => [:cropper]
+            "large" => {
+              "geometry" => "465>",
+              "processors" => [:cropper]
             }
         },
-        :path => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
-        :url => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
-        'photo_missing_thumb' => "avatar.png",
-        'photo_missing_medium' => "avatar.png",
+        "path" => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
+        "url" => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
+    'photo_missing_thumb' => "avatar.png",
+    'photo_missing_medium' => "avatar.png",
     },
-    :partial =>'settings/redmine_social'
+    :partial =>'settings_redmine_social/settings')
 
   contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
   menu :account_menu, :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}

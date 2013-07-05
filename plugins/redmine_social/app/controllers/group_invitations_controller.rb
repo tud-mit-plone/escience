@@ -54,7 +54,7 @@ class GroupInvitationsController < ApplicationSocialController
   def selection 
     unless params[:true].nil?
       @group_invitation.friendship_status_id = FriendshipStatus[:accepted].id
-      m = Member.new(:user_id => @user.id, :project => @group_invitation.group, :role_ids => [Setting.plugin_redmine_social[:invitation_default_role_id]])
+      m = Member.new(:user_id => @user.id, :project => @group_invitation.group, :role_ids => [Setting.plugin_redmine_social['invitation_default_role_id']])
       m.save!
       @group_invitation.group.members << m
       @group_invitation.save!

@@ -10,6 +10,8 @@ module RedmineSocialExtends
       receiver.extend         ClassMethods
       receiver.send :include, InstanceMethods
       receiver.class_eval do
+        helper ProjectsHelper        
+
         def render_block
           if params['blockname'].nil?
             redirect_to :action => 'index', :user_id => User.current.id

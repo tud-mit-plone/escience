@@ -37,7 +37,7 @@
             prj.tracker_ids = []
             prj.custom_value_ids=[] 
             prj.save!
-            m = Member.new(:user_id => user.id, :project => prj, :role_ids => [Setting.plugin_redmine_social[:private_project_default_role_id]])
+            m = Member.new(:user_id => user.id, :project => prj, :role_ids => [Setting.plugin_redmine_social['private_project_default_role_id']])
             m.save!
             prj.exclusive_user = user 
           end
@@ -76,12 +76,14 @@
         def upload_profile_photo
           @user = User.find(params[:id])
           @avatar = Photo.new(params[:photo])
-
+            logger.info("1#{@user.login} : avatar_id: #{@avatar.id} #{@user.avatar_id}")
           @avatar.name = params[:photo][:filename] 
           @avatar.user  = @user
-          if @avatar.save
-#            @user.avatar_id  = @avatar.id
-#            @user.save!
+            logger.info("#{@user.login} : avatar_id: #{@avatar.id} #{@user.avatar_id}")          
+          if @avatar.save!
+            @user.avatar_id  = @avatar.id
+            @user.save!
+
             @photo = @avatar
             respond_to do |format|
               format.html { render :action => 'show', :layout => false if request.xhr? }
