@@ -6,7 +6,8 @@
     <h1><%= l(:change_profile_photo) %></h1>
     
     <div class="alt first_alt" >
-      <%= form_for Photo.new, :url => upload_profile_photo_user_path(@user), :remote => true, :multipart =>true, :html => {:id => 'upload_avatar_form'} do |form| %>
+      <%= form_for Photo.new, :url => upload_profile_photo_user_path(@user), 
+              :remote => true, :multipart =>true, :html => {:id => 'upload_avatar_form'} do |form| %>
         <label>
           <%= l(:choose_a_photo_for_your_profile) %>
           <%= form.file_field :photo, :id => 'uploadFile' %>
@@ -43,7 +44,8 @@ $(function() {
   <%if params[:format] %>
     $('#preview').attr('src','<%= @photo.photo.url(:original) %>');
   <% end %>
-  $('#uploadFile').live('change', function(){
+  $(document).one('change', '#uploadFile', function(){
+    console.log(jQuery( $('#uploadFile') ).data( "events" ));
     $('#upload_avatar_form').ajaxSubmit({
       beforeSubmit: function(a,f,o) {o.dataType = 'json';},
       complete: function(XMLHttpRequest, textStatus) {
