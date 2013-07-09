@@ -1709,3 +1709,6 @@ en:
   filter: "Filter"
   contact_list: "Contact list "
   notice_user_successful_added: "user added successfully"
+  text_message_sent_error_fields: "Could not send message"
+  text_message_sent_done: "Message was send successfully"
+  label_contact_captcha: "What is the name of the platform?"

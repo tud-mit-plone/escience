@@ -47,7 +47,7 @@ class UserMessagesController < ApplicationController
   def send_contact_message
 
     email = params[:email]
-    if email.match(EMAIL_REGEX).nil?
+    if email.match(EMAIL_REGEX).nil? || params[:captcha].nil? || !(params[:captcha].to_s.downcase == 'escience')
       flash[:notice] = l(:text_message_sent_error_fields)
     else
       @user_message = UserMessage.new()
