@@ -14,6 +14,12 @@
 
   <p>
     <%= f.submit button1 %>
-    <%= f.submit button2, :onclick => "Form.getInputs(this.form, null, 'go_to')[0].value = 'only_create'" %>
+    <%= f.submit button2, :onclick => 'set_goto();' %>
   </p>
 </frameset>
+<%= javascript_tag ' 
+
+function set_goto(){
+  $("#go_to").val("only_create");
+};
+'%>

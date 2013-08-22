@@ -3,9 +3,11 @@
 </div>
   <div id='yui'>
     <div id ="single_upload", class =".yui-b">
+      <fieldset>
       <h3><%= l(:new_album) %></h3>
-      <%= form_for(@album, :url => user_albums_path(User.current.id), :html => {:class => "MainForm"}) do |f| %>
+      <%= form_for(@album, :url => {:controller => 'albums', :action => 'create', :user_id => User.current.id, :project_id => params[:project_id]}, :html => {:class => "MainForm"}) do |f| %>
         <%= render :partial => 'form', :locals => {:f => f, :button1 => l(:create_and_add_photos), :button2 => l(:create_album) } %>
       <%end%>
+      </fieldset>
     </div>
   </div>

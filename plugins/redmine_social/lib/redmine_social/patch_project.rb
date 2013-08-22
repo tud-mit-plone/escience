@@ -12,6 +12,7 @@ module RedmineSocialExtends
         receiver.class_eval do
           acts_as_invitable
 
+          has_many :albums, as: :container, :dependent => :destroy
           has_one :exclusive_user, :class_name => 'User', :foreign_key => 'private_project_id'
         end
       end

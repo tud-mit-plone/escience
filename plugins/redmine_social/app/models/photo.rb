@@ -44,7 +44,7 @@ class Photo < ActiveRecord::Base
   has_attached_file :photo, settings_to_symbolize_keys
 
   def display_name
-    (self.name && self.name.length>0) ? self.name : "#{:created_at.l.downcase}: #{I18n.l(self.created_at, :format => :published_date)}"
+    (self.name && self.name.length>0) ? self.name : "#{l(:created_at).downcase}: #{I18n.l(self.created_at, :format => :published_date)}"
   end
 
   def description_for_rss

@@ -1,10 +1,17 @@
-
 <h3><%= "#{l(:album)}"%></h3>
 <% @albums.each do |album| %>
   <%next if album.nil?%>
-  <frameset>
-    <%unless album.title.empty?%>
-      <p><%=album.title%></p>
+  <fieldset>
+    <% if album.container %> 
+    <legend><%= album.container%></legend>
     <%end%>
-</frameset>
+    <%unless album.title.empty?%>
+      <% name = album.title%>
+    <%else%>
+      <% name = "unnamed album" %> 
+    <%end%>
+    <%= link_to(name ,  url_for({:controller => 'albums', :action => 'show', :project_id => params[:project_id], :id => album.id }))%>
+    <%= link_to("Destroy", url_for({:controller => 'albums', :action => 'destroy', :id => album.id }),:method => :delete, :confirm => l(:text_are_you_sure) ,:class => 'button negative' ) %>
+</fieldset>
 <%end%>
+ <%= link_to("add_album", url_for({:controller => 'albums', :action => 'new', :project_id => params[:project_id] })) %>

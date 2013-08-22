@@ -24,8 +24,8 @@
         </div>
     <div class='yui'>
         <h3>
-          <%= link_to l(:users_photos, :user => @user.login), user_photos_path(@user) %>
-          <%= link_to h(@photo.display_name), user_photo_path(@user, @photo) %>
+          <%= link_to(l(:users_photos, :user => @user.login), user_photos_path(@user)) %>
+          <%= link_to(h(@photo.display_name), user_photo_path(@user, @photo))%>
         </h3> 
     </div>
     <%end%>

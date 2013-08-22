@@ -11,13 +11,13 @@
                      :url => { :action => "account" },
                      :html => { :id => 'my_account_form',
                                 :method => :post } do |f| %>
-
 <%= link_to(l(:button_change_password), {:action => 'password'}, :class => 'button') if @user.change_password_allowed? %>
 <%= link_to(l(:preview), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'button', :target => '_blank') %>
 <%= submit_tag l(:button_save) %>
 <h2><%=l(:label_my_account)%></h2>
 <%= error_messages_for 'user' %>
-
+<%= render :partial => 'security_settings', :locals => {:user => @user}%>
+<%= render :partial => 'edit_interest', :locals => {:user => @user}%>
 <div id="profile">
 <fieldset id="information" class="box tabular">
   <legend><%=l(:label_information_plural)%></legend>
@@ -29,7 +29,7 @@
       <% if @user.avatar %>
         <%= image_tag( @user.avatar.photo(:medium), :height => '180', :id => 'preview') %>
       <% else %>
-        <%#= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
+        <%= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
       <% end %>
     </a>  
     </div>
