@@ -140,8 +140,82 @@ function tagItForUs(el,text,id) {
      placeholderText: text
   });
 }
+    function is_input_in_autocomplete(html_autocomplete_id, message){
+      var flag = false; 
+      $(html_autocomplete_id+" .name_element").each(function() {
+        
+        if($(this).text() == message){
+          flag = true; 
+          return false;
+        }
+      });
+      return flag;
+    }
 
-	function addUserToReceivers(message, id) {
+    function autocomplete_keydown_events(html_insert_id, html_autocomplete_id) {
+    $(html_insert_id+"_visible").on("keydown",function(e) {
+      
+      /* 32 => space, 13 => enter */
+
+      if (e.which == 32 || e.which == 13 && (e.preventDefault() || 1)){ 
+        var inserted_one = false; 
+        input = $(html_insert_id+"_visible").val();
+        
+        $.map($.redmine_social, function (auto_suggest) {
+          if(auto_suggest["tag"]["name"] == input ){
+            addElementToHtmlElement(html_insert_id,html_autocomplete_id, auto_suggest["tag"]["name"], auto_suggest["tag"]["id"]);
+            inserted_one = true; 
+            return false;
+          }
+        });
+        if(inserted_one == false){
+          addElementToHtmlElement(html_insert_id,html_autocomplete_id,input, input);
+        }
+        $(html_insert_id+"_visible").val("");
+      }
+    });
+    }
+
+	function addElementToHtmlElement(html_insert_id,html_autocomplete_id, message, id) {
+        if(is_input_in_autocomplete(html_autocomplete_id, message) == true){
+          return; 
+        }
+	  var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
+	  var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
+	  var id = $(this).attr('class').split(' ')[1].substring(8);
+	  var olddata_arr = $(html_insert_id).val().split(',');
+        
+         if (olddata_arr.length == 0) {
+	    $(html_insert_id).val("");
+	  }else{
+           olddata_arr.splice($.inArray(id, olddata_arr), 1 );
+	    $(html_insert_id).val(olddata_arr.join(','));
+	    $(this).parent().remove();
+	  }
+	  });
+	  var oldelements = $(html_autocomplete_id).find(".name_element");
+	  if (oldelements.length < 1){
+          element.prependTo(html_autocomplete_id);
+         }else{
+           element = oldelements.last().after(element);
+         }
+	   $(html_autocomplete_id).scrollTop( 0 );
+	   var olddata = $(html_insert_id).val();
+         if (olddata != ""){
+           olddata = olddata+","+id;
+         }else{
+           olddata = id;
+         }
+         
+          $(html_insert_id).val(olddata);
+	   $(html_insert_id+"_visible").val("");
+	}
+
+    function addUserToReceivers(message, id) {
+        addElementToHtmlElement('#user_message_receiver','#recipient_autocomplete', message, id);
+    }
+
+	/*function addUserToReceivers(message, id) {
 		var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
 		var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
 		 var id = $(this).attr('class').split(' ')[1].substring(8);
@@ -163,4 +237,4 @@ function tagItForUs(el,text,id) {
 		else olddata = id;
 		$("#user_message_receiver").val(olddata);
 		$("#user_message_receiver_visible").val("");
-	}
+	}*/

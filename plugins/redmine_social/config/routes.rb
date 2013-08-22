@@ -14,6 +14,9 @@ RedmineApp::Application.routes.draw do
   post 'create_photo.js' => 'photos#create', :as => :create_photo, :format => 'js'
 
   match 'my/render_block/:blockname', :controller => 'my', :action => 'render_block', :via => :get, :blockname => /\w+/
+  match 'my/interest_search', :controller => 'my', :action => 'interest_search', :via => :get
+  match 'my/skill_search', :controller => 'my', :action => 'skill_search', :via => :get
+
   resources :projects do 
     resources :photos do
       post 'add_comment', :action => :add_comment

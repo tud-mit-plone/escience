@@ -26,7 +26,6 @@ module RedmineSocialExtends
           message_id user_message
           @user_message = user_message
           @author = user_message.user
-          p user_message.recipients_mail
           @user_message_url = url_for(:controller => 'user_messages', :action => 'show', :id => user_message.id)
           mail(:to => user_message.recipients_mail, 
                   :subject => "[#{l(:label_user_message)}] #{l(:label_from)} #{user_message.user}: #{user_message.subject}") do |format| 

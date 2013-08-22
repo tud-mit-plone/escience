@@ -1,0 +1,54 @@
+<%= javascript_tag '
+    $(function(){
+      autocomplete_with_keyevents("#my_interest",
+                                                        "#interest_autocomplete",
+                                                        "'+url_for(:controller => "my", :action => "interest_search")+'",
+                                                        "'+user.interest_list.join(',')+'",
+                                                        "'+user.interest_ids.join(',')+'");
+      autocomplete_with_keyevents("#my_skill",
+                                                        "#skill_autocomplete",
+                                                        "'+url_for(:controller => "my", :action => "skill_search")+'",
+                                                        "'+user.skill_list.join(',')+'",
+                                                        "'+user.skill_ids.join(',')+'");
+    });
+  '%>
+
+<fieldset>
+<legend><%=l(:text_my_interest)%></legend>
+<div style="height:20px;"></div>
+<label><%= l(:label_my_interest_add) %>:</label> 
+<div class="ui-widget ui-widget-content" id="interest_autocomplete">
+
+  <input id="my_interest_visible" class="ui-autocomplete-input ui-corner-all"/>
+  <%= hidden_field_tag "my_interest",nil,:autocomplete => 'off' %>
+
+</div>
+<div style="clear:both"></div>
+<div id="auto_suggestion"></div>
+</fieldset>
+
+<fieldset>
+<legend><%= l(:text_my_skill) %></legend>
+<div style="height:20px;"></div>
+<label><%= l(:label_my_skill_add) %>:</label> 
+<div class="ui-widget ui-widget-content" id="skill_autocomplete">
+
+  <input id="my_skill_visible" />
+  <%= hidden_field_tag "my_skill",nil,:autocomplete => 'off' %>
+
+</div>
+<div style="clear:both"></div>
+<div id="auto_suggestion"></div>
+</fieldset>
+
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'user_message' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.core.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.position.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.widget.js' %>
+  <%= javascript_include_tag 'visualsearch/jquery.ui.autocomplete.js' %>
+  <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
+  <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
+  <%= javascript_include_tag 'autocomplete_with_manual_input.js', :plugin => 'redmine_social' %> 
+<% end %>

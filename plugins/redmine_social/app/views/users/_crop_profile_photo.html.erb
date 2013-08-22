@@ -1,5 +1,13 @@
 <% @avatar = @avatar ? @avatar : @user.avatar %>
 <% @photo = @photo ? @photo : @user.avatar %>
+
+<% if @avatar && @avatar.errors.any? %>
+  <%= javascript_tag "$(document).ready(function(){
+          $.notification({ message:\"#{@avatar.errors.full_messages.join("\n")}\", type:\"error\" });
+  });"
+  %> 
+<% end %>
+
 <div class="background_hider" onclick="<%= @avatar ? 'hide_change_avatar()' : "$('#change_avatar_wrapper').fadeOut();" %> "></div>
 <div id="change_avatar">
   <div class="change_avatar_background">

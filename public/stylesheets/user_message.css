@@ -225,6 +225,7 @@ div.name_element {
   border-radius: 5px;
   color: #ffffff;
   margin: 4px 3px 0 3px;
+  cursor: default;
 }
 
 #user_message_receiver_visible {

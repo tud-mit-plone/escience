@@ -57,11 +57,23 @@ en:
       time_ago: "%l:%M%p"
 
   activerecord:
+    models: 
+      photo: "photo"
     attributes:
+      _all: 
+        created_at: "created at"
+        updated_at: "updated at"
       photo:
         created_at: "created at: "
+        photo_file_size: "Filesize"
       sb_posts:
         body: "Body"
+    errors:
+      models:
+        photo:
+          attributes:
+            photo_file_size:
+              less_than: "Filesize to large %{count}"
   greeting: "Hello %{name}"
   #en: a_few_seconds_ago:  a few seconds ago
   a_few_seconds_ago:  a few seconds ago
@@ -1709,6 +1721,11 @@ en:
   filter: "Filter"
   contact_list: "Contact list "
   notice_user_successful_added: "user added successfully"
+  change_profile_photo: "change your profile picture"
   text_message_sent_error_fields: "Could not send message"
   text_message_sent_done: "Message was send successfully"
   label_contact_captcha: "What is the name of the platform?"
+  text_my_interest: 'My science fields'
+  label_my_interest_add: 'Add science field'
+  text_my_skill: 'My skills'
+  label_my_skill_add: 'Add skill'

@@ -1400,3 +1400,7 @@ de:
   label_user_message: "Plattform-Nachricht"
   label_from: "von"
   label_contact_captcha: "Wie lautet der Name unserer Plattform?"
+  text_my_interest: 'Meine Forschungsgebiete'
+  label_my_interest_add: 'Ergänze deine Forschungsgebiete'
+  text_my_skill: 'Meine Fertigkeiten'
+  label_my_skill_add: 'Ergänze deine Fertigkeiten'

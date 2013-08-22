@@ -22,7 +22,6 @@
 </fieldset>
 <% end %>
 &nbsp;
-
 <div class="autoscroll">
 <table class="list" width="100%">
   <thead><tr>
@@ -40,7 +39,11 @@
 <% for user in @users -%>
   <tr class="user <%= cycle("odd", "even") %> <%= %w(anon active registered locked)[user.status] %>">
      <td><%= link_to({:controller => "users", :action => "show" , :id => user.id}) do %>
+        <%begin%>
         <%= image_tag( user.avatar_photo_url(:thumb), :class => "polaroid" ) %>
+        <%rescue => e %> 
+        <% logger.error e.backtrace %> 
+        <%end%> 
         <%end%>
     </td>
     <td class="username"><%= link_to h(user.login), edit_user_path(user) %></td>

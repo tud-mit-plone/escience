@@ -56,12 +56,12 @@
 						maxRows: 12,
 						q: request.term
 					},
-					success: function( data ) {
-						response( $.map( data, function( item ) {
-							return {
-							  id: item.user.id,
-								label: item.user.firstname + " " +item.user.lastname
-							}
+			success: function( data ) {
+				response( $.map( data, function( item ) {
+					return {
+					  id: item.user.id,
+						label: item.user.firstname + " " +item.user.lastname
+						}
 						}));
 					}
 				});

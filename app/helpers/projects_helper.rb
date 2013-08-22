@@ -34,7 +34,9 @@ module ProjectsHelper
             {:name => 'boards', :action => :manage_boards, :partial => 'projects/settings/boards', :label => :label_board_plural},
             {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :enumeration_activities}
             ]
-    tabs.select {|tab| User.current.allowed_to?(tab[:action], @project)}
+    tabs = tabs.select {|tab| User.current.allowed_to?(tab[:action], @project)}
+    logger.info("Projecttabs:: #{tabs.select {|tab| User.current.allowed_to?(tab[:action], @project)}}")
+    tabs
   end
 
   def parent_project_select_tag(project)
