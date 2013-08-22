@@ -5,6 +5,10 @@
       
       module InstanceMethods
 
+        def sort
+          self.filename 
+        end
+
          def render_to_image(options=nil)
            attachment =  options && options[:attachment] ? options[:attachment] : self 
            size = options && options[:size] ? options[:size] : '100x' 
@@ -34,6 +38,11 @@
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval do
+          acts_as_searchable :columns => ['filename'], :foreign_column => :meta_information
+          
+          #necessary for search function
+          scope :visible, lambda {|*args| { } } 
+          
           def thumbnailable?
             image? || image_convertable?
           end

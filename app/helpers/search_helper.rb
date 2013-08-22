@@ -56,8 +56,9 @@ module SearchHelper
   def render_results_by_type(results_by_type)
     links = []
     # Sorts types by results count
-    results_by_type.keys.sort {|a, b| results_by_type[b] <=> results_by_type[a]}.each do |t|
-      c = results_by_type[t]
+    begin 
+    results_by_type.keys.sort {|a, b| results_by_type[b].length <=> results_by_type[a].length}.each do |t|
+      c = results_by_type[t].length
       next if c == 0
       text = "#{type_label(t)} (#{c})"
       links << link_to(h(text), :q => params[:q], :titles_only => params[:titles_only],
@@ -66,5 +67,13 @@ module SearchHelper
     ('<ul>'.html_safe +
         links.map {|link| content_tag('li', link)}.join(' ').html_safe + 
         '</ul>'.html_safe) unless links.empty?
+    rescue => e 
+      logger.info e.full_message
+      logger.info e.backtrace.join("\n")
+    end
+  end
+
+  def is_event?(type)
+    return type.singularize.camelcase.constantize.included_modules.include?(Redmine::Acts::Event::InstanceMethods)
   end
 end

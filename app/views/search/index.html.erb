@@ -21,33 +21,47 @@
 <p><%= submit_tag l(:button_submit), :name => 'submit' %></p>
 <% end %>
 </div>
-
-<% if @results %>
+<% display_show_count = 10 %>
+<% if @results_by_type %>
     <div id="search-results-counts">
     <%= render_results_by_type(@results_by_type) unless @scope.size == 1 %>
     </div>
 
-    <h3><%= l(:label_result_plural) %> (<%= @results_by_type.values.sum %>)</h3>
+    <h3><%= l(:label_result_plural) %> (<%= @sum %>)</h3>
     <dl id="search-results">
-      <% @results.each do |e| %>
-        <dt class="<%= e.event_type %>"><%#= content_tag('span', h(e.project), :class => 'project') unless @project == e.project %> <%= link_to highlight_tokens(truncate(h(e.event_title), :length => 255), @tokens), e.event_url %></dt>
-        <dd><span class="description"><%= highlight_tokens(textilizable(h(e.event_description)).gsub(/<\/?[^>]*>/, ""), @tokens) %></span>
-        <span class="author"><%= format_time(e.event_datetime) %></span></dd>
+      <% @results_by_type.each do |type,results| %>
+        <%next if results.empty?%>
+        <h2><%= type%></h2>
+        <%= "#{type} : #{results.length}" %>
+        <% results.each_with_index do |e,count| %>
+
+          <% break if count >= display_show_count %>
+          <% if is_event?(type) %>
+            <dt class="<%= e.event_type %>"><%#= content_tag('span', h(e.project), :class => 'project') unless @project == e.project %> <%= link_to highlight_tokens(truncate(h(e.event_title), :length => 255), @tokens), e.event_url %></dt>
+            <dd><span class="description"><%= highlight_tokens(textilizable(h(e.event_description)).gsub(/<\/?[^>]*>/, ""), @tokens) %></span>
+            <span class="author"><%= format_time(e.event_datetime) %></span></dd>
+          <%else%>     
+            <table width="100%" style="margin-bottom:4px;">
+              <fieldset>
+                <%= render :partial => @object_types_options[type][:show_result_partial], :locals => @object_types_options[type][:show_result_partial_locals].call(e) %>
+              </fieldset>
+            </table>
+          <%end%>
+        <% end %>
+        <p><center>
+        <% if @pagination_previous_date && results.length > display_show_count %>
+        <%= link_to("\xc2\xab " + l(:label_previous),
+              params.merge(:previous => 1,
+                           :offset => @pagination_previous_date, :result_type => type)) %>&nbsp;
+        <% end %>
+        <% if @pagination_next_date && results.length > display_show_count %>
+        <%= link_to(l(:label_next) + " \xc2\xbb",
+              params.merge(:previous => nil,
+                           :offset => @pagination_next_date, :result_type => type)) %>
+        <% end %>
+        </center></p>
       <% end %>
     </dl>
 <% end %>
-
-<p><center>
-<% if @pagination_previous_date %>
-<%= link_to_content_update("\xc2\xab " + l(:label_previous),
-      params.merge(:previous => 1,
-                   :offset => @pagination_previous_date.strftime("%Y%m%d%H%M%S"))) %>&nbsp;
-<% end %>
-<% if @pagination_next_date %>
-<%= link_to_content_update(l(:label_next) + " \xc2\xbb",
-      params.merge(:previous => nil,
-                   :offset => @pagination_next_date.strftime("%Y%m%d%H%M%S"))) %>
-<% end %>
-</center></p>
 
 <% html_title(l(:label_search)) -%>

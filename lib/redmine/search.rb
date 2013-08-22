@@ -18,9 +18,10 @@
 module Redmine
   module Search
 
-    mattr_accessor :available_search_types
+    mattr_accessor :available_search_types, :type_specific_options
 
     @@available_search_types = []
+    @@type_specific_options = {}
 
     class << self
       def map(&block)
@@ -31,6 +32,7 @@ module Redmine
       def register(search_type, options={})
         search_type = search_type.to_s
         @@available_search_types << search_type unless @@available_search_types.include?(search_type)
+        @@type_specific_options[search_type] = options if options.any?
       end
     end
 

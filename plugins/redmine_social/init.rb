@@ -54,12 +54,24 @@ Redmine::Plugin.register :redmine_social do
   menu :account_menu, :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}
 #  menu :account_menu, :user_contacts2, {:controller => 'friendships', :action => 'accepted', :user_id => Proc.new{"#{User.current.id}"}}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
   menu :account_menu, :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
+  
+  menu :project_menu, :album, {:controller => 'albums', :action => 'index'}, :caption => :label_album_plural, :param => :project_id
 
+  project_module :album do 
+    permission :album_create, {:albums => [:create,:index]}
+  end
+  
   project_module :user_calendar do 
     permission :appointments_add_watchers, :appointments => :add_watchers
   end
   user_module :user_clandar do 
     permission :view_calendar, {:calendar => [:show, :update]}, :read => true
+  end
+  Redmine::Search.map do |search|
+    search.register :users, :sort_function => 'sort', :limit_date_function => 'updated_on', :show_result_partial => 'users/show', 
+                             :show_result_partial_locals => Proc.new {|e|  {:user => e, :memberships => e.memberships}}
+    search.register :attachments, :sort_function => 'sort', 
+                             :show_result_partial_locals => Proc.new {|e|  {:attachment => e}}
   end
 end
 

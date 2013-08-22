@@ -17,6 +17,10 @@
           end
         end
         
+        def sort
+          self.lastname + self.firstname 
+        end
+
         def can_request_friendship_with(user)
           !self.eql?(user) && !self.friendship_exists_with?(user)
         end
@@ -42,12 +46,27 @@
             prj.exclusive_user = user 
           end
         end
+
+        # #necessary for search function
+        # def visible?(user=User.current)
+        #   true
+        # end
       end
       
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval do
+
+          acts_as_tagger 
+          acts_as_taggable_on :skills, :interests
+          
+          #set error message from max characters to max length
+          validates :interest_list, length: { maximum: 5 }
+          validates :skill_list, length: { maximum: 5 }
+          
+          acts_as_searchable :columns => ['mail', 'firstname', 'lastname'],:with_tagging => true
+          
           #photos 
           has_many :photos, :order => "created_at desc", :dependent => :destroy
           #albums 
@@ -64,6 +83,9 @@
           #private project 
           #belongs_to :private_project, :autosave => true, :dependent => :destroy, :class_name => 'Project', :foreign_key => 'id'
           belongs_to :private_project, :class_name => "Project", :foreign_key => "private_project_id"
+
+          #necessary for search function
+          scope :visible, lambda {|*args| { }  } 
         end
       end
     end
@@ -76,22 +98,36 @@
         def upload_profile_photo
           @user = User.find(params[:id])
           @avatar = Photo.new(params[:photo])
-            logger.info("1#{@user.login} : avatar_id: #{@avatar.id} #{@user.avatar_id}")
           @avatar.name = params[:photo][:filename] 
           @avatar.user  = @user
-            logger.info("#{@user.login} : avatar_id: #{@avatar.id} #{@user.avatar_id}")          
-          if @avatar.save!
+          if @avatar.save
             @user.avatar_id  = @avatar.id
             @user.save!
 
             @photo = @avatar
-            respond_to do |format|
-              format.html { render :action => 'show', :layout => false if request.xhr? }
-              format.js { render :partial => 'crop_profile_photo' }
-            end
+          end
+
+          respond_to do |format|
+            format.html { render :action => 'show', :layout => false if request.xhr? }
+            format.js { render :partial => 'crop_profile_photo' }
           end
         end
         
+          def tag_search
+            tags = []
+            if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
+              tags
+            else
+              tags = ActsAsTaggableOn::Tag.where("name like ?",params[:q])
+            end
+            
+            respond_to do |format|
+              format.xml { render :xml => tags }
+              #format.js # user_search.js.erb
+              #format.json { render :json => @projects }
+            end
+          end
+
         def crop_profile_photo
           @user = User.find(params[:id])
           @avatar = @user.avatar ? @user.avatar : Photo.new(params[:photo]) 

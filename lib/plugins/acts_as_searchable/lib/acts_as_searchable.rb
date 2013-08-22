@@ -58,6 +58,20 @@ module Redmine
         end
 
         module ClassMethods
+
+          def add_results_for_tags(tokens, all_words)
+            return [] unless self.respond_to?('tagged_with')
+            results = []
+            tags = []
+            User.tag_types.each do |type|
+              tokens.each do |token|
+                 tags << self.send("#{type.to_s.singularize}_counts").where("name like #{token}").select("name").collect(&:name)
+              end
+              results << self.tagged_with(tags.flatten, :on => type.to_s.to_sym, :match_all=>all_words, :any=>!all_words)
+            end
+            return results
+          end
+
           # Searches the model for the given tokens
           # projects argument can be either nil (will search all projects), a project or an array of projects
           # Returns the results and the results count
@@ -76,11 +90,15 @@ module Redmine
             find_options[:order] = "#{searchable_options[:order_column]} " + (options[:before] ? 'DESC' : 'ASC')
 
             limit_options = {}
+            
             limit_options[:limit] = options[:limit] if options[:limit]
-            if options[:offset]
-              limit_options[:conditions] = "(#{searchable_options[:date_column]} " + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
-            end
+            limit_options[:offset] = options[:offset] if options[:offset]
 
+            #if options[:offset]
+              #limit_options[:conditions] = "(#{searchable_options[:date_column]} " + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+             # limit_options[:conditions] = "LIMIT #{options[:offset]}, #{}"
+            #end
+            
             columns = searchable_options[:columns]
             columns = columns[0..0] if options[:titles_only]
 
@@ -97,6 +115,14 @@ module Redmine
                   " AND #{CustomValue.table_name}.custom_field_id IN (#{searchable_custom_field_ids.join(',')}))"
                 token_clauses << custom_field_sql
               end
+            end
+
+            if searchable_options[:foreign_column]
+              foreign_key = self.reflections[searchable_options[:foreign_column].to_s.to_sym].foreign_key
+              foreign_table = self.reflections[searchable_options[:foreign_column].to_s.to_sym].klass.arel_table.name
+              table = self.arel_table.name 
+              token_clauses << "#{table}.id IN (SELECT #{foreign_key} FROM #{foreign_table}" +
+                  " WHERE LOWER(#{searchable_options[:foreign_column].to_s}) LIKE ?)"
             end
 
             sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
@@ -119,10 +145,20 @@ module Redmine
 
             results = []
             results_count = 0
-
-            scope = scope.scoped({:conditions => project_conditions}).scoped(find_options)
+            scope = scope.scoped({:conditions => project_conditions}).scoped(find_options).scoped({:conditions => []})
             results_count = scope.count(:all)
             results = scope.find(:all, limit_options)
+
+            if searchable_options[:with_tagging]
+              tag_results = add_results_for_tags(tokens.collect {|w| "'%#{w.downcase}%'"},options[:all_words])
+              results << tag_results 
+              results.flatten!
+              results_count += tag_results.length
+            end
+
+            logger.info("results #{results}")
+            logger.info("results_count #{results_count}")
+            logger.info("find_options[:conditions] #{find_options[:conditions]}")
 
             [results, results_count]
           end
