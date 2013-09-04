@@ -1,8 +1,10 @@
-<h2><%=h @status %></h2>
-
-<% if @message.present? %>
-  <p id="errorExplanation"><%=h @message %></p>
-<% end %>
-<p><a href="javascript:history.back()"><%= l(:button_back) %></a></p>
-
-<% html_title @status %>
+<div style="width:100%; text-align:center">
+  <h1><i class="icon-question" style="font-size:200px;color:#F0F0F0;text-shadow: -1px -1px 1px #DDD, 1px 1px 1px #DDD;"></i></h1>
+  <h2><%=h @status %></h2>
+  <% if @message.present? %>
+    <p id="errorExplanation"><%=h @message %></p>
+  <% end %>
+  <p><a href="javascript:history.back()"><%= l(:button_back) %></a></p>
+  
+  <% html_title @status %>
+</div>

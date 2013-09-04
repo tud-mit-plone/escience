@@ -1,25 +1,55 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<title>Redmine 500 error</title>
-<style>
-body{
-font-family: Trebuchet MS,Georgia,"Times New Roman",serif;
-color:#303030;
-margin:10px;
-}
-h1{
-font-size:1.5em;
-}
-p{
-font-size:0.8em;
-}
-</style>
-<body>
-  <h1>Internal error</h1>
-  <p>An error occurred on the page you were trying to access.<br />
-  If you continue to experience problems please contact your Redmine administrator for assistance.</p>
-  <p>If you are the Redmine administrator, check your log files for details about the error.</p>
-  <p><a href="javascript:history.back()">Back</a></p>
-</body>
-</html>
+<HTML>
+<!-- LOCALIZERS: If in a right-to-left locale, add dir="rtl" to the HTML element. -->
+<HEAD>
+    <LINK rel=stylesheet type="text/css" href="/stylesheets/page-load-errors.css">
+    <SCRIPT src="/javascripts/jquery.min.js" type="text/javascript"></SCRIPT>
+    <!-- LOCALIZERS: You might want to change the font family. You can also add styles to override sizes, etc. -->
+    <STYLE>
+        BODY {font-family:'Helvetica Neue';}
+    </STYLE>
+    <!-- LOCALIZERS: The next line contains the page title that appears in the window's title bar -->
+    <TITLE>Seite konnte nicht geöffnet werden - eScience</TITLE>
+    <SCRIPT>
+      $.ajax({ 
+        url: "http://ajaxhttpheaders.appspot.com", 
+        dataType: 'jsonp', 
+        success: function(headers) {
+            language = headers['Accept-Language'];
+            setLand(language);
+        }
+      });
+      function setLand(language) {
+        if (language.substr(0,2) == "en") {
+          document.title = "Page could not be opened - eScience";
+          $('.error-title').html("An error has occurred while creating the page.");
+          $('.error-message').html("Try - if possible - to visit this page in just a few minutes again. If this error message appear again, we please you to contact the administrator of the platform.<br/><br/>We're working to fix the problem and hope for your understanding.<br /><br /><a href='javascript:history.back();' onclick='history.back();' class='separator'>Back</a>");
+        }
+      }
+    </SCRIPT>
+</HEAD>
+
+<BODY>
+<div class="error-container">
+<div class="icon" alt="Safari Icon" role="img"></div>
+<div class="separator"></div>
+<div class="text-container">
+<!-- main title here, repeated 3 times -->
+<P aria-hidden="true" class="error-title error-text-engraving">Es trat ein Fehler bei der Erstellung der Seite auf.</P>
+<P aria-hidden="true" class="error-title error-text">Es trat ein Fehler bei der Erstellung der Seite auf.</P>
+<P class="error-title error-text-inner-shadow">Es trat ein Fehler bei der Erstellung der Seite auf.</P>
+</div>
+<div class="text-container">
+<!-- error message here, repeated 3 times -->
+<P class="error-message error-text-engraving">Versuchen Sie - falls möglich - diese Seite in wenigen Minuten noch einmal aufzurufen. Sollte diese Fehlermeldung dann erneut erscheinen, bitten wir Sie den Administrator der Plattform zu kontaktieren.<br/><br/>
+Wir arbeiten daran den Fehler zu beheben und hoffen auf Ihr Verständnis.<br /><br /><a href="javascript:history.back();" onclick="history.back();" class="separator">Zurück</a></P>
+<P aria-hidden="true" class="error-message error-text">Versuchen Sie - falls möglich - diese Seite in wenigen Minuten noch einmal aufzurufen. Sollte diese Fehlermeldung dann erneut erscheinen, bitten wir Sie den Administrator der Plattform zu kontaktieren.<br/><br/>
+Wir arbeiten daran den Fehler zu beheben und hoffen auf Ihr Verständnis.<br /><br /><a href="#" onclick="history.back();" class="separator">Zurück</a></P>
+<P aria-hidden="true" class="error-message error-text-inner-shadow">Versuchen Sie - falls möglich - diese Seite in wenigen Minuten noch einmal aufzurufen. Sollte diese Fehlermeldung dann erneut erscheinen, bitten wir Sie den Administrator der Plattform zu kontaktieren.<br/><br/>
+Wir arbeiten daran den Fehler zu beheben und hoffen auf Ihr Verständnis.<br /><br /><a href="#" onclick="history.back();" class="separator">Zurück</a></P>
+</div>
+</div>
+</BODY>
+
+</HTML>

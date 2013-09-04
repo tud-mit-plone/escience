@@ -1,0 +1,182 @@
+/*
+    This file has a UTF-8 BOM in it so it can be included from a UTF-16 page
+    without specifying an explicit character set. When editing it, please be
+    sure to preserve the BOM (first three bytes of the file, EF BB BF).
+ */
+
+body {
+    background-color: rgb(237, 239, 238);
+    background-image: url(../images/error-page/ErrorPageBackgroundTile.png);
+    background-size: 100px 100px;
+    text-align: center;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.error-container {
+    position: relative;
+    width: 500px;
+    min-height: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 128px;
+    padding-top: 0;
+    
+    padding-left: 93px;
+    padding-right: 93px;
+    padding-bottom: 0;
+}
+
+.icon {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    
+    width: 300px;
+    height: 120px;
+    background-image: url(../images/error-page/ErrorPageEscience.png);
+    background-repeat: no-repeat;
+    background-size: 300px 120px;
+}
+
+.error-text-engraving .reading-list-glasses, .error-text-inner-shadow .reading-list-glasses {
+    /* Hide the duplicate Reading List glasses that are next to the envgraving and the shadow of the
+    inner text. The images are just there for horizontal spacing of the components of the error text, 
+    we don't want to show them. */
+    visibility: hidden;
+}
+
+html[dir=rtl] .icon {
+    left: auto;
+    right: 7px;
+}
+
+.separator {
+    background-image: url(../images/error-page/ErrorPageDividerLine.png);
+    background-repeat: no-repeat;
+    background-size: 500px 1px;
+    margin-top: 20px;
+    padding-top: 20px;
+    display: block;
+}
+.text-container {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.error-text, .error-text-engraving, .error-text-inner-shadow
+{
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.error-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-text-engraving {
+    position: relative;
+    top: 1px;
+    width: 100%;
+    color: white;
+}
+
+.error-text-inner-shadow {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    right: 0;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.error-title
+{
+    font-size: 18px;
+    line-height:24px; /* This needs to be the same as the 2nd color stop position in -webkit-repeating-linear-gradient of error-title.error-text. */
+    font-weight: bold;
+}
+
+.error-title.error-text {
+    /* the position for rgba(124, 128, 130, 0.9) needs to be the same as the line-height in .error-title */
+    background-image: -webkit-repeating-linear-gradient(rgba(79, 82, 85, 0.9) 0, rgba(124, 128, 130, 0.9) 24px), url(../images/error-page/ErrorPageBackgroundTile.png);
+    color:#858383;
+}
+
+.error-title.error-text-engraving {
+    margin-top: 22px;
+    margin-bottom: 25px;
+}
+
+.error-message {
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.error-message.error-text {
+    background-color: rgba(101, 105, 107, 0.9);
+    color:#858383;
+}
+
+@-moz-document url-prefix() { 
+  .suggestion-prompt.error-text, .error-message.error-text {
+    background-color: inherit;
+  }
+}
+
+a {
+  color: #7DB414;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.error-text a, .error-text-inner-shadow a {
+    visibility: hidden;
+}
+
+.error-text-engraving a {
+    z-index: 1;
+    position: relative;
+    top: -1px;
+}
+
+@media (-webkit-min-device-pixel-ratio:2) {
+    body {
+        background-image: url(../images/error-page/ErrorPageBackgroundTile@2x.png);
+    }
+
+    .suggestion-container {
+        background-image: url(../images/error-page/ErrorPageDividerLine@2x.png);
+    }
+
+    .icon {
+        background-image: url(../images/error-page/ErrorPageEscience@2x.png);
+    }
+
+    .reading-list-glasses {
+        background-image: url(../images/error-page/ErrorPageReadingList@2x.png);
+    }
+
+    .error-title.error-text {
+        /* the position for rgba(124, 128, 130, 0.9) needs to be the same as the line-height in .error-title */
+        background-image: -webkit-repeating-linear-gradient(rgba(79, 82, 85, 0.9) 0, rgba(124, 128, 130, 0.9) 24px), url(../images/error-page/ErrorPageBackgroundTile@2x.png);
+    }
+
+    #help-button {
+        background-image: url(HelpButton@2x.png);
+    }
+
+    #help-button:active {
+        background-image: url(HelpButtonPressed@2x.png);
+    }
+}
