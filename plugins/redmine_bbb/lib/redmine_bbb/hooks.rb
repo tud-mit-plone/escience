@@ -25,14 +25,15 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
           output << "   <li class=\"help\">#{link_to(l(:label_help), url, :class => 'icon icon-question')}</li>" unless url.empty?
         else
           meeting_started = true
-          output << "</ul><hr /><div style='white-space:nowrap;margin-left:7px;'>#{l(:label_bigbluebutton)} (<i>#{l(:label_bigbluebutton_status_closed)}</i>)</div>"            
-          output << "<div class=\"people\">#{doc.root.elements['attendees'].count+" "+l(:label_bigbluebutton_people)}</div>" unless doc.root.elements['attendees'].empty?
+          output << "</ul><hr /><div style='white-space:nowrap;margin-left:7px;'>#{l(:label_bigbluebutton)} (<i>#{l(:label_bigbluebutton_status_running)}</i>)</div>"            
+          output << "<div class=\"people\">#{doc.root.elements['attendees'].count+" "+l(:label_bigbluebutton_people)}</div>" unless (doc.root.elements['attendees'].text == "" || doc.root.elements['attendees'].has_elements?)
           output << "<ul>"
           output << "   <li>#{link_to(l(:label_help), url, :class => 'icon icon-question')}</li>" unless url.empty?
           if Setting.plugin_redmine_bbb['bbb_popup'] != '1'
             output << "   <li>#{link_to(l(:label_bigbluebutton_join), {:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true}, :class => 'icon icon-signin')}</i>"
           else
-            output << "   <li>#{link_to_function(l(:label_bigbluebutton_join),"var wihe='width'+screen.availWidth+',height='+screen.availHeight; open('"+url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true)+'\\'+"','Meeting','directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,' + wihe);return false;", :class => "icon icon-signin")}</li>"
+            output << "   <li>#{link_to_function(l(:label_bigbluebutton_join),"open('#{url_for(:controller => 'bbb', :action => 'start', :project_id => context[:project], :only_path => true)}','Meeting','directories=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width='+screen.availWidth+',height='+screen.availHeight)", :class => "icon icon-signin")}</li>"
+
           end
  
           doc.root.elements['attendees'].each do |attendee|
@@ -40,7 +41,7 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
 #              output << "<li>#{name}</li>"
           end
         end
-        output << "</ul></div>"
+        output << "</ul>"
 
         if !meeting_started
           if User.current.allowed_to?(:bigbluebutton_start, @project)
@@ -55,6 +56,7 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
         end
       end
     rescue Exception => e
+      p e
 #      config.logger.error(e.message)
 #      config.logger.error(e.backtrace.inspect)
       output << "</ul><hr /><div style='margin-left:11px;'>#{l(:label_bigbluebutton)}<br/>"

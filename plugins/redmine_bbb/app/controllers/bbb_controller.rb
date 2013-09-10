@@ -80,13 +80,12 @@ class BbbController < ApplicationController
     moderatorPW = Digest::SHA1.hexdigest("root"+@project.identifier)
     attendeePW = Digest::SHA1.hexdigest("guest"+@project.identifier)
     
-    data = callapi(server, "getMeetingInfo","meetingID=" + @project.identifier + "&password=" + moderatorPW, true)
+    data = callapi(server, "getMeetingInfo","meetingID=" + @project.identifier + "&password=" + moderatorPW, true, Setting.plugin_redmine_bbb["bbb_salt"].to_s)
     if data == false 
       redirect_to(back_url) 
       return 
     end
     doc = REXML::Document.new(data)
-    data = callapi(server, "end","meetingID=" + @project.identifier + "&password=" + moderatorPW, true)
     if doc.root.elements['returncode'].text == "FAILED"
       #If not, we created it...
       if @user.allowed_to?(:bigbluebutton_start, @project)
@@ -99,7 +98,7 @@ class BbbController < ApplicationController
           "&moderatorPW=" + moderatorPW + 
           "&logoutURL=" + back_url + 
           "&record=#{record == true ? true : false}" + 
-          "&voiceBridge=" + bridge, true)
+          "&voiceBridge=" + bridge, true, Setting.plugin_redmine_bbb["bbb_salt"].to_s)
         ok_to_join = true
       end
     else
@@ -107,9 +106,10 @@ class BbbController < ApplicationController
       ok_to_join = true
     end
     #Now, join meeting...
+
     if ok_to_join
       server = Setting.plugin_redmine_bbb['bbb_server'] if server.nil? 
-      url = callapi(server, "join", "meetingID=" + @project.identifier + "&password="+ (@user.allowed_to?(:bigbluebutton_moderator, @project) ? moderatorPW : attendeePW) + "&fullName=" + CGI.escape(User.current.name), false)
+      url = callapi(server, "join", "meetingID=" + @project.identifier + "&password="+ (@user.allowed_to?(:bigbluebutton_moderator, @project) ? moderatorPW : attendeePW) + "&fullName=" + CGI.escape(User.current.name), false, Setting.plugin_redmine_bbb["bbb_salt"].to_s)
       redirect_to url
     else
       redirect_to back_url
