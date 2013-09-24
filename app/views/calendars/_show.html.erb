@@ -1,11 +1,11 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
 
-<h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %> (<%= month_name(@month)%> <%= @year%>)</h2>
+<h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %> (<%= month_name(@month)%> <%= @year%>)  <i class="icon-calendar"></i></h2>
 <div style="float:right">
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
-  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'button' %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'btn' %>
 <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
-  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'button' %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'btn' %>
 <% end %>
 </div>
 <div class="clear"></div>
@@ -24,9 +24,11 @@
       <%= label_tag('year', l(:label_year)) %>
       <%= select_year(@year, :prefix => "year", :discard_type => true) %>
     </div>
-    <div class="buttons" style="display: none;">
-      <div><%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %></div>
-      <div><%= submit_tag l(:button_apply) %></div>
+    <%= hidden_field_tag 'hidden_submit', '' %>
+    <div class="btn-group" style="display: none; float:right">
+      <%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %>
+      <%= link_to l(:button_apply), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+      <%#= submit_tag l(:button_apply) %>
     </div>
   </fieldset>
   
