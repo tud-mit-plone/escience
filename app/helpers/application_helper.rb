@@ -285,19 +285,21 @@ module ApplicationHelper
     title = nil
     subject = nil
     text = options[:tracker] == false ? "##{issue.id}" : "#{issue.tracker} ##{issue.id}"
+    length = options[:truncate].nil? ? 60 : options[:truncate]
     if options[:subject] == false
-      title = truncate(issue.subject, :length => 60)
+      title = truncate(issue.subject, :length => length)
     else
       subject = issue.subject
       if options[:truncate]
-        subject = truncate(subject, :length => options[:truncate])
+        subject = truncate(subject, :length => length)
       end
     end
     if options[:title] == false
       title = nil
     end
     if options[:link_text].nil?
-      link_text = "#{h(issue.tracker)} ##{issue.id}"
+      link_text = truncate(issue.subject, :length => length)
+#      link_text = "#{h(issue.tracker)} ##{issue.id}"
     else
       link_text = options[:link_text]
     end
@@ -1393,7 +1395,11 @@ module ApplicationHelper
       :class => ''
     }.merge(options)
 
-    link_to l(:button_delete), url, options
+    if !options[:no_text].nil? && options[:no_text] == true
+      link_to '<i class="icon-trash"></i>'.html_safe, url, options
+    else
+      link_to l(:button_delete), url, options
+    end
   end
 
   def preview_link(url, form, target='preview', options={})
@@ -1491,9 +1497,7 @@ module ApplicationHelper
 
         tags = javascript_tag(
                    "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', firstDay: #{start_of_week}, " +
-                     "showOn: 'button', buttonImageOnly: true, buttonImage: '" + 
-                     path_to_image('/images/calendar.png') +
-                     "', showButtonPanel: true};")
+                     "showOn: 'button', buttonText:''};")
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
         unless jquery_locale == 'en'
           tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
@@ -1621,6 +1625,7 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.event.drop-2.2.js")
     tags << javascript_include_tag("jquery.roundabout-shapes.min.js")
     tags << javascript_include_tag("jquery.confirm.js")
+    tags << javascript_include_tag("bootstrap.min.js")
     tags << javascript_tag(flash_notifications)
 
     tags << "\n".html_safe

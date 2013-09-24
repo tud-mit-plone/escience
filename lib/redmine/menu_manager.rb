@@ -104,8 +104,8 @@ module Redmine
           return render_menu_node_with_children(node, project)
         else
           caption, url, selected = extract_node_details(node, project)
-          return content_tag('li',
-                               render_single_menu_node(node, caption, url, selected))
+          list_element =  selected ? 'li class="selected"': 'li' 
+          return content_tag(list_element, render_single_menu_node(node, caption, url, selected))
         end
       end
 
