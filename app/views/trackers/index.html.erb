@@ -1,5 +1,7 @@
 <% content_for :sidebar_right do %>
-	<%= link_to l(:label_tracker_new), new_tracker_path, :class => 'icon icon-add' %>
+  <ul>
+    <li><%= link_to l(:label_tracker_new), new_tracker_path, :class => 'icon icon-plus-sign' %></li>
+  </ul>
 <%end%>
 
 <h2><%=l(:label_tracker_plural)%></h2>
