@@ -9,7 +9,13 @@ require 'xml-object'
 class BbbController < ApplicationController
 
   before_filter :find_project, :find_user
-  before_filter :authorize, :except => ['bbb_session', 'start_form','bbb_session_files']
+  before_filter :authorize, :except => ['bbb_session', 'start_form','bbb_session_files', 'index']
+
+  def index
+    respond_to do |format|
+      format.html { render :js => "<script>window.close();</script>".html_safe}   
+    end
+  end
 
   def start
     #First, test if meeting room already exists
@@ -75,11 +81,14 @@ class BbbController < ApplicationController
 
   def create_bbb_session_or_redirect(server,record=false)
     ok_to_join = false
-    back_url = Setting.plugin_redmine_bbb['bbb_url'].empty? ? request.referer.to_s : Setting.plugin_redmine_bbb['bbb_url']
 
     moderatorPW = Digest::SHA1.hexdigest("root"+@project.identifier)
     attendeePW = Digest::SHA1.hexdigest("guest"+@project.identifier)
-    
+    Setting.plugin_redmine_bbb['bbb_popup'] == '1' 
+      back_url = url_for(:action => "index")
+    else
+      back_url = Setting.plugin_redmine_bbb['bbb_url'].empty? ? request.referer.to_s : Setting.plugin_redmine_bbb['bbb_url']
+    end
     data = callapi(server, "getMeetingInfo","meetingID=" + @project.identifier + "&password=" + moderatorPW, true, Setting.plugin_redmine_bbb["bbb_salt"].to_s)
     if data == false 
       redirect_to(back_url) 

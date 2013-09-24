@@ -26,7 +26,7 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
         else
           meeting_started = true
           output << "</ul><hr /><div style='white-space:nowrap;margin-left:7px;'>#{l(:label_bigbluebutton)} (<i>#{l(:label_bigbluebutton_status_running)}</i>)</div>"            
-          output << "<div class=\"people\">#{doc.root.elements['attendees'].count+" "+l(:label_bigbluebutton_people)}</div>" unless (doc.root.elements['attendees'].text == "" || doc.root.elements['attendees'].has_elements?)
+          output << "<div class=\"people\">#{l(:label_bigbluebutton_people, :count => doc.root.elements['attendees'].count.to_s)}</div>" unless (doc.root.elements['attendees'].text == "" || doc.root.elements['attendees'].has_elements?)
           output << "<ul>"
           output << "   <li>#{link_to(l(:label_help), url, :class => 'icon icon-question')}</li>" unless url.empty?
           if Setting.plugin_redmine_bbb['bbb_popup'] != '1'
@@ -56,9 +56,8 @@ class ProjectSidebarBigBlueButtonHook < Redmine::Hook::ViewListener
         end
       end
     rescue Exception => e
-      p e
-#      config.logger.error(e.message)
-#      config.logger.error(e.backtrace.inspect)
+      p e.message
+      p e.backtrace
       output << "</ul><hr /><div style='margin-left:11px;'>#{l(:label_bigbluebutton)}<br/>"
       output << "<i class='icon-exclamation-sign' style='color:#d4b93f'></i> #{l(:label_bigbluebutton_error)}</div>"
     end
