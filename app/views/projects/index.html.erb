@@ -4,18 +4,18 @@
 
 <% content_for :sidebar_right do %>
   <% if User.current.logged? %>
-  	<% if User.current.allowed_to?(:add_project, nil, :global => true) %>
-  		<%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new', :sub => params[:sub]}, :class => 'icon icon-add')%>
-  	<% end %>
   	<ul>
+  	<% if User.current.allowed_to?(:add_project, nil, :global => true) %>
+  		<li><%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new', :sub => params[:sub]}, :class => 'icon icon-plus-sign')%></li>
+  	<% end %>
   	<% if User.current.allowed_to?(:view_issues, nil, :global => true) && 1==0 %>
-  	    <li><%= link_to(l(:label_issue_view_all), issues_path) %></li>
+  	    <li class="icon icon-time"><%= link_to(l(:label_issue_view_all), issues_path) %></li>
       <% end %>
   	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-  	    <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}) %></li>
+  	    <li class="icon icon-time"><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}) %></li>
   	<% end %>
   	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-      <li><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }) %></li>
+      <li class="icon icon-spinner"><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }) %></li>
   	<% end %>
   	</ul>
   <% else %>
@@ -26,9 +26,9 @@
 
 <h2><%=l(:label_project_plural)%></h2>
 <div class="sort_buttons" style="float:right; margin-top:-44px;">
-      <div class="sortby"><%= l(:label_sort) %></div>
-      <div class="first"><%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "#{@newest_dir if params[:order] == 'created_on'}") %></div>
-      <div><%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "#{@name_dir if params[:order].nil? || params[:order] == 'name'}") %></div>
+  <div class="sortby"><%= l(:label_sort) %></div>
+  <div class="first"><%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "#{@newest_dir if params[:order] == 'created_on'}") %></div>
+  <div><%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "#{@name_dir if params[:order].nil? || params[:order] == 'name'}") %></div>
 </div>
 <div class="clear"></div>
 <% unless @projects.nil? %>

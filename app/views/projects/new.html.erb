@@ -1,11 +1,32 @@
-<h2 style="float:left"><%= l(:label_project_new) %></h2>
-
-<%= link_to(l(:button_back), {:action => 'index', :id => @project.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
-<div class="clear"></div>
+<h2 style="float:left"><%= l(:label_project_new) %> <i class="icon-beaker"></i></h2>
 
 <%= labelled_form_for @project do |f| %>
-<%= render :partial => 'form', :locals => { :f => f } %>
-<%= submit_tag l(:button_create) %>
-<%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_project').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_project').submit();" %>
+    <% unless params[:parent_issue_id] %>
+        <%= link_to(l(:button_cancel), {:action => 'index', :id => @project.id, :sub => params[:sub]}, :class => "btn") %>
+    <% else %>
+      <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'show', :id => "#{params[:parent_issue_id] if params[:parent_issue_id]}"}, :class => 'btn', :style => '60px' %>
+    <% end %>
+    <%#= submit_tag l(:button_create), :class => 'btn' %>
+    <%#= submit_tag l(:button_create_and_continue), :class => 'btn', :name => 'continue' %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_project').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_project').submit();" %>
+    <% unless params[:parent_issue_id] %>
+        <%= link_to(l(:button_cancel), {:action => 'index', :id => @project.id, :sub => params[:sub]}, :class => "btn") %>
+    <% else %>
+      <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'show', :id => "#{params[:parent_issue_id] if params[:parent_issue_id]}"}, :class => 'btn', :style => '60px' %>
+    <% end %>
+    <%#= submit_tag l(:button_create), :class => 'btn' %>
+    <%#= submit_tag l(:button_create_and_continue), :class => 'btn', :name => 'continue' %>
+  </div>
+<%#= submit_tag l(:button_create) %>
+<%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
 <%= javascript_tag "$('#project_name').focus();" %>
 <% end %>

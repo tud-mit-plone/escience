@@ -1,6 +1,6 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :action => 'show', :id => @project.id).html_safe %></h1></div>
 <!--<h2><%=l(:label_overview)%> <%= l(:label_forproject) %> </h2>-->
 
+<h2><%= h(@project.name) %> <i class="icon-beaker"></i></h2>
 <% if !@topproject.nil? && (session[:current_view_of_eScience] != '0' || @topproject.name != 'eScience') %>
 <p id="subprojectof">
   <%= l(:label_subprojectof) %>:
@@ -22,11 +22,11 @@
     <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
       <div id="buttons" style="float:right">
         <div id="save_button" style="display:none">
-          <%= link_to_function l(:button_cancel), "$('#edit_button').toggle();$('#save_button').toggle();$('#description').toggle();$('#project_description').toggle();" %>
-          <%= link_to_function l(:button_save), "CKEDITOR.instances.descr_edit.updateElement();$('.edit_project').submit();$('#description').toggle();$('#project_description').toggle();$('#edit_button').toggle();$('#save_button').toggle();" %>
+          <%= link_to_function '', "CKEDITOR.instances.descr_edit.updateElement();$('.edit_project').submit();$('#description').toggle();$('#project_description').toggle();$('#edit_button').toggle();$('#save_button').toggle();", :class => "btn icon-ok", :style =>"width:15px", :title => l(:button_save) %>
+          <%= link_to_function '', "$('#edit_button').toggle();$('#save_button').toggle();$('#description').toggle();$('#project_description').toggle();", :class => "btn icon-remove", :style => "width:15px", :title => l(:button_cancel) %>
         </div>
         <div id="edit_button">
-          <%= link_to_function image_tag('edit.png'), "$('#save_button').toggle();$('#edit_button').toggle();$('#description').toggle();$('#project_description').toggle();CKEDITOR.instances.descr_edit.resize(500, 200);" %>
+          <%= link_to_function '<i class="icon-pencil icon-large"></i>'.html_safe(), "$('#save_button').toggle();$('#edit_button').toggle();$('#description').toggle();$('#project_description').toggle();CKEDITOR.instances.descr_edit.resize(500, 200);", :title => l(:button_edit) %>
         </div>
       </div>
   <% end %>
@@ -109,17 +109,28 @@
         <a id="show_closed" style="display:none" onclick="$('.linkToIssue.closed').toggle();$(this).hide();$('#hide_closed').show()"><%= l(:label_issues_closed_show) %></a>
     </p>
     <% else %>
-      <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add', :style => 'padding-left:25px !important;') %>
+      <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-plus-sign') %>
     <% end %>
 </fieldset>
 <% end %>
 <%= call_hook(:view_projects_show_left, :project => @project) %>
 
 <fieldset>
-  <legend>Dokumente</legend>
-  <div id="attachments" style="margin-bottom:10px;"><%= link_to_attachments @project %></div>
-  <%= form_tag({:action => 'add_attachment', :id => @project}, :remote => true, :id=>"attachments_form", :multipart => true) do %>
-    <div id="content_of_form"><%= render :partial => 'attachments/form' %></div>
+  <legend><%= l(:project_module_documents) %></legend>
+  <% if @project.attachments.any? %>
+    <div id="attachments" style="margin-bottom:10px;"><%= link_to_attachments @project %></div>
+  <% end %>
+  <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
+    <div id="attachment_fieldset">
+      <div id="add_attachments" style="display:none">
+        <%= form_tag({:action => 'add_attachment', :id => @project}, :remote => true, :id=>"attachments_form", :multipart => true) do %>
+          <div id="content_of_form"><%= render :partial => 'attachments/form' %></div>
+        <% end %>
+      </div>
+      <div id="add_button">
+        <%= link_to_function "<span class='icon icon-plus-sign'>#{l(:label_attachment_new)}</span>".html_safe(), "$('#add_attachments').show();$('#add_button').hide();", :style => 'color: #707070;' %>
+      </div>
+    </div>
   <% end %>
 </fieldset>
 
@@ -130,13 +141,18 @@
 <%= call_hook(:view_projects_show_right, :project => @project) %>
 
 <% content_for :sidebar_right do %>
+  <ul>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
-    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
+    <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-plus-sign' %></li>
   <% end %>
 	<% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
-		<%= link_to(l(:label_project_edit), {:controller => 'projects', :action => 'settings', :show_project => @project.id}, :class => 'icon icon-settings')%>
+		<li><%= link_to(l(:label_project_edit), {:controller => 'projects', :action => 'settings', :show_project => @project.id}, :class => "icon icon-cog")%></li>
+	<% end %>
+	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
+    <li><%= link_to(l(:label_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub], :project_id => @project.id}, :class => "icon icon-time") %></li>
 	<% end %>
   <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
+  </ul>
 <% end %>
 
 

@@ -174,7 +174,7 @@ class ProjectsController < ApplicationController
     @project.safe_attributes = params[:project]
     @project.creator = User.current.id
     
-    if Project.find_by_name(params[:project][:name]).nil? && params[:project][:name].length<51 && validate_parent_id && @project.save!
+    if Project.find_by_name(params[:project][:name]).nil? && !params[:project][:name].blank? && params[:project][:name].length<51 && validate_parent_id && @project.save!
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
       # Add current user as a project member if he is not admin
       unless User.current.admin?

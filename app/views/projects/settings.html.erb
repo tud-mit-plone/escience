@@ -1,16 +1,16 @@
 <% content_for :sidebar do %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
-    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-add' %>
+    <%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-plus-sign' %>
   <% end %>
 <%end%>
 
-<div id="titleOfProject"><h1><%= @project.name %></h1></div>
-<h2 style="float:left;"><%=l(:label_settings)%></h2>
+<div id="titleOfProject"><h1><%= @project.name %> <i class="icon-beaker"></i></h1></div>
+<h2 style="float:left;"><%=l(:label_settings)%> <i class="icon-cog"></i></h2>
 
 <% unless params[:show_project] %>
-  <%= link_to(l(:button_back), {:controller => 'projects', :action => 'index', :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+  <%= link_to(l(:button_back), {:controller => 'projects', :action => 'index', :sub => params[:sub]}, :class => "btn", :style => 'float:right') %>
 <% else %>
-  <%= link_to(l(:button_back), {:controller => 'projects', :action => 'show', :id => params[:show_project], :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+  <%= link_to(l(:button_back), {:controller => 'projects', :action => 'show', :id => params[:show_project], :sub => params[:sub]}, :class => "btn", :style => 'float:right') %>
 <% end %>
 <div class="clear"></div>
 
