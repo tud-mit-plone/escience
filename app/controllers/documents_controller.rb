@@ -23,6 +23,7 @@ class DocumentsController < ApplicationController
   before_filter :find_project_from_association, :except => [:index, :new, :create]
   before_filter :authorize
 
+  include ApplicationHelper
   helper :attachments
 
   def index
@@ -53,6 +54,7 @@ class DocumentsController < ApplicationController
 
   def create
     @document = @project.documents.build
+    params[:document][:description] = convertHtmlToWiki(params[:document][:description])
     @document.safe_attributes = params[:document]
     @document.save_attachments(params[:attachments])
     if @document.save
@@ -77,6 +79,7 @@ class DocumentsController < ApplicationController
   end
 
   def update
+    params[:document][:description] = convertHtmlToWiki(params[:document][:description])
     @document.safe_attributes = params[:document]
     if request.put? and @document.save
       flash[:notice] = l(:notice_successful_update)
@@ -93,11 +96,21 @@ class DocumentsController < ApplicationController
 
   def add_attachment
     attachments = Attachment.attach_files(@document, params[:attachments])
-    render_attachment_warning_if_needed(@document)
 
     if attachments.present? && attachments[:files].present? && Setting.notified_events.include?('document_added')
       Mailer.attachments_added(attachments[:files]).deliver
     end
-    redirect_to :action => 'show', :id => @document
+    respond_to do |format|
+      format.html {
+        render_attachment_warning_if_needed(@document)
+        redirect_to :action => 'show', :id => @document
+      }
+      format.js {
+        meta = params[:attachments][:meta_information]
+        @message = (meta.nil? || meta.empty?) ? l(:error_empty_message) : l(:notice_successful_update)
+#        render :js => "$.notification({ message:'#{message}', type:'warning' }); $('#files').html('#{link_to_attachments @document}')"
+        render :action => "update_document"
+      }
+    end
   end
 end

@@ -1,8 +1,10 @@
-<% content_for :sidebar_right do %>
-  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<% content_for :sidebar_right_deaktiviert do %>
+  <%= link_to_function l(:button_cancel), "history.back()", :class => 'icon icon-history' %>
 <% end %>
 
-<h2><%=l(:label_attachment_new)%></h2>
+<h2><%=l(:label_attachment_new)%> <i class="icon-folder-open-alt"></i></h2>
 
 <%= error_messages_for 'attachment' %>
 <%= form_tag(project_files_path(@project), :multipart => true, :class => "tabular") do %>
@@ -19,5 +21,10 @@
   <ul id="demo1"></ul>
   
 </div>
-<%= submit_tag l(:button_add) %>
+<%#= submit_tag l(:button_add) %>
+<div class="btn-group" style="float:right">
+    <%= link_to l(:button_add), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('.tabular').submit();" %>
+    <%= link_to_function l(:button_cancel), "history.back()", :class => 'btn', :style => 'float:right' %>
+</div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
 <% end %>

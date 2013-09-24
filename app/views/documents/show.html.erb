@@ -1,35 +1,31 @@
 <% content_for :sidebar_right do %>
-  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
   <ul>
+    <li><%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left' %></li>
     <% if User.current.allowed_to?(:manage_documents, @project) %>
-    <li><%= link_to(l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;",
-                                             :id => 'attach_files_link') if authorize_for('documents', 'add_attachment') %></li>
-    <li><%= link_to l(:button_edit), edit_document_path(@document), :accesskey => accesskey(:edit) %></li>
-    <li><%= delete_link document_path(@document) %></li>
+      <li><%= link_to(l(:label_attachment_new), {}, :onclick => "$('#attachments_form').show(); return false;", :id => 'attach_files_link', :class => 'icon icon-folder-open-alt') if authorize_for('documents', 'add_attachment') %></li>
+      <li><%= link_to l(:button_edit), edit_document_path(@document), :accesskey => accesskey(:edit), :class => 'icon icon-pencil' %></li>
+      <li><%= delete_link document_path(@document), :class => 'icon icon-trash' %></li>
     <% end %>
-    
   </ul>
 <%end%>
 
-<h2><%=h @document.title %></h2>
+<h2><%=h @document.title %> <i class="icon-book"></i></h2>
 <div style="float:right; margin-top: -45px; text-align:right">
     <%=h @document.category.name %><br />
     <%= format_date @document.created_on %>
 </div>
-<%= l(:label_description) unless @document.description.empty? %>
-<div class="wiki" style="padding:10px 20px; border: 1px solid #F0F0F0">
-  <%= textilizable @document.description, :attachments => @document.attachments %>
-</div>
-
-<h3><%= l(:label_attachment_plural) %></h3>
-<%= link_to_attachments @document %>
-<% if authorize_for('documents', 'add_attachment') %>
-<p><%#= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;", :id => 'attach_files_link' %></p>
-  <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document }, :multipart => true, :id => "add_attachment_form", :style => "display:none;") do %>
-  <div class="box">
-    <p><%= render :partial => 'attachments/form' %></p>
+<% unless @document.description.nil? || @document.description.empty? %>
+  <div id="documents">
+    <div class="wiki" >
+      <%= textilizable @document.description, :attachments => @document.attachments %>
+    </div>
   </div>
-  <%= submit_tag l(:button_add) %>
+<% end %>
+<h3><%= l(:label_attachment_plural) %></h3>
+<div id="files"><%= link_to_attachments @document %></div>
+<% if authorize_for('documents', 'add_attachment') %>
+  <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document },:remote => true, :multipart => true, :id => "attachments_form", :style => "display:none;") do %>
+    <div class="box"><%= render :partial => 'attachments/form' %></div>
   <% end %>
 <% end %>
 <% html_title @document.title -%>
@@ -38,9 +34,7 @@
     <%= stylesheet_link_tag 'scm' %>
     <%= stylesheet_link_tag 'jquery.fancybox' %>
     <%= javascript_include_tag('jquery.fancybox.pack.js') %>
-    <%#= javascript_include_tag('jquery.pdf.min.js') %>
     <%= javascript_tag '$(document).ready(function() {
       $(".fancybox").fancybox({padding: 0,closeClick : true});
-//      var myPDF = new PDFObject({ url: "http://141.57.9.94:3000/attachments/256/PascalDuffy.pdf" }).embed();
     });' %>
 <% end %>

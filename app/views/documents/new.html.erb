@@ -1,6 +1,25 @@
-<h2><%=l(:label_document_new)%></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<h2 style="float:left"><%=l(:label_document_new)%> <i class="icon-book"></i></h2>
 
 <%= labelled_form_for @document, :url => project_documents_path(@project), :html => {:multipart => true} do |f| %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'documents', :action => 'index', :id => @document}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_document').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_document').submit();" %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <p><%= submit_tag l(:button_create) %></p>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'documents', :action => 'index', :id => @document}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_document').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_document').submit();" %>
+  </div>
+<% end %>
+
+<% content_for :header_tags do %>
+    <%= robot_exclusion_tag %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>

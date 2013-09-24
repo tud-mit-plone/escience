@@ -1,6 +1,14 @@
-<h3><%= link_to h(document.title)+" ("+document.attachments.size.to_s()+" "+l(:label_attachment_plural)+")", document_path(document) %></h3>
-<p><em><%= format_time(document.updated_on) %></em></p>
-
-<div class="wiki">
-  <%= textilizable(truncate_lines(document.description), :object => document) %>
+<h3 style="float:left"><%= link_to truncate(h(document.title), length: 52)+" ("+document.attachments.size.to_s()+" "+l(:label_attachment_plural)+")", document_path(document), :style => "color:#707070", :title => "#{h(document.title) if h(document.title).length > 52}" %></h3>
+<div style="float:right;padding-top: 10px;" class="btn-group">
+  <%= link_to('<i class="icon-pencil"></i>'.html_safe, edit_document_path(document), :title => l(:label_edit_document), :accesskey => accesskey(:edit), :class => "btn btn-small") if User.current.allowed_to?(:manage_files, @project) %>
+  <%= link_to('<i class="icon-trash"></i>'.html_safe, attachment_path(document), :title => l(:label_delete_document),
+              :data => {:confirm => l(:text_are_you_sure)}, :class => "btn btn-small", :method => :delete) if User.current.allowed_to?(:manage_files, @project) %>
 </div>
+<div style="float:right;padding: 15px 30px 0 0;"><%= "#{l(:label_last_modified)} #{format_time(document.updated_on)}" %></div>
+<div class="clear"></div>
+<% unless document.description.nil? || document.description.empty? %>
+<div class="wiki">
+  <%= textilizable(document.description) %>
+  <%#= textilizable(truncate_lines(document.description), :object => document) %>
+</div>
+<% end %>

@@ -1,9 +1,19 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <% javascriptString = "" %>
-<% content_for :sidebar_right do %>
-  <%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-add') if User.current.allowed_to?(:manage_files, @project) %>
+<% content_for :sidebar_right_deaktiviert do %>
+  <% if User.current.allowed_to?(:manage_files, @project) %>
+    <ul>
+      <li><%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-plus-sign') %></li>
+    </ul>
+  <% end %>
 <% end %>
 
-<h2><%=l(:label_attachment_plural)%></h2>
+<h2 style="float:left"><%=l(:label_attachment_plural)%> <i class="icon-folder-open-alt"></i></h2>
+<% if User.current.allowed_to?(:manage_files, @project) %>
+  <%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'btn', :style => "float:right") %></li>
+<% end %>
+<div class="clear"></div>
 
 <% delete_allowed = User.current.allowed_to?(:manage_files, @project) %>
 
@@ -28,6 +38,7 @@
   <% container.attachments.each do |file| %>
   <tr class="file <%= cycle("odd", "even") %>">
     <td class="filename attachments" width="50%">
+      <div>
   <% mimetype = Redmine::MimeType.main_mimetype_of(file.filename) 
      filetype = file.filename[(file.filename.rindex('.')+1)..-1] %>
   <%= link_to_attachment file, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+file.id.to_s, :title => file.description.blank? ? file.filename.to_s : file.description.to_s -%>
@@ -39,14 +50,14 @@
      file_information += '</br><div style="max-width:150px">'+h(" #{file.description}")+'</div>'.html_safe unless file.description.empty?
      javascriptString += 'addToolTip("#fileinfo_'+file.id.to_s+'",\''+file_information+'\',"left");' %>
   <% end %>
-      
+      </div>
     </td>
     <td class="created_on"><%= format_time(file.created_on) %></td>
     <td class="filesize"><%= number_to_human_size(file.filesize) %></td>
     <td class="downloads"><%= file.downloads %></td>
     <td align="right">
-    <%= link_to_attachment file, :download => true, :target => '_self', :text => "", :title => l(:label_download_file), :class => "download" -%>
-    <%= link_to("", attachment_path(file), :class => "delete", :title => l(:label_delete_file),
+    <%= link_to_attachment file, :download => true, :target => '_self', :text => "", :title => l(:label_download_file), :class => "icon-cloud-download icon-large" -%>
+    <%= link_to("", attachment_path(file), :class => "icon-trash icon-large", :title => l(:label_delete_file),
                 :data => {:confirm => l(:text_are_you_sure)}, :method => :delete) if delete_allowed %>
     </td>
   </tr>

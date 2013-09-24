@@ -1,12 +1,11 @@
-<% content_for :sidebar_right do %>
-	<% if User.current.allowed_to?(:manage_documents, @project) %>
-	 <%= link_to l(:label_document_new), new_project_document_path(@project), :class => 'icon icon-add',
-	       :onclick => 'showAndScrollTo("add-document", "document_title"); return false;' if User.current.allowed_to?(:manage_documents, @project) %>
-	<%end%>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<% content_for :sidebar_right_deactivated do %>
+	 <%= link_to l(:label_document_new), new_project_document_path(@project), :class => 'icon icon-plus-sign', :onclick => 'showAndScrollTo("add-document", "document_title"); return false;' if User.current.allowed_to?(:manage_documents, @project) %>
 <%end%>
 
 <div id="add-document" style="display:none;">
-  <h2><%=l(:label_document_new)%></h2>
+  <h2><%=l(:label_document_new)%> <i class="icon-book"></i></h2>
   <%= labelled_form_for @document, :url => project_documents_path(@project), :html => {:multipart => true} do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>
     <p>
@@ -17,25 +16,28 @@
 </div>
 
 <div id="documents">
-<h2><%=l(:label_document_plural)%></h2>
-
-<div class="sort_buttons" style="float:right; margin-top:-44px;">
-      <div class="sortby">Sort by :</div>
-      <div class="first"><%= link_to l(:field_category), {:sort_by => 'category'}, :class => (@sort_by == 'category' ? 'selected' :nil) %></div>
-      <div><%= link_to l(:label_date), {:sort_by => 'date'}, :class => (@sort_by == 'date' ? 'selected' :nil) %></div>
-      <div><%= link_to l(:field_title), {:sort_by => 'title'}, :class => (@sort_by == 'title' ? 'selected' :nil) %></div>
-      <div><%= link_to l(:field_author), {:sort_by => 'author'}, :class => (@sort_by == 'author' ? 'selected' :nil) %></div>
-</div>
-<div class="clear"></div>
-    
-<% if @grouped.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
-
-<% @grouped.keys.sort.each do |group| %>
-  <fieldset id="document_<%= group %>">
-    <legend><%= @sort_by == 'date' ? format_date(group) : group %></legend>
-    <%= render :partial => 'documents/document', :collection => @grouped[group] %>
-  </fieldset>
-<% end %>
+  <h2 style="float:left;"><%=l(:label_document_plural)%> <i class="icon-book"></i></h2>
+  <%= link_to l(:label_document_new), new_project_document_path(@project), :style => 'float:right; margin-left:40px;', :class => 'btn' if User.current.allowed_to?(:manage_documents, @project) %>
+  
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:field_category), {:sort_by => 'category'}, :class => "btn #{(@sort_by == 'category' ? 'active' :nil)}" %>
+    <%= link_to l(:label_date), {:sort_by => 'date'}, :class => "btn #{(@sort_by == 'date' ? 'active' :nil)}" %>
+    <%= link_to l(:field_title), {:sort_by => 'title'}, :class => "btn #{(@sort_by == 'title' ? 'active' :nil)}" %>      
+    <%= link_to l(:field_author), {:sort_by => 'author'}, :class => "btn #{(@sort_by == 'author' ? 'active' :nil)}" %>
+  </div>
+  <div class="sortby" style="float:right"><%= l(:label_sortby)%></div>
+  <div class="clear"></div>
+      
+  <% if @grouped.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
+  
+  <% @grouped.keys.sort.each do |group| %>
+    <fieldset id="document_<%= group %>">
+      <legend><%= @sort_by == 'date' ? format_date(group) : group %></legend>
+      <div style="margin-top:-10px;">
+        <%= render :partial => 'documents/document', :collection => @grouped[group] %>
+      </div>
+    </fieldset>
+  <% end %>
 </div>
 
 <% content_for :sidebar do %>
