@@ -14,14 +14,17 @@
             	  <% else %>
             	    <tr>
             	     <td><%= l(:label_project) %><span class="required"> *</span></td>
-            	     <td><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).all, :selected => @time_entry.project, :truncate => 10), :no_label => true, :required => true %>
+            	     <td><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).all, :selected => @time_entry.project, :truncate => 100), :no_label => true, :required => true %>
             	     </td>
             	    </tr>
             	  <% end %>
             	<% end %>
               <tr>
                 <td width="16%"><%= l(:label_spent_time) %><span class="required"> *</span></td>
-                <td width="84%"><%= time_entry.text_field :hours, :size => 6, :no_label => true, :required => true %> <%= l(:field_hours) %></td>
+                <td width="84%">
+                  <%= time_entry.text_field :hours, :size => 6, :no_label => true %> <%= l(:field_hours) %>
+                </td>
+              </tr>
               <tr>
                 <td width="16%"><%= l(:field_spent_on) %><span class="required"> *</span></td>
               	<td><%= f.text_field :spent_on, :size => 10, :no_label => true, :required => true %><%= calendar_for('time_entry_spent_on') %></td>
@@ -45,7 +48,7 @@
         </fieldset>
     <%# end %>
     </div>
-	<%= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
+	<%#= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
 
 
 <%= javascript_tag "observeAutocompleteField('time_entry_issue_id', '#{escape_javascript auto_complete_issues_path(:project_id => @project, :scope => (@project ? nil : 'all'))}')" %>

@@ -1,6 +1,12 @@
-<h2><%= l(:label_spent_time) %></h2>
+<h2 style="float:left"><%= l(:label_spent_time) %> <i class="icon-time"></i></h2>
 
 <%= labelled_form_for @time_entry, :url => project_time_entry_path(@time_entry.project, @time_entry) do |f| %>
+  <%= hidden_field_tag 'hidden_submit', '' %>
+  <div class="btn-group" style="float:right">
+    <%= link_to(l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#edit_time_entry').submit();") %>
+    <%= link_to(l(:button_back), {:action => 'index', :id => @project, :sub => params[:sub]}, :class => "btn") %>
+  <%#= submit_tag l(:button_save) %>
+  </div>
+  <div class="clear"></div>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_save) %>
 <% end %>

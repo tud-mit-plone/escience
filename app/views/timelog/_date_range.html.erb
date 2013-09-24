@@ -27,9 +27,11 @@
     <div class="clear"></div>
   </div>
 </div>
-<div class="buttons">
-  <%= submit_tag l(:button_apply), :class => 'button' %>
-  <%= link_to l(:button_clear), {:controller => controller_name, :action => action_name, :project_id => @project, :issue_id => @issue}, :class => 'button' %>
+<%= hidden_field_tag 'hidden_submit', '' %>
+<div class="btn-group" style="float:right">
+  <%= link_to l(:button_apply), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#query_form').submit();" %>
+  <%= link_to l(:button_clear), {:controller => controller_name, :action => action_name, :project_id => @project, :issue_id => @issue}, :class => 'btn' %>
+  <%#= submit_tag l(:button_apply), :class => 'button' %>
 </div>
 </fieldset>
 

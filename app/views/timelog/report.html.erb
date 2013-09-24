@@ -1,4 +1,8 @@
-<% content_for :sidebar_right do %>
+<% unless @project.nil? %>
+  <div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<% end %>
+
+<% content_for :sidebar_right_deaktivated do %>
   <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
   <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
     <ul>
@@ -9,8 +13,12 @@
 
 <%#= render_timelog_breadcrumb %>
 
-<h2><%= l(:label_spent_time) %></h2>
-
+<h2 style="float:left"><%= l(:label_spent_time) %> <i class="icon-time"></i></h2>
+<div style="float:right" class="btn-group">
+  <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'btn' if User.current.allowed_to?(:log_time, @project, :global => true) %>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'btn' %>
+</div>
+<div class="clear"></div>
 <%= form_tag({:controller => 'timelog', :action => 'report',
               :project_id => @project, :issue_id => @issue},
             :method => :get, :id => 'query_form') do %>
@@ -19,7 +27,7 @@
   <% end %>
   <%= render :partial => 'timelog/date_range' %>
 
-  <p><label for='columns'><%= l(:label_details) %></label>: <%= select_tag 'columns', options_for_select([[l(:label_year), 'year'],
+  <p class="timelog criteria"><label for='columns'><%= l(:label_details) %></label>: <%= select_tag 'columns', options_for_select([[l(:label_year), 'year'],
                                                                             [l(:label_month), 'month'],
                                                                             [l(:label_week), 'week'],
                                                                             [l(:label_day_plural).titleize, 'day']], @report.columns),
@@ -30,48 +38,48 @@
                                                           :style => 'width: 200px',
                                                           :id => nil,
                                                           :disabled => (@report.criteria.length >= 3), :id => "criterias") %>
-     <%= link_to l(:button_clear), {:project_id => @project, :issue_id => @issue, :period_type => params[:period_type], :period => params[:period], :from => @from, :to => @to, :columns => @report.columns}, :class => 'button' %></p>
+     <%= link_to l(:button_clear), {:project_id => @project, :issue_id => @issue, :period_type => params[:period_type], :period => params[:period], :from => @from, :to => @to, :columns => @report.columns}, :class => 'btn', :style => 'float:right' %></p>
 <% end %>
-
-<% unless @report.criteria.empty? %>
-<div class="total-hours">
-<p><%= l(:label_total) %>: <%= html_hours(l_hours(@report.total_hours)) %></p>
-</div>
-
-<% unless @report.hours.empty? %>
-<div class="autoscroll">
-<table class="list" id="time-report">
-<thead>
-<tr>
-<% @report.criteria.each do |criteria| %>
-  <th><%= l_or_humanize(@report.available_criteria[criteria][:label]) %></th>
-<% end %>
-<% columns_width = (40 / (@report.periods.length+1)).to_i %>
-<% @report.periods.each do |period| %>
-  <th class="period" width="<%= columns_width %>%"><%= period %></th>
-<% end %>
-  <th class="total" width="<%= columns_width %>%"><%= l(:label_total) %></th>
-</tr>
-</thead>
-<tbody>
-<%= render :partial => 'report_criteria', :locals => {:criterias => @report.criteria, :hours => @report.hours, :level => 0} %>
-  <tr class="total">
-  <td><%= l(:label_total) %></td>
-  <%= ('<td></td>' * (@report.criteria.size - 1)).html_safe %>
-  <% total = 0 -%>
-  <% @report.periods.each do |period| -%>
-    <% sum = sum_hours(select_hours(@report.hours, @report.columns, period.to_s)); total += sum -%>
-    <td class="hours"><%= html_hours("%.2f" % sum) if sum > 0 %></td>
-  <% end -%>
-  <td class="hours"><%= html_hours("%.2f" % total) if total > 0 %></td>
-  </tr>
-</tbody>
-</table>
+  
+<div class="timelog content">
+  <% unless @report.criteria.empty? %>
+  <div class="total-hours"><%= l(:label_total) %>: <%= html_hours(l_hours(@report.total_hours)) %></div>
+  <% unless @report.hours.empty? %>
+  <div class="autoscroll">
+    <table class="list" id="time-report">
+      <thead>
+        <tr>
+        <% @report.criteria.each do |criteria| %>
+          <th><%= l_or_humanize(@report.available_criteria[criteria][:label]) %></th>
+        <% end %>
+        <% columns_width = (40 / (@report.periods.length+1)).to_i %>
+        <% @report.periods.each do |period| %>
+          <th class="period" width="<%= columns_width %>%"><%= period %></th>
+        <% end %>
+          <th class="total" width="<%= columns_width %>%"><%= l(:label_total) %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= render :partial => 'report_criteria', :locals => {:criterias => @report.criteria, :hours => @report.hours, :level => 0} %>
+        <tr class="total">
+          <td><%= l(:label_total) %></td>
+          <%= ('<td></td>' * (@report.criteria.size - 1)).html_safe %>
+          <% total = 0 -%>
+          <% @report.periods.each do |period| -%>
+            <% sum = sum_hours(select_hours(@report.hours, @report.columns, period.to_s)); total += sum -%>
+            <td class="hours"><%= html_hours("%.2f" % sum) if sum > 0 %></td>
+          <% end -%>
+          <td class="hours"><%= html_hours("%.2f" % total) if total > 0 %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <% other_formats_links do |f| %>
   <%= f.link_to 'CSV', :url => params %>
 <% end %>
+
 <% end %>
 <% end %>
 

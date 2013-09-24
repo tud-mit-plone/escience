@@ -135,7 +135,7 @@ module TimelogHelper
     elsif k = criteria_options[:klass]
       obj = k.find_by_id(value.to_i)
       if obj.is_a?(Issue)
-        obj.visible? ? "#{obj.tracker} ##{obj.id}: #{obj.subject}" : "##{obj.id}"
+        obj.visible? ? link_to_issue(obj, :subject => false) : "##{obj.id}"
       else
         obj
       end

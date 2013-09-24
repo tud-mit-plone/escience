@@ -1,15 +1,19 @@
 <% unless @project.nil? %>
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
 <% end %>
 
-<h2 style="float:left"><%= l(:label_spent_time) %></h2>
-
-<%= link_to(l(:button_back), {:action => 'index', :id => @project, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
-<div class="clear"></div>
-
-<%= labelled_form_for @time_entry, :url => time_entries_path do |f| %>
+<%= labelled_form_for @time_entry, :url => time_entries_path, :html => {:id => 'new_time_entry'} do |f| %>
+<%#= labelled_form_for @time_entry, :url => time_entries_path do |f| %>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= hidden_field_tag 'project_id', params[:project_id] if params[:project_id] %>
+  <h2 style="float:left"><%= l(:label_spent_time) %> <i class="icon-time"></i></h2>
+  <div class="btn-group" style="float:right">
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_time_entry').submit();" %>
+    <%= link_to l(:button_create_and_continue), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_time_entry').submit();" %>
+    <%= link_to(l(:button_back), {:action => 'index', :id => @project, :sub => params[:sub]}, :class => "btn", :style => 'float:right') %>
+  </div>
+  <div class="clear"></div>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_create) %>
-  <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+  <%#= submit_tag l(:button_create) %>
+  <%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
 <% end %>

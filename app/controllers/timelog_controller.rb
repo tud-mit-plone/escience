@@ -128,7 +128,7 @@ class TimelogController < ApplicationController
   end
 
   def new
-    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :user => User.current, :spent_on => User.current.today)
+    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :user => User.current, :spent_on => format_date(User.current.today))
     @time_entry.safe_attributes = params[:time_entry]
   end
 

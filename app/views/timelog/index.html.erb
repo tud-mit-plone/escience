@@ -1,5 +1,5 @@
 <% unless @project.nil? %>
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -15,23 +15,25 @@
 
 <% unless @issue.nil? %>
 
-  <h2 style="float:left"><%= l(:label_spent_time_for_issue) %></h2>
-  <%= link_to(l(:button_back), {:controller => 'issues',:action => 'show', :id => @issue.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
+  <h2 style="float:left"><%= l(:label_spent_time_for_issue) %> <i class="icon-time"></i></h2>
   <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
     <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'button' %>
   <% end %>
+  <%= link_to(l(:button_back), {:controller => 'issues',:action => 'show', :id => @issue.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
   <div class="clear"></div>
   <h2 style="font-size:1.4em;margin-top:-20px;"><%= @issue.subject %> (<%= l(:label_total) %>: <%= html_hours(l_hours(@total_hours)) %>)</h2>
   
 <% else %>
 
-  <h2 style="float:left"><%= l(:label_spent_time) %></h2>
-  <% unless @project.nil? %>
-    <%= link_to(l(:button_back), {:controller => 'projects', :action => 'show', :id => @project.id, :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
-  <% end %>
-  <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
-    <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'button' %>
-  <% end %>
+  <h2 style="float:left"><%= l(:label_spent_time) %> <i class="icon-time"></i></h2>
+  <div class="btn-group" style="float:right">
+    <% if User.current.allowed_to?(:log_time, @project, :global => true) %>
+      <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project, :issue_id => @issue}, :class => 'btn' %>
+    <% end %>
+    <% unless @project.nil? %>
+      <%= link_to(l(:button_back), {:controller => 'projects', :action => 'show', :id => @project.id, :sub => params[:sub]}, :class => "btn") %>
+    <% end %>
+  </div>
   <div class="clear"></div>
 
 <% end %>
