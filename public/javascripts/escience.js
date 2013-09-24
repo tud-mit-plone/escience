@@ -14,7 +14,10 @@ function upload_attachment() {
   $('#attachments_form').ajaxSubmit({
     beforeSubmit: function(a,f,o) {o.dataType = 'json';},
     complete: function(XMLHttpRequest, textStatus) {
-      eval(XMLHttpRequest.responseText);
+      var xmlhttp = XMLHttpRequest;
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+         eval(xmlhttp.responseText);
+      }
     }
   });
 }
