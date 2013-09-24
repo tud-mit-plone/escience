@@ -1,8 +1,13 @@
 <legend><%=l(:label_news_latest)%></legend>
-
+<div style="padding:0;">
 <%= render(:partial => 'news/news',
-            :collection => News.find(:all,
-                                     :limit => 10,
-                                     :order => "#{News.table_name}.created_on DESC",
-                                     :conditions => "#{News.table_name}.project_id in (#{@user.projects.collect{|m| m.id}.join(',')})",
-                                     :include => [:project, :author])) unless @user.projects.empty? %>
+            :collection => News.find(
+              :all,
+              :limit => 6,
+              :order => "#{News.table_name}.created_on DESC",
+              :conditions => "#{News.table_name}.project_id in (#{@user.projects.collect{|m| m.id}.join(',')})",
+              :include => [:project, :author]
+            )
+          ) unless @user.projects.empty? %>
+<%= link_to_function('weitere',"$(this).parent().load('#{url_for('/my/blocks/news')}')").html_safe; %>
+</div>

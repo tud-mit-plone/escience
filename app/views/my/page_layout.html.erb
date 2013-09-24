@@ -1,21 +1,22 @@
-<% content_for :sidebar_right do %>
-  <%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-history' %>
+<% content_for :sidebar_right_deaktiviert do %>
+  <%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-chevron-left' %>
 <% end %>
-<h2><%=l(:label_my_page)%></h2>
+<h2 style="float:left"><%=l(:label_my_page)%> <li class="icon-dashboard"></li></h2>
+<%= link_to l(:button_back), {:action => 'page'}, :class => 'btn', :style => 'float:right' %>
+<div class="clear"></div>
 <p><%=l(:text_personalize_account)%></p>
 <div>
 <% if @block_options.present? %>
   <%= form_tag({:action => "add_block"}, :id => "block-form") do %>
   <%= label_tag('block-select', l(:label_my_page_block)) %>:
   <%= select_tag 'block',
-                 content_tag('option') + options_for_select(@block_options),
-                 :id => "block-select" %>
-  <%= link_to l(:button_add), '#', :onclick => '$("#block-form").submit()', :class => 'icon icon-add' %>
+                 content_tag('option', l(:actionview_instancetag_blank_option)) + options_for_select(@block_options),
+                 :id => "block-select", :onchange => 'if ($("#block-select option:selected").index() > 0) {$("#block-add").removeClass("disabled");} else {$("#block-add").addClass("disabled");}' %>
+  <%= link_to l(:button_add), '#', :onclick => 'if ($("#block-select option:selected").index() > 0) $("#block-form").submit(); else return false;', :class => 'icon icon-plus-sign disabled', :id => 'block-add' %>
   <% end %>
 <% end %>
 </div>
 <br><br>
-<h2><%=l(:label_my_page)%></h2>
 
 <div id="list-top" class="block-receiver">
   <% @blocks['top'].each do |b|

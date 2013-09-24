@@ -1,14 +1,10 @@
-<% content_for :sidebar_right do %>
-  <ul>
-    <li>
-        <%= link_to l(:label_personalize_page), :action => 'page_layout' %>
-    </li>
-  </ul>
+<% content_for :sidebar_right_deaktiviert do %>
+  <%= link_to(l(:label_personalize_page),{:action => 'page_layout'}, :class => 'icon icon-sort-by-attributes-alt btn') %>
 <% end %>
 
-
-<h2><%=l(:label_my_page)%></h2>
-
+<h2 style="float:left"><%=l(:label_my_page)%> <li class="icon-dashboard"></li></h2>
+<%= link_to(l(:label_personalize_page),{:action => 'page_layout'}, :class => 'btn', :style => 'float:right') %>
+<div class="clear"></div>
 <div id="list-top">
   <% counter = 0;
      @blocks['top'].each do |b|
