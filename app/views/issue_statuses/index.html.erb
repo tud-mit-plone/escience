@@ -1,7 +1,9 @@
 <% content_for :sidebar_right do %>
-  <%= link_to l(:label_issue_status_new), new_issue_status_path, :class => 'icon icon-add' %>
-	<% if Issue.use_status_for_done_ratio? %>
 	<ul>
+	 <li>
+     <%= link_to l(:label_issue_status_new), new_issue_status_path, :class => 'icon icon-plus-sign' %>
+	 </li>
+	<% if Issue.use_status_for_done_ratio? %>
 	 <li>
       <%= link_to(l(:label_update_issue_done_ratios), update_issue_done_ratio_issue_statuses_path, :class => 'icon icon-multiple', :method => 'post', :confirm => l(:text_are_you_sure))  %>
    </li>

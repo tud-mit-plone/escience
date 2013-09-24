@@ -1,25 +1,14 @@
 <% content_for :sidebar_right do %>
-  <ul style="padding:0; list-style-position: inside; margin:0 0 -5px 0;">
-    <li style="list-style:none;">
-      <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history', :target => "_self", :style => 'padding-left:25px !important;' %>
-    </li>
-    <li style="list-style:none">
-    <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-add', :style => 'padding-left:25px !important;') %>
-    </li>
-  </ul>
-  <ul>
+  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left', :target => "_self" %>
+  <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-plus-sign') %>
 	<% if authorize_for("issues", "edit") %>
-		<li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :accesskey => accesskey(:edit)) %></li>
+    <%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :accesskey => accesskey(:edit), :class => "icon icon-pencil") %>
 	<%end%>
 	<% if authorize_for("timelog", "new") %>
-		<li><%= link_to(l(:button_log_time), {:controller => 'issues', :action => 'edit', :id => @issue, :update => 'timelog' }, :accesskey => accesskey(:edit)) %></li>
-		<!--
-		<li><%= link_to(l(:button_log_time), new_issue_time_entry_path(@issue)) %></li>
-		-->
+    <%= link_to(l(:button_log_time), {:controller => 'issues', :action => 'edit', :id => @issue, :update => 'timelog' }, :accesskey => accesskey(:edit), :class => 'icon icon-time') %>	
 	<%end%>
-	<li><%= watcher_tag(@issue, User.current) %></li>
+	<%= watcher_tag(@issue, User.current) %>
 	<% if User.current.allowed_to?(:delete_issues, @project) %>
-		<li><%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete) %></li>
+		<%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-trash') %>
 	<%end%>	
-  </ul>
 <%end%>

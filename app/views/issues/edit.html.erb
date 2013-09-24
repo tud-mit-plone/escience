@@ -1,5 +1,5 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %></h1></div>
-<h2><%= @issue.subject %><%#= issue_heading(@issue) %></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe %> <i class="icon-beaker"></i></h1></div>
+<h2><%= @issue.subject %><%#= issue_heading(@issue) %> <i class="icon-check"></i></h2>
 <!--h2><%=h "#{@issue.tracker.name} ##{@issue.id}" %></h2-->
 
 <% if params[:update].nil? %>

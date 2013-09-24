@@ -26,3 +26,7 @@
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
+<script lang="javascript">
+  var el = $('.linkToIssue .icon-angle-right').parent().parent();
+  el.parent().prepend(el);
+</script>

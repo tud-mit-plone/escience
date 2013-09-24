@@ -1,4 +1,4 @@
-<div id="titleOfProject"><h1><%= link_to h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id unless @project.nil? %></h1></div>
+<div id="titleOfProject"><h1><%= link_to h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
 <%= call_hook(:view_issues_new_top, {:issue => @issue}) %>
 
@@ -7,15 +7,21 @@
   <%#= error_messages_for 'issue' %>
   <%= hidden_field_tag 'copy_from', params[:copy_from] if params[:copy_from] %>
   <%= hidden_field_tag 'parent_id', params[:parent_issue_id] if params[:parent_issue_id] %>
+  <%= hidden_field_tag 'hidden_submit', '' %>
 
-  <h2 style="float:left; position:absolute"><%= l(:label_issue_new) %></h2>
-  <% unless params[:parent_issue_id] %>
-      <%= link_to l(:button_cancel), {:controller => 'projects', :action => 'show', :id => @project.id}, :class => 'button', :style => '60px' %>
-  <% else %>
-    <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'show', :id => "#{params[:parent_issue_id] if params[:parent_issue_id]}"}, :class => 'button', :style => '60px' %>
-  <% end %>
-  <%= submit_tag l(:button_create) %>
-  <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+  <h2 style="float:left; position:absolute"><%= l(:label_issue_new) %> <i class="icon-check"></i></h2>
+  <div class="btn-group" style="float:right;">
+    <% unless params[:parent_issue_id] %>
+        <%= link_to l(:button_cancel), {:controller => 'projects', :action => 'show', :id => @project.id}, :class => 'btn', :style => '60px' %>
+    <% else %>
+      <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'show', :id => "#{params[:parent_issue_id] if params[:parent_issue_id]}"}, :class => 'btn', :style => '60px' %>
+    <% end %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
+    <%#= submit_tag l(:button_create), :class => 'btn' %>
+    <%#= submit_tag l(:button_create_and_continue), :class => 'btn', :name => 'continue' %>
+  </div>
+
   <div class="clear"></div>
   <div class="box" style="padding-top: 10px;">
     <fieldset class="tabular"><legend><%= l(:label_issue_new) %></legend>
@@ -26,8 +32,8 @@
 
     <p><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
     
+    <% if @issue.safe_attribute? 'watcher_user_ids' -%>
     <fieldset>
-      <% if @issue.safe_attribute? 'watcher_user_ids' -%>
       <label><%= l(:label_issue_watchers) %></label><br />
         <p id="watchers_form">
         <span id="watchers_inputs">
@@ -40,8 +46,8 @@
   				  :method => 'get' %>
         </span>
         </p>
-      <% end %>
     </fieldset>
+    <% end %>
   </div>
 
   <% if @copy_from && @copy_from.attachments.any? && 1==0 %>
@@ -57,9 +63,21 @@
   </p>
   <% end %>
 
-  <%= link_to l(:button_cancel), {:controller => 'projects', :action => 'show', :id => @project.id}, :class => 'button', :style => '60px' %>
-  <%= submit_tag l(:button_create) %>
-  <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+  <div class="btn-group" style="float:right;">
+    <% unless params[:parent_issue_id] %>
+        <%= link_to l(:button_cancel), {:controller => 'projects', :action => 'show', :id => @project.id}, :class => 'btn', :style => '60px' %>
+    <% else %>
+      <%= link_to l(:button_cancel), {:controller => 'issues', :action => 'show', :id => "#{params[:parent_issue_id] if params[:parent_issue_id]}"}, :class => 'btn', :style => '60px' %>
+    <% end %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+    <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
+    <%#= submit_tag l(:button_create), :class => 'btn' %>
+    <%#= submit_tag l(:button_create_and_continue), :class => 'btn', :name => 'continue' %>
+  </div>
+
+  <%#= link_to l(:button_cancel), {:controller => 'projects', :action => 'show', :id => @project.id}, :class => 'button', :style => '60px' %>
+  <%#= submit_tag l(:button_create) %>
+  <%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
 
   <%= javascript_tag "$('#issue_subject').focus();" %>
 <% end %>

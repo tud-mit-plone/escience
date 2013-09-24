@@ -418,12 +418,12 @@ class IssuesController < ApplicationController
 private
 
   def formated_date_to_db(date)
-    return nil if date.nil?
+    return nil if date.nil? || date.empty?
     d = nil
     unless Setting.date_format.blank?
       d = Date.strptime(date, Setting.date_format )
     else
-      d = Date.strptime(date,::I18n.t("date.formats.default",{ :locale => User.current.language }))
+     d = Date.strptime(date,::I18n.t("date.formats.default",{ :locale => User.current.language }))
     end
     return d 
   end

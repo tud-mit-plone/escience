@@ -2,6 +2,6 @@
   <% if issue != current %>
     <%= link_to(h(truncate(issue.subject, :length => 60)),{:controller => 'issues', :action => 'show', :id => issue}, :class => "#{issue.closed? ? 'closed' : nil}", :title => "#{l(:label_closed_issues) if issue.closed?}") %>
   <% else %>
-    <%= h(truncate(issue.subject, :length => 60)) %>
+    <span class="icon-angle-right" style="color:#B61634 !important"> <%= h(truncate(issue.subject, :length => 60)) %></span>
   <% end %>
 </div>

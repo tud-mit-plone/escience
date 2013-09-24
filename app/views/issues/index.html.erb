@@ -1,20 +1,20 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless (@project.nil?)%></h1></div>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless (@project.nil?)%></h1></div>
 
-<% content_for :sidebar_right do %>
+<% content_for :sidebar_right_deaktiviert do %>
   <% if params['sub'].nil? && User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
-    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-add' %>
+    <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'icon icon-plus-sign' %>
   <% end %>
   <% if !@query.new_record? && @query.editable_by?(User.current) %>
   <% end %>
   <%= render_sidebar_queries %>
 <%end%>
 
-<h2 style="float:left;"><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
+<h2 style="float:left;"><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %> <i class="icon-check"></i></h2>
 <div style="float:right">
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
-  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'button' %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'btn' %>
 <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
-  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'button' %>
+  <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'btn' %>
 <% end %>
 </div>
 <div class="clear"></div>
@@ -26,25 +26,23 @@
             :method => :get, :id => 'query_form') do %>
     <%= hidden_field_tag 'set_filter', '1' %>
     <%= hidden_field_tag 'sub', 'issues_all' unless params['sub'].nil? %>
+    <%= hidden_field_tag 'hidden_submit', '' %>
     <div id="query_form_content" class="hide-when-print">
     <fieldset id="filters" class="collapsable" style="padding-right:10px;<%= 'display:none' unless params['id'].nil? %>">
       <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
       <div>
         <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
       </div>
-      <div class="buttons hide-when-print" style="margin-bottom:10px;">
-        <div><%= link_to_function l(:button_apply), 'submit_query_form("query_form")' %></div>
-        <div>
-          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project, :sub => 'issues_all' }, :class => 'icon icon-reload' if (!params.nil? && !params['issues_all'].nil?)  %>
-          <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project } if (params.nil? || (!params.nil? && params['issues_all'].nil?))  %>
-        </div>
-          <% if !@query.new_record? && @query.editable_by?(User.current) %>
-          	<div><%= link_to l(:button_edit), edit_query_path(@query) %></div>
-          	<div><%= delete_link query_path(@query) %></div>
-          <% end %>
+      <div class="buttons hide-when-print btn-group" style="margin-bottom:10px;">
+        <%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'btn' %>
+        <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project, :sub => 'issues_all' }, :class => 'icon icon-reload btn' if (!params.nil? && !params['issues_all'].nil?)  %>
+        <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'btn' if (params.nil? || (!params.nil? && params['issues_all'].nil?))  %>
+        <% if !@query.new_record? && @query.editable_by?(User.current) %>
+        	<%= link_to l(:button_edit), edit_query_path(@query), :class => 'btn' %>
+        	<%= delete_link query_path(@query), :class => 'btn' %>
+        <% end %>
         <% if @query.new_record? && User.current.allowed_to?(:save_queries, @project, :global => true) %>
-        <div><%= link_to_function l(:button_save), "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')" %>
-        </div>
+          <%= link_to_function l(:button_save), "$('query_form').action='#{ @project ? new_project_query_path(@project) : new_query_path }'; submit_query_form('query_form')", :class => 'btn' %>
         <% end %>
       </div>
     </fieldset>
