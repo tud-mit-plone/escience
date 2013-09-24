@@ -31,11 +31,16 @@
       <% end %>
     </fieldset>
   </div>
-
-  <%= link_to l(:button_cancel), {:controller => 'appointments', :action => 'index'}, :class => 'button', :style => '60px' %>
-  <%= submit_tag l(:button_create) %>
-  <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
-  <%= javascript_tag "$('#appointment_subject').focus();" %>
+  
+  <div class="btn-group" style="float:right">
+    <%= link_to l(:button_cancel), {:controller => 'appointments', :action => 'index'}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
+    <%#= submit_tag l(:button_create) %>
+    <%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+    <%= javascript_tag "$('#appointment_subject').focus();" %>
+  </div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
 <% end %>
 
 
