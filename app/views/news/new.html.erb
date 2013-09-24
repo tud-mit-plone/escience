@@ -1,9 +1,26 @@
-<h2><%=l(:label_news_new)%></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
 <%= labelled_form_for @news, :url => project_news_index_path(@project),
                                            :html => { :id => 'news-form', :multipart => true } do |f| %>
+  <h2 style="float:left"><%=l(:label_news_new)%> <i class="icon-bullhorn"></i></h2>
+  <div class="btn-group" style="float:right">
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#news-form').submit();" %>
+    <%= link_to l(:button_cancel), {:action => 'index', :project => @project}, :class => 'btn', :style => '60px' %>
+    <%#= submit_tag l(:button_create) %>
+  </div>
+  <div class="clear"></div>
   <%= render :partial => 'news/form', :locals => { :f => f } %>
-  <%= submit_tag l(:button_create) %>
+  <%= hidden_field_tag 'hidden_submit', '' %>
+  <div class="btn-group" style="float:right">
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#news-form').submit();" %>
+    <%= link_to l(:button_cancel), {:action => 'index', :project => @project}, :class => 'btn', :style => '60px' %>
+    <%#= submit_tag l(:button_create) %>
+  </div>
   <%= preview_link preview_news_path(:project_id => @project), 'news-form' %>
 <% end %>
 <div id="preview" class="wiki"></div>
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
+<% end %>
+

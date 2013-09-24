@@ -1,10 +1,15 @@
 <%= error_messages_for @news %>
 
-<div class="box tabular">
-<p><%= f.text_field :title, :required => true, :size => 60 %></p>
-<p><%= f.text_area :summary, :cols => 60, :rows => 2 %></p>
-<p><%= f.text_area :description, :required => true, :cols => 60, :rows => 15, :class => 'wiki-edit' %></p>
-<p id="attachments_form"><label><%= l(:label_attachment_plural) %></label><%= render :partial => 'attachments/form', :locals => {:container => @news} %></p>
-</div>
+<fieldset>
+  <legend>Neuer Eintrag</legend>
+  <%= f.text_field :title, :required => true, :size => 60, :style => 'width:80%; font-size:16px; margin-bottom:5px;' %>
+  <%#= f.text_area :summary, :cols => 60, :rows => 2 %>
+  <textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="news_description" name="news[description]" rows="<%= (@news.description.blank? ? 10 : [[10, @news.description.length / 50].max, 100].min) %>">
+    <%= textilizable @news, :description %>
+  </textarea>
+</fieldset>
 
-<%= wikitoolbar_for 'news_description' %>
+<fieldset id="attachments_form">
+  <legend><%= l(:label_attachment_plural) %></legend>
+  <%= render :partial => 'attachments/form', :locals => {:container => @news} %>
+</fieldset>

@@ -28,6 +28,7 @@ class NewsController < ApplicationController
 
   helper :watchers
   helper :attachments
+  include ApplicationHelper
 
   def index
     case params[:format]
@@ -68,6 +69,7 @@ class NewsController < ApplicationController
 
   def create
     @news = News.new(:project => @project, :author => User.current)
+    @news.description = convertHtmlToWiki(params[:news][:description])
     @news.safe_attributes = params[:news]
     attachments = @news.save_attachments(params[:attachments])
     render_attachment_notice_if_upload_failed(attachments)
@@ -85,6 +87,7 @@ class NewsController < ApplicationController
   end
 
   def update
+    params[:news][:description] = convertHtmlToWiki(params[:news][:description])
     @news.safe_attributes = params[:news]
     attachments = @news.save_attachments(params[:attachments])
     render_attachment_notice_if_upload_failed(attachments)

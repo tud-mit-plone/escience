@@ -1,13 +1,15 @@
-<% content_for :sidebar_right do %>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<% content_for :sidebar_right_deaktiviert do %>
 <% if @project && User.current.allowed_to?(:manage_news, @project) %>
 	<%= link_to(l(:label_news_new),
             new_project_news_path(@project),
-            :class => 'icon icon-add',
+            :class => 'icon icon-plus-sign',
             :onclick => 'showAndScrollTo("add-news", "news_title"); return false;') if @project && User.current.allowed_to?(:manage_news, @project) %>
 <% end %>
 <%end%>
 
-<div id="add-news" style="display:block;">
+<div id="add-news" style="display:none;">
   <h2><%=l(:label_news_new)%></h2>
   <%= labelled_form_for @news, :url => project_news_index_path(@project), :html => { :id => 'news-form', :multipart => true } do |f| %>
   <%= render :partial => 'news/form', :locals => { :f => f } %>
@@ -19,8 +21,14 @@
   <%#= preview_link preview_news_path(:project_id => @project), 'news-form' %> | |
   <%#= link_to l(:button_cancel), "#", :onclick => '$("#add-news").hide()' %>
   -->
-  <h2><%=l(:label_news_plural)%></h2>
-  
+  <h2 style="float:left"><%=l(:label_news_plural)%> <i class="icon-bullhorn"></i></h2>
+<% if @project && User.current.allowed_to?(:manage_news, @project) %>
+	<%= link_to(l(:label_news_new),
+            new_project_news_path(@project),
+            :class => 'icon icon-plus-sign btn',
+            :style => 'float:right') if @project && User.current.allowed_to?(:manage_news, @project) %>
+<% end %>
+  <div class="clear"></div>
   <% if @newss.empty? %>
   <p class="nodata"><%= l(:label_no_data) %></p>
   <% else %>
