@@ -1,2 +1,1 @@
-<% selector = ".#{watcher_css(watched)}" %>
-$("<%= selector %>").each(function(){$(this).parent().html("<%= escape_javascript watcher_link(watched, user) %>")});
+$(".<%= watcher_css(watched) %>").replaceWith("<%= escape_javascript watcher_link(watched, user) %>");
