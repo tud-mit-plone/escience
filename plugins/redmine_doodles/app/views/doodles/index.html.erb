@@ -1,14 +1,18 @@
-<% content_for :sidebar_right do %>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<% content_for :sidebar_right_deaktiviert do %>
   <% if @project && User.current.allowed_to?({:controller => 'doodles', :action => 'new'}, @project) %>
+    <ul><li>
     <%= link_to l(:label_doodle_new),
                             {:controller => 'doodles', :action => 'new', :project_id => @project},
-                            :class => 'icon icon-add',
+                            :class => 'icon icon-plus-sign',
                             :onclick => '$("#add-doodle").show(); $("#doodle_title").focus(); $("#preview").hide(); return false;' %>
+    </li></ul>
   <% end %>
 <%end%>
-
 <div id="add-doodle" style="display:none;">
 <h2><%= l(:label_doodle_new) %></h2>
+
 <%= labelled_form_for :doodle, @doodle, :url => { :controller => 'doodles', :action => 'create', :project_id => @project }, :html => { :id => 'doodle-form' } do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
 <%= submit_tag l(:button_create) %>
@@ -23,7 +27,11 @@
 <% end if @project %>
 </div>
 <div id="preview" class="doodle">
-  <h2><%= l(:label_doodle_plural)%></h2>
+  <h2 style="float:left"><%= l(:label_doodle_plural)%> <i class="icon-bar-chart"></i></h2>
+<%= link_to l(:label_doodle_new),
+            {:controller => 'doodles', :action => 'new', :project_id => @project},
+            :class => 'icon icon-plus-sign btn', :style => 'float:right' if @project && User.current.allowed_to?({:controller => 'doodles', :action => 'new'}, @project) %>
+<div class="clear"></div>
   
   <% if @doodles.empty? %>
   <p class="nodata"><%= l(:label_no_data) %></p>

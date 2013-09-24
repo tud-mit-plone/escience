@@ -32,7 +32,7 @@ Redmine::Plugin.register :redmine_doodles do
     permission :view_doodles, {:doodles => [:index, :show]}
   end
   
-  menu :project_menu, :doodles, {:controller => 'doodles', :action => 'index'}, :caption => :label_doodle_plural, :param => :project_id
-  menu :account_menu, :doodle, { :controller => 'doodles', :action => 'list', :unanswered => "true" }, :caption => {:value_behind => Proc.new {"#{User.current.open_answers.count()}"}, :text => :label_my_doodles}, :if => Proc.new {User.current.open_answers.count()>0}
+  menu :project_menu, :doodles, {:controller => 'doodles', :action => 'index'}, :html => {:class => "icon icon-bar-chart"}, :caption => :label_doodle_plural, :param => :project_id
+  menu :account_menu, :doodle, { :controller => 'doodles', :action => 'list', :unanswered => "true" }, :html => {:class => "icon icon-bar-chart"}, :caption => {:value_behind => Proc.new {"#{User.current.open_answers.count()}"}, :text => :label_my_doodles}, :if => Proc.new {User.current.open_answers.count()>0}
   activity_provider :doodles, :default => false, :class_name => ['Doodle', 'DoodleAnswersEdits']
 end

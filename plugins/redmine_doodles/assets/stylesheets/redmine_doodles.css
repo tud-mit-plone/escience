@@ -49,37 +49,37 @@
 }
 
 .list.doodle tbody tr:first-child td:first-child {
-  -moz-border-radius: 10px 0 0 0;
-  -webkit-border-radius: 10px 0 0 0;
-  -khtml-border-radius: 10px 0 0 0;
-  border-radius: 10px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+  -khtml-border-radius: 5px 0 0 0;
+  border-radius: 5px 0 0 0;
   border-top: 1px solid #D0D0D0;
   border-left: 1px solid #D0D0D0;
 }
 
 .list.doodle tbody tr:first-child td:last-child {
--moz-border-radius: 0 10px 0 0;
--webkit-border-radius: 0 10px 0 0;
--khtml-border-radius: 0 10px 0 0;
-border-radius: 0 10px 0 0;
+-moz-border-radius: 0 5px 0 0;
+-webkit-border-radius: 0 5px 0 0;
+-khtml-border-radius: 0 5px 0 0;
+border-radius: 0 5px 0 0;
   border-top: 1px solid #D0D0D0;
   border-right: 1px solid #D0D0D0;
 }
 
 .list.doodle tbody tr:last-child td:first-child {
-  -moz-border-radius: 0 0 0 10px;
-  -webkit-border-radius: 0 0 0 10px;
-  -khtml-border-radius: 0 0 0 10px;
-  border-radius: 0 0 0 10px;
+  -moz-border-radius: 0 0 0 5px;
+  -webkit-border-radius: 0 0 0 5px;
+  -khtml-border-radius: 0 0 0 5px;
+  border-radius: 0 0 0 5px;
   border-bottom: 1px solid #D0D0D0;
   border-left: 1px solid #D0D0D0;
 }
 
 .list.doodle tbody tr:last-child td:last-child {
-  -moz-border-radius: 0 0 10px 0;
-  -webkit-border-radius: 0 0 10px 0;
-  -khtml-border-radius: 0 0 10px 0;
-  border-radius: 0 0 10px 0;
+  -moz-border-radius: 0 0 5px 0;
+  -webkit-border-radius: 0 0 5px 0;
+  -khtml-border-radius: 0 0 5px 0;
+  border-radius: 0 0 5px 0;
   border-bottom: 1px solid #D0D0D0;
   border-right: 1px solid #D0D0D0;
 }

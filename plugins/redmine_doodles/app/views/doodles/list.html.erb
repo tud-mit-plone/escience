@@ -2,7 +2,7 @@
   <% if @project && User.current.allowed_to?({:controller => 'doodles', :action => 'new'}, @project) %>
     <%= link_to l(:label_doodle_new),
                             {:controller => 'doodles', :action => 'new', :project_id => @project},
-                            :class => 'icon icon-add',
+                            :class => 'icon icon-plus-sign',
                             :onclick => '$("#add-doodle").show(); $("#doodle_title").focus(); $("#preview").hide(); return false;' %>
   <% end %>
 <%end%>

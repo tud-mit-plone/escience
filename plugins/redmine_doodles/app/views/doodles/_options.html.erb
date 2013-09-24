@@ -3,6 +3,6 @@
   (options.nil? ? Array.new(5, "") : (options + Array.new(options.length < 5 ? (5 - options.length) : 0,""))).each do |option| %>
   <div class="option">
   <% counter += 1 %>
-    <p><%= label "doodle_options_", nil, l(:field_option) %> <%= text_field_tag "doodle[options][]", option, :size => 60, :id => "doodle_options_#{counter}" %><%= calendar_for('doodle_options_'+counter.to_s()) if calender %> <%= link_to_function l(:button_delete), "$(this).closest('.option').remove()" %></p>
+    <p><%= label "doodle_options_", nil, l(:field_option) %> <%= text_field_tag "doodle[options][]", option, :size => 60, :id => "doodle_options_#{counter}" %><%= calendar_for('doodle_options_'+counter.to_s()) if calender %> <%= link_to_function '<i class="icon-trash icon-large"></i>'.html_safe(), "$(this).closest('.option').remove()" %></p>
   </div>
 <% end %>
