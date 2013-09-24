@@ -4,18 +4,18 @@
 
 <% content_for :sidebar_right do %>
   <% if User.current.logged? %>
-    <% if User.current.allowed_to?(:add_project, nil, :global => true) %>
-      <%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new', :sub => params[:sub]}, :class => 'icon icon-add')%>
-    <% end %>
     <ul>
+    <% if User.current.allowed_to?(:add_project, nil, :global => true) %>
+      <li><%= link_to(l(:label_project_new), {:controller => 'projects', :action => 'new', :sub => params[:sub]}, :class => 'icon icon-plus-sign')%></li>
+    <% end %>
     <% if User.current.allowed_to?(:view_issues, nil, :global => true) && 1==0 %>
-        <li><%= link_to(l(:label_issue_view_all), issues_path) %></li>
-      <% end %>
-    <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-        <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}) %></li>
+      <li><%= link_to(l(:label_issue_view_all), issues_path) %></li>
     <% end %>
     <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-      <li><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }) %></li>
+        <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}, :class => "icon icon-time") %></li>
+    <% end %>
+    <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
+      <li><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }, :class => "icon icon-spinner") %></li>
     <% end %>
     </ul>
   <% else %>
@@ -24,11 +24,13 @@
   <% end%>
 <% end %>
 
-<h2><%=l(:label_project_plural)%></h2>
-<div class="sort_buttons" style="float:right; margin-top:-44px;">
-      <div class="sortby"><%= l(:label_sort) %></div>
-      <div class="first"><%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "#{@newest_dir if params[:order] == 'created_on'}") %></div>
-      <div><%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "#{@name_dir if params[:order].nil? || params[:order] == 'name'}") %></div>
+<h2><%=l(:label_project_plural)%> <li class="icon-beaker"></li></h2>
+<div style="float:right; margin-top:-44px;">
+  <div class="sortby" style="float:left;"><%= l(:label_sort) %></div>
+  <div class="btn-group" style="float:left;">
+    <%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "icon #{'active icon_number_'+@newest_dir if params[:order] == 'created_on'} btn") %>
+    <%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "icon btn #{'active icon_letter_'+@name_dir if params[:order].nil? || params[:order] == 'name'}") %>
+  </div>
 </div>
 <div class="clear"></div>
 <% unless @projects.nil? %>
@@ -39,12 +41,12 @@
       <div class="tools">
         <% if User.current.allowed_to?(:close_project, nil, :global => true) %>
           <div class="delete_project">
-            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/delete.png"), project_path(project), :data => {:confirm => l(:text_project_destroy_confirmation)}, :method => :delete) %>
+            <%= link_to(content_tag("i","",:class=> "icon-trash #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), project_path(project), :data => {:confirm => l(:text_project_destroy_confirmation)}, :method => :delete) %>
           </div>
         <% end %>
         <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
           <div class="settings_project">
-            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/settings.png"), {:controller => 'projects', :action => 'settings', :id => project.id, :sub => params[:sub]}) %>
+            <%= link_to(content_tag("i","",:class=> "icon-cog #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), {:controller => 'projects', :action => 'settings', :id => project.id, :sub => params[:sub]}) %>
           </div>
         <% end %>
         <% visible_issues = false 
@@ -55,7 +57,7 @@
            end %>
         <% if User.current.allowed_to?(:view_issues, project) && visible_issues %>
           <div class="issues_project">
-            <%= link_to(image_tag(Redmine::Utils.relative_url_root+"/images/todo.png"), {:controller => 'issues', :id => project.id, :sub=>params[:sub]}) %>
+            <%= link_to(content_tag("i","",:class=> "icon-check #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), {:controller => 'issues', :id => project.id, :sub=>params[:sub]}) %>
           </div>
         <% end %>
       </div>

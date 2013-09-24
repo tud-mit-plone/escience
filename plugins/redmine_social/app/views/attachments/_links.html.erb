@@ -11,16 +11,15 @@
       <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
     <% end %>
     <div class="options" style="display:none;">
-      <%= link_to_attachment attachment, :download => true, :target => '_blank', :text => "", :title => l(:label_download_file), :class => "download" -%>
+      <%= link_to_attachment attachment, :download => true, :target => '_blank', :text => "", :title => l(:label_download_file), :class => "icon-cloud-download icon-large" -%>
       <%= link_to("", attachment_path(attachment), 
-                      :class => "delete", 
+                      :class => "icon-trash icon-large", 
                       :title => l(:label_delete_file),
                       :data => {:confirm => l(:text_are_you_sure)}, 
                       :method => :delete, :remote => true) if options[:deletable] %>
     <% if attachment.is_text? %>
-      <%= link_to image_tag('magnifier.png'),
-                  :controller => 'attachments', :action => 'show',
-                  :id => attachment, :filename => attachment.filename %>
+      <%= link_to("", {:controller => 'attachments', :action => 'show',
+                  :id => attachment, :filename => attachment.filename}, :class => 'icon-search icon-large')%>
     <% end %>
     <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
     
@@ -40,7 +39,7 @@
       <% end %>
     <% if options[:author] || !attachment.description.empty? %>
     <% file_information = ''
-       file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(attachment), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
+       file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(attachment)+"/"+attachment.filename.to_s(), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
 
        file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(:controller => 'attachments', :action => 'thumbnail', :id => attachment.id), :height=>"64px") + "</div>".html_safe if filetype == 'pdf' || filetype == 'xls' || filetype == 'ods'
        

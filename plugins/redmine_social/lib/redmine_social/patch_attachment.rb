@@ -105,6 +105,8 @@
                        type == 'application/vnd.oasis.opendocument.spreadsheet'
                   sent_render_to_image({:size => '1000x',:pages => params[:pages]})
                   render :render_show
+                else 
+                  render :render_show
                 end
               }
               format.html {
@@ -132,7 +134,9 @@
                   download
                 end
               }
-              format.api
+              format.api {
+                render :render_show
+              }
             end
           end
 

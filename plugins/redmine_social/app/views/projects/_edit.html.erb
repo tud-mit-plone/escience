@@ -1,9 +1,16 @@
 <%= labelled_form_for @project do |f| %>
-<%= render :partial => 'projects/form', :locals => { :f => f } %>
-<%= submit_tag l(:button_save), :class => "button_bottom" %>
-<% unless params[:show_project] %>
-  <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'index', :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
-<% else %>
-  <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'show', :id => params[:show_project], :sub => params[:sub]}, :class => "button submit", :style => 'margin-right: 0px') %>
-<% end %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+<%= hidden_field_tag 'hidden_submit', '' %>
+<div class="btn-group" style="float:right">
+  <%#= submit_tag l(:button_save), :class => "btn" %>
+  <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('form.edit_project').submit();" %>
+<!--
+  <% unless params[:show_project] %>
+    <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'index', :sub => params[:sub]}, :class => "btn", :style => 'margin-right: 0px') %>
+  <% else %>
+    <%= link_to(l(:button_cancel), {:controller => 'projects', :action => 'show', :id => params[:show_project], :sub => params[:sub]}, :class => "btn", :style => 'margin-right: 0px') %>
+  <% end %>
+-->  
+</div>
+<div class="clear"></div>
 <% end %>
