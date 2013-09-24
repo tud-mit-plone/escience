@@ -323,10 +323,3 @@ table.issues {
 #all_attributes p {
   margin: 1px 0;
 }
-
-.timelog.content {
-  border-left: 1px solid #bbbbbb;
-  border-right: 1px solid #bbbbbb;
-  border-bottom: 1px solid #bbbbbb;
-  padding: 0 10px 10px 10px;
-}
