@@ -51,8 +51,9 @@ module ApplicationHelper
         {:replace => "\"$$content$$\":$$href$$" }
       ]},
       :img =>  {:spec => [
-          {:parent => 'a', :replace => "!$$src$$!"},
-          {:replace => "!$$src$$!"}
+        {:parent => 'a', :replace => "!$$src$$!"},
+        {:attr => "style", :value=>"", :replace => "!{$$style$$}$$src$$! "},
+        {:replace => "!$$src$$!"}
       ]},
       :p  => {:spec => [
         {:attr => "style", :value=>"text-align:center;", :replace => "p=. $$content$$\r\n\r\n"},

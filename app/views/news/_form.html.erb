@@ -1,15 +1,12 @@
 <%= error_messages_for @news %>
 
 <fieldset>
-  <legend>Neuer Eintrag</legend>
+  <legend><%= l(:label_news_new_entry) %></legend>
   <%= f.text_field :title, :required => true, :size => 60, :style => 'width:80%; font-size:16px; margin-bottom:5px;' %>
-  <%#= f.text_area :summary, :cols => 60, :rows => 2 %>
+  <%= f.text_area :summary, :cols => 60, :rows => 3 %>
   <textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="news_description" name="news[description]" rows="<%= (@news.description.blank? ? 10 : [[10, @news.description.length / 50].max, 100].min) %>">
-    <%= textilizable @news, :description %>
+    <%= html_description = textilizable @news, :description %>
   </textarea>
 </fieldset>
 
-<fieldset id="attachments_form">
-  <legend><%= l(:label_attachment_plural) %></legend>
-  <%= render :partial => 'attachments/form', :locals => {:container => @news} %>
-</fieldset>
+<%= render :partial => 'attachments/form', :locals => {:container => @news} %>
