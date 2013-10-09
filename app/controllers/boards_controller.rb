@@ -22,6 +22,7 @@ class BoardsController < ApplicationController
 
   helper :sort
   include SortHelper
+  include ApplicationHelper
   helper :watchers
 
   def index
@@ -66,6 +67,7 @@ class BoardsController < ApplicationController
 
   def create
     @board = @project.boards.build
+    params[:board][:description] = convertHtmlToWiki(params[:board][:description])
     @board.safe_attributes = params[:board]
     if @board.save
       flash[:notice] = l(:notice_successful_create)
@@ -79,6 +81,7 @@ class BoardsController < ApplicationController
   end
 
   def update
+    params[:board][:description] = convertHtmlToWiki(params[:board][:description])
     @board.safe_attributes = params[:board]
     if @board.save
       redirect_to_settings_in_projects

@@ -1,6 +1,16 @@
-<h2><%= l(:label_board_new) %></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
+<h2><%= l(:label_board_new) %> <i class="icon-group"></i></h2>
 <%= labelled_form_for @board, :url => project_boards_path(@project) do |f| %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'boards', :action => 'index', :id => @board}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_create) %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'boards', :action => 'index', :id => @board}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+  </div>
 <% end %>

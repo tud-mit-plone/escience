@@ -1,19 +1,24 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <%#= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)) %>
 <% content_for :sidebar_right do %>
+  <ul>
   <% if authorize_for('messages', 'new') %>
+    <li>
   	<%= link_to_if_authorized l(:label_message_new),
                           {:controller => 'messages', :action => 'new', :board_id => @board},
-                          :class => 'icon icon-plus-sign',
-                          :onclick => 'showAndScrollTo("add-message", "message_subject"); return false;' %>
+                          :class => 'icon icon-plus-sign'
+                          #,:onclick => 'showAndScrollTo("add-message", "message_subject"); return false;' 
+                          %>
+    </li>
   <% end %>
-  <ul>
     <li><%= watcher_tag(@board, User.current) %></li>
   </ul>
 <% end %>
 
 <div id="add-message" style="display:none;">
 <% if authorize_for('messages', 'new') %>
-<h2><%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %></h2>
+<h2><%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %> <i class="icon-group"></i></h2>
 <%= form_for @message, :url => {:controller => 'messages', :action => 'new', :board_id => @board}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
   <%= render :partial => 'messages/form', :locals => {:f => f} %>
   <p><%= submit_tag l(:button_create) %>
@@ -24,10 +29,30 @@
 <% end %>
 </div>
 
-<h2><%=h @board.name %></h2>
-<p class="subtitle"><%=h @board.description %></p>
+<h2><%=h @board.name %> <i class="icon-group"></i></h2>
+<div class="wiki description"><%=h @board.description %></div>
 
 <% if @topics.any? %>
+<div class="list messages" style="width:95%; float:right;">
+  <% @topics.each do |topic| %>
+      <h3 class="subject" style="display:inline"><%= link_to h(topic.subject), { :controller => 'messages', :action => 'show', :board_id => @board, :id => topic } %></h3> (<%= authoring topic.created_on, topic.author %>)
+      <div class="wiki description" style="margin-top:8px;">
+        <div style="margin:-8px 0 5px 0"><i><%= truncate(textilizable(topic,:content), length:200).html_safe %></i></div>
+        <div class="replies">
+          <%= topic.replies_count %> <%= l(:label_reply_plural) %><% if topic.last_reply %>:<% end %>
+        </div>
+        <div class="last_message">
+          <% if topic.last_reply %>
+          <%= l(:label_message_last) %>:
+          <%= authoring topic.last_reply.created_on, topic.last_reply.author %><br />
+          <%= link_to_message topic.last_reply %>
+          <% end %>
+        </div>
+      </div>
+  <% end %>
+</div>
+<div class="clear"></div>
+<!--
 <table class="list messages">
   <thead><tr>
     <th><%= l(:field_subject) %></th>
@@ -53,6 +78,7 @@
   <% end %>
   </tbody>
 </table>
+-->
 <p class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></p>
 <% else %>
 <p class="nodata"><%= l(:label_no_data) %></p>

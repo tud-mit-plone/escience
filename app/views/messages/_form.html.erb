@@ -4,7 +4,7 @@
 <div class="box">
 <!--[form:message]-->
 <p><label for="message_subject"><%= l(:field_subject) %></label><br />
-<%= f.text_field :subject, :size => 109, :id => "message_subject", :style => "width:565px" %>
+<%= f.text_field :subject, :size => 109, :id => "message_subject", :style => "width:80%" %>
 
 <% unless replying %>
   <% if @message.safe_attribute? 'sticky' %>
@@ -23,8 +23,9 @@
 
 <p>
 <%= label_tag "message_content", l(:description_message_content), :class => "hidden-for-sighted" %>
-<%= f.text_area :content, :cols => 80, :rows => 15, :class => 'wiki-edit', :id => 'message_content' %></p>
-<%= wikitoolbar_for 'message_content' %>
+<% @message[:content] = textilizable(@message,:content) %>
+<%= f.text_area :content, :cols => 80, :rows => 15, :class => 'wiki-edit ckeditor', :id => 'message_content' %></p>
+<%#= wikitoolbar_for 'message_content' %>
 <!--[eoform:message]-->
 
 <p><%= l(:label_attachment_plural) %><br />

@@ -1,9 +1,25 @@
-<h2><%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<h2 style="float:left"><%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %> <i class="icon-group"></i></h2>
 
 <%= form_for @message, :url => {:action => 'new'}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'boards', :action => 'show', :project_id => @project, :id => @board}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_create) %>
-  <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form') %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:controller => 'boards', :action => 'show', :project_id => @project, :id => @board}, :class => 'btn' %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+    <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board},'message-form','preview',:class => 'btn') %>
+  </div>
 <% end %>
 
 <div id="preview" class="wiki"></div>
+
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
+<% end %>

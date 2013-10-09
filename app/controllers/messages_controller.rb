@@ -26,6 +26,7 @@ class MessagesController < ApplicationController
   helper :watchers
   helper :attachments
   include AttachmentsHelper
+  include ApplicationHelper
 
   REPLIES_PER_PAGE = 25 unless const_defined?(:REPLIES_PER_PAGE)
 
@@ -54,6 +55,7 @@ class MessagesController < ApplicationController
     @message = Message.new
     @message.author = User.current
     @message.board = @board
+    params[:message][:content] = convertHtmlToWiki(params[:message][:content]) unless params[:message].nil?
     @message.safe_attributes = params[:message]
     if request.post?
       @message.save_attachments(params[:attachments])
@@ -70,6 +72,7 @@ class MessagesController < ApplicationController
     @reply = Message.new
     @reply.author = User.current
     @reply.board = @board
+    params[:reply][:content] = convertHtmlToWiki(params[:reply][:content]) unless params[:reply].nil?
     @reply.safe_attributes = params[:reply]
     @topic.children << @reply
     if !@reply.new_record?
@@ -83,6 +86,7 @@ class MessagesController < ApplicationController
   # Edit a message
   def edit
     (render_403; return false) unless @message.editable_by?(User.current)
+    params[:message][:content] = convertHtmlToWiki(params[:message][:content]) unless params[:message].nil?
     @message.safe_attributes = params[:message]
     if request.post? && @message.save
       attachments = Attachment.attach_files(@message, params[:attachments])

@@ -1,6 +1,8 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <%#= board_breadcrumb(@message) %>
 
-<h2><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %></h2>
+<h2 style="float:left"><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %> <i class="icon-group"></i></h2>
 
 <%= form_for @message, {
                :as => :message,
@@ -9,9 +11,25 @@
                          :id => 'message-form',
                          :method => :post}
           } do |f| %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:action => 'show', :id => @message}, :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= render :partial => 'form',
              :locals => {:f => f, :replying => !@message.parent.nil?} %>
-  <%= submit_tag l(:button_save) %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), {:action => 'show', :id => @message}, :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+  </div>
+  <div class="clear"></div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board, :id => @message}, 'message-form') %>
 <% end %>
 <div id="preview" class="wiki"></div>
+
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
+<% end %>

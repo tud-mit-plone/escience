@@ -1,40 +1,38 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <%#= board_breadcrumb(@message) %>
 
 <% content_for :sidebar_right do %>
   <ul>
+  	<li><%= link_to(l(:label_organisation),{:controller => 'boards', :action => 'index', :project_id => @project}, :class => 'icon icon-align-left') %></li>
   	<li><%= watcher_tag(@topic, User.current) %></li>
   	<% if authorize_for(params[:controller], 'quote') %>
   	<li>    <%= link_to(
           l(:button_quote),
           {:action => 'quote', :id => @topic},
-          :remote => true,
+          :remote => true, :class => 'icon icon-comment-alt',
           :method => 'get',
           :remote => true) if !@topic.locked? && authorize_for('messages', 'reply') %></li>
     <% end %>
     <% if @message.editable_by?(User.current) %>
-  	<li><%= link_to(
-          l(:button_edit),
-          {:action => 'edit', :id => @topic}
-        ) %></li>
+    <li><%= link_to(l(:button_edit),{:action => 'edit', :id => @topic}, :class => 'icon icon-pencil') %></li>
     <% end %>
     <% if @message.destroyable_by?(User.current) %>
   	<li><%= link_to(
           l(:button_delete),
           {:action => 'destroy', :id => @topic},
-          :method => :post,
+          :method => :post, :class => 'icon icon-trash',
           :data => {:confirm => l(:text_are_you_sure)}
          ) %></li>
     <% end %>
   </ul>
 <%end%>
 
-<h2><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %></h2>
+<h2><%= avatar(@topic.author, :size => "24") %><%=h @topic.subject %> <i class="icon-group"></i></h2>
 
 <div class="message">
 <p><span class="author"><%= authoring @topic.created_on, @topic.author %></span></p>
-<div class="wiki">
-<%= textilizable(@topic, :content) %>
-</div>
+<div class="wiki description"><%= textilizable(@topic, :content) %></div>
 <%= link_to_attachments @topic, :author => false %>
 </div>
 <br />
@@ -45,18 +43,18 @@
   <div class="message reply" id="<%= "message-#{message.id}" %>">
     <div class="contextual">
       <%= link_to(
-            image_tag('comment.png'),
+            '<i class="icon-comment-alt"></i>'.html_safe(),
             {:action => 'quote', :id => message},
             :remote => true,
             :method => 'get',
             :title => l(:button_quote)) if !@topic.locked? && authorize_for('messages', 'reply') %>
       <%= link_to(
-            image_tag('edit.png'),
+            '<i class="icon-pencil"></i>'.html_safe(),
             {:action => 'edit', :id => message},
             :title => l(:button_edit)
           ) if message.editable_by?(User.current) %>
       <%= link_to(
-            image_tag('delete.png'),
+            '<i class="icon-trash"></i>'.html_safe(),
             {:action => 'destroy', :id => message},
             :method => :post,
             :data => {:confirm => l(:text_are_you_sure)},
@@ -69,7 +67,7 @@
     -
     <%= authoring message.created_on, message.author %>
   </h4>
-  <div class="wiki"><%= textilizable message, :content, :attachments => message.attachments %></div>
+  <div class="wiki description"><%= textilizable message, :content, :attachments => message.attachments %></div>
   <%= link_to_attachments message, :author => false %>
   </div>
 <% end %>
@@ -77,19 +75,29 @@
 <% end %>
 
 <% if !@topic.locked? && authorize_for('messages', 'reply') %>
-<p><%= toggle_link l(:button_reply), "reply", :focus => 'message_content' %></p>
+<%= link_to_function "<i class='icon-mail-reply'></i> #{l(:button_reply)}".html_safe(), "$('#reply, .reply_link').toggle(); $('#message_content').focus(); return false;", :class => 'btn reply_link' %>
+<%#= toggle_link l(:button_reply), "reply", :focus => 'message_content', :hide => '$(self);' %>
 <div id="reply" style="display:none;">
-<%= form_for @reply, :as => :reply, :url => {:action => 'reply', :id => @topic}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
-  <%= render :partial => 'form', :locals => {:f => f, :replying => true} %>
-  <%= submit_tag l(:button_submit) %>
-  <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form') %>
-<% end %>
-<div id="preview" class="wiki"></div>
+  <fieldset>
+    <legend><%= l(:button_reply) %></legend>
+    <%= form_for @reply, :as => :reply, :url => {:action => 'reply', :id => @topic}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
+      <%= render :partial => 'form', :locals => {:f => f, :replying => true} %>
+      <div class="btn-group" style="float:right;">
+        <%= link_to_function l(:button_cancel), "$('#reply, .reply_link').toggle();return false;", :class => 'btn' %>
+        <%= link_to l(:button_submit), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#message-form').submit();" %>
+        <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form','preview', :class => 'btn') %>
+      </div>
+      <div class="clear"></div>
+    <% end %>
+  </fieldset>
+  <div id="preview" class="wiki"></div>
 </div>
 <% end %>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
 
 <% html_title @topic.subject %>
