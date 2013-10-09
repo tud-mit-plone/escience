@@ -83,10 +83,11 @@ textarea {
   float: right;
 }
 
-.link_to_news legend {
-  margin-bottom: -15px;
-  font-size: 12px;
-  text-align: right;
+.link_to_news {
+  position: relative;
+}
+.news_wrapper h3 {
+  font-size: 18px;
 }
 
 .link_to_news, .link_to_news h3 {
@@ -102,31 +103,44 @@ textarea {
   background-color: #F4F4F4;
 }
 
-.news_wrapper {
-  padding: 0px 10px 5px 10px;
-  border: solid 2px #F0F0F0;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -khtml-border-radius: 5px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}	
+.link_to_news .date, .link_to_news .wiki {
+  float: left;
+}
+
+.link_to_news .date {
+  margin: 0px 20px 0px 2px;
+}
+
+.link_to_news .author {
+  position: absolute;
+  right: 7px;
+  top: 15px;
+}
+
+#news_summary {
+  width: 713px;
+  margin-bottom: 10px;
+}
 
 .news_wrapper h2 {
   padding-top: 15px;
   font-size: 16px;
 }
 
+.comment {
+  margin-top: 10px !important;
+}
 .comment p {
-  margin: 5px;
+  margin: 5px 0;
 }
 
-.comment legend {
+.comment .author {
   font-size: 14px;
+  padding: 0;
 }
 
-.comment .contextual {
-  margin-top: -20px;
+.comment .contextual a:hover i {
+  color: #fff;
 }
 
 #titleOfProject {
@@ -709,7 +723,7 @@ div .add_attachment:hover {
 
 /*----------- Documents ---------------------------- */
 
-#documents div.wiki::before {
+div.wiki.description::before {
   content: ' ';
   position: absolute;
   width: 0;
@@ -720,7 +734,7 @@ div .add_attachment:hover {
   border-color: transparent transparent #DDD transparent;
 }
 
-#documents div.wiki::after {
+div.wiki.description::after {
   content: ' ';
   position: absolute;
   width: 0;
@@ -731,14 +745,17 @@ div .add_attachment:hover {
   border-color: transparent transparent #FAFAFA transparent;
 }
 
-#documents .wiki {
-  margin-top: -3px;
-  margin-bottom: 10px;
+div.wiki.description {
   background: #FDFDFD;
   border: 1px solid #DDD;
+  margin-top: -3px;
+  margin-bottom: 10px;
+}
+
+.wiki.description {
   padding: 5px 7px;
   position: relative;
-  color: #ADADAD;
+  color: #797979;
 }
 
 .sort_buttons {

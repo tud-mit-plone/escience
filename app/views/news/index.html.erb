@@ -25,7 +25,7 @@
 <% if @project && User.current.allowed_to?(:manage_news, @project) %>
 	<%= link_to(l(:label_news_new),
             new_project_news_path(@project),
-            :class => 'icon icon-plus-sign btn',
+            :class => 'btn',
             :style => 'float:right') if @project && User.current.allowed_to?(:manage_news, @project) %>
 <% end %>
   <div class="clear"></div>
@@ -35,13 +35,16 @@
   <% @newss.each do |news| %>
       <%= link_to(news, :class => "link_to_news") do %>
       <fieldset class="news_wrapper">
-        <legend><%= format_date(news.created_on) %></legend>
-        <h3><%= avatar(news.author, :size => "24") %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
-        <%= h(news.title) %>
-        <%= " (#{l(:label_x_comments, :count => news.comments_count)})" if news.comments_count > 0 %></h3>
-        <p class="author"><%= strip_tags(authoring news.created_on, news.author) %></p>
+        <legend>
+        <h3><%= truncate(h(news.title), length:50) %><%= " (#{l(:label_x_comments, :count => news.comments_count)})" if news.comments_count > 0 %></h3>
+        </legend>
+        <div class="date">
+          <%= Date.parse(news.created_on.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe %>
+        </div>
+        <%= avatar(news.author, :size => "24") %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
+        <div class="author"><%= strip_tags(authoring news.created_on, news.author) %></div>
         <div class="wiki">
-        <%= news.summary.nil? ? textilizable(news, :description) : textilizable(news, :summary) %>
+          <%= news.summary.nil? ? textilizable(news, :description) : textilizable(news, :summary) %>
         </div>
       </fieldset>
       <% end %>
