@@ -1,0 +1,5 @@
+$('#fileList').html('<%= escape_javascript(render :partial => 'file_list') %>');
+$('#content_of_form').html('<% self.formats = [:html] %><%= escape_javascript(render :partial => 'attachments/form', :formats => [:html] )%><% self.formats = [:js] %>');
+$('#addNewFile').toggle();
+$('.addButton').toggle();
+$.notification({ message:'<%= @message %>', type:'notice' });

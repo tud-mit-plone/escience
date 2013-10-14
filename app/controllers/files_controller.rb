@@ -33,6 +33,7 @@ class FilesController < ApplicationController
 
     @containers = [ Project.find(@project.id, :include => :attachments, :order => sort_clause)]
     @containers += @project.versions.find(:all, :include => :attachments, :order => sort_clause).sort.reverse
+    @versions = @project.versions.sort
     render :layout => !request.xhr?
   end
 
@@ -45,10 +46,43 @@ class FilesController < ApplicationController
     attachments = Attachment.attach_files(container, params[:attachments])
     render_attachment_warning_if_needed(container)
     render_attachment_notice_if_upload_failed(attachments)
+    
+    messages = flash.to_hash
+    @message = messages[:notice]
+    flash.clear
 
     if !attachments.empty? && !attachments[:files].blank? && Setting.notified_events.include?('file_added')
       Mailer.attachments_added(attachments[:files]).deliver
     end
-    redirect_to project_files_path(@project)
+    errors = (attachments[:files].empty? && attachments[:unsaved].empty?) ? [l(:no_file_given)] : []
+    attachments[:errors].each do |error|
+      error.each do |k,v| 
+        errors << l(k) + " #{v.first}" if (k != :base)
+        errors << v.flatten if (k == :base)
+      end
+    end 
+    if errors.empty?
+      respond_to do |format|
+        format.html {redirect_to project_files_path(@project)}
+        format.js { 
+          sort_init 'filename', 'asc'
+          sort_update 'filename' => "#{Attachment.table_name}.filename",
+                      'created_on' => "#{Attachment.table_name}.created_on",
+                      'size' => "#{Attachment.table_name}.filesize",
+                      'downloads' => "#{Attachment.table_name}.downloads"
+      
+          @containers = [ Project.find(@project.id, :include => :attachments, :order => sort_clause)]
+          @containers += @project.versions.find(:all, :include => :attachments, :order => sort_clause).sort.reverse
+          render :partial => 'update_attachment'
+        }
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to project_files_path(@project)}
+        format.json {
+          render :js => "$.notification({ message:'#{errors.join('\\n')}', type:'error' })";
+        }
+      end
+    end
   end
 end
