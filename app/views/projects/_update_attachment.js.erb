@@ -1,6 +1,6 @@
 <% logger.info(@attachment.id) unless @attachment.nil?  %>
-<% if @attachment.nil? %>
- $('.attachments').html('<%= escape_javascript(link_to_attachments(@project)) %>');
+<% if @attachments.nil? %>
+ $('#attachments').html('<%= escape_javascript(link_to_attachments(@project)) %>');
 <% else %>
  if ($('#content_of_form'))
    $('#content_of_form').html('<% self.formats = [:html] %><%= escape_javascript(render :partial => 'attachments/form', :formats => [:html] )%><% self.formats = [:js] %>');

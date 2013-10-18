@@ -1,0 +1,10 @@
+<% if flash[:error].nil? %>
+  $('#fileList').html('<%= escape_javascript(link_to_attachments @issue) %>');
+  $('#content_of_form').html('<% self.formats = [:html] %><%= escape_javascript(render :partial => 'attachments/form', :formats => [:html] )%><% self.formats = [:js] %>');
+  $('#addNewFile').toggle();
+  $('.addButton').toggle();
+  $('#history .content').html('<%= escape_javascript(render :partial => 'history', :locals => { :issue => @issue, :journals => @journals }) %>');
+  <% unless flash[:notice].nil? %>$.notification({ message:'<%= flash[:error] %>', type:'notice' });<% end %>
+<% else %>
+  $.notification({ message:'<%= flash[:error] %>', type:'error' });
+<% end %>

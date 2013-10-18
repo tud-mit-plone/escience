@@ -1,6 +1,6 @@
 <% reply_links = authorize_for('issues', 'edit') -%>
 <% is_first = true %>
-<% for journal in journals.reverse! %>
+<% for journal in journals %>
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
     <%= content_tag('a', '', :name => "note-#{journal.indice}")%>
     <% if session[:current_view_of_eScience] != '0' %>
@@ -17,7 +17,7 @@
     </ul>
     <% end %>
     <%= render_notes(issue, journal, :reply_links => reply_links) unless journal.notes.blank? %>
-    <% if is_first && journals.size > 1 %>
+    <% if journal.id == @firstJournalID && journals.size > 1 %>
       <hr>
     <%  is_first = false
        end %>

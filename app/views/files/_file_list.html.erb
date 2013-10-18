@@ -29,7 +29,8 @@
       <%#= link_to_attachment file, :download => true, :title => file.description %>
   <% if file.author %>
   <% file_information = ''
-     file_information += '<div class="thumbnail" style="max-width:150px !important;min-width:150px">'+image_tag(url_for(file), :height=>"64px") + "</div>".html_safe if mimetype == 'image'
+#     file_information += '<div class="thumbnail" style="max-height:180px !important;">'+image_tag(thumbnail_attachment_url(:id => file.id, :size => "180")) + "</div>".html_safe if mimetype == 'image'
+     file_information += '<div class="thumbnail" style="max-width:150px !important;min-width:150px">'+image_tag(thumbnail_attachment_url(:id => file.id, :size => "155"), :width=>"155px") + "</div>".html_safe if mimetype == 'image'
      file_information += '<i>'.html_safe+h(file.author)+'</i>'.html_safe
      file_information += '</br><div style="max-width:150px">'+h(" #{file.description}")+'</div>'.html_safe unless file.description.empty?
      javascriptString += 'addToolTip("#fileinfo_'+file.id.to_s+'",\''+file_information+'\',"left");' %>

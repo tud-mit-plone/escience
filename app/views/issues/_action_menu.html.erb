@@ -1,14 +1,16 @@
 <% content_for :sidebar_right do %>
-  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left', :target => "_self" %>
-  <%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-plus-sign') %>
+  <ul>
+  <li><%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left', :target => "_self" %></li>
+  <li><%= link_to(l(:label_issue_new), { :controller => 'issues', :action => 'new', :project_id => @project }, :class => 'icon icon-plus-sign') %></li>
 	<% if authorize_for("issues", "edit") %>
-    <%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :accesskey => accesskey(:edit), :class => "icon icon-pencil") %>
+    <li><%= link_to(l(:button_update), {:controller => 'issues', :action => 'edit', :id => @issue }, :accesskey => accesskey(:edit), :class => "icon icon-pencil") %></li>
 	<%end%>
 	<% if authorize_for("timelog", "new") %>
-    <%= link_to(l(:button_log_time), {:controller => 'issues', :action => 'edit', :id => @issue, :update => 'timelog' }, :accesskey => accesskey(:edit), :class => 'icon icon-time') %>	
+    <li><%= link_to(l(:button_log_time), {:controller => 'issues', :action => 'edit', :id => @issue, :update => 'timelog' }, :accesskey => accesskey(:edit), :class => 'icon icon-time') %>	</li>
 	<%end%>
-	<%= watcher_tag(@issue, User.current) %>
+	<li><%= watcher_tag(@issue, User.current) %></li>
 	<% if User.current.allowed_to?(:delete_issues, @project) %>
-		<%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-trash') %>
-	<%end%>	
+		<li><%= link_to(l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-trash') %></li>
+	<%end%>
+  </ul>	
 <%end%>

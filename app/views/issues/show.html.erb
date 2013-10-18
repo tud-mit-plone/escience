@@ -116,8 +116,22 @@
     <% end %>
     <% if @issue.attachments.any? %>
       <h4 style="margin-top:-0px; margin-bottom: -0px"><%= l(:label_fileuploads) %>:</h4>
-      <%= link_to_attachments @issue %>
+      <div id="fileList">
+        <%= link_to_attachments @issue %>
+      </div>
     <% end %>
+    <%= link_to_function("<span class=\"icon icon-plus-sign\">#{l(:label_attachment_new)}</span>".html_safe, "$('#addNewFile').toggle(); $(this).toggle();", :style => "color: #707070;", :class => "addButton") %>
+    <div id="addNewFile" style="display:none">      
+      <%#= labelled_form_for @issue, :remote => true, :dataType => 'script', :html => {:id => 'attachments_form', :multipart => true} do |f| %>
+      <%= form_tag({:action => 'update', :id => @issue.id},method: "put", :remote => true, :id=>"attachments_form", :multipart => true) do %>
+        <div id="content_of_form"><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></div>
+        <%= hidden_field_tag :lock_version %>
+        <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
+      <% end %>
+      <div class="btn-group" style="float:right">
+          <%= link_to_function(l(:button_cancel), "$('#addNewFile').toggle();$('.addButton').toggle()", :class => 'btn', :style => 'float:right') %>
+      </div>
+    </div>
     </div>
   </fieldset>
 <% end %>
@@ -127,7 +141,10 @@
 <% if @journals.present? %>
 <fieldset id="history" class="collapsable">
   <legend onclick="toggleFieldset(this)"><%=l(:label_history)%></legend>
-  <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @journals } %>
+  <div class="content">
+    <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @posts } %>
+    <%= will_paginate @posts, :renderer => RemotePaginator::LinkRenderer, :page_links=>false,:previous_label=> "<i class='icon icon-angle-left'></i>#{l(:label_previous)}",:next_label=>"#{l(:label_next)}<i class='icon icon-angle-right'></i>" %>
+  </div>
 </fieldset>
 <% end %>
 
@@ -160,7 +177,7 @@
 <% if authorize_for('issues', 'edit') %>
   <div id="update" style="display:none;">
   <h3><%= l(:button_update) %></h3>
-  <%= render :partial => 'edit' %>
+  <%#= render :partial => 'edit' %>
   </div>
 <% end %>
 

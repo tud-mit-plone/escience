@@ -537,6 +537,9 @@ de:
   label_document_new: Neues Dokument
   label_document_plural: Dokumente
   label_document_added: Dokument hinzugefügt
+  label_document_edit: Dokument bearbeiten 
+  label_document_delete: Dokument bearbeiten
+  label_document_show: Dokument anzeigen
   label_role: Rolle
   label_role_plural: Rollen
   label_role_new: Neue Rolle
@@ -611,7 +614,7 @@ de:
   label_login: Anmelden
   label_logout: Abmelden
   label_help: Hilfe
-  label_reported_issues: Eigene Anweisungen
+  label_reported_issues: Eigene Aufgaben
   label_assigned_to_me_issues: Mir zugewiesen
   label_last_login: Letzte Anmeldung
   label_registered_on: Angemeldet am
@@ -659,12 +662,13 @@ de:
   label_news_anonym: Neuigkeiten
   label_news_plural_anonym: Neuigkeiten
   label_news_new: Mitteilung hinzufügen
+  label_news_new_entry: Neuer Eintrag
   label_news_plural: Pinnwand/Blog
   label_news_latest: Letzte Mitteilung
   label_news_view_all: Alle Mitteilungen anzeigen
   label_news_added: Mitteilung hinzugefügt
   label_settings: Konfiguration
-  label_overview: Übersicht
+  label_overview: Projektinformationen
   label_version: Version
   label_version_new: Neue Version
   label_version_plural: Versionen
@@ -937,8 +941,8 @@ de:
   button_check_all: Alles auswählen
   button_uncheck_all: Alles abwählen
   button_delete: Löschen
-  button_create: Anlegen und zurück
-  button_create_and_continue: Anlegen
+  button_create: Anlegen
+  button_create_and_continue: weitere Anlegen
   button_test: Testen
   button_edit: Bearbeiten
   button_edit_associated_wikipage: "Zugehörige Wikiseite bearbeiten: %{page_title}"

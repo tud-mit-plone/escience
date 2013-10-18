@@ -512,6 +512,10 @@ select#values_project_id_1 {
   visibility: hidden;
 }
 
+#attachments_fields .btn {
+  padding: 6px 3px;
+}
+
 #attachments_fields .fileselected legend {
   color: #707070;
 }
@@ -537,7 +541,7 @@ select#values_project_id_1 {
 }
 
 #attachments_fields .cover_input {
-  width: 43%;
+  width: 46%;
 }
 
 #attachments_fields .fileupload {
@@ -1318,4 +1322,8 @@ p.timelog.criteria {
   border-right: 1px solid #bbbbbb;
   padding: 10px 10px 10px 10px;
   margin: 0;
+}
+
+.pagination .next_page {
+  float: right;
 }

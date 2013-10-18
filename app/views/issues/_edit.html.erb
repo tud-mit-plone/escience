@@ -10,12 +10,18 @@
         </fieldset>
     <% end %>
 
+    <%= link_to_attachments @issue %>
     <p><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
     </div>
 
     <%= f.hidden_field :lock_version %>
     <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
-    <%= submit_tag l(:button_submit) %>
-    <%= link_to l(:button_cancel), {:action => 'show', :id => @issue.id}, :class => "button" %></p>
+    <div class="btn-group" style="float:right">
+        <%= link_to l(:button_submit), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+        <%= link_to l(:button_cancel), {:action => 'show', :id => @issue.id}, :class => 'btn', :style => 'float:right' %>
+    </div>
+    <%= hidden_field_tag 'hidden_submit', '' %>
+    <%#= submit_tag l(:button_submit) %>
+    <%#= link_to l(:button_cancel), {:action => 'show', :id => @issue.id}, :class => "button" %></p>
     <%#= preview_link preview_edit_issue_path(:project_id => @project, :id => @issue), 'issue-form' %>
 <% end %>

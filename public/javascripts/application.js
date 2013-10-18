@@ -333,7 +333,7 @@ function addFileField(message) {
 
 function removeFileField(el) {
   var fields = $('attachments_fields');
-  var s = $(el).parents('span').first();
+  var s = $(el).first();
   if (fields.children().length > 1) {
     s.remove();
     jQuery('.add_attachment').removeClass('disabled');

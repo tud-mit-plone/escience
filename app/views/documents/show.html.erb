@@ -16,7 +16,7 @@
 </div>
 <% unless @document.description.nil? || @document.description.empty? %>
   <div id="documents">
-    <div class="wiki" >
+    <div class="wiki description" >
       <%= textilizable @document.description, :attachments => @document.attachments %>
     </div>
   </div>

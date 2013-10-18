@@ -65,7 +65,7 @@
             if thumbnailable? && readable?
               target = File.join(self.class.thumbnails_storage_path, "#{id}_#{digest}_#{size}.thumb")
               begin
-                Redmine::Thumbnail.generate(self.diskfile, target, size)
+                return Redmine::Thumbnail.generate(self.diskfile, target, size)
               rescue => e
                 logger.error "An error occured while generating thumbnail for #{disk_filename} to #{target}\nException was: #{e.message}" if logger
                 return nil

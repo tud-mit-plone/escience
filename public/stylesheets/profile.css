@@ -17,6 +17,11 @@
 			width:74px;
 		}
 	}
+	
+	#profile #tab-content-modules label {
+  	width: inherit;
+		margin-bottom: 2px;
+	}
 		
 	#profile .membership label {
 		width: 250px;

@@ -106,7 +106,7 @@ class DocumentsController < ApplicationController
         redirect_to :action => 'show', :id => @document
       }
       format.js {
-        meta = params[:attachments][:meta_information]
+        meta = params[:attachments]["1"][:meta_information]
         @message = (meta.nil? || meta.empty?) ? l(:error_empty_message) : l(:notice_successful_update)
 #        render :js => "$.notification({ message:'#{message}', type:'warning' }); $('#files').html('#{link_to_attachments @document}')"
         render :action => "update_document"
