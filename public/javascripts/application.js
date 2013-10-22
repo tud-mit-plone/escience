@@ -381,9 +381,12 @@ function checkFileSize(el, maxSize, message) {
           $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ filesize + ")");
           $(el).parent().parent().addClass('fileselected');          
           
-          $('.add_attachment').removeClass('disabled');
-          $('.deleteButton').removeClass('disabled');
-          $(el).parent().find('input.ui-widget-content').focus();
+          var tagField = $(el).parent().parent().find('input.ui-widget-content');
+          tagField.focus();
+          tagField.focusout(function() {
+            if ($("input[name][name$='attachments[1][meta_information][]']").length > 0)
+            $('.add_attachment').removeClass('disabled');
+          });
         } else {
           alert(message);
           el.value = "";
