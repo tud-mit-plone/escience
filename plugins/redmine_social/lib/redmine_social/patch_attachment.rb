@@ -139,6 +139,20 @@
               }
             end
           end
+          
+          def download
+            if @attachment.container.is_a?(Version) || @attachment.container.is_a?(Project)
+              @attachment.increment_download
+            end
+            diskfile = @attachment.thumbnail({:size => 300, :pages => params[:pages]}) 
+            
+            if stale?(:etag => diskfile)
+              # images are sent inline
+              send_file diskfile, :filename => filename_for_content_disposition(diskfile),
+                                              :type => 'jpeg',
+                                              :disposition => (@attachment.image? ? 'inline' : 'attachment')
+            end
+          end
 
           def thumbnail
             if @attachment.thumbnailable? && thumbnail = @attachment.thumbnail({:size => params[:size], :pages => params[:pages]})

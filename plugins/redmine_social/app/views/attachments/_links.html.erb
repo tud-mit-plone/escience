@@ -5,10 +5,9 @@
     <% mimetype = Redmine::MimeType.main_mimetype_of(attachment.filename) 
        filetype = attachment.filename[(attachment.filename.rindex('.')+1)..-1] %>
     <% if filetype == 'pdf' %>
-            <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
-      <%#= link_to attachment.filename.to_s(), '#showPDF', :class => 'fancybox '+filetype+' '+mimetype, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :onclick => 'new PDFObject({ url: "'+ url_for(attachment).to_s()+'/'+attachment.filename.to_s() +'"}).embed("showPDF");', :title => attachment.description.blank? ? attachment.filename : attachment.description -%>
+      <%= link_to_attachment attachment, :download => true, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
     <% else %>
-      <%= link_to_attachment attachment, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
+      <%= link_to_attachment attachment, :download => true, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
     <% end %>
     <div class="options" style="display:none;">
       <%= link_to_attachment attachment, :download => true, :target => '_blank', :text => "", :title => l(:label_download_file), :class => "icon-cloud-download icon-large" -%>
