@@ -11,17 +11,19 @@
   next if board.new_record? %>
   <tr class="<%= cycle 'odd', 'even' %>">
     <td style="padding-left: <%= level * 18 %>px;"><%= link_to board.name, project_board_path(@project, board) %></td>
-    <td><%=h board.description %></td>
-    <td style="width:70px">
+    <td><%= textilizable board, :description %></td>
+    <td style="width:50px">
     <% if authorize_for("boards", "edit") %>
       <%= reorder_links('board', {:controller => 'boards', :action => 'update', :project_id => @project, :id => board}, :put) %>
     <% end %>
     </td>
-    <td class="buttons" style="width:180px">
+    <td align="right" width="75px">
     <% if User.current.allowed_to?(:manage_boards, @project) %>
-      <%= link_to l(:button_edit), edit_project_board_path(@project, board), :class => 'button' %>
-      <%= delete_link project_board_path(@project, board), :class => 'button' %>
-		<% end %>
+      <div class="btn-group">
+        <%= link_to '<i class="icon-pencil"></i>'.html_safe, edit_project_board_path(@project, board), :class => 'btn btn-small' %>
+        <%= delete_link project_board_path(@project, board), :class => 'btn btn-small', :no_text => true %>
+      </div>
+    <% end %>
     </td>
   </tr>
 <% end %>
@@ -30,7 +32,6 @@
 <% else %>
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
-
 <% if User.current.allowed_to?(:manage_boards, @project) %>
-<p><%= link_to l(:label_board_new), new_project_board_path(@project), :class => 'button submit' %></p>
+<div style="float:right; margin-top: 20px;"><%= link_to l(:label_board_new), new_project_board_path(@project), :class => 'btn' %></div>
 <% end %>

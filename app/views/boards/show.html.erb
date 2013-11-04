@@ -30,7 +30,7 @@
 </div>
 
 <h2><%=h @board.name %> <i class="icon-group"></i></h2>
-<div class="wiki description"><%=h @board.description %></div>
+<div class="wiki description"><%= textilizable @board, :description %></div>
 
 <% if @topics.any? %>
 <div class="list messages" style="width:95%; float:right;">

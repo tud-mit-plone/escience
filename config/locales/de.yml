@@ -354,6 +354,7 @@ de:
   field_group_by: Gruppiere Ergebnisse nach
   field_sharing: Gemeinsame Verwendung
   field_parent_issue: Übergeordnete Aufgabe
+  field_board_parent: Übergeordnetes Forum
 
   setting_app_title: Applikations-Titel
   setting_app_subtitle: Applikations-Untertitel

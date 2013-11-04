@@ -4,7 +4,7 @@
 
 <% Board.board_tree(@boards) do |board, level| %>
   <h3><%= link_to h(board.name), {:action => 'show', :id => board}, :class => "board"  %></h3>
-  <div class="wiki description" style="font-size:11px"> <%=h board.description %></div>
+  <div class="wiki description" style="font-size:11px"><%= textilizable board, :description %></div>
     <div class="topic-count"><%= board.topics_count %></div>
     <div class="message-count"><%= board.messages_count %></div>
     <div class="last-message">

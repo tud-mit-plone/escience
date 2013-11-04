@@ -1,9 +1,14 @@
 <%= error_messages_for @board %>
 
 <div class="box tabular">
-<p><%= f.text_field :name, :required => true %></p>
-<p><%= f.text_field :description, :required => true, :size => 80 %></p>
+<p><%= f.text_field :name, :required => true, :style => 'font-size:20px;' %></p>
+<p><%#= f.text_field :description, :required => true, :size => 80 %>
+<label style="margin-bottom:5px;"><%= l(:label_description) %></label>
+<textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="board_description" name="board[description]" rows="<%= (@board.description.blank? ? 10 : [[10, @board.description.length / 50].max, 100].min) %>">
+  <%= textilizable @board, :description %>
+</textarea>
+</p>
 <% if @board.valid_parents.any? %>
-<p><%= f.select :parent_id, boards_options_for_select(@board.valid_parents), :include_blank => true, :label => :field_board_parent %></p>
+<div style="float:left"><%= f.select :parent_id, boards_options_for_select(@board.valid_parents), :include_blank => true, :label => :field_board_parent %></div>
 <% end %>
 </div>

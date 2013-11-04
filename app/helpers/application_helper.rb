@@ -746,18 +746,18 @@ module ApplicationHelper
   end
 
   def reorder_links(name, url, method = :post)
-    link_to(image_tag('2uparrow.png', :alt => l(:label_sort_highest)),
+    link_to('<i class = "icon-chevron-up"></i>'.html_safe,
             url.merge({"#{name}[move_to]" => 'highest'}),
             :method => method, :title => l(:label_sort_highest)) +
-    link_to(image_tag('1uparrow.png',   :alt => l(:label_sort_higher)),
-            url.merge({"#{name}[move_to]" => 'higher'}),
-           :method => method, :title => l(:label_sort_higher)) +
-    link_to(image_tag('1downarrow.png', :alt => l(:label_sort_lower)),
-            url.merge({"#{name}[move_to]" => 'lower'}),
+    link_to('<i class = "icon-caret-up"></i>'.html_safe,
+            url.merge({"#{name}[move_to]" => 'highest'}),
+            :method => method, :title => l(:label_sort_higher)) +
+    link_to('<i class = "icon-caret-down"></i>'.html_safe,
+            url.merge({"#{name}[move_to]" => 'highest'}),
             :method => method, :title => l(:label_sort_lower)) +
-    link_to(image_tag('2downarrow.png', :alt => l(:label_sort_lowest)),
-            url.merge({"#{name}[move_to]" => 'lowest'}),
-           :method => method, :title => l(:label_sort_lowest))
+    link_to('<i class = "icon-chevron-down"></i>'.html_safe,
+            url.merge({"#{name}[chevron_to]" => 'highest'}),
+            :method => method, :title => l(:label_sort_lowest))
   end
 
   def breadcrumb(*args)

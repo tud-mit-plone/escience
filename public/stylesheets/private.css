@@ -403,6 +403,10 @@ select#membership_project_id {
   	width: 200px !important;
 	}
 	
+	.action-settings #tab-content-boards p {
+  	 margin: 2px 0;
+	}
+	
 	.controller-users label {
 	  width: 50px;
 	}
