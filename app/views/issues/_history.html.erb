@@ -23,7 +23,7 @@
        end %>
   </div>
   <%= call_hook(:view_issues_history_journal_bottom, { :journal => journal }) %>
-<% end %>
+<% end unless journals.nil? %>
 
 <% heads_for_wiki_formatter if User.current.allowed_to?(:edit_issue_notes, issue.project) || User.current.allowed_to?(:edit_own_issue_notes, issue.project) %>
 <% content_for :header_tags do %>
