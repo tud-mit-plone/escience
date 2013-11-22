@@ -81,6 +81,9 @@ module RedmineSocialExtends
             new_tags = prepare_tag_params(params[:my_skill])
             @user.skill_list = new_tags.uniq
 
+            @user.private_project.enabled_module_names = params[:enabled_module_names]
+            @user.private_project.save!
+
             @user.save!
             if @user.save
               @user.pref.save

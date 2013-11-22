@@ -62,8 +62,8 @@
           acts_as_taggable_on :skills, :interests
           
           #set error message from max characters to max length
-          validates :interest_list, length: { maximum: 5 }
-          validates :skill_list, length: { maximum: 5 }
+          validates :interest_list, length: { maximum: 20 }
+          validates :skill_list, length: { maximum: 20 }
           
           acts_as_searchable :columns => ['mail', 'firstname', 'lastname'],:with_tagging => true
           

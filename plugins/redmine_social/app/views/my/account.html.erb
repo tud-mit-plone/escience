@@ -70,8 +70,8 @@
   </fieldset>
   
   <fieldset>
-  <% @project = User.current.private_project%>
-  <%= render_tabs private_project_settings_tabs %>  
+    <% @project = User.current.private_project%>
+    <%= render_tabs private_project_settings_tabs %>  
   </fieldset>
   <%= link_to l(:button_save), "#", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#my_account_form').submit();", :style =>'float:right' %>
   <%#= submit_tag l(:button_save) %>

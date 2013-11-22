@@ -68,6 +68,16 @@ module Redmine
         @available_project_modules ||= @permissions.collect(&:project_module).uniq.compact
       end
 
+      def available_private_project_modules
+        project_modules ||= @permissions.collect(&:project_module).uniq.compact
+        private_modules = %w(issue_tracking time_tracking documents files wiki repository gantt user_calendar reddrop album)
+        @available_private_project_modules ||= []
+        project_modules.each do |m|
+          @available_private_project_modules << m if private_modules.include?(m.to_s)
+        end
+        @available_private_project_modules.uniq.compact
+      end
+
       def modules_permissions(modules)
         @permissions.select {|p| p.project_module.nil? || modules.include?(p.project_module.to_s)}
       end

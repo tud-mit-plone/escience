@@ -151,11 +151,11 @@ class Attachment < ActiveRecord::Base
   end
 
   def project
-    container.try(:project)
+    container.try(:project) if container.respond_to?(:project)
   end
 
   def visible?(user=User.current)
-    container && container.attachments_visible?(user)
+    container && (container == user || container.attachments_visible?(user))
   end
 
   def deletable?(user=User.current)
