@@ -1,0 +1,45 @@
+<% if defined?(block_no) %>
+  <%# if @options.nil? || @options[:dashurl].nil? || @options[:dashattachment].nil?%>
+  <% if @user.pref[:dash_url].nil? || @user.pref[:dash_url].empty? || @user.pref[:dash_url][block_no.to_i].nil? || @user.pref[:dash_url][block_no.to_i][:attachment].nil?%>
+    <%= form_tag url_for(:controller => "my",:action => "create_dash_block"), :method => :post, :remote=> true, :id => "commit_#{block_no}" do%>
+        <%= label_tag "Dash-Url:" %>
+        <%= text_field_tag "dash_url" %>
+        <%= hidden_field_tag "block_no","#{block_no}" %>
+        <%= submit_tag "Submit URL", :class => 'button' %>
+
+      <%end%> 
+  <%else%>
+        <%= javascript_tag ' 
+      $(document).ready(function(){
+        $(\'#'"commit_#{block_no}"'\').submit(function() {  
+          var valuesToSubmit = $(this).serialize();
+          var ajax = $.ajax({
+            type: \'POST\',
+            url: $(this).attr(\'action\'), //sumbits it to the given url of the form
+            data: valuesToSubmit,
+            dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+            }).always(function(json){
+            if(json.readyState == 4 && json.status == 200){
+              var insert = $(\'#'"commit_#{block_no}"'\').parent();
+              $(\'#'"commit_#{block_no}"'\').remove();
+              
+              insert.append(generate_dash_block(ajax.responseText)).hide().fadeIn(2000); 
+              
+            }
+          });
+         
+          return false; // prevents normal behaviour
+        });
+
+        //$(\'#'"commit_#{block_no}"' input[type="submit"]\').click(function(event){
+        //  event.preventDefault(); // cancel default behavior          
+        //});
+      });
+      function generate_dash_block(link){
+        var new_dash_block = \''"#{render_dash_block_image(@user.pref[:dash_url][block_no.to_i][:dash_url], 10)}"'\';
+        return new_dash_block.replace(/src=".*?"/,"src=\'"+link+"\'");
+      }
+      '%>
+    <%= render_dash_block_image(@user.pref[:dash_url][block_no.to_i][:dash_url], @user.pref[:dash_url][block_no.to_i][:attachment]) %>
+  <%end%>
+<%end%>
