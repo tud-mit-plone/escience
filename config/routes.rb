@@ -72,6 +72,7 @@ RedmineApp::Application.routes.draw do
   match 'my/add_block', :controller => 'my', :action => 'add_block', :via => :post
   match 'my/remove_block', :controller => 'my', :action => 'remove_block', :via => :post
   match 'my/order_blocks', :controller => 'my', :action => 'order_blocks', :via => :post
+  match 'my/create_dash_block', :controller => 'my', :action => 'create_dash_block', :via => :post
 
   match 'metatagssearch', :controller => 'meta_information', :action => 'retrieve_all_tags'
 

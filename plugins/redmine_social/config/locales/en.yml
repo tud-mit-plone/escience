@@ -74,6 +74,7 @@ en:
           attributes:
             photo_file_size:
               less_than: "Filesize to large %{count}"
+  published_date: "%m/%d/%Y"   
   greeting: "Hello %{name}"
   #en: a_few_seconds_ago:  a few seconds ago
   a_few_seconds_ago:  a few seconds ago
@@ -1729,3 +1730,5 @@ en:
   label_my_interest_add: 'Add science field'
   text_my_skill: 'My skills'
   label_my_skill_add: 'Add skill'
+  label_album_plural: 'Pictures'
+  label_dashurl: 'Favorite Website'

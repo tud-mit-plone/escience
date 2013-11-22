@@ -20,22 +20,25 @@
 
 <div id="list-top" class="block-receiver">
   <% @blocks['top'].each do |b|
+     b,b_count = extract_block_name(b)
      next unless MyController::BLOCKS.keys.include? b %>
-  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b} %>
+  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b, :block_no => b_count} %>
   <% end if @blocks['top'] %>
 </div>
 
 <div id="list-left" class="splitcontentleft block-receiver">
   <% @blocks['left'].each do |b|
+     b,b_count = extract_block_name(b)
      next unless MyController::BLOCKS.keys.include? b %>
-  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b} %>
+  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b, :block_no => b_count} %>
   <% end if @blocks['left'] %>
 </div>
 
 <div id="list-right" class="splitcontentright block-receiver">
   <% @blocks['right'].each do |b|
+     b,b_count = extract_block_name(b)
      next unless MyController::BLOCKS.keys.include? b %>
-  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b} %>
+  <%= render :partial => 'block', :locals => {:user => @user, :block_name => b, :block_no => b_count} %>
   <% end if @blocks['right'] %>
 </div>
 

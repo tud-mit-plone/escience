@@ -1,6 +1,7 @@
-<fieldset id="block_<%= block_name.dasherize %>" style="cursor:move; padding:10px 20px" class="mypage-box">
-    <div style="float:right;margin-right:-20px; margin-top: -30px;z-index:500;">
-    <%= link_to "", {:action => "remove_block", :block => block_name}, :method => 'post', :class => "icon-trash icon-large" %>
+<fieldset id="block_<%= block_name.dasherize %><%= "_#{local_assigns[:block_no]}" unless local_assigns[:block_no].nil? %>" style="cursor:move; padding:10px 20px" class="mypage-box">
+    <div style="float:right;margin-right:-20px; margin-top: -40px;z-index:500;">
+    <%= link_to "", {:action => "remove_block", :block => block_name,  :block_no => local_assigns[:block_no] || nil }, :method => 'post', :class => "icon-trash icon-large" %>
     </div>
-    <%= render :partial => "my/blocks/#{block_name}", :locals => { :user => user } %>
+    <%= render :partial => "my/blocks/#{block_name}", :locals => { :user => user, :block_no => local_assigns[:block_no] || nil } %>
+
 </fieldset>

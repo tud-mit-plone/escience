@@ -51,6 +51,22 @@ module MyHelper
     s.html_safe
   end
   
+  def extract_block_name(block)
+    return [block.split('_').first, block.split('_').length > 1 ? block.split('_').last : nil]
+  end
+
+  def render_dash_block_image(dash_url,attachment_id)
+    s =  "<div style=\"overflow: hidden; height: 200px; width: 320px;\">"
+    if /^(http:\/\/|https:\/\/)/.match(s).nil? 
+      dash_url = "http://#{dash_url}"
+    end
+    s << link_to(dash_url) do 
+               image_tag url_for(:controller => 'attachments', :action => 'show', :id => attachment_id), :width => '320' 
+             end
+    s << "</div>"
+    return s.html_safe
+  end
+
   def render_usermessage_inbox
   	authors = UserMessage.get_names_of_sender
     s = ''

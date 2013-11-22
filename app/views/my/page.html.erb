@@ -8,28 +8,31 @@
 <div id="list-top">
   <% counter = 0;
      @blocks['top'].each do |b|
-     next unless MyController::BLOCKS.keys.include? b  
+       b,b_count = extract_block_name(b)
+       next unless MyController::BLOCKS.keys.include? b  
      %>
   <fieldset class="mypage-box<%= ((counter+=1) % 3) == 0 ? ' last': '' %>">
-    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
+    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user, :block_no => b_count} %>
   </fieldset>
   <% end if @blocks['top'] %>
 </div>
 
 <div id="list-left" class="splitcontentleft">
   <% @blocks['left'].each do |b|
+     b,b_count = extract_block_name(b)
      next unless MyController::BLOCKS.keys.include? b %>
   <fieldset class="mypage-box">
-    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
+    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user, :block_no => b_count} %>
   </fieldset>
   <% end if @blocks['left'] %>
 </div>
 
 <div id="list-right" class="splitcontentright">
   <% @blocks['right'].each do |b|
+     b,b_count = extract_block_name(b)
      next unless MyController::BLOCKS.keys.include? b %>
   <fieldset class="mypage-box">
-    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user } %>
+    <%= render :partial => "my/blocks/#{b}", :locals => { :user => @user, :block_no => b_count } %>
   </fieldset>
   <% end if @blocks['right'] %>
 </div>

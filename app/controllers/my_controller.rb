@@ -28,7 +28,8 @@ class MyController < ApplicationController
              'news' => :label_news_latest,
              'calendar' => :label_calendar,
              'documents' => :label_document_plural,
-             'timelog' => :label_spent_time
+             'timelog' => :label_spent_time,
+             'dashurl' => {:label => :label_dashurl, :multiple => true, :data => true}
            }.merge(Redmine::Views::MyPage::Block.additional_blocks).freeze
 
   DEFAULT_LAYOUT = {  'left' => ['issuesassignedtome'],
@@ -138,7 +139,8 @@ class MyController < ApplicationController
     @blocks = @user.pref[:my_page_layout] || DEFAULT_LAYOUT.dup
     @block_options = []
     BLOCKS.each do |k, v|
-      unless %w(top left right).detect {|f| (@blocks[f] ||= []).include?(k)}
+      unless %w(top left right).detect {|f| (@blocks[f] ||= []).include?(k) && !(v.class == Hash && v[:multiple] == true)}
+
         @block_options << [l("my.blocks.#{v}", :default => [v, v.to_s.humanize]), k.dasherize]
       end
     end
@@ -153,22 +155,90 @@ class MyController < ApplicationController
     @user = User.current
     layout = @user.pref[:my_page_layout] || {}
     # remove if already present in a group
-    %w(top left right).each {|f| (layout[f] ||= []).delete block }
+    %w(top left right).each {|f| (layout[f] ||= []).delete(block) unless BLOCKS[f].class == Hash && v[:multiple] == true}
     # add it on top
-    layout['top'].unshift block
+    layout['top'].unshift create_block_name_with_number(layout, block)
+    
     @user.pref[:my_page_layout] = layout
     @user.pref.save
     redirect_to :action => 'page_layout'
+  end
+
+  def create_block_name_with_number(layout, block)
+    return block unless BLOCKS[block].class == Hash && BLOCKS[block][:multiple] == true
+    block_nr = 0
+    block = block.split('_').first
+    
+    layout.each do |k,v|
+      v.each do |active_block| 
+        if active_block.split('_').first == block
+          block_nr = active_block.split('_').last.to_i + 1 if active_block.split('_').last.to_i >= block_nr
+        end
+      end
+    end
+    return "#{block}_#{block_nr}"
+  end
+
+  def create_dash_block 
+    
+    unless(params[:dash_url].nil? || params[:dash_url] == '')
+      @user = User.current
+      block_no = params[:block_no].to_i
+      require 'capit'
+
+      #if no x server is available use xvfb => sudo apt-get install xvfb
+      # 
+      capit = CapIt::Capture.new(params[:dash_url], :cutycapt_path => "cutycapt", :user_agent => "", 
+                                                  :filename => "#{Time.now.to_i}_#{Time.now.nsec}_dash_url.jpg", :folder => "/tmp/")
+      capit.capture
+      @attachment = Attachment.new(:file => File.open("#{File.join(capit.folder,capit.filename)}"))
+      @attachment.author = User.current
+      @attachment.filename = capit.filename 
+      @attachment.meta_information = [MetaInformation.new(:meta_information => ["dash_url"])]
+      @attachment.container = @user
+      @attachment.save! 
+
+      @user.pref[:dash_url] ||= []
+      @user.pref[:dash_url] [block_no] = {:dash_url => params[:dash_url], :attachment => @attachment.id}
+      @user.pref.save
+
+      respond_to do |format|
+        format.xml { render :xml => @attachment }
+        format.js 
+        format.json { render :json => "#{url_for({:controller => 'attachments', :action => 'show', :id => @attachment.id})}" }
+      end
+    end
+    
+  end
+
+  def check_delete_block(block)
+    block_no = block.split('_').last.to_i
+    block = block.split('_').first
+    
+    if BLOCKS[block].class == Hash && BLOCKS[block][:data] == true 
+      unless @user.pref[:dash_url].nil? || @user.pref[:dash_url].empty? || @user.pref[:dash_url][block_no].nil? || 
+                 !(@user.pref[:dash_url][block_no].class == Hash) || @user.pref[:dash_url][block_no][:attachment].nil?
+        Attachment.find(@user.pref[:dash_url][block_no][:attachment]).destroy
+      end
+      @user.pref[:dash_url][block_no] = {}
+      @user.pref.save
+    else
+      return
+    end
   end
 
   # Remove a block to user's page
   # params[:block] : id of the block to remove
   def remove_block
     block = params[:block].to_s.underscore
+    
+    block += "_#{params[:block_no]}" unless params[:block_no].nil? || params[:block_no] == ''
     @user = User.current
     # remove block in all groups
+    check_delete_block block
+
     layout = @user.pref[:my_page_layout] || {}
-    %w(top left right).each {|f| (layout[f] ||= []).delete block }
+    %w(top left right).each {|f| (layout[f] ||= []).delete block}
     @user.pref[:my_page_layout] = layout
     @user.pref.save
     redirect_to :action => 'page_layout'
