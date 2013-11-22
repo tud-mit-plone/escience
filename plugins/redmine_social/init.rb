@@ -47,7 +47,11 @@ Redmine::Plugin.register :redmine_social do
         "url" => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"}, 
     'photo_missing_thumb' => "avatar.png",
     'photo_missing_medium' => "avatar.png",
-    },
+    'private_project_modules' => [{:name => 'modules', :action => :select_project_modules, :partial => 'projects/settings/modules', :label => :label_module_plural},
+            {:name => 'wiki', :action => :manage_wiki, :partial => 'projects/settings/wiki', :label => :label_wiki},
+            {:name => 'repositories', :action => :manage_repository, :partial => 'projects/settings/repositories', :label => :label_repository_plural},
+            {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :enumeration_activities}
+            ]},
     :partial =>'settings_redmine_social/settings')
 
   contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}

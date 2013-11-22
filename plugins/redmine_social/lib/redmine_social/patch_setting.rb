@@ -26,7 +26,11 @@ module RedmineSocialExtends
             if !selectable.nil?
               html << selectable
             else
-              html << text_field_tag("#{name_pre}[#{k}]",v, :size => "#{v.length > 40 ? 80 : 40}")
+              if v.class == Array 
+                html << text_area_tag("#{name_pre}[#{k}]",v, :rows => "#{(v.join(" ").length / 50).to_i}")
+              else
+                html << text_field_tag("#{name_pre}[#{k}]",v, :size => "#{v.length > 40 ? 80 : 40}")
+              end
             end
             html << "<br />"
           else

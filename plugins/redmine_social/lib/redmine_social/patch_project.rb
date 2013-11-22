@@ -28,6 +28,9 @@ module RedmineSocialExtends
             {:name => 'repositories', :action => :manage_repository, :partial => 'projects/settings/repositories', :label => :label_repository_plural},
             {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :enumeration_activities}
             ]
+          #logger.info ("TRodules #{JSON.parse(Setting.plugin_redmine_social['private_project_modules']).class}")
+          #tab = Setting.plugin_redmine_social['private_project_modules'].class == Array ? Setting.plugin_redmine_social['private_project_modules'] : 
+          #          Setting.plugin_redmine_social['private_project_modules'].to_s.split(" ")
         end
       end
       
