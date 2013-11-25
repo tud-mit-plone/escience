@@ -77,11 +77,9 @@
       <legend><%=l(:label_member_new)%></legend>
       <p><%= label_tag "principal_search", l(:label_principal_search) %><%= text_field_tag 'principal_search', nil %></p>
       <%= javascript_tag "observeSearchfield('principal_search', 'principals', '#{ escape_javascript autocomplete_project_memberships_path(@project) }')" %>
-      <!--
       <div id="principals" class="membership">
         <%#= principals_check_box_tags 'membership[user_ids][]', principals %>
       </div>
-      -->
 
       <p class="membership"><%= l(:label_role_plural) %>:
       <% roles.each do |role| %>
