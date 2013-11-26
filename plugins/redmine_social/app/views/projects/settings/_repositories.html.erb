@@ -37,5 +37,6 @@
 <% end %>
 
 <% if User.current.allowed_to?(:manage_repository, @project) %>
-  <p><%= link_to l(:label_repository_new), new_project_repository_path(@project), :class => 'button submit' %></p>
+  <div style="float:right; margin: 7px 0;"><%= link_to l(:label_repository_new), new_project_repository_path(@project), :class => 'btn' %></div>
+  <div class="clear"></div>
 <% end %>
