@@ -59,7 +59,7 @@ Redmine::Plugin.register :redmine_social do
 #  menu :account_menu, :user_contacts2, {:controller => 'friendships', :action => 'accepted', :user_id => Proc.new{"#{User.current.id}"}}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
   menu :account_menu, :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}
   
-  menu :project_menu, :album, {:controller => 'albums', :action => 'index'}, :caption => :label_album_plural, :param => :project_id
+  menu :project_menu, :album, {:controller => 'albums', :action => 'index'}, :caption => :label_album_plural, :param => :project_id, :html => {:class => "icon icon-picture"}
 
   project_module :album do 
     permission :album_create, {:albums => [:create,:index]}
