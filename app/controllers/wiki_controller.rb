@@ -210,7 +210,6 @@ class WikiController < ApplicationController
     @content.version = @page.content.version
 
     @text = @content.text
-    
     if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
       @section = params[:section].to_i
       @text, @section_hash = Redmine::WikiFormatting.formatter.new(@text).get_section(@section)
@@ -251,6 +250,7 @@ class WikiController < ApplicationController
 
     @content.comments = content_params[:comments]
     @text = content_params[:text]
+
     if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
       @section = params[:section].to_i
       @section_hash = params[:section_hash]
@@ -259,6 +259,8 @@ class WikiController < ApplicationController
       @content.version = content_params[:version] if content_params[:version]
       @content.text = @text
     end
+    @content.save!
+
     @content.author = User.current
     @page.content = @content
 
@@ -314,7 +316,9 @@ class WikiController < ApplicationController
 
   def protect
     @page.update_attribute :protected, params[:protected]
-    redirect_to :action => 'show', :project_id => @project, :id => @page.title
+    @lock = params[:protected] == '1' ? true : false
+    render :partial => 'update_protection'
+#    redirect_to :action => 'show', :project_id => @project, :id => @page.title
   end
 
   # show page history
