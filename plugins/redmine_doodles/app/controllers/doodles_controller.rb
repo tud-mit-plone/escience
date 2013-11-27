@@ -8,6 +8,7 @@ class DoodlesController < ApplicationController
   #verify :method => :post, :only => [:lock], :redirect_to => { :action => :show }
   
   helper :watchers
+  include ApplicationHelper
   include WatchersHelper
   
   def index
@@ -44,6 +45,7 @@ class DoodlesController < ApplicationController
   end
   
   def create
+    params[:doodle][:description] = convertHtmlToWiki(params[:doodle][:description])
     @doodle.attributes = params[:doodle]
     #@doodle.watcher_user_ids = params[:doodle]['watcher_user_ids']
     @doodle.should_answer_ids = params[:doodle]['should_answer_ids']
@@ -56,7 +58,8 @@ class DoodlesController < ApplicationController
   end
   
   def update
-    expiry_date = Date.strptime(params[:doodle][:expiry_date], t("date.formats.default"))
+    params[:doodle][:description] = convertHtmlToWiki(params[:doodle][:description])
+#    expiry_date = Date.strptime(params[:doodle][:expiry_date], t("date.formats.default"))
     params[:doodle][:expiry_date] = params[:doodle][:expiry_date].empty? ? '' : expiry_date.strftime("%d.%m.%Y")
     @doodle.attributes = params[:doodle]
     if @doodle.save
