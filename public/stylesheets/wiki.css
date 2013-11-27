@@ -4,23 +4,38 @@
   padding-bottom: 0px;
 //  padding-top: 10px;
 }
-
 .wiki-page h1 {
-  font-size: 24px;
+  font-size: 1.8em;
 }
-
 .wiki-page h2 {
-  font-size: 20px;
+  font-size: 1.6em;
 }
-
 .wiki-page h3 {
-  font-size: 18px;
+  font-size: 1.4em;
 }
-
 .wiki-page h4 {
-  font-size: 16px;
+  font-size: 1.2em;
 }
-
 .wiki-page.new {
   color:#b00000;
+}
+.contextual a {
+  color: #4d4d4d;
+  font-size: 18px;
+}
+.wiki-page ul {
+  list-style: inherit;
+}
+.wiki-hierarchy .main_level {
+  font-size: 1.8em;
+  padding-left: 20px;
+}
+.wiki-hierarchy .pages-hierarchy {
+  font-size: 0.8em;
+  padding-left: 20px;
+}
+
+#edit_wiki_page #wiki_page_title {
+  font-size: 18px;
+  width: 98%;
 }

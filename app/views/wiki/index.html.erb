@@ -1,33 +1,29 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <% content_for :sidebar_right do %>
-  <ul>
-    <li><%= watcher_tag(@wiki, User.current) %></li>
-  </ul>
+  <ul><li><%= watcher_tag(@wiki, User.current) %></li></ul>
   <%= render :partial => 'sidebar' %>
 <% end %>
 
-<h2><%= l(:label_index_by_title) %></h2>
-
-<% if @pages.empty? %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% end %>
-
-<%= render_page_hierarchy(@pages_by_parent_id, nil, :timestamp => true) %>
+<h2><%= l(:label_index_by_title) %> <i class="icon icon-list-alt"></i></h2>
+<% if @pages.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
+<div class="wiki-hierarchy"><%= render_page_hierarchy(@pages_by_parent_id, nil, :timestamp => true) %></div>
 
 <% unless @pages.empty? %>
-<% other_formats_links do |f| %>
-  <%= f.link_to 'Atom',
-                :url => {:controller => 'activities', :action => 'index',
-                         :id => @project, :show_wiki_edits => 1,
-                         :key => User.current.rss_key} %>
-  <% if User.current.allowed_to?(:export_wiki_pages, @project) %>
-  <%= f.link_to('PDF', :url => {:action => 'export', :format => 'pdf'}) %>
-  <%= f.link_to('HTML', :url => {:action => 'export'}) %>
+  <% other_formats_links do |f| %>
+    <%= f.link_to 'Atom',
+                  :url => {:controller => 'activities', :action => 'index',
+                           :id => @project, :show_wiki_edits => 1,
+                           :key => User.current.rss_key} %>
+    <% if User.current.allowed_to?(:export_wiki_pages, @project) %>
+      <%= f.link_to('PDF', :url => {:action => 'export', :format => 'pdf'}) %>
+      <%= f.link_to('HTML', :url => {:action => 'export'}) %>
+    <% end %>
   <% end %>
-<% end %>
 <% end %>
 
 <% content_for :header_tags do %>
-<%= auto_discovery_link_tag(
+  <%= auto_discovery_link_tag(
       :atom, :controller => 'activities', :action => 'index',
       :id => @project, :show_wiki_edits => 1, :format => 'atom',
       :key => User.current.rss_key) %>

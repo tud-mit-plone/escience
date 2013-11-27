@@ -510,6 +510,7 @@ de:
   label_communication: Eigener Bereich
   label_description: Beschreibung
   label_forproject: für das Projekt
+  label_create: Anlegen
   label_user: Benutzer
   label_user_plural: Benutzer
   label_user_new: Neuer Benutzer
@@ -526,6 +527,7 @@ de:
     other: "%{count} Projekte"
   label_project_all: Alle Projekte
   label_project_latest: Neueste Projekte
+  label_project_private: Privater Bereich
   label_issue: Aufgaben
   label_issue_new: Neue Aufgabe
   label_issue_plural: Aufgaben
@@ -539,7 +541,7 @@ de:
   label_document_plural: Dokumente
   label_document_added: Dokument hinzugefügt
   label_document_edit: Dokument bearbeiten 
-  label_document_delete: Dokument bearbeiten
+  label_document_delete: Dokument löschen
   label_document_show: Dokument anzeigen
   label_role: Rolle
   label_role_plural: Rollen
@@ -793,6 +795,8 @@ de:
   label_wiki_page_plural: Wiki-Seiten
   label_wiki_toc: Inhaltsverzeichnis
   label_wiki_toplink: Zum Seitenanfang
+  label_wiki_dialog_title: Wiki-Seite hinzufügen/ ändern
+  label_wiki_dialog_text: Bitte geben Sie die Bezeichnung der Wiki-Seite ein
   label_index_by_title: Seiten nach Titel sortiert
   label_index_by_date: Seiten nach Datum sortiert
   label_current_version: Gegenwärtige Version
@@ -935,6 +939,14 @@ de:
   label_user_search: "Nach Benutzer suchen:"
   label_issues_closed_hide: fertige Aufgaben ausblenden
   label_issues_closed_show: fertige Aufgaben anzeigen
+  label_doc_Folien: Folien
+  label_doc_Übersicht: Übersicht
+  label_doc_Grafik: Grafik
+  label_doc_Video: Video
+  label_doc_Audio: Audio
+  label_doc_Text: Text
+  label_doc_Kooperatives_Textdokument: Kooperatives Textdokument
+  label_doc_Kooperatives_Tabellendokument: Kooperatives Tabellendokument
 
   button_login: Login
   button_submit: OK

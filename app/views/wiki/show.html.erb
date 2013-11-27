@@ -1,38 +1,40 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <% content_for :sidebar_right do %>
-  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' unless current_page?(:controller => 'wiki', :action => 'show', :id => nil) %>
+  <ul>
+    <li><%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left' unless current_page?(:controller => 'wiki', :action => 'show', :id => nil) %></li>
   <% if @editable %>
-    <ul>
   	<% if (authorize_for("wiki", "edit") && @content.current_version?) %>
-  		<li><%= link_to(l(:button_edit), {:action => 'edit', :id => @page.title}, :accesskey => accesskey(:edit)) %></li>
+  		<li><%= link_to(l(:button_edit), {:action => 'edit', :id => @page.title}, :class => 'icon icon-pencil', :accesskey => accesskey(:edit)) %></li>
+  		<li><%= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); $(this).hide(); $('html, body').animate({scrollTop: $(\'#add_attachment_form\').offset().top - 60}, 1500); return false;", :class => 'icon icon-folder-open-alt',:id => 'attach_files_link' %></li>
   	<%end%>
   	<li><%= watcher_tag(@page, User.current) %></li>
   	<% if (authorize_for("wiki", "protect") && !@page.protected?) %>
-  		<li><%= link_to(l(:button_lock), {:action => 'protect', :id => @page.title, :protected => 1}, :method => :post) %></li>
+  		<li><%= link_to(l(:button_lock), {:action => 'protect', :id => @page.title, :protected => 1}, :remote => true, :class => 'icon icon-unlock-alt', :method => :post) %></li>
   	<%end%>
   	<% if (authorize_for("wiki", "protect") && @page.protected?) %>
-  		<li><%= link_to(l(:button_unlock), {:action => 'protect', :id => @page.title, :protected => 0}, :method => :post) %></li>
+  		<li><%= link_to(l(:button_unlock), {:action => 'protect', :id => @page.title, :protected => 0}, :remote => true, :class => 'icon icon-lock', :method => :post) %></li>
   	<%end%>
   	<% if (authorize_for("wiki", "rename") && @content.current_version?) %>
-  		<li><%= link_to(l(:button_rename), {:action => 'edit', :id => @page.title}) %></li>
+  		<li><%= link_to(l(:button_rename), {:action => 'rename', :id => @page.title}, :class => 'icon icon-edit') %></li>
   	<%end%>
   	<% if (authorize_for("wiki", "destroy")) %>
-  		<li><%= link_to(l(:button_delete), {:action => 'edit', :id => @page.title}, :method => :destroy, :confirm => l(:text_are_you_sure)) %></li>
+  		<li><%= link_to(l(:button_delete), {:action => 'edit', :id => @page.title}, :class => 'icon icon-trash', :method => :destroy, :confirm => l(:text_are_you_sure)) %></li>
   	<%end%>
   	<% if (authorize_for("wiki", "edit") && !@content.current_version?) %>
-  		<li><%= link_to(l(:button_rollback), {:action => 'edit', :id => @page.title, :version => @content.version }) %></li>
+  		<li><%= link_to(l(:button_rollback), {:action => 'edit', :id => @page.title, :version => @content.version }, :class => 'icon icon-reply') %></li>
   	<%end%>
   	<% if (authorize_for("wiki", "history") && @content.current_version?) %>
-  		<li><%= link_to(l(:label_history), {:action => 'history', :id => @page.title}) %></li>
+  		<li><%= link_to(l(:label_history), {:action => 'history', :id => @page.title}, :class => 'icon icon-time') %></li>
   	<%end%>
-    </ul>
   <%end%>
+  </ul>
   <%= render :partial => 'sidebar' %>
 <%end%>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'wiki' %>
 <% end %>
-
 
 <%#= wiki_page_breadcrumb(@page) %>
 
@@ -62,21 +64,14 @@
 <%= link_to_attachments @page %>
 
 <% if @editable && authorize_for('wiki', 'add_attachment') %>
-<div id="wiki_add_attachment">
-<p><%= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); $(this).hide(); $('html, body').animate({
-                    scrollTop: $(\'#add_attachment_form\').offset().top - 60}, 1500); return false;",
-                                             :id => 'attach_files_link' %></p>
-<%= form_tag({:controller => 'wiki', :action => 'add_attachment',
-              :project_id => @project, :id => @page.title},
-             :multipart => true, :id => "add_attachment_form",
-             :style => "display:none;") do %>
-  <div class="box">
-  <p><%= render :partial => 'attachments/form' %></p>
+  <div id="wiki_add_attachment">
+    <%= form_tag({:controller => 'wiki', :action => 'add_attachment',
+                  :project_id => @project, :id => @page.title},
+                  :multipart => true, :id => "add_attachment_form",
+                  :style => "display:none;") do %>
+      <%= render :partial => 'attachments/form' %>
+    <% end %>
   </div>
-<%= submit_tag l(:button_add) %>
-<%= link_to l(:button_cancel), {}, :onclick => "$('#add_attachment_form').hide(); $('#attach_files_link').show(); return false;" %>
-<% end %>
-</div>
 <% end %>
 
 <% other_formats_links do |f| %>

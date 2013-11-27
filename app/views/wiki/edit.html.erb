@@ -1,48 +1,53 @@
-<% content_for :sidebar_right do %>
-  <%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-history' %>
-<%end%>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
 <%#= wiki_page_breadcrumb(@page) %>
 
-<h2><%= h @page.pretty_title %></h2>
+<h2 style="float:left; max-width:80%"><%= h @page.pretty_title %> <i class="icon icon-list-alt"></i></h2>
+<div class="btn-group" style="float:right;">
+  <%= link_to l(:button_cancel), :back, :class => 'btn' %>
+  <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#wiki_form').submit();" %>
+</div>
+<div class="clear"></div>
 
 <%= form_for @content, :as => :content,
             :url => {:action => 'update', :id => @page.title},
             :html => {:method => :put, :multipart => true, :id => 'wiki_form'} do |f| %>
-<%= f.hidden_field :version %>
-<% if @section %>
-<%= hidden_field_tag 'section', @section %>
-<%= hidden_field_tag 'section_hash', @section_hash %>
-<% end %>
-<%= error_messages_for 'content' %>
-
-<div class="box tabular">
-<%= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25,
-                  :class => 'wiki-edit', :accesskey => accesskey(:edit) %>
-Bitte geben Sie hier etwas ein:
-<input type="hidden" name="content[text]" />
-<textarea class="ckeditor" cols="80" id="ckeditor" name="ckeditor" rows="40">
-  <%= textilizable(@puretext) %>
-</textarea>
-<% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
-  <%= fields_for @page do |fp| %>
-    <p>
-      <label><%= l(:field_parent_title) %></label>
-      <%= fp.select :parent_id,
-                    content_tag('option', '', :value => '') +
-                       wiki_page_options_for_select(@wiki.pages.all(:include => :parent) -
-                         @page.self_and_descendants, @page.parent) %>
-    </p>
+  <%= f.hidden_field :version %>
+  <% if @section %>
+    <%= hidden_field_tag 'section', @section %>
+    <%= hidden_field_tag 'section_hash', @section_hash %>
   <% end %>
-<% end %>
+  <%= error_messages_for 'content' %>
+  
+  <div class="box tabular">
+  <%#= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25,:class => 'wiki-edit', :accesskey => accesskey(:edit) %>
+  <%#= wikitoolbar_for 'content_text' %>
+  <input type="hidden" name="content[text]" />
+  <textarea class="ckeditor" cols="80" id="ckeditor" name="ckeditor" rows="40"><%= textilizable(@puretext) %></textarea>
+  <% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
+    <%= fields_for @page do |fp| %>
+      <p>
+        <label><%= l(:field_parent_title) %></label>
+        <%= fp.select :parent_id,
+                      content_tag('option', '', :value => '') +
+                      wiki_page_options_for_select(@wiki.pages.all(:include => :parent) -
+                      @page.self_and_descendants, @page.parent) %>
+      </p>
+    <% end %>
+  <% end %>
+  
+  <p><label><%= l(:field_comments) %></label><%= f.text_area :comments, :rows => 3 %></p>
+  <p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+  </div>
 
-<p><label><%= l(:field_comments) %></label><%= f.text_area :comments, :rows => 3 %></p>
-<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
-</div>
-
-<p><%= submit_tag l(:button_save) %>
-   <%= preview_link({:controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title }, 'wiki_form') %></p>
-<%= wikitoolbar_for 'content_text' %>
+  <%= hidden_field_tag 'hidden_submit', '' %>
+  <div class="btn-group" style="float:right; margin: 10px 0;">
+    <%= link_to l(:button_cancel), :back, :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#wiki_form').submit();" %>
+  </div>
+  
+  <%#= submit_tag l(:button_save) %>
+  <%#= preview_link({:controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title }, 'wiki_form') %>
 <% end %>
 <div class="clear"></div>
 <div id="preview" class="wiki"></div>
@@ -50,8 +55,8 @@ Bitte geben Sie hier etwas ein:
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'scm' %>
   <%= robot_exclusion_tag %>
-    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
-    <%= stylesheet_link_tag 'ckeditor/editor' %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
 
 <% html_title @page.pretty_title %>

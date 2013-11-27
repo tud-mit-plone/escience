@@ -1,21 +1,32 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <%#= wiki_page_breadcrumb(@page) %>
 
-<h2><%= h @original_title %></h2>
+<h2><%= h @original_title %>  <i class="icon icon-list-alt"></i></h2>
 
 <%= error_messages_for 'page' %>
 
 <%= labelled_form_for :wiki_page, @page,
                      :url => { :action => 'rename' },
                      :html => { :method => :post } do |f| %>
-<div class="box tabular">
-<p><%= f.text_field :title, :required => true, :size => 100  %></p>
-<p><%= f.check_box :redirect_existing_links %></p>
-<p><%= f.select :parent_id,
-                content_tag('option', '', :value => '') + 
+  <br />
+  <div class="wiki description">
+  <p><%= f.text_field :title, :required => true, :size => 100  %></p>
+  <p><%= f.check_box :redirect_existing_links %></p>
+  <p><%= f.select :parent_id,
+                  content_tag('option', '', :value => '') + 
                   wiki_page_options_for_select(
                     @wiki.pages.all(:include => :parent) - @page.self_and_descendants,
                     @page.parent),
-                :label => :field_parent_title %></p>
-</div>
-<%= submit_tag l(:button_rename) %>
+                  :label => :field_parent_title %></p>
+  </div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
+  <div class="btn-group" style="float:right; margin: 10px 0;">
+    <%= link_to l(:button_cancel), :back, :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#edit_wiki_page').submit();" %>
+  </div>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'wiki' %>
 <% end %>

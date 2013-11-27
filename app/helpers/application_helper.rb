@@ -60,6 +60,7 @@ module ApplicationHelper
         {:attr => "style", :value=>"text-align:right;", :replace => "p>. $$content$$"},
         {:replace => "$$content$$\r\n\r\n"}
       ]},
+      :br  => {:replace => "\r\n"},
       :h3  => {:replace => "\r\nh3. $$content$$\r\n\r\n"},
       :h2  => {:replace => "h2. $$content$$\r\n\r\n"},
       :h1  => {:replace => "h1. $$content$$\r\n\r\n"},
@@ -480,7 +481,8 @@ module ApplicationHelper
   def render_page_hierarchy(pages, node=nil, options={})
     content = ''
     if pages[node]
-      content << "<ul class=\"pages-hierarchy\">\n"
+      add = node.nil? ? "<ul class=\"main_level\">\n" : "<ul class=\"pages-hierarchy\">\n"
+      content <<  add
       pages[node].each do |page|
         content << "<li>"
         content << link_to(h(page.pretty_title), {:controller => 'wiki', :action => 'show', :project_id => page.project, :id => page.title, :version => nil},
@@ -1152,7 +1154,7 @@ module ApplicationHelper
       @current_section += 1
       if @current_section > 1
         content_tag('div',
-          link_to(image_tag('edit.png'), options[:edit_section_links].merge(:section => @current_section)),
+          link_to('<i class="icon icon-pencil"></i>'.html_safe, options[:edit_section_links].merge(:section => @current_section)),
           :class => 'contextual',
           :title => l(:button_edit_section)) + heading.html_safe
       else
@@ -1627,6 +1629,7 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.roundabout-shapes.min.js")
     tags << javascript_include_tag("jquery.confirm.js")
     tags << javascript_include_tag("bootstrap.min.js")
+    tags << javascript_tag(ckeditor_localize)
     tags << javascript_tag(flash_notifications)
 
     tags << "\n".html_safe
@@ -1636,6 +1639,10 @@ module ApplicationHelper
       tags << "\n".html_safe + javascript_tag("$(window).load(function(){ warnLeavingUnsaved('#{escape_javascript l(:text_warn_on_leaving_unsaved)}'); });")
     end
     tags
+  end
+  
+  def ckeditor_localize
+    return %Q{var text_for_wiki_dialog = '#{l(:label_wiki_dialog_text)}'; var title_for_wiki_dialog = '#{l(:label_wiki_dialog_title)}'}
   end
 
   def favicon

@@ -8,7 +8,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
 			editor.addMenuGroup( 'mygroup', 10 );
 			editor.addMenuItem( 'My Dialog',
 			{
-				label : 'Open dialog',
+				label : title_for_wiki_dialog,
 				command : 'insert_page',
 				group : 'mygroup'
 			});
@@ -19,7 +19,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   }
   CKEDITOR.dialog.add('insert_page', function(api){
   	var dialogDefinition = {
-  		title : 'Sample dialog',
+  		title : title_for_wiki_dialog,
   		minWidth : 390,
   		minHeight : 130,
   		contents : [{
@@ -30,7 +30,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   			padding : 0,
   			elements :[{
   					type : 'html',
-  					html : '<p>This is some sample HTML content.</p>'
+  					html : text_for_wiki_dialog
   				},{
   					type : 'textarea',
   					id : 'textareaId',
@@ -41,14 +41,13 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   		buttons : [ CKEDITOR.dialog.okButton, CKEDITOR.dialog.cancelButton ],
   		onShow: function() {
     		var elem= api.getSelection().getSelectedText();
-  			var textareaObj = this.getContentElement( 'tab1', 'textareaId' );
-  			$(textareaObj).innerHTML(elem);
-//				textareaObj.setValue($(selection).getValue());
-//  			if ($(selection).hasClass('wiki-page'))
-//  				textareaObj.setValue(selection.getValue());
-//  			else
-///  		    element = null;
-//  			this.setupContent( parseLink.apply( this, [ editor, element ] ) );
+    		if (elem != "") {
+    			var e = api.document.createElement('span');
+          e.setAttribute('class','wiki-page');
+          e.appendHtml(elem);
+          api.insertElement(e);
+          CKEDITOR.dialog.getCurrent().hide();
+    		}
   		},
   		onOk : function() {
   			var textareaObj = this.getContentElement( 'tab1', 'textareaId' );
