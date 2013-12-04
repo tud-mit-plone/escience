@@ -1,17 +1,31 @@
-<h3><%= "#{l(:album)}"%></h3>
-<% @albums.each do |album| %>
-  <%next if album.nil?%>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
+<h2 style="float:left;"><%= "#{l(:album)}"%> <i class="icon icon-picture"></i></h2>
+<%= link_to(l(:new_album), url_for({:controller => 'albums', :action => 'new', :project_id => params[:project_id] }), :style => 'float:right;', :class => 'btn') %>
+<div class="clear"></div>
+
+<% @container.each do |container_name, container| %>
   <fieldset>
-    <% if album.container %> 
-    <legend><%= album.container%></legend>
-    <%end%>
-    <%unless album.title.empty?%>
-      <% name = album.title%>
-    <%else%>
-      <% name = "unnamed album" %> 
-    <%end%>
-    <%= link_to(name ,  url_for({:controller => 'albums', :action => 'show', :project_id => params[:project_id], :id => album.id }))%>
-    <%= link_to("Destroy", url_for({:controller => 'albums', :action => 'destroy', :id => album.id }),:method => :delete, :confirm => l(:text_are_you_sure) ,:class => 'button negative' ) %>
+    <legend><%= container_name %></legend>
+    <table width="100%">
+    <% container.each do |album| %>
+      <tr>
+      <%next if album.nil?%> 
+        <td>
+        <%unless album.title.empty?%>
+          <% name = album.title%>
+        <%else%>
+          <% name = "unnamed album" %> 
+        <%end%>
+        <%= link_to(name ,  url_for({:controller => 'albums', :action => 'show', :project_id => params[:project_id], :id => album.id }))%>
+        </td>
+        <td>
+          <div class="btn-group" style="float:right">
+            <%= link_to('<i class="icon-trash"></i>'.html_safe, url_for({:controller => 'albums', :action => 'destroy', :id => album.id }),:method => :delete, :confirm => l(:text_are_you_sure), :class => 'btn btn-small', :title => l(:label_album_delete)) %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    </table>
 </fieldset>
 <%end%>
- <%= link_to("add_album", url_for({:controller => 'albums', :action => 'new', :project_id => params[:project_id] })) %>

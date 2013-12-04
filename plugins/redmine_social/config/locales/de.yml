@@ -1396,6 +1396,47 @@ de:
   group_invitation_for: "Einladung zum"
   label_cancel: "Ablehnen"
   label_accept: "Annehmen"
+  #en: photo_manager: "Photo manager"
+  photo_manager: "Photo manager"
+  #en: album: "Album"
+  album: "Album"  
+  #en: albums: "Albums"
+  albums: "Albums"
+  #en: album_added_photos: Photos added to album
+  album_added_photos: Photos added to album
+  # en album_updated: "Album updated"
+  album_updated: "Album updated"
+  #en: album_comments: "Comentarios de álbum"
+  album_comments: "Album comments"
+  #en: album_tip: "Albums let you organize yout photos. Share whole experiencies with other %{community_name} users"
+  #album_tip: "Albums let you organize your photos. Share whole experiencies with other users"
+  #en: delete_album_and_photos: Delete album and its associated photos?
+  delete_album_and_photos: "Delete album and its associated photos?"
+  #en: album_was_successfully_created: "Album was successfully created"
+  album_was_successfully_created: "Album was successfully created"    
+  #en: view_more: "View more"
+  view_more: "View more"
+  #en: assign_album: "Assign album"
+  assign_album: "Assign album" 
+  #en: new_album: "New album"
+  new_album: "Album hinzufügen"
+  #en: created_an_album: "Created an album"
+  created_an_album: "Created an album"
+  #en: add_photos: "Add photos"
+  add_photos: "Add photos"
+  #en: view_my_album: "View my album"
+  view_my_album: "View my album"
+  #en: photos_of_this_album: "Photos from this album"
+  photos_of_this_album: "Photos from this album"
+  #en: not_assigned_photos: "Photos not assigned to an album"
+  not_assigned_photos: "Photos not assigned to an album"
+  create_and_add_photos: Anlegen und Fotos hinzufügen
+  edit_and_add_photos: "Edit and add photos to this album"
+  create_album: Anlegen
+  edit_album: Bearbeiten
+  cancel_and_go_back_to_photo_manager: "Cancel and go back to photo manager"
+  back_to_photo_manager: "Back to photo manager"
+  
 
   label_user_message: "Plattform-Nachricht"
   label_from: "von"
@@ -1405,3 +1446,5 @@ de:
   text_my_skill: 'Meine Fertigkeiten'
   label_my_skill_add: 'Ergänze deine Fertigkeiten'
   label_dashurl: 'Bookmark Website'
+  label_album_plural: 'Bildersammlung'
+  label_album_delete: 'Bildersammlung löschen'

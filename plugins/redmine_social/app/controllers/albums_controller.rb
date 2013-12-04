@@ -1,9 +1,10 @@
 class AlbumsController < ApplicationSocialController
 
   before_filter :require_login
-  before_filter :project_album_if_visible
+  before_filter :project_album_if_visible  
   before_filter :find_user, :only => [:new, :edit, :index]
   before_filter :require_current_user, :only => [:new, :edit, :update, :destroy, :create]
+  before_filter :get_albums, :only => [:index, :new]
 
   # GET /albums/1
   # GET /albums/1.xml
@@ -43,7 +44,7 @@ class AlbumsController < ApplicationSocialController
     
     respond_to do |format|
       if @album.save
-        if params[:go_to] == 'only_create'
+        if params[:commit] == 'only_create'
           flash[:notice] = l(:album_was_successfully_created) 
           format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
         else
@@ -55,17 +56,13 @@ class AlbumsController < ApplicationSocialController
     end
   end
 
-  def index 
-    if(params[:user_id])
-      @albums = User.find(params[:user_id]).albums
-    elsif(params[:project_id])
-      @albums = @project.albums
-    else
-      @albums = @user.albums
-    end
-        
+  def index         
     respond_to do |format|
-      format.html{}
+      if @albums.empty?
+        format.html { redirect_to({:action => 'new'})}
+      else 
+        format.html{}
+      end
     end
   end
 
@@ -117,6 +114,23 @@ class AlbumsController < ApplicationSocialController
   end
 
 private 
+
+  def get_albums
+    if(params[:user_id])
+      @albums = User.find(params[:user_id]).albums
+    elsif(params[:project_id])
+      @albums = @project.albums
+    else
+      @albums = @user.albums
+    end
+    @container = {}
+    @albums.each do |album|
+      container_name = album.container.name == User.current.mail ? l(:label_project_private) : album.container.name
+      @container[container_name] ||= []
+      @container[container_name] << album
+    end 
+  end
+
   def project_album_if_visible
     @album = Album.find(params[:id]) if params[:id]
     @project = Project.find(params[:project_id]) unless params[:project_id].nil?
