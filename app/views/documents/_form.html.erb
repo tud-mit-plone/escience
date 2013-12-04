@@ -2,9 +2,10 @@
 
 <div class="box tabular">
 <p><%= f.select :category_id, DocumentCategory.active.collect {|c| [c.name, c.id]} %></p>
-<p><%= f.text_field :title, :required => true, :size => 60 %></p>
+<p><%= f.text_field :title, :required => true, :style => 'font-size:20px;', :size => 71 %></p>
 <p><%#= f.text_area :description, :cols => 60, :rows => 15, :class => 'wiki-edit' %></p>
-<textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="documents_description" name="issue[description]">
+<label style="margin-bottom:5px;"><%= l(:label_description) %></label>
+<textarea accesskey="e" class="wiki-edit ckeditor" cols="60" id="document_description" name="document[description]" rows="<%= (@document.description.blank? ? 10 : [[10, @document.description.length / 50].max, 100].min) %>">
   <%= textilizable @document, :description %>
 </textarea>
 </div>
@@ -13,6 +14,6 @@
 
 <% if @document.new_record? %>
 <div class="box tabular">
-<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form', :locals => {:container => @document} %></p>
+<p><%= render :partial => 'attachments/form', :locals => {:container => @document} %></p>
 </div>
 <% end %>

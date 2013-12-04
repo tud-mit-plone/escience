@@ -91,7 +91,7 @@ class DocumentsController < ApplicationController
 
   def destroy
     @document.destroy if request.delete?
-    redirect_to :controller => 'documents', :action => 'index', :project_id => @project
+    redirect_to :controller => 'documents', :action => 'index', :project_id => @project, :id => nil
   end
 
   def add_attachment
@@ -109,7 +109,7 @@ class DocumentsController < ApplicationController
         meta = params[:attachments]["1"][:meta_information]
         @message = (meta.nil? || meta.empty?) ? l(:error_empty_message) : l(:notice_successful_update)
 #        render :js => "$.notification({ message:'#{message}', type:'warning' }); $('#files').html('#{link_to_attachments @document}')"
-        render :action => "update_document"
+        render :partial => "update_attachment"
       }
     end
   end

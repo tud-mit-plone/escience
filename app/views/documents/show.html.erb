@@ -1,6 +1,8 @@
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+
 <% content_for :sidebar_right do %>
   <ul>
-    <li><%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left' %></li>
+    <li><%= link_to l(:button_back), project_documents_path(@project), :class => 'icon icon-chevron-left' %></li>
     <% if User.current.allowed_to?(:manage_documents, @project) %>
       <li><%= link_to(l(:label_attachment_new), {}, :onclick => "$('#attachments_form').show(); return false;", :id => 'attach_files_link', :class => 'icon icon-folder-open-alt') if authorize_for('documents', 'add_attachment') %></li>
       <li><%= link_to l(:button_edit), edit_document_path(@document), :accesskey => accesskey(:edit), :class => 'icon icon-pencil' %></li>
@@ -21,8 +23,19 @@
     </div>
   </div>
 <% end %>
-<h3><%= l(:label_attachment_plural) %></h3>
-<div id="files"><%= link_to_attachments @document %></div>
+<% if @document.category.name == 'Kooperatives Tabellendokument'%>
+  <%= textilizable "{{ethersheet(#{@document.title}, useMonospaceFont=true, width=100%)}}" %>
+<% elsif @document.category.name == 'Kooperatives Textdokument'%>
+  <%= textilizable "{{etherpad(#{@document.title.gsub(' ','_')}, useMonospaceFont=true, width=100%)}}" %>
+<% end %>
+
+<fieldset>
+<legend><%= l(:label_attachment_plural) %></legend>
+  <div id="files">
+    <%= link_to_attachments @document %>
+  </div>
+</fieldset>
+
 <% if authorize_for('documents', 'add_attachment') %>
   <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document },:remote => true, :multipart => true, :id => "attachments_form", :style => "display:none;") do %>
     <div class="box"><%= render :partial => 'attachments/form' %></div>

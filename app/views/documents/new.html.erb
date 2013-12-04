@@ -9,7 +9,10 @@
     <%= link_to l(:button_create_and_continue), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_document').submit();" %>
   </div>
   <div class="clear"></div>
-  <%= render :partial => 'form', :locals => {:f => f} %>
+  <fieldset>
+    <legend><%= l(:label_create) %></legend>
+    <%= render :partial => 'form', :locals => {:f => f} %>
+  </fieldset>
   <%= hidden_field_tag 'hidden_submit', '' %>
   <div class="btn-group" style="float:right;">
     <%= link_to l(:button_cancel), {:controller => 'documents', :action => 'index', :id => @document}, :class => 'btn' %>

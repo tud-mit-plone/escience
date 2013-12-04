@@ -1,8 +1,24 @@
-<h2><%=l(:label_document)%></h2>
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
+<h2 style="float:left"><%= h @document.title %> <i class="icon-book"></i></h2>
+<div class="btn-group" style="float:right;">
+  <%= link_to l(:button_back), :back, :class => 'btn' %>
+</div>
+<div class="clear"></div>
 <%= labelled_form_for @document do |f| %>
-  <%= render :partial => 'form', :locals => {:f => f} %>
-  <p><%= submit_tag l(:button_save) %></p>
+
+<fieldset>
+  <legend><%= l(:button_edit) %></legend>
+    <%= render :partial => 'form', :locals => {:f => f} %>
+    <%= hidden_field_tag 'hidden_submit', '' %>
+    <div class="btn-group" style="float:right; margin: 10px 0;">
+      <%= link_to l(:button_cancel), :back, :class => 'btn' %>
+      <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('.edit_document').submit();" %>
+    </div>
+  <% end %>
+</fieldset>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+  <%= stylesheet_link_tag 'ckeditor/editor' %>
 <% end %>
-
-

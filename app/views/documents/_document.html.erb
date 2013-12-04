@@ -1,8 +1,8 @@
 <h3 style="float:left"><%= link_to truncate(h(document.title), length: 52)+" ("+document.attachments.size.to_s()+" "+l(:label_attachment_plural)+")", document_path(document), :title => "#{h(document.title) if h(document.title).length > 52}" %></h3>
 <div style="float:right;padding-top: 10px;" class="btn-group">
-  <%= link_to('<i class="icon-eye-open"></i>'.html_safe, document_path(document),:title => l(:label_show_document), :class => "btn btn-small") %>
-  <%= link_to('<i class="icon-pencil"></i>'.html_safe, edit_document_path(document), :title => l(:label_edit_document), :accesskey => accesskey(:edit), :class => "btn btn-small") if User.current.allowed_to?(:manage_files, @project) %>
-  <%= link_to('<i class="icon-trash"></i>'.html_safe, attachment_path(document), :title => l(:label_delete_document),
+  <%= link_to('<i class="icon-eye-open"></i>'.html_safe, document_path(document),:title => l(:label_document_show), :class => "btn btn-small") %>
+  <%= link_to('<i class="icon-pencil"></i>'.html_safe, edit_document_path(document), :title => l(:label_document_edit), :accesskey => accesskey(:edit), :class => "btn btn-small") if User.current.allowed_to?(:manage_files, @project) %>
+  <%= link_to('<i class="icon-trash"></i>'.html_safe, document_path(document), :title => l(:label_document_delete),
               :data => {:confirm => l(:text_are_you_sure)}, :class => "btn btn-small", :method => :delete) if User.current.allowed_to?(:manage_files, @project) %>
 </div>
 <div style="float:right;padding: 15px 20px 0 0;"><%= "#{l(:label_last_modified)} #{format_time(document.updated_on)}" %></div>
