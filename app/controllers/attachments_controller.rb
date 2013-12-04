@@ -105,6 +105,7 @@ class AttachmentsController < ApplicationController
     @attachment.container.attachments.delete(@attachment)
     respond_to do |format|
       format.html {redirect_to_referer_or project_path(@project)}
+#      format.js { render :partial => Rails.application.routes.recognize_path(request.referrer)[:controller]+'/update_attachment'}
       format.js { render :partial => 'projects/update_attachment'}
     end
   end

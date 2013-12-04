@@ -1,0 +1,2 @@
+$.notification({ message:'<%=@message %>', type:'warning' }); $('#files').html('<%=escape_javascript(link_to_attachments @document) %>');
+$('#attachments_form .box').html('<%= escape_javascript(render :partial => 'attachments/form', :formats => [:html]) %>');
