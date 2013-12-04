@@ -142,6 +142,9 @@
 
 <% content_for :sidebar_right do %>
   <ul>
+  <% if params['sub'] == 'overview_all' %>
+    <li><%= link_to l(:label_back), {:controller => 'projects', :action => 'index', 'sub' => 'overview_all'}, :class => 'icon icon-chevron-left' %></li>
+  <% end %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
     <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-plus-sign' %></li>
   <% end %>
