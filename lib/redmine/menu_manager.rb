@@ -77,13 +77,13 @@ module Redmine
 
       # Renders the application main menu
       def render_main_menu(project)
-	begin
-        project = Project.find(session[:selected_project]) if (project.nil? && (!session[:selected_project].nil?))
-        render_menu((project && !project.new_record?) ? :project_menu : :application_menu, project)
-	rescue ActiveRecord::RecordNotFound => e 
-	  logger.info(e.message)
-	  return nil
-	end
+        begin
+          project = Project.find(session[:selected_project]) if (project.nil? && (!session[:selected_project].nil?))
+          render_menu((project && !project.new_record?) ? :project_menu : :application_menu, project)
+      	rescue ActiveRecord::RecordNotFound => e 
+      	  logger.info(e.message)
+      	  return nil
+      	end
       end
 
       def display_main_menu?(project)
@@ -448,16 +448,17 @@ module Redmine
     	      	return "#{d}"
     	      end
   	      end
-          "#{c} #{d} #{e}"
+          return "#{c} #{d} #{e}"
         elsif @caption.is_a?(Proc)
-          c = @caption.call(project).to_s
+          response = @caption.call(project)
+          c = response.is_a?(Symbol) ? l(response) : response.to_s
           c = @name.to_s.humanize if c.blank?
-          c
+          return c
         else
           if @caption.nil?
-            l_or_humanize(name, :prefix => 'label_')
+            return l_or_humanize(name, :prefix => 'label_')
           else
-            @caption.is_a?(Symbol) ? l(@caption) : @caption
+            return @caption.is_a?(Symbol) ? l(@caption) : @caption
           end
         end
       end
