@@ -25,7 +25,8 @@ module RedmineSocialExtends
           end
           call_hook(:controller_account_success_authentication_after, {:user => user })
           if !(Project.find(:first, :conditions => "name = 'eScience'").nil?)
-            session[:selected_project] = Project.find(:first, :conditions => "name = 'eScience'")
+#            session[:selected_project] = Project.find(:first, :conditions => "name = 'eScience'")
+            session[:selected_project] = User.current.private_project
             redirect_back_or_default :controller => 'my', :action => 'page'
           else
             redirect_back_or_default :controller => 'my', :action => 'page'

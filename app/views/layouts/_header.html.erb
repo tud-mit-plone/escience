@@ -1,5 +1,6 @@
   <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})
-     project = @project.nil? ? 'eScience' : @project 
+#     project = @project.nil? ? 'eScience' : @project 
+     project = @project
      user_messages = UserMessage.where("receiver_id = ? AND state = 1", User.current.id).count
      message_persons = []
      UserMessage.find(:all,:conditions => {:receiver_id => User.current.id, :state => 1}).each do |msg|
@@ -83,7 +84,7 @@
   function setParam(param) {
     if (param=="0") url = "/my/page";
     if (param=="1") url = "/user_messages";
-    if (param=="2") url = "/projects/escience";
+    if (param=="2") url = "/projects/kein";
     self.location.href = url+"?navigation_group="+param;
   }'%>
   

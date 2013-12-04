@@ -225,7 +225,7 @@ class AccountController < ApplicationController
     end
     call_hook(:controller_account_success_authentication_after, {:user => user })
     if !(Project.find(:first, :conditions => "name = 'eScience'").nil?)
-      session[:selected_project] = Project.find(:first, :conditions => "name = 'eScience'")
+#      session[:selected_project] = Project.find(:first, :conditions => "name = 'eScience'")
   		redirect_back_or_default :controller => 'my', :action => 'page'
 #	    redirect_to :controller => 'projects', :action => 'show', :id => "escience"
   	else

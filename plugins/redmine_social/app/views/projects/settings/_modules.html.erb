@@ -7,7 +7,7 @@
 <div class="box">
   <fieldset>
     <legend><%= l(:text_select_project_modules) %></legend>
-<%if @project.is_private_project == false %>    
+<%if @project.is_private_project == false || @project.is_private_project.nil? %>    
       <% Redmine::AccessControl.available_project_modules.each do |m| %>
       <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
        <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
