@@ -37,7 +37,7 @@
         <dl style="margin-top:2px">
         <% @events_by_day[day].sort {|x,y| y.event_datetime <=> x.event_datetime }.each do |e| -%>
           <dt class="<%= e.event_type %>  <%= User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author ? 'me' : nil %>">
-          <div style="position:absolute; background-color: #fff"><%= avatar(e.event_author, :size => "18", :class => "small rounded_image") if e.respond_to?(:event_author) %></div>
+          <div style="position:absolute; background-color: #fff"><%= avatar(e.event_author, :size => "18", :class => "small rounded_image") if !e.event_author.nil? && e.respond_to?(:event_author) %></div>
 
           <span class="time" style="padding-left:25px"><%= format_time(e.event_datetime, false) %></span>
           <%= content_tag('span', h(e.project), :class => 'project') if @project.nil? || @project != e.project %>
