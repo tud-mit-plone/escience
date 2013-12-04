@@ -2,65 +2,69 @@
 <% projects = Project.active.find(:all, :order => 'lft') %>
 
 <div class="membership">
-<% if @user.memberships.any? %>
-<table class="list memberships">
-  <thead><tr>
-    <th><%= l(:label_project) %></th>
-    <th><%= l(:label_role_plural) %></th>
-    <th style="width:15%"></th>
-      <%= call_hook(:view_users_memberships_table_header, :user => @user )%>
-  </tr></thead>
-  <tbody>
-  <% @user.memberships.each do |membership| %>
-  <% next if membership.new_record? %>
-  <tr id="member-<%= membership.id %>" class="<%= cycle 'odd', 'even' %> class">
-  <td class="project">
-    <%= link_to_project membership.project %>
-  </td>
-  <td class="roles">
-    <span id="member-<%= membership.id %>-roles"><%=h membership.roles.sort.collect(&:to_s).join(', ') %></span>
-    <%= form_for(:membership, :remote => true,
-                 :url => user_membership_path(@user, membership), :method => :put,
-                 :html => {:id => "member-#{membership.id}-roles-form",
-                           :style => 'display:none;'}) do %>
-        <p><% roles.each do |role| %>
-        <label><%= check_box_tag 'membership[role_ids][]', role.id, membership.roles.include?(role),
-                                                           :disabled => membership.member_roles.detect {|mr| mr.role_id == role.id && !mr.inherited_from.nil?} %> <%=h role %></label><br />
-        <% end %></p>
-        <%= hidden_field_tag 'membership[role_ids][]', '' %>
-        <p><%= submit_tag l(:button_change) %>
-        <%= link_to_function l(:button_cancel),
-                             "$('member-#{membership.id}-roles').show(); $('member-#{membership.id}-roles-form').hide(); return false;"
-            %></p>
-    <% end %>
-  </td>
-  <td width="60" align="right">
-      <%= link_to_function l(:button_edit),
-                           "$('member-#{membership.id}-roles').hide(); $('member-#{membership.id}-roles-form').show(); return false;"
-          %>
-      <%= delete_link user_membership_path(@user, membership), :remote => true if membership.deletable? %>
-  </td>
+  <% if @user.memberships.any? %>
+  <table class="list memberships">
+    <thead>
+      <tr>
+        <th><%= l(:label_project) %></th>
+        <th><%= l(:label_role_plural) %></th>
+        <th style="width:15%"></th>
+        <%= call_hook(:view_users_memberships_table_header, :user => @user )%>
+      </tr>
+    </thead>
+    <tbody>
+    <% @user.memberships.each do |membership| %>
+    <% next if membership.new_record? %>
+    <tr id="member-<%= membership.id %>" class="<%= cycle 'odd', 'even' %> class">
+      <td class="project"><%= link_to_project membership.project %></td>
+      <td class="roles">
+        <span id="member-<%= membership.id %>-roles"><%=h membership.roles.sort.collect(&:to_s).join(', ') %></span>
+        <div class="edit_role" id="member-<%= membership.id %>-roles-div">
+        <%= form_for(:membership, :remote => true, :url => user_membership_path(@user, membership), :method => :put,
+                     :html => {:id => "member-#{membership.id}-roles-form"}) do %>
+          <% roles.each do |role| %>
+            <%#= check_box_tag 'membership[role_ids][]', role.id, membership.roles.include?(role), :disabled => membership.member_roles.detect {|mr| mr.role_id == role.id && !mr.inherited_from.nil?} %>
+            <%= check_box_tag 'membership[role_ids][]', role.id, membership.roles.include?(role) %>
+            <label><%=h role %></label>
+            <div class="clearfix"></div>
+          <% end %>
+          <%= hidden_field_tag 'membership[role_ids][]', '' %>
+          <%= hidden_field_tag 'hidden_submit', '' %>
+          <div class="btn-group" style="float:right; margin-top:10px;">
+            <%= link_to l(:button_change), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#member-#{membership.id}-roles-form').submit(); return false;" %>
+            <%= link_to_function l(:button_cancel), "$('#member-#{membership.id}-roles').show(); $('#member-#{membership.id}-roles-div').hide(); return false;", :class => 'btn' %>
+          </div>
+        <% end %>
+        </div>
+      </td>
+      <td width="60" align="right">
+          <%= link_to_function '<i class="icon icon-pencil"></i>'.html_safe, "$('#member-#{membership.id}-roles').hide(); $('#member-#{membership.id}-roles-div').show(); return false;", :style => 'color:#4d4d4d' %>
+          <%= delete_link user_membership_path(@user, membership), :no_text => true , :remote => true if membership.deletable? %>
+      </td>
       <%= call_hook(:view_users_memberships_table_row, :user => @user, :membership => membership, :roles => roles, :projects => projects )%>
-  </tr>
-  <% end; reset_cycle %>
-  </tbody>
-</table>
-<% else %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% end %>
+    </tr>
+    <% end; reset_cycle %>
+    </tbody>
+  </table>
+  <% else %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% end %>
 </div>
 
-<div class="membership">
 <% if projects.any? %>
-<fieldset><legend><%=l(:label_project_new)%></legend>
-<%= form_for(:membership, :remote => true, :url => user_memberships_path(@user)) do %>
-<%= select_tag 'membership[project_id]', options_for_membership_project_select(@user, projects) %>
-<p><%= l(:label_role_plural) %>:
-<% roles.each do |role| %>
-  <label><%= check_box_tag 'membership[role_ids][]', role.id %> <%=h role %></label>
-<% end %></p>
-<p><%= submit_tag l(:button_add) %></p>
+  <div class="membership">
+    <fieldset>
+      <legend><%=l(:label_project_new)%></legend>
+      <%= form_for(:membership, :remote => true, :url => user_memberships_path(@user)) do %>
+        <%= select_tag 'membership[project_id]', options_for_membership_project_select(@user, projects) %>
+        <p>
+          <%= l(:label_role_plural) %>:
+          <% roles.each do |role| %>
+            <label><%= check_box_tag 'membership[role_ids][]', role.id %> <%=h role %></label>
+          <% end %>
+        </p>
+        <%= submit_tag l(:button_add) %>
+      <% end %>
+    </fieldset>
+  </div>
 <% end %>
-</fieldset>
-<% end %>
-</div>

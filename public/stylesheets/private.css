@@ -316,7 +316,7 @@ textarea {
 }
 
 select#membership_project_id {
-	max-width: 550px;
+	max-width: 520px;
 }
 
 	#new_project label {
@@ -434,6 +434,20 @@ select#membership_project_id {
 	.controller-friendships .user_information_main label {
 	 width: 55px;
 	 display: inline-block;
+  }
+  
+  .roles .edit_role {
+    display: none;
+    position: absolute;
+    border: solid 1px #ADADAD;
+    background: #fff;
+    padding: 5px 10px;
+    margin-left: -35px;
+  }
+  
+  .roles .edit_role label {
+    line-height: 18.5px !important;
+    width: auto !important;
   }
   
   .controller-friendships ul {

@@ -4,7 +4,7 @@
 
 <div class="splitcontentleft">
   <% if members.any? %>
-  <table class="list members" cellspacing="0" style="margin:15px 0 0 20px">
+  <table class="list members" cellspacing="0" width="100%" style="margin:15px 0 0 20px">
     <thead>
       <tr>
         <th><%= l(:label_user) %> / <%= l(:label_group) %></th>
@@ -27,32 +27,26 @@
             <div style="border: 1px solid #f2f2f2">
               <div style="float:left;">
                 <% roles.each do |role| %>
-                  <label><%= check_box_tag 'membership[role_ids][]', role.id, member.roles.include?(role),
-                                                             :disabled => member.member_roles.detect {|mr| mr.role_id == role.id && !mr.inherited_from.nil?} %> <%=h role %>
-                  </label><br />
+                  <%= check_box_tag 'membership[role_ids][]', role.id, member.roles.include?(role), :disabled => member.member_roles.detect {|mr| mr.role_id == role.id && !mr.inherited_from.nil?} %> 
+                  <label><%=h role %></label>
+                  <div class="clearfix"></div>
                 <% end %>
               </div>
               <%= hidden_field_tag 'membership[role_ids][]', '' %>
               <div style="float:left;">
                 <%= hidden_field_tag 'hidden_change', '' %>
                 <div class="btn-group" style="padding: 3px 3px 0 0">
-                  <%= link_to '<i class="icon-ok"></i>'.html_safe, "#top", :class => 'btn', :onclick =>"$('#hidden_change').attr('name','commit');$('form.hol').submit();", :style => "padding:2px; width:15px" %>
-                  <%#= submit_tag l(:button_change), :class => "small" %>
-                  <%= link_to_function '<i class="icon-remove"></i>'.html_safe,
-                                     "$('#member-#{member.id}-roles').show(); $('#member-#{member.id}-roles-form').hide(); $('#member-#{member.id}').removeClass('edit'); $(this).closest('tr').find('.icon-pencil').attr('style',''); return false;", :class => 'btn', :style => "padding:2px; width:15px;" %>
+                  <%= link_to '<i class="icon-ok"></i>'.html_safe, "#top", :class => 'btn', :onclick =>"$('#hidden_change').attr('name','commit');$('form.hol').submit();", :style => "padding:2px; width:15px;" %>
+                  <%= link_to_function '<i class="icon-remove"></i>'.html_safe, "$('#member-#{member.id}-roles').show(); $('#member-#{member.id}-roles-form').hide(); $('#member-#{member.id}').removeClass('edit'); $(this).closest('tr').find('.icon-pencil').attr('style',''); return false;", :class => 'btn', :style => "padding:2px; width:15px;" %>
                 </div>
               </div>
               <div class="clear"></div>
             </div>
           <% end %>
         </td>
-        <td style="padding-left:10px;" valign="top">
-            <%= link_to_function '',
-                                 "$('#member-#{member.id}-roles').hide(); $('#member-#{member.id}-roles-form').show(); $('#member-#{member.id}').addClass('edit');$(this).css('color', '#bbb'); return false;", :class => "icon-pencil" %>
-            <%= delete_link membership_path(member),
-                            :remote => true,
-                            :no_text => true,
-                            :data => (!User.current.admin? && member.include?(User.current) ? {:confirm => l(:text_own_membership_delete_confirmation)} : {}) if member.deletable? %>
+        <td style="padding-left:10px; width:40px" valign="top">
+          <%= link_to_function '<i class="icon-pencil"></i>'.html_safe, "$('#member-#{member.id}-roles').hide(); $('#member-#{member.id}-roles-form').show(); $('#member-#{member.id}').addClass('edit');$(this).css('color', '#bbb'); return false;", :style => 'float:left; margin-right: 3px' %>
+          <%= delete_link membership_path(member), :remote => true, :no_text => true, :data => (!User.current.admin? && member.include?(User.current) ? {:confirm => l(:text_own_membership_delete_confirmation)} : {}) if member.deletable? %>
         </td>
         <%= call_hook(:view_projects_settings_members_table_row, { :project => @project, :member => member}) %>
       </tr>

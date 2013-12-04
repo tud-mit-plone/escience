@@ -871,6 +871,7 @@ de:
   label_updated_time: "Vor %{value} aktualisiert"
   label_jump_to_a_project: Projekt wählen
   label_file_plural: Dateien
+  label_my_file_plural: Meine Dateien
   label_changeset_plural: Changesets
   label_default_columns: Standard-Spalten
   label_no_change_option: (Keine Änderung)

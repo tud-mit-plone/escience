@@ -26,6 +26,7 @@ class UsersController < ApplicationController
   helper :sort
   include SortHelper
   helper :custom_fields
+  include ActionView::Helpers::JavaScriptHelper
   include CustomFieldsHelper
 
   def index
@@ -166,7 +167,6 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(:language => Setting.default_language, :mail_notification => Setting.default_notification_option)
-    p params[:user]
     params[:user][:login] = params[:user][:mail]
     @user.safe_attributes = params[:user]
     @user.admin = params[:user][:admin] || false
@@ -265,16 +265,15 @@ class UsersController < ApplicationController
   end
 
   def edit_membership
+    @auth_sources = AuthSource.find(:all)
     @membership = Member.edit_membership(params[:membership_id], params[:membership], @user)
     @membership.save
     respond_to do |format|
       if @membership.valid?
         format.html { redirect_to :controller => 'users', :action => 'edit', :id => @user, :tab => 'memberships' }
         format.js {
-          render(:update) {|page|
-            page.replace_html "tab-content-memberships", :partial => 'users/memberships'
-            page.visual_effect(:highlight, "member-#{@membership.id}")
-          }
+          content_for_update = render_to_string :partial => "users/memberships"
+          render js: "$('#tab-content-memberships').html('#{escape_javascript(content_for_update)}');"
         }
       else
         format.js {
@@ -293,7 +292,10 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to :controller => 'users', :action => 'edit', :id => @user, :tab => 'memberships' }
-      format.js { render(:update) {|page| page.replace_html "tab-content-memberships", :partial => 'users/memberships'} }
+      format.js {
+        content_for_update = render_to_string :partial => "users/memberships"
+        render js: "$('#tab-content-memberships').html('#{escape_javascript(content_for_update)}');"
+      }
     end
   end
 
