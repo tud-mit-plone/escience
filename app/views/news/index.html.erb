@@ -30,7 +30,7 @@
 <% end %>
   <div class="clear"></div>
   <% if @newss.empty? %>
-  <p class="nodata"><%= l(:label_no_data) %></p>
+    <div class="wiki description"><p class="nodata"><%= l(:label_no_data) %></p></div>
   <% else %>
   <% @newss.each do |news| %>
       <%= link_to(news, :class => "link_to_news") do %>

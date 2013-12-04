@@ -22,9 +22,7 @@
   <li><%= watcher_tag(@news, User.current) %></li>
 <%end%>
 
-<!-- div style="background-image: url('http://141.57.9.94:3000/images/notice.jpg'); background-repeat: no-repeat; padding: 25px 10px; border-left: solid 2px #F0F0F0; border-right: solid 2px #F0F0F0; border-bottom: solid 2px #F0F0F0;" -->
 <div class="news_wrapper">
-
 <% if authorize_for('news', 'edit') %>
 <div id="edit-news" style="display:none;">
   <%= labelled_form_for :news, @news, :url => news_path(@news),
@@ -52,48 +50,43 @@
     <legend><h3><%= truncate(h(@news.title), length:50) %></h3></legend>
     <%= avatar(@news.author, :size => "24") %>
     <span class="author"><%= User.current.logged? ? strip_tags(authoring @news.created_on, @news.author) : authoring(@news.created_on, @news.author) %></span>
-    
-    <p><% unless @news.summary.blank? %><em><%=h @news.summary %></em><br /><% end %></p>
+    <% unless @news.summary.blank? %><p><em><%=h @news.summary %></em><br /></p><% end %>
     <div class="wiki"><%= textilizable(@news, :description).html_safe %></div>
     <%= link_to_attachments @news %>
   </fieldset>
   <% if (@comments.any? || @news.commentable?) %>
   <div id="comments" style="margin-bottom:16px;">
-  <h3 class="comments"><%= l(:label_comment_plural) if @comments.any? %></h3>
-  <% @comments.each do |comment| %>
+    <h3 class="comments"><%= l(:label_comment_plural) if @comments.any? %></h3>
+    <% @comments.each do |comment| %>
       <% next if comment.new_record? %>
       <div class="wiki description comment">
         <div class="contextual">
         <%= link_to_if_authorized "<i class=\"icon icon-trash btn btn-xs\"></i>".html_safe, {
               :controller => 'comments', :action => 'destroy', 
-              :id => @news, :comment_id => comment
-            }, :data => {:confirm => l(:text_are_you_sure)}, 
-               :method => :delete, :title => l(:button_delete) 
+              :id => @news, :comment_id => comment.id
+            },:method => :delete, :data => {:confirm => l(:text_are_you_sure)}, :title => l(:button_delete) 
         %>
         </div>
-        <div class="author"><%= avatar(comment.author, :size => "24") %><%= authoring comment.created_on, comment.author %></div>
+        <div class="author"><%= avatar(comment.author, :size => "18", :class => "small rounded_image") %><%= authoring comment.created_on, comment.author %></div>
         <hr style="float:left;">
         <%= textilizable(comment.comments) %>
       </div>
-  <% end %>
+    <% end %>
   </div>
-  
+
   <% if @news.commentable? %>
-  <%= link_to_function l(:label_comment_add), '$("#add_comment_form").toggle();$(this).toggle();', :class => "btn add_comment_btn", :style => "float:left; margin-bottom: 15px;", :focus => "comment_comments" %>
-  <div style="clear:both"></div>
-  <%= form_tag({:controller => 'comments', :action => 'create', :id => @news}, :id => "add_comment_form", :style => "display:none;") do %>
-    <div class="box">
-        <%= text_area 'comment', 'comments', :cols => 80, :rows => 5, :class => 'wiki-edit' %>
-        <%#= wikitoolbar_for 'comment_comments' %>
-    </div>
-    <%= hidden_field_tag 'hidden_submit', '' %>
-    <div class="btn-group" style="float:right; margin-top: 10px;">
-      <%= link_to_function l(:button_cancel), '$("#add_comment_form").toggle();$(".add_comment_btn").toggle();', :class => 'btn' %>
-      <%= link_to l(:button_add), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#add_comment_form').submit();" %>
-    </div>
-  <% end %>
-  <% end %>
-  <% end %>
+    <%= link_to_function l(:label_comment_add), '$("#add_comment_form").toggle();$(this).toggle();', :class => "btn add_comment_btn", :style => "float:left; margin-bottom: 15px;", :focus => "comment_comments" %>
+    <div style="clear:both"></div>
+    <%= form_tag({:controller => 'comments', :action => 'create', :id => @news}, :id => "add_comment_form", :style => "display:none;") do %>
+      <div class="box"><%= text_area 'comment', 'comments', :cols => 80, :rows => 5, :class => 'wiki-edit' %></div>
+      <%= hidden_field_tag 'hidden_submit', '' %>
+      <div class="btn-group" style="float:right; margin-top: 10px;">
+        <%= link_to_function l(:button_cancel), '$("#add_comment_form").toggle();$(".add_comment_btn").toggle();', :class => 'btn' %>
+        <%= link_to l(:button_add), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#add_comment_form').submit();" %>
+      </div>
+    <% end  # form %>
+  <% end  # if @news.commentable? %>
+  <% end  # @comments.any? || @news.commentable? %>
   <div class="clear"></div>
   </div>
 </div>
