@@ -5,8 +5,12 @@
 <% Board.board_tree(@boards) do |board, level| %>
   <h3><%= link_to h(board.name), {:action => 'show', :id => board}, :class => "board"  %></h3>
   <div class="wiki description" style="font-size:11px"><%= textilizable board, :description %></div>
-    <div class="topic-count"><%= board.topics_count %></div>
-    <div class="message-count"><%= board.messages_count %></div>
+    <% if board.topics_count > 0 %>
+      <div class="topic-count"><%= board.topics_count %> <%= l(:label_topic_plural) %></div>
+    <% end 
+       if board.messages_count > 0 %>
+      <div class="message-count"><%= board.messages_count %> <%= l(:label_message_plural) %></div>
+    <% end %>
     <div class="last-message">
       <% if board.last_message %>
       <%= authoring board.last_message.created_on, board.last_message.author %><br />

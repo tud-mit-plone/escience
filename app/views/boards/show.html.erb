@@ -3,6 +3,7 @@
 <%#= breadcrumb link_to(l(:label_board_plural), project_boards_path(@project)) %>
 <% content_for :sidebar_right do %>
   <ul>
+  <li><%= link_to_function l(:button_back), "history.back()", :class => 'icon icon-chevron-left' %></li>
   <% if authorize_for('messages', 'new') %>
     <li>
   	<%= link_to_if_authorized l(:label_message_new),
@@ -17,41 +18,46 @@
 <% end %>
 
 <div id="add-message" style="display:none;">
-<% if authorize_for('messages', 'new') %>
-<h2><%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %> <i class="icon-group"></i></h2>
-<%= form_for @message, :url => {:controller => 'messages', :action => 'new', :board_id => @board}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
-  <%= render :partial => 'messages/form', :locals => {:f => f} %>
-  <p><%= submit_tag l(:button_create) %>
-  <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form') %> |
-  <%= link_to l(:button_cancel), "#", :onclick => '$("#add-message").hide(); return false;' %></p>
-<% end %>
-<div id="preview" class="wiki"></div>
-<% end %>
+  <% if authorize_for('messages', 'new') %>
+    <h2>
+      <%= link_to h(@board.name), :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %> <i class="icon-group"></i>
+    </h2>
+    <%= form_for @message, :url => {:controller => 'messages', :action => 'new', :board_id => @board}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
+      <fieldset>
+        <legend><%= l(:label_create) %></legend>
+        <%= render :partial => 'messages/form', :locals => {:f => f} %>
+      </fieldset>
+      <p><%= submit_tag l(:button_create) %>
+      <%= preview_link({:controller => 'messages', :action => 'preview', :board_id => @board}, 'message-form') %> |
+      <%= link_to l(:button_cancel), "#", :onclick => '$("#add-message").hide(); return false;' %></p>
+    <% end %>
+    <div id="preview" class="wiki"></div>
+  <% end %>
 </div>
 
 <h2><%=h @board.name %> <i class="icon-group"></i></h2>
 <div class="wiki description"><%= textilizable @board, :description %></div>
 
 <% if @topics.any? %>
-<div class="list messages" style="width:95%; float:right;">
-  <% @topics.each do |topic| %>
-      <h3 class="subject" style="display:inline"><%= link_to h(topic.subject), { :controller => 'messages', :action => 'show', :board_id => @board, :id => topic } %></h3> (<%= authoring topic.created_on, topic.author %>)
-      <div class="wiki description" style="margin-top:8px;">
-        <div style="margin:-8px 0 5px 0"><i><%= truncate(textilizable(topic,:content), length:200).html_safe %></i></div>
-        <div class="replies">
-          <%= topic.replies_count %> <%= l(:label_reply_plural) %><% if topic.last_reply %>:<% end %>
+  <div class="list messages" style="width:95%; float:right;">
+    <% @topics.each do |topic| %>
+        <h3 class="subject" style="display:inline"><%= link_to h(topic.subject), { :controller => 'messages', :action => 'show', :board_id => @board, :id => topic } %></h3> (<%= authoring topic.created_on, topic.author %>)
+        <div class="wiki description" style="margin-top:8px;">
+          <div style="margin:-8px 0 5px 0"><i><%= truncate(textilizable(topic,:content), length:200).html_safe %></i></div>
+          <div class="replies">
+            <%= topic.replies_count %> <%= l(:label_reply_plural) %><% if topic.last_reply %>:<% end %>
+          </div>
+          <div class="last_message">
+            <% if topic.last_reply %>
+            <%= l(:label_message_last) %>:
+            <%= authoring topic.last_reply.created_on, topic.last_reply.author %><br />
+            <%= link_to_message topic.last_reply %>
+            <% end %>
+          </div>
         </div>
-        <div class="last_message">
-          <% if topic.last_reply %>
-          <%= l(:label_message_last) %>:
-          <%= authoring topic.last_reply.created_on, topic.last_reply.author %><br />
-          <%= link_to_message topic.last_reply %>
-          <% end %>
-        </div>
-      </div>
-  <% end %>
-</div>
-<div class="clear"></div>
+    <% end %>
+  </div>
+  <div class="clear"></div>
 <!--
 <table class="list messages">
   <thead><tr>
@@ -79,9 +85,9 @@
   </tbody>
 </table>
 -->
-<p class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></p>
+  <p class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></p>
 <% else %>
-<p class="nodata"><%= l(:label_no_data) %></p>
+  <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
 <% other_formats_links do |f| %>

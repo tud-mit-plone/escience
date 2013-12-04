@@ -62,6 +62,7 @@ class BoardsController < ApplicationController
 
   def new
     @board = @project.boards.build
+    params[:board][:description] = convertHtmlToWiki(params[:board][:description])
     @board.safe_attributes = params[:board]
   end
 
