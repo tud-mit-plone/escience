@@ -11,3 +11,9 @@
                    }, :accesskey => accesskey(:preview) %>
 <% end if @project %>
 <div id="preview" class="doodle"></div>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'calendar' %>
+    <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
+    <%= stylesheet_link_tag 'ckeditor/editor' %>
+<% end %>

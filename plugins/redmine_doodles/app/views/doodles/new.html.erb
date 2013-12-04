@@ -11,7 +11,7 @@
   <%= render :partial => 'form', :locals => { :f => f } %>
   <div class="btn-group" style="float:right;">
     <%= link_to l(:button_cancel), {:controller => 'documents', :action => 'index', :id => @document}, :class => 'btn' %>
-    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_document').submit();" %>
+    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#doodle-form').submit();" %>
     <%= link_to l(:label_preview), 
                        { :url => { :controller => 'doodles', :action => 'preview', :project_id => @project },
                          :remote => true,
