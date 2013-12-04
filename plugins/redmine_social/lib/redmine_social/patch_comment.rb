@@ -10,9 +10,12 @@ module RedmineSocialExtends
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval do
-          before_filter :find_model_object, :only => [:create, :destroy]
-          before_filter :find_project_from_association, :only => [:create]
-          #before_filter :authorize, :only => [:create, :destroy] # TODO: for all functions please ... but not for now
+          before_filter :find_model_object
+          before_filter :find_project_from_association
+          before_filter :authorize
+#          before_filter :find_model_object, :only => [:create, :destroy]
+#          before_filter :find_project_from_association, :only => [:create, :destroy]
+#          before_filter :authorize, :only => [:create, :destroy] # TODO: for all functions please ... but not for now
 
           def create_general_comment
             model = nil
