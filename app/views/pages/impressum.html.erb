@@ -1,6 +1,6 @@
 <% content_for :sidebar_right do %>
   <%= render :partial => 'welcome/sidebar' %>
-<% end %>
+<% end unless User.current.logged? %>
 <article class="article">
 <H1>Impressum</H1>
 <P LANG="de-DE" CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
