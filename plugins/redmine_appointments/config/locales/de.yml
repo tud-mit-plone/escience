@@ -11,5 +11,6 @@ de:
   label_community_issue_plural: Gemeinschaftsaufgaben
   label_watched_issue_plural: Beobachtete Aufgaben
   label_headline_sidebar: Kalenderarten
+  label_added_by: Angelegt von
   notice_appointment_successful_create: Termin gespeichert
   notice_appointment_fail_create: Es scheinen Fehler in Ihrem Termin zu sein.

@@ -53,10 +53,18 @@ module AppointmentsHelper
     ed = a.due_date
 #    out = '<div style="float:left;margin-right:20px;">'.html_safe+link_to_appointment(a, {:subject => false, :link_text => a.subject})+"</div>".html_safe
     out = "<div style=\"float:left;margin-right:20px;\"><h2>#{truncate(a.subject, :length => 60)}</h2></div>".html_safe
-    out << '<div style="float:right;">'.html_safe+link_to(image_tag('edit.png'),{:controller => 'appointments', :action => 'edit', :id => a.id}).html_safe+'</div>'.html_safe
-    out << '<div style="float:right;">'.html_safe+link_to(image_tag('delete.png'), {:controller => 'appointments', :action => 'destroy', :id => a.id, :view => 'calendar'}, :remote => true, :method => :delete, :confirm => l(:text_are_you_sure)).html_safe+'</div>'.html_safe
+    out << '<div style="float:right;">'.html_safe+link_to("<i class='icon icon-pencil' style='color:#7D7D7D'></i>".html_safe,{:controller => 'appointments', :action => 'edit', :id => a.id}).html_safe+'</div>'.html_safe
+    out << '<div style="float:right;">'.html_safe+link_to("<i class='icon icon-trash' style='color:#7D7D7D'></i>".html_safe, {:controller => 'appointments', :action => 'destroy', :id => a.id, :view => 'calendar'}, :remote => true, :method => :delete, :confirm => l(:text_are_you_sure)).html_safe+'</div>'.html_safe
     out << '<div class="clear"></div>'.html_safe
     out << textilizable(truncate(a.description, :length => 400)).html_safe unless h(a.description) == ''
+    out << render_appointment_cycle(a) 
+    out.html_safe
+  end
+  
+  def render_appointment_cycle(a) 
+    sd = a.start_date
+    ed = a.due_date
+    out = ""
     if a.cycle > 0
       out << '<table cellspacing="0" cellpadding="0"><tr>'.html_safe
           out << '<td style="padding:3px 4px;border: 1px solid #DADADA !important;border-right:2px solid #606060 !important">'.html_safe
@@ -99,6 +107,6 @@ module AppointmentsHelper
           out << '</tr></table>'.html_safe
       end
     end
-    out.html_safe
+    return out.html_safe
   end
 end

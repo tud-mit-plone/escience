@@ -1,9 +1,12 @@
-  <%= form_for(@appointment,:url=>{:action=>'create'}, :html => {:id => 'issue-form', :multipart => true}) do |f| %>
+  <%= form_for(@appointment,:url=>{:action=>'create'}, :html => {:id => 'appointment-form', :multipart => true}) do |f| %>
 
-  <h2 style="float:left; position:absolute"><%= l(:label_appointments) %></h2>
-  <%= link_to l(:button_cancel), {:controller => 'appointments', :action => 'index'}, :class => 'button', :style => '60px' %>
-  <%= submit_tag l(:button_create), :name => 'continue' %>
-  <%= submit_tag l(:button_create_and_continue) %>
+  <h2 style="float:left; position:absolute"><%= l(:label_appointments) %> <i class="icon icon-calendar calendar"></i></h2>
+  <div class="btn-group" style="float:right;">
+    <%= link_to_function l(:button_cancel), "history.back()", :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#appointment-form').submit();" %>
+    <%= link_to l(:button_create_and_continue), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#appointment-form').submit();" %>
+  </div>
+  <%= hidden_field_tag 'hidden_submit', '' %>
   <div class="clear"></div>
   <div class="box" style="padding-top: 10px;">
     <fieldset class="tabular"><legend><%= l(:label_appointment_new) %></legend>
@@ -31,16 +34,12 @@
       <% end %>
     </fieldset>
   </div>
-  
-  <div class="btn-group" style="float:right">
-    <%= link_to l(:button_cancel), {:controller => 'appointments', :action => 'index'}, :class => 'btn' %>
-    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
-    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
-    <%#= submit_tag l(:button_create) %>
-    <%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
-    <%= javascript_tag "$('#appointment_subject').focus();" %>
+  <div class="btn-group" style="float:right;">
+    <%= link_to l(:button_cancel), @referer, :class => 'btn' %>
+    <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#appointment-form').submit();" %>
+    <%= link_to l(:button_create_and_continue), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#appointment-form').submit();" %>
   </div>
-  <%= hidden_field_tag 'hidden_submit', '' %>
+  <%= javascript_tag "$('#appointment_subject').focus();" %>
 <% end %>
 
 

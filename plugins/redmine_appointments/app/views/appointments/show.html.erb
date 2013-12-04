@@ -1,3 +1,19 @@
-<h2><%= l(:label_appointments) %></h2>
+<% content_for :sidebar_right do %>
+  <ul>
+    <li><%= link_to l(:button_back), :back, :class => 'icon icon-chevron-left' %></li>
+    <li><%= link_to l(:label_appointment_new), {:action => 'new'}, :class => 'icon icon-plus-sign' %></li>
+    <li><%= link_to l(:label_appointment_edit), {:action => 'edit', :id => @appointment.id}, :class => 'icon icon-pencil' %></li>
+  </ul>
+<% end %>
 
-  <%= @appointment.subject %>
+<h2 style="float:left;"><%= @appointment.subject %> <i class="icon icon-calendar calendar"></i></h2>
+<div style="float:right;"><%= "#{l(:label_added_by)} #{@appointment.author}" if @appointment.author!=User.current.name %></div>
+<div class="clear"></div>
+
+<div class="wiki description">
+  <p>
+    <%= textilizable @appointment, :description %>
+    <%= render_appointment_cycle(@appointment) %>
+  </p>
+</div>
+  
