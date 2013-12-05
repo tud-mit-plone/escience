@@ -493,6 +493,7 @@ de:
   label_imprint: Impressum
   label_termsconditions: Nutzungsbedingungen
   label_organisation: Übersicht
+  label_my_organisation: Übersicht
   label_hello: Hallo
   label_delete_file: Datei löschen
   label_download_file: Datei herunterladen
@@ -502,8 +503,8 @@ de:
   label_new_usermessage: Nachricht schreiben
   label_usermessage_announce: neue Nachricht
   label_usermessage_announce_plural: neue Nachrichten
-  label_mymessage: Meine Aufgaben
-  label_mymessage_plural: Aufgaben
+  label_my_issues_plural: Meine Aufgaben
+  label_issues_plural: Aufgaben
   label_projectspec: Projektspezifisch
   label_projectnew: Neues Projekt
   label_knowledge: Wissensräume
@@ -520,7 +521,7 @@ de:
   label_project_edit: Einstellungen
   label_project_plural: Projekte
   label_projects_list: Liste der Projekte
-  label_myproject_plural: Meine Projekte
+  label_my_project_plural: Meine Projekte
   label_x_projects:
     zero:  keine Projekte
     one:   1 Projekt
@@ -539,6 +540,7 @@ de:
   label_document: Dokument
   label_document_new: Neues Dokument
   label_document_plural: Dokumente
+  label_my_document_plural: Meine Dokumente
   label_document_added: Dokument hinzugefügt
   label_document_edit: Dokument bearbeiten 
   label_document_delete: Dokument löschen
@@ -789,6 +791,7 @@ de:
   label_result_plural: Resultate
   label_all_words: Alle Wörter
   label_wiki: Wiki
+  label_my_wiki: Mein Wiki
   label_wiki_edit: Wiki-Bearbeitung
   label_wiki_edit_plural: Wiki-Bearbeitungen
   label_wiki_page: Wiki-Seite

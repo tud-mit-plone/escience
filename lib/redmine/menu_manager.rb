@@ -424,6 +424,20 @@ module Redmine
         super @name.to_sym
       end
 
+      def setCaptionPrefix(prefix=nil)
+        if @caption.is_a?(Symbol)
+          label = @caption.to_s
+          unless (label.nil? || label.index("label_").nil? || !label.index(prefix).nil?)
+            @caption = label.insert(6,prefix + "_").to_sym
+          end
+        elsif @caption.nil?
+          label = @name.to_s
+          if label.index("label_").nil? && label.index(prefix).nil?
+            @caption = label.insert(0,'label_' + prefix + "_").to_sym
+          end
+        end
+      end
+      
       def caption(project=nil)
       	if @caption.is_a?(Hash)
       	  unless @caption[:value].nil?
