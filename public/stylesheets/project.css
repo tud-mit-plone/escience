@@ -3,9 +3,11 @@
   text-decoration: none;
 }
 
+/*
 .action-index fieldset:hover {
-//  background-color: #F4F4F4;
+  background-color: #F4F4F4; 
 }
+*/
 
 #main fieldset a h2 {
   font-size: 16px;
@@ -37,7 +39,8 @@
 }
 
 #main fieldset .list.issues .text .description {
-  padding-right: 20px;
+  width: 95%;
+  float: left;
 }
 
 #main fieldset .has_subproject {
@@ -145,6 +148,7 @@
 }
 
 #main fieldset .list.issues .innerInfo {
+  min-height: 88px;
   position: relative;
   font-size: 12px;
   font-weight: normal;
@@ -154,6 +158,10 @@
   -khtml-border-radius: 0px 0px 10px 10px;
   border-radius: 0px 0px 10px 10px;
   background: #EFEFEF;
+}
+
+#main fieldset tr.issue td, #main fieldset tr.issue .linkToIssue, #main fieldset tr.issue .child {
+  padding-bottom: 10px;
 }
 
 #main fieldset .list.issues .linkToIssue .innerInfo .text {
