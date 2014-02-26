@@ -11,6 +11,7 @@ class GroupInvitation < ActiveRecord::Base
   validates_presence_of :friendship_status_id
   validates_presence_of :group
   validate :need_two_users 
+  serialize :role_ids
 
   @@invitation_groups = [] 
 

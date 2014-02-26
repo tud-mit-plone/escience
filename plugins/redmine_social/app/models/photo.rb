@@ -101,6 +101,45 @@ class Photo < ActiveRecord::Base
     end
   end
 
+  def maincolor
+    if @maincolor.nil? 
+
+      img =  Magick::Image.read(self.photo.path).first
+      total = 0
+      avg   = { :r => 0.0, :g => 0.0, :b => 0.0 }
+      # img.quantize.color_histogram.each { |c, n|
+      #     avg[:r] += n * c.red
+      #     avg[:g] += n * c.green
+      #     avg[:b] += n * c.blue
+      #     total   += n
+      # }
+      # img.quantize(1,Magick::RGBColorspace).color_histogram.each { |c, n|
+      #     avg[:r] += n * c.red
+      #     avg[:g] += n * c.green
+      #     avg[:b] += n * c.blue
+      #     total   += n
+      # }
+      pix = img.scale(1, 1)
+      @maincolor = pix.pixel_color(0,0)
+    end
+    return pix.to_color(@maincolor)
+
+    [:r, :g, :b].each { |comp| avg[comp] = ((avg[comp] / (Magick::QuantumRange)).to_i & 255)}
+    #[:r, :g, :b].each { |comp| avg[comp] = (avg[comp].to_i & 255).to_s.to_i(16) }
+    str = '#'
+    avg.values.each do |col|
+      str += sprintf("%02X",col)
+    end
+    return str
+  end
+
+  def maincolor_rgb
+    if @maincolor.nil? 
+      self.maincolor
+    end
+    return [((@maincolor.red * 255).to_f / Magick::QuantumRange).to_i,((@maincolor.green * 255).to_f / Magick::QuantumRange).to_i,((@maincolor.blue * 255).to_f / Magick::QuantumRange).to_i]
+  end
+
   private
 
   def reprocess_photo

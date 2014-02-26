@@ -1,0 +1,10 @@
+fieldset label{
+  position: relative;
+  float: left;
+}
+
+fieldset label:nth-of-type(2n){
+  width: 210px;          /* RC width */
+  float:right;
+  clear: right;
+}

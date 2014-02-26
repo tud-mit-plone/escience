@@ -28,12 +28,6 @@ module RedmineSocialExtends
         end
       end
 
-      def generate_security_hash
-        #user_items = %W(information, email, private_project, my_interest, my_skill)
-        user_security_items = %W(user_items)
-        u2u_relations = %W(user_project_user, user_contact_user, user_community_user)
-      end
-
       def prepare_tag_params(tag_list)
         tag_list = tag_list.split(',')
         ids = []
@@ -76,6 +70,8 @@ module RedmineSocialExtends
             @user.pref[:no_self_notified] = (params[:no_self_notified] == '1')
             @user.login = params[:user][:mail]
             
+            @user.security_number = User.calc_security_number(params[:security])
+
             new_tags = prepare_tag_params(params[:my_interest])
             @user.interest_list = new_tags.uniq
             new_tags = prepare_tag_params(params[:my_skill])
@@ -83,6 +79,10 @@ module RedmineSocialExtends
 
             @user.private_project.enabled_module_names = params[:enabled_module_names]
             @user.private_project.save!
+
+            @wiki = @user.private_project.wiki || Wiki.new(:project => @user.private_project)
+            @wiki.safe_attributes = params[:wiki]
+            @wiki.save!
 
             @user.save!
             if @user.save

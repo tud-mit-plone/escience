@@ -75,5 +75,6 @@ RedmineApp::Application.routes.draw do
         post 'selection', :action => :selection
       end
   end
+  match '/qr_gen(/:p_url)',:controller => 'application', :action => 'generate_qr_code', as: :generate_qr_code, :method => :get
 end
 

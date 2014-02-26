@@ -11,7 +11,7 @@ class AlbumsController < ApplicationSocialController
   def show
     @album = Album.find(params[:id])
     #update_view_count(@album) if User.current && User.current.id != @album.user_id
-    @album_photos = @album.photos.paginate(:page => params[:page], :per_page => 1)
+    @album_photos = @album.photos.paginate(:page => params[:page], :per_page => 6)
     
     respond_to do |format|
       format.html # show.html.erb

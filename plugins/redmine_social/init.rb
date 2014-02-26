@@ -65,8 +65,13 @@ Redmine::Plugin.register :redmine_social do
     permission :album_create, {:albums => [:create,:index]}
   end
   
+  Redmine::AccessControl.map do |map|
+    map.permission :group_invitations_create, :group_invitations => [:create], :require => :member
+  end
+  
   project_module :user_calendar do 
     permission :appointments_add_watchers, :appointments => :add_watchers
+    permission :group_invitations_create, :group_invitations => :create
   end
   user_module :user_clandar do 
     permission :view_calendar, {:calendar => [:show, :update]}, :read => true

@@ -1,27 +1,49 @@
-<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+<%= stylesheet_link_tag 'font-awesome' %>
 
-<h2 style="float:left;"><%= h @album.title %> <i class="icon icon-picture"></i></h2>
-<%= link_to(l(:new_album), url_for({:controller => 'albums', :action => 'new', :project_id => params[:project_id] }), :style => 'float:right;', :class => 'btn') %>
+$(document).ready(function() {
+    externalLinks().attr({target: "_blank"});
+    addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
+    }
+
+
+<div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
+  <div class='btn' style="
+    float: right; 
+    position: relative; 
+    font-size: 20px; 
+    background-color: inherit; 
+    margin-bottom: -8px; 
+    margin-right: 3px; 
+    border: 1px solid #DDD;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;">
+      <%= link_to(l(:new_album), url_for({:controller => 'albums', :action => 'new', :project_id => params[:project_id] }), :style => '', :class => 'icon-plus-sign-alt') %>
+      <% if @album.user == User.current %>
+        <% if @album %>
+          <%= link_to('',new_user_album_photo_path(User.current,@album), :class => 'icon icon-plus-sign', :style => '') %>
+        <%end%>
+        <%= link_to('', edit_user_album_path(User.current, @album), :class => 'icon icon-edit', :style => 'padding-top: 3px;') %>
+        <%= link_to('', user_album_path(User.current, @album), :class => 'icon icon-trash', :style => '', :method => :delete) %>
+      <%end%>
+</div>
 <div class="clear"></div>
+<fieldset>
+<legend style="font-size: 20px;"><%= h @album.title %> <i class="icon icon-picture"></i></legend>
 
 <% unless @album.description.empty? %>
   <div class="wiki description"><%= h @album.description %></div>
 <% end %>
+<div id='photos'>
+  <% @album_photos.each do |photo| %>
+    <%= link_to(image_tag(photo.photo.url(:thumb), :class => "polaroid"), user_photo_path(photo.user, photo)) %>
+  <%end%>
+  <%= will_paginate @album_photos, :style => 'border: 2px solid;' %>
+</div>
 
-<h3><%= l(:photos_of_this_album) %></h3>
-  <div id='photos' class='yui'>
-    <% @album_photos.each do |photo| %>
-      <%= link_to(image_tag(photo.photo.url(:thumb), :class => "polaroid"), user_photo_path(photo.user, photo)) %>
-    <%end%>
-    <%= will_paginate @album_photos %>
-  </div>
-
-<h3><%= l(:album_comments) %></h3>
-<h4><%= l(:add_your_comment) %></h4>
-<p><%= render :partial => 'comments/comments', :locals => {:form_hash => {:action => 'create_general_comment', :controller => 'comments' ,:album_id => @album}, :comments => @album.comments} %></p>
-<a "id='newest_comment'">
-  <%#= render :partial => 'comments/comment', :collection => @album.comments %>
-</a>
-<span id='more_comments_links'>
-  <%#= more_comments_links(@album) %>
-</span>
+</fieldset>
+<fieldset>
+  <legend><%= l(:album_comments) %></legend>
+  <p><%= render :partial => 'comments/comments', :locals => {:form_hash => {:action => 'create_general_comment', :controller => 'comments' ,:album_id => @album}, :comments => @album.comments} %></p>
+</fieldset>

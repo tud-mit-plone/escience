@@ -1113,7 +1113,7 @@ en:
   #en: pros: Pros
   project_invitation_sent: Project invitation was sent.
   project_invitation_denied: It was noted that you do not wish to participate in the project.
-  project_invitation_accdepted: Welcome to the Project <br>. If you are not already in the view, you can navigate to your group projects by clicking on »Team« in the navigation at the top left.
+  project_invitation_accepted: "Welcome to the Project  '%{project}'. If you are not already in the view, you can navigate to your group projects by clicking on »Team« in the navigation at the top left."
   pros: Pros
   #en: published: Published
   published: Published
@@ -1733,3 +1733,18 @@ en:
   label_album_plural: 'Pictures'
   label_dashurl: 'Favorite Website'
   label_add_album: 'Add Album'
+  label_add_file: 'Add file'
+  label_wiki_toc: 'Toc'
+  label_my_organisation: 'My organisation'
+  label_my_project_plural: 'My projects'
+  label_my_issues_plural: 'My issues'
+  label_issues_plural: 'Issues'
+  label_my_album_plural: 'My photo albums'
+
+  button_invite: 'Send Invite'
+  no_common_project: 'No common project'
+
+  searchable_sql: 'Can I be searched?'
+  account_readable_for_user: 'Can other users see my account?'
+  no_name: 'No name given'
+  label_album_delete: 'Delete album'

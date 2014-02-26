@@ -1,27 +1,25 @@
 <%= link_to "&raquo; ".html_safe + l(:back_to_my_photos), user_photos_path(@user) %>
 
- <div class='yui'>
-      <h3><%= l(:new_photo) %></h3>
-</div>
+<fieldset>
+     <legend><%= l(:new_photo) %></legend>
+
 <%= error_messages_for @photo %>
 <%= form_for(@photo, :url => user_photos_path(:user_id => User.current.id, :album_id => params[:album_id]), 
                          :html => {:multipart =>true, :class => "MainForm"} ) do |f| %>
   <%= f.file_field :photo %>
-  <label>
-    <em><%#= " " + l(:megabyte_upload_limit, :count => "10") %></em>
-  </label>
-  <label><%= l(:title) + ":" %><br />
+  <div>
+  <%=  "#{l("setting_#{:attachment_max_size}")}: " %><%= number_to_human_size(Setting.send(:attachment_max_size).to_i*1024) %>
+  </div>
+  <div><%= l(:title) + ":" %><br />
     <%= f.text_field :name, :size => 35 %>
-  </label>
-
-  <label>
+  </div>
+  <br />
+  <div>
     <%= l(:tags) %><br /> 
-    <em>
+        <%= text_field_tag 'tag_list', @photo.tag_list, {:autocomplete => "off", :size => 35} %><br />
         <%= "(#{l(:optional_keywords_describing_this_photo_separated_by_commas)})" %>
-        <%= text_field_tag 'tag_list', @photo.tag_list, {:autocomplete => "off", :size => 35} %>
-    </em>
-  </label>
-
+  </div>
+  <br />
   <div "id='tag_list_auto_complete'" "class='auto_complete'">
   <%#content_for :end_javascript do %>
     <%#= auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
@@ -44,3 +42,4 @@
   </p>
   <%end%>
 
+</fieldset>

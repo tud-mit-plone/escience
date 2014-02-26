@@ -1434,13 +1434,13 @@ de:
   edit_and_add_photos: "Edit and add photos to this album"
   create_album: Anlegen
   edit_album: Bearbeiten
-  cancel_and_go_back_to_photo_manager: "Cancel and go back to photo manager"
-  back_to_photo_manager: "Back to photo manager"
-  
-
+  cancel_and_go_back_to_photo_manager: "Abbrechen und zurückgehen zur Photoverwaltung"
+  back_to_photo_manager: " Zurück zur Photoverwaltung"
   label_user_message: "Plattform-Nachricht"
   label_from: "von"
+
   label_contact_captcha: "Wie lautet der Name unserer Plattform?"
+
   text_my_interest: 'Meine Forschungsgebiete'
   label_my_interest_add: 'Ergänze deine Forschungsgebiete'
   text_my_skill: 'Meine Fertigkeiten'
@@ -1449,3 +1449,11 @@ de:
   label_album_plural: 'Bildersammlung'
   label_my_album_plural: 'Meine Bilderalben'
   label_album_delete: 'Bildersammlung löschen'
+
+  button_invite: 'Einladung schicken'
+  no_common_project: 'In keinem gemeinsamen Projekt'
+
+  searchable_sql: 'Werde ich bei  Suchen angezeigt?'
+  account_readable_for_user: 'Können andere meine Benutzerkonto sehen?'
+  no_name: 'Kein Name vergeben'
+  label_album_delete: 'Album entfernen'

@@ -25,7 +25,9 @@ Rails.configuration.to_prepare do
   require File.join(File.dirname(__FILE__),'patch_project' )
   Project.send(:include, ::RedmineSocialExtends::ProjectsExtension)
   ProjectsHelper.send(:include, ::RedmineSocialExtends::ProjectsHelperExtension)
-
+  require File.join(File.dirname(__FILE__),'patch_projects_controller' )
+  ProjectsController.send(:include, ::RedmineSocialExtends::ProjectsControllerExtension)
+  
   require_dependency 'mailer'
   require File.join(File.dirname(__FILE__),'patch_mailer' )
   Mailer.send(:include, ::RedmineSocialExtends::MailerExtension)
