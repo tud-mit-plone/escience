@@ -12,6 +12,7 @@
   		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
   		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>
   		   </ul>
+             <div style="position: absolute; right: 10px;margin-top: 15px"><%= image_tag("/qr_gen?p_url=#{request.url}")%></div>
   		</div> 
   	</div>
   </div>
