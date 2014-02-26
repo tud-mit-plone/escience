@@ -1395,7 +1395,8 @@ module ApplicationHelper
     options = {
       :method => :delete,
       :data => {:confirm => l(:text_are_you_sure)},
-      :class => ''
+      :class => '',
+      :no_text => false
     }.merge(options)
 
     if !options[:no_text].nil? && options[:no_text] == true
@@ -1499,7 +1500,7 @@ module ApplicationHelper
         start_of_week = start_of_week.to_i % 7
 
         tags = javascript_tag(
-                   "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', firstDay: #{start_of_week}, " +
+                   "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', constrainInput: false, firstDay: #{start_of_week}, " +
                      "showOn: 'button', buttonText:''};")
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
         unless jquery_locale == 'en'

@@ -418,7 +418,7 @@ class IssuesController < ApplicationController
 private
 
   def formated_date_to_db(date)
-    return nil if date.nil? || date.empty?
+    return nil if date.nil? || date.empty? || date.blank?
     d = nil
     unless Setting.date_format.blank?
       d = Date.strptime(date, Setting.date_format )
