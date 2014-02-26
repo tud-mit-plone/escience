@@ -224,13 +224,7 @@ class AccountController < ApplicationController
       set_autologin_cookie(user)
     end
     call_hook(:controller_account_success_authentication_after, {:user => user })
-    if !(Project.find(:first, :conditions => "name = 'eScience'").nil?)
-#      session[:selected_project] = Project.find(:first, :conditions => "name = 'eScience'")
-  		redirect_back_or_default :controller => 'my', :action => 'page'
-#	    redirect_to :controller => 'projects', :action => 'show', :id => "escience"
-  	else
-  		redirect_back_or_default :controller => 'my', :action => 'page'
-  	end
+    redirect_back_or_default :controller => 'my', :action => 'page'
   end
 
   def set_autologin_cookie(user)
