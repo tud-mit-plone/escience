@@ -1,21 +1,15 @@
-<%= labelled_form_for @wiki,
-                   :as => :wiki,
-                   :url => { :controller => 'wikis', :action => 'edit', :id => @project },
-                   :remote => true, :method => 'post' do |f| %>
+<% unless params[:controller] == 'my' %>
+  <%= labelled_form_for @wiki,
+                     :as => :wiki,
+                     :url => { :controller => 'wikis', :action => 'edit', :id => @project },
+                     :html => {:id => 'edit_wiki'},
+                     :remote => true, :method => 'post' do |f| %>
 
-  <%= error_messages_for 'wiki' %>
-  
-  <div class="box tabular">
-    <p><%= f.text_field :start_page, :size => 60, :required => true %></p>
-    <p><em class="info"><%= l(:text_unallowed_characters) %>: , . / ? ; : |</em></p>
+    <%= error_messages_for 'wiki' %>
     
-    <%= hidden_field_tag 'hidden_submit', '' %>
-    <div class="btn-group" style="float:right; margin: 7px 0;">
-      <%= link_to(l(:button_delete), {:controller => 'wikis', :action => 'destroy', :id => @project},
-              :class => 'btn') if @wiki && !@wiki.new_record? %>
-      <%= link_to ((@wiki.nil? || @wiki.new_record?) ? l(:button_create) : l(:button_save)), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#edit_wiki').submit();" %>
-    </div>
-    <div class="clear"></div>
-  </div>
+    <%= render :partial => 'projects/settings/wiki_content'%>
 
+  <% end %>
+<% else %>
+  <%= render :partial => 'projects/settings/wiki_content'%>  
 <% end %>

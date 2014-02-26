@@ -13,7 +13,7 @@
 <fieldset>
   <legend><%= l(:label_general) %></legend>
   <p style="float: right; margin:5px" class="project_public<%= ' checked' if @project[:is_public] %>"><%= f.check_box :is_public, :onclick => "$('.project_public').toggleClass('checked')" %></p>
-  <p><%= f.text_field :name, :required => true, :size => 60, :style => "font-size:18px; height:20px;margin-bottom:3px;" %></p>
+  <p><%= f.text_field :name, :required => true, :size => 60, :style => "font-size:18px; height:20px;margin-bottom:3px;width: 100%;" %></p>
   
   <!--
   <% unless @project.allowed_parents.compact.empty? %>

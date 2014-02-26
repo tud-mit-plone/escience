@@ -14,9 +14,6 @@
     <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
         <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}, :class => "icon icon-time") %></li>
     <% end %>
-    <% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-      <li><%= link_to(l(:label_overall_activity), { :controller => 'activities', :action => 'index', :id => nil }, :class => "icon icon-spinner") %></li>
-    <% end %>
     </ul>
   <% else %>
     <%  @user = session[:user].nil? ? User.new : session[:user] %>
@@ -41,7 +38,7 @@
       <div class="tools">
         <% if User.current.allowed_to?(:close_project, nil, :global => true) %>
           <div class="delete_project">
-            <%= link_to(content_tag("i","",:class=> "icon-trash #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), project_path(project), :data => {:confirm => l(:text_project_destroy_confirmation)}, :method => :delete) %>
+            <%= link_to(content_tag("i","",:class=> "icon-trash #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), archive_project_path(project), :data => {:confirm => l(:text_project_destroy_confirmation)}, :method => :post) %>
           </div>
         <% end %>
         <% if User.current.allowed_to?(:edit_project, nil, :global => true) %>

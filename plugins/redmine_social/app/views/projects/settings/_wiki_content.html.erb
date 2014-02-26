@@ -1,0 +1,12 @@
+  <div class="box tabular">
+    <p><%= text_field_tag :start_page, @wiki.nil? || @wiki.start_page.nil? ? '' : @wiki.start_page,:size => 60, :required => true %></p>
+    <p><em class="info"><%= l(:text_unallowed_characters) %>: , . / ? ; : |</em></p>
+    <%= hidden_field_tag 'hidden_submit', '' %>
+    <div class="btn-group" style="float:right; margin: 7px 0;">
+      <% if @wiki && !@wiki.new_record? %>
+        <%= link_to( l(:button_delete), {:controller => 'wikis', :action => 'destroy', :id => @project},:class => 'btn') %>
+      <% end %>
+      <%= link_to ((@wiki.nil? || @wiki.new_record?) ? l(:button_create) : l(:button_save)), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#edit_wiki').submit();" %>
+    </div>
+    <div class="clear"></div>
+  </div>

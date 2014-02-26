@@ -1,33 +1,11 @@
-<%= form_for @project,
-            :url => {:controller => 'projects', :action => 'modules', :id => @project.id },
-            :html => {:id => 'modules-form',
-            :class => "tab_view",
-            :method => :post} do |f| %>
-
-<div class="box">
-  <fieldset>
-    <legend><%= l(:text_select_project_modules) %></legend>
-<%if @project.is_private_project == false || @project.is_private_project.nil? %>    
-      <% Redmine::AccessControl.available_project_modules.each do |m| %>
-      <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
-       <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
-      <% end %>
-<%else%>
-  <% Redmine::AccessControl.available_private_project_modules.each do |m| %>
-      <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
-       <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
-      <% end %>
+<% if params[:controller] == 'my' %>
+  <%= form_for @project,
+              :url => {:controller => 'projects', :action => 'modules', :id => @project.id },
+              :html => {:id => 'modules-form',
+              :class => "tab_view",
+              :method => :post} do |f| %>
+    <%= render :partial => 'projects/settings/modules_content' %>
   <% end %>
-   <div class="clear"></div>
-    <p style="padding-top:10px"><%= check_all_links 'modules-form' %></p>
-    <%= hidden_field_tag 'hidden_submit', '' %>
-    <div class="btn-group" style="float:right">
-      <%#= submit_tag l(:button_save), :class => "btn" %>
-      <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#modules-form').submit();" %>
-    </div>
-    <%#= submit_tag l(:button_save) %>
-    <div class="clear"></div>
-  </fieldset>
-</div>
+<% else %>
+  <%= render :partial => 'projects/settings/modules_content' %>
 <% end %>
- 
