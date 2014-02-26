@@ -24,7 +24,7 @@ class ProjectsController < ApplicationController
   before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :add_attachment]
   before_filter :require_login, :only => [:show]
   before_filter :authorize_global, :only => [:new, :create]
-  before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy ]
+  before_filter :require_admin, :only => [ :copy, :unarchive, :destroy ]
   accept_rss_auth :index
   accept_api_auth :index, :show, :create, :update, :destroy
 
@@ -363,7 +363,8 @@ class ProjectsController < ApplicationController
         flash[:error] = l(:error_can_not_archive_project)
       end
     end
-    redirect_to(url_for(:controller => 'admin', :action => 'projects', :status => params[:status]))
+    redirect_to(:back)
+    #redirect_to(url_for(:controller => 'admin', :action => 'projects', :status => params[:status]))
   end
 
   def unarchive
@@ -372,7 +373,7 @@ class ProjectsController < ApplicationController
   end
 
   def close
-    @project.close
+    @project.close_completed_versions
     redirect_to project_path(@project)
   end
 

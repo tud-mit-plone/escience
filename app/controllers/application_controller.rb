@@ -102,6 +102,18 @@ class ApplicationController < ActionController::Base
     @events_by_day = events.group_by {|event| User.current.time_to_date(event.event_datetime)}
   end
 
+  def set_last_visited_page
+    controllers = %w(documents issues my journals messages news boards projects reports repositories user_contact user_messages versions wiki wikis)
+    unallowed_actions = %w(logout login generate_qr_code)
+    
+    if controllers.include?(params[:controller]) || !(unallowed_actions.include?(params[:action]))
+      page = request.url
+    else
+      page = session[:last_page_visited]  
+    end
+    return page
+  end
+
   def session_expired?
     if Setting.session_lifetime?
       unless session[:ctime] && (Time.now.utc.to_i - session[:ctime].to_i <= Setting.session_lifetime.to_i * 60)
@@ -113,7 +125,7 @@ class ApplicationController < ActionController::Base
         return true
       end
     end
-    session[:last_page_visited] = request.url unless params[:action] == 'logout' || params[:action] == 'login'
+    session[:last_page_visited] = set_last_visited_page
     false
   end
 
@@ -185,7 +197,7 @@ class ApplicationController < ActionController::Base
   def logout_user
     if User.current.logged?
       unless session[:last_page_visited].nil?
-          User.current .pref[:last_page_visited] = session[:last_page_visited]
+          User.current.pref[:last_page_visited] = session[:last_page_visited]
           User.current.pref.save
       end
       cookies.delete :autologin
@@ -383,6 +395,7 @@ class ApplicationController < ActionController::Base
 
   def render_403(options={})
     @project = nil
+    logger.info "Render 403 #{options}" unless options.empty?
     render_error({:message => :notice_not_authorized, :status => 403}.merge(options))
     return false
   end
@@ -600,4 +613,19 @@ class ApplicationController < ActionController::Base
   def _include_layout?(*args)
     api_request? ? false : super
   end
+
+  def generate_qr_code(url = params[:p_url], size_x=30, size_y=30)
+    qr = nil
+    qr_size = 3
+    while(qr == nil && qr_size < 10)
+      begin
+        qr = RQRCode::QRCode.new( url, :size => qr_size, :level => :h )
+        png = qr.to_img
+        send_data(png.resize(size_x, size_y), :type => 'image/png', :disposition => 'inline')
+      rescue RQRCode::QRCodeRunTimeError => e
+        qr_size += 1
+      end
+    end
+  end
 end
+ 
