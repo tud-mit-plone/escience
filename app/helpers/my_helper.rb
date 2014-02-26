@@ -56,14 +56,21 @@ module MyHelper
   end
 
   def render_dash_block_image(dash_url,attachment_id)
-    s =  "<div style=\"overflow: hidden; height: 200px; width: 320px;\">"
-    if /^(http:\/\/|https:\/\/)/.match(s).nil? 
+    
+    s =  "<fieldset style=\"overflow: hidden; height: 145px; width: 180px;\">"
+    s += "<legend style=\"font-size:13px;\">#{dash_url.to_s.length > 26 ? dash_url.truncate(26) : dash_url}</legend><p>"
+  
+    if /^(http:\/\/|https:\/\/)/.match(dash_url).nil? 
+      require 'erb'
       dash_url = "http://#{dash_url}"
+      #dash_url = ::ERB::Util.url_encode("http://#{dash_url}")
+    else
+      #dash_url = ::ERB::Util.url_encode(dash_url)
     end
-    s << link_to(dash_url) do 
-               image_tag url_for(:controller => 'attachments', :action => 'show', :id => attachment_id), :width => '320' 
+    s += link_to(dash_url) do 
+               image_tag url_for(:controller => 'attachments', :action => 'show', :id => attachment_id), :width => '180' 
              end
-    s << "</div>"
+    s += "</p></fieldset>"
     return s.html_safe
   end
 

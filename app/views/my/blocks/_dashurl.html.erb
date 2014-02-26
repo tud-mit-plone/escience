@@ -3,15 +3,17 @@
   <% if @user.pref[:dash_url].nil? || @user.pref[:dash_url].empty? || @user.pref[:dash_url][block_no.to_i].nil? || @user.pref[:dash_url][block_no.to_i][:attachment].nil?%>
     <%= form_tag url_for(:controller => "my",:action => "create_dash_block"), :method => :post, :remote=> true, :id => "commit_#{block_no}" do%>
         <%= label_tag "Dash-Url:" %>
-        <%= text_field_tag "dash_url" %>
+        <%= text_field_tag "dash_url_#{block_no}" %>
         <%= hidden_field_tag "block_no","#{block_no}" %>
-        <%= submit_tag "Submit URL", :class => 'button' %>
+        <%= submit_tag "Submit URL", :class => 'button', :style => "float:none;" %>
 
       <%end%> 
-  <%else%>
-        <%= javascript_tag ' 
+
+      <%= javascript_tag ' 
       $(document).ready(function(){
         $(\'#'"commit_#{block_no}"'\').submit(function() {  
+          var link_external = $(\'#'"dash_url_#{block_no}"'\').val();
+          
           var valuesToSubmit = $(this).serialize();
           var ajax = $.ajax({
             type: \'POST\',
@@ -19,12 +21,12 @@
             data: valuesToSubmit,
             dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
             }).always(function(json){
-            if(json.readyState == 4 && json.status == 200){
+            if(ajax.readyState == 4 && ajax.status == 200){
               var insert = $(\'#'"commit_#{block_no}"'\').parent();
               $(\'#'"commit_#{block_no}"'\').remove();
-              
-              insert.append(generate_dash_block(ajax.responseText)).hide().fadeIn(2000); 
-              
+              console.log(ajax);
+              response = JSON.parse(ajax.responseText)
+              insert.append(generate_dash_block(response[0],response[1])).hide().fadeIn(2000); 
             }
           });
          
@@ -35,11 +37,27 @@
         //  event.preventDefault(); // cancel default behavior          
         //});
       });
-      function generate_dash_block(link){
-        var new_dash_block = \''"#{render_dash_block_image(@user.pref[:dash_url][block_no.to_i][:dash_url], 10)}"'\';
+      function generate_dash_block(link,link_external){
+        var new_dash_block = \''"#{render_dash_block_image("", 10)}"'\';
+        console.log("Link :" + link_external);
+        new_dash_block = new_dash_block.replace(/<legend (.*?)>.*?<\/legend>/,\'<legend $1>\' +link_external+ \'<\/legend>\');
+        new_dash_block = new_dash_block.replace(/href=".*?"/,"href=\'"+link_external+"\' target=\'_blank\'");
+        
         return new_dash_block.replace(/src=".*?"/,"src=\'"+link+"\'");
       }
       '%>
+          <%= javascript_tag '
+    $(\'#'"commit_#{block_no}"'\').bind({
+      \'ajax:before\': function () {
+         $("body").append("<div id=\"overlay\" style=\"background-color:grey;position:absolute;top:0;left:0;height:100%;width:100%;z-index:999\"></div>");
+        //$(\'#'"commit_#{block_no}"'\').attr(\'disabled\',true);
+      },
+      \'ajax:complete\': function () {
+        $("#overlay").remove();
+        //$(\'#'"commit_#{block_no}"'\').removeAttr(\'disabled\');
+      }
+    });'%>
+  <%else%>
     <%= render_dash_block_image(@user.pref[:dash_url][block_no.to_i][:dash_url], @user.pref[:dash_url][block_no.to_i][:attachment]) %>
   <%end%>
 <%end%>

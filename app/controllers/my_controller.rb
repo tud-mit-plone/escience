@@ -179,18 +179,37 @@ class MyController < ApplicationController
     return "#{block}_#{block_nr}"
   end
 
+  def sanitize_url(url)
+    if url.split("://").count > 1 
+      unless url.split("://").first.include?("http") || url.split("://").first.include?("https")  
+        url = "http://#{url.split("://")[1]}"
+      end
+    else
+      url = "http://#{url}"
+    end
+    return url 
+  end
+
   def create_dash_block 
-    
+    params[:dash_url] = params["dash_url_#{params[:block_no]}"]
     unless(params[:dash_url].nil? || params[:dash_url] == '')
       @user = User.current
       block_no = params[:block_no].to_i
       require 'capit'
+      require 'RMagick'
 
       #if no x server is available use xvfb => sudo apt-get install xvfb
-      # 
+      # cutycapt is needed 
+      # apt-get install cutycapt 
+
       capit = CapIt::Capture.new(params[:dash_url], :cutycapt_path => "cutycapt", :user_agent => "", 
                                                   :filename => "#{Time.now.to_i}_#{Time.now.nsec}_dash_url.jpg", :folder => "/tmp/")
       capit.capture
+
+      #cutycapt just uses min-width and min-height values, for a better view the picture will be cropped
+      img = Magick::Image.read("#{File.join(capit.folder,capit.filename)}").first.crop_resized(1024,768,Magick::NorthWestGravity)
+      img.write("#{File.join(capit.folder,capit.filename)}")
+
       @attachment = Attachment.new(:file => File.open("#{File.join(capit.folder,capit.filename)}"))
       @attachment.author = User.current
       @attachment.filename = capit.filename 
@@ -198,14 +217,18 @@ class MyController < ApplicationController
       @attachment.container = @user
       @attachment.save! 
 
+      File.delete("#{File.join(capit.folder,capit.filename)}") if File.exist?("#{File.join(capit.folder,capit.filename)}")
+
       @user.pref[:dash_url] ||= []
+      params[:dash_url] = sanitize_url(params[:dash_url])
       @user.pref[:dash_url] [block_no] = {:dash_url => params[:dash_url], :attachment => @attachment.id}
       @user.pref.save
 
       respond_to do |format|
         format.xml { render :xml => @attachment }
         format.js 
-        format.json { render :json => "#{url_for({:controller => 'attachments', :action => 'show', :id => @attachment.id})}" }
+        # Addressable::URI.parse(params[:dash_url]).host].to_json  -> return host
+        format.json { render :json => [ "#{url_for({:controller => 'attachments', :action => 'show', :id => @attachment.id})}", params[:dash_url] ]}
       end
     end
     
