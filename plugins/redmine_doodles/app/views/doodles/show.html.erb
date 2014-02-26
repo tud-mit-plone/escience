@@ -39,7 +39,10 @@
 
 <div id="preview" class="doodle">
 <div class="doodle details" style="clear:both">
-  <div class="info"><%=l(:field_expiry_date)%>: <%= format_date(@doodle.expiry_date) %></div>
+  <%if(!(@doodle.expiry_date.nil?) && !(@doodle.expiry_date.to_s == ''))%>
+    <div class="info"><%=l(:field_expiry_date)%>: <%= format_date(@doodle.expiry_date) %></div>
+  <%end%>
+  <div style="clear:both"></div>
   <h2><%=h @doodle.title %> <i class="icon-bar-chart"></i></h2>
   <%= avatar(@author, :size => "64", :style => 'float:right') %>
   <div class="author"><%= authoring @doodle.created_on, @doodle.author %></div>

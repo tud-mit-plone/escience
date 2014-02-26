@@ -84,7 +84,7 @@ class BbbController < ApplicationController
 
     moderatorPW = Digest::SHA1.hexdigest("root"+@project.identifier)
     attendeePW = Digest::SHA1.hexdigest("guest"+@project.identifier)
-    Setting.plugin_redmine_bbb['bbb_popup'] == '1' 
+    if Setting.plugin_redmine_bbb['bbb_popup'] == '1' 
       back_url = url_for(:action => "index")
     else
       back_url = Setting.plugin_redmine_bbb['bbb_url'].empty? ? request.referer.to_s : Setting.plugin_redmine_bbb['bbb_url']

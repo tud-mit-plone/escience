@@ -66,6 +66,7 @@ module Redmine
 
       def available_project_modules
         @available_project_modules ||= @permissions.collect(&:project_module).uniq.compact
+        return @available_project_modules
       end
 
       def available_private_project_modules

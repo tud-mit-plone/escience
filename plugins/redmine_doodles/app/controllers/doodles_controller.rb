@@ -59,8 +59,12 @@ class DoodlesController < ApplicationController
   
   def update
     params[:doodle][:description] = convertHtmlToWiki(params[:doodle][:description])
-#    expiry_date = Date.strptime(params[:doodle][:expiry_date], t("date.formats.default"))
-    params[:doodle][:expiry_date] = params[:doodle][:expiry_date].empty? ? '' : expiry_date.strftime("%d.%m.%Y")
+    begin
+      expiry_date = Date.strptime(params[:doodle][:expiry_date], t("date.formats.default"))
+    rescue ArgumentError
+      expiry_date = ''
+      params[:doodle][:expiry_date] = params[:doodle][:expiry_date].empty? ? '' : expiry_date
+    end
     @doodle.attributes = params[:doodle]
     if @doodle.save
       flash[:notice] = l(:doodle_update_successful)
