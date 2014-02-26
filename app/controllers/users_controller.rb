@@ -105,10 +105,12 @@ class UsersController < ApplicationController
     end
     @projects = []
     @allusers = []
+    @n_projects = {}
 
     project_list = Project.visible.find(:all, :order => 'lft')
     project_list.each do |project|
       users = []
+      n_users = {}
       user_projects = project.users_by_role
       user_projects.each do |user_project|
         role = ""
@@ -118,6 +120,8 @@ class UsersController < ApplicationController
           elsif user_roles.class.to_s == "Array"
             user_roles.each do |user|
               if !(others.detect {|v| v.id == user.id}).nil?
+                n_users[role] ||= []
+                n_users[role] << user
                 users += [[user, role]]
                 @allusers += [[user, role]]
               end
@@ -129,14 +133,21 @@ class UsersController < ApplicationController
         users.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
         @projects += [[project.name, users]]
       end
+      if !n_users.empty? 
+        @n_projects[project.name] = n_users
+      end
     end
     @allusers.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
     
-
+    @n_projects[l(:no_common_project)] = {}
+    @n_projects[l(:no_common_project)][""] = User.find((others - @allusers[0]).flatten.map{|m| m.id} )
+    
+    #@projects += [["Noch nicht gekannt", [[User.find((others - @allusers).flatten.map{|m| m.id} ),"nix" ]]]]
+    
     respond_to do |format|
       format.xml { render :xml => @users }
       format.js # user_search.js.erb
-      format.json { render :json => @projects }
+      format.json { render :json => @n_projects.to_json }
     end
   end
 
@@ -148,7 +159,7 @@ class UsersController < ApplicationController
     @events_by_day = events.group_by(&:event_date)
 
     unless User.current.admin?
-      if !@user.active? || (@user != User.current  && @memberships.empty? && events.empty?)
+      if !@user.active? #|| (@user != User.current  && @memberships.empty? && events.empty?)
         render_404
         return
       end

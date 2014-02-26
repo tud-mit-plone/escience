@@ -39,15 +39,21 @@ module UsersHelper
     user.valid_notification_options.collect {|o| [l(o.last), o.first]}
   end
 
-  def change_status_link(user)
+  def change_status_link(user,options={})
+    options = {:no_text => false}.merge(options)
+
+    lock_class = options[:lock][:html_class].to_s unless options[:lock].nil?
+    activate_class = options[:activate][:html_class].to_s unless options[:activate].nil?
+    unlock_class = options[:unlock][:html_class].to_s unless options[:unlock].nil?
+
     url = {:controller => 'users', :action => 'update', :id => user, :page => params[:page], :status => params[:status], :tab => nil}
 
     if user.locked?
-      link_to l(:button_unlock), url.merge(:user => {:status => User::STATUS_ACTIVE}), :method => :put, :class => ''
+      link_to options[:no_text] ? '<i class="icon-unlock-alt"></i>'.html_safe : l(:button_unlock), url.merge(:user => {:status => User::STATUS_ACTIVE}), :method => :put, :class => unlock_class
     elsif user.registered?
-      link_to l(:button_activate), url.merge(:user => {:status => User::STATUS_ACTIVE}), :method => :put, :class => ''
+      link_to options[:no_text] ? '<i class="icon-signin"></i>'.html_safe : l(:button_activate), url.merge(:user => {:status => User::STATUS_ACTIVE}), :method => :put, :class => activate_class
     elsif user != User.current
-      link_to l(:button_lock), url.merge(:user => {:status => User::STATUS_LOCKED}), :method => :put, :class => ''
+      link_to options[:no_text] ? '<i class="icon-lock"></i>'.html_safe : l(:button_lock), url.merge(:user => {:status => User::STATUS_LOCKED}), :method => :put, :class => lock_class
     end
   end
 
