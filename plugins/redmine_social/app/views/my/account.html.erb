@@ -10,7 +10,7 @@
 <%= labelled_form_for :user, @user,
                      :url => { :action => "account" },
                      :html => { :id => 'my_account_form',
-                                :method => :post } do |f| %>
+                                :method => :post }, remote: true do |f| %>
   <%= hidden_field_tag 'hidden_submit', '' %>
   <h2 style="float:left"><%=l(:label_my_account)%> <li class="icon-user"></li></h2>
   <div class="btn-group" style="float:right;">

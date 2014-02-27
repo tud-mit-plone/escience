@@ -49,7 +49,7 @@
           <% calendar.events_on(day).each do |i| %>
           <div style="float:left">
             <% if (calendar.events_on(day).size < 5) %>
-              <div class="linkToInfo <%= i.css_classes %>" id="<%= "#{i.id}_#{day}" %>">
+              <div class="linkToInfo <%= i.css_classes if defined?(i.css_classes) %>" id="<%= "#{i.id}_#{day}" %>">
                 <% if i.is_a? Issue %>
                   <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(15)}) %>
                 <% elsif i.is_a? Appointment %>

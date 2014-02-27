@@ -47,7 +47,13 @@ end
 
 platforms :mri_19, :mingw_19 do
   group :mysql do
-    #gem "mysql2", "~> 0.3.11"
+    gem "mysql2", "~> 0.3.11"
+  end
+end
+
+platforms :mri_20, :mingw_20 do
+  group :mysql do
+    gem "mysql2", "~> 0.3.11"
   end
 end
 

@@ -27,7 +27,7 @@ class TimeEntry < ActiveRecord::Base
   attr_protected :project_id, :user_id, :tyear, :tmonth, :tweek
 
   acts_as_customizable
-  acts_as_event :title => Proc.new {|o| "#{o.subject}"},
+  acts_as_event :title => Proc.new {|o| defined?(o.subject) ? "#{o.subject}" : "#{o.to_s}"},
                 :url => Proc.new {|o| {:controller => 'timelog', :action => 'index', :project_id => o.project, :issue_id => o.issue}},
                 :author => :user,
                 :description => :comments

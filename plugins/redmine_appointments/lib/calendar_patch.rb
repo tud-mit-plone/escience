@@ -163,6 +163,7 @@ module RedmineAppointmentExtension
         def getListOfDaysBetween(events, startdt=Date.today,enddt=Date.today)
           listOfDaysBetween = {}
           events.each do |event|
+            next if event[:start_date].nil? || event[:due_date].nil?
             if event[:start_date] >= startdt && event[:start_date] < enddt && event[:start_date] != event[:due_date] && !event[:due_date].nil?
               currentDate = event[:start_date].to_date.to_time + 1.day
               while currentDate < event[:due_date] && currentDate <= enddt
