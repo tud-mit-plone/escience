@@ -22,12 +22,13 @@ module RedmineSocialExtends
       end
       
       module InstanceMethods
-        def private_project_settings_tabs
+        def private_project_settings_tabs(project=nil)
           tabs = [{:name => 'modules', :action => :select_project_modules, :partial => 'projects/settings/modules', :label => :label_module_plural},
-            {:name => 'wiki', :action => :manage_wiki, :partial => 'projects/settings/wiki', :label => :label_wiki},
             {:name => 'repositories', :action => :manage_repository, :partial => 'projects/settings/repositories', :label => :label_repository_plural},
             {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :enumeration_activities}
             ]
+            tabs << {:name => 'wiki', :action => :manage_wiki, :partial => 'projects/settings/wiki', :label => :label_wiki} if project.nil? == false && project.module_enabled?('wiki')
+            return tabs
           #logger.info ("TRodules #{JSON.parse(Setting.plugin_redmine_social['private_project_modules']).class}")
           #tab = Setting.plugin_redmine_social['private_project_modules'].class == Array ? Setting.plugin_redmine_social['private_project_modules'] : 
           #          Setting.plugin_redmine_social['private_project_modules'].to_s.split(" ")
