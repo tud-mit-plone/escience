@@ -1,4 +1,4 @@
-<% if params[:controller] == 'my' %>
+<% unless params[:controller] == 'my' %>
   <%= form_for @project,
               :url => {:controller => 'projects', :action => 'modules', :id => @project.id },
               :html => {:id => 'modules-form',

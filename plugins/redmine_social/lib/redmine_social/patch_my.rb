@@ -80,9 +80,11 @@ module RedmineSocialExtends
             @user.private_project.enabled_module_names = params[:enabled_module_names]
             @user.private_project.save!
 
-            @wiki = @user.private_project.wiki || Wiki.new(:project => @user.private_project)
-            @wiki.safe_attributes = params[:wiki]
-            @wiki.save!
+            if  params[:wiki].nil? == false && params[:wiki][:start_page].nil? == false 
+              @wiki = @user.private_project.wiki || Wiki.new(:project => @user.private_project)
+              @wiki.safe_attributes = params[:wiki]
+              @wiki.save!
+            end
 
             @user.save!
             if @user.save

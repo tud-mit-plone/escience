@@ -1740,6 +1740,7 @@ en:
   label_my_issues_plural: 'My issues'
   label_issues_plural: 'Issues'
   label_my_album_plural: 'My photo albums'
+  label_my_wiki: 'My wiki'
 
   button_invite: 'Send Invite'
   no_common_project: 'No common project'

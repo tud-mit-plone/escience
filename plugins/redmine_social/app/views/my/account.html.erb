@@ -85,8 +85,9 @@
   <%= stylesheet_link_tag 'profile' %>
   <%= stylesheet_link_tag 'jquery.Jcrop.css', :plugin => 'redmine_social'%>
   <%= javascript_include_tag 'jquery.Jcrop.min.js', :plugin => 'redmine_social' %>
-  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>  
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>
 <% end %>
+
 <script type="text/Javascript" charset="utf-8">
 function hide_change_avatar() {
   $('#preview').css({
@@ -96,14 +97,18 @@ function hide_change_avatar() {
   });
   $('#preview').attr('src','<%= @user.avatar ? @user.avatar.photo(:medium) : '/images/avatar.png' %>');
   $('#change_avatar_wrapper').fadeOut();
+  $('#change_avatar_wrapper').removeAttr('style');
+  $('#change_avatar_wrapper').css("display","block");
 }
 function show_change_avatar() {
   $('#change_avatar_wrapper').fadeIn();
+  $('#change_avatar_wrapper').css("opacity","1.0");
+  $('#change_avatar_wrapper').css("display","block");
   <% if @user.avatar %>
-  $('#preview').attr('src','<%= @user.avatar.photo(:original) %>'); 
+  $('#preview').attr('src','<%= @user.avatar.photo(:original) %>');
   $("#cropbox").Jcrop({
     onChange: update_crop,
-    onSelect: update_crop, 
+    onSelect: update_crop,
     setSelect: [0,0,500,500],
     aspectRatio: 1
   });
