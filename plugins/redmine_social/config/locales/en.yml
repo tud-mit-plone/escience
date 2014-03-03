@@ -1741,6 +1741,7 @@ en:
   label_issues_plural: 'Issues'
   label_my_album_plural: 'My photo albums'
   label_my_wiki: 'My wiki'
+  label_my_file_plural: 'My files'
 
   button_invite: 'Send Invite'
   no_common_project: 'No common project'
