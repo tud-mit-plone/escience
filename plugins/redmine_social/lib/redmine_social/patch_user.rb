@@ -76,7 +76,7 @@
             prj.save!
             m = Member.new(:user_id => user.id, :project => prj, :role_ids => [Setting.plugin_redmine_social['private_project_default_role_id']])
             m.save!
-            prj.exclusive_user = user 
+            prj.exclusive_user = user
           end
         end
 
