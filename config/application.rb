@@ -43,6 +43,8 @@ module RedmineApp
          config.console = Pry
     end
     
+    config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
+
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 

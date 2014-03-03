@@ -62,19 +62,19 @@
             
             size = 100 unless size > 0
             
-            if thumbnailable? && readable?
+            if image? && readable?
               target = File.join(self.class.thumbnails_storage_path, "#{id}_#{digest}_#{size}.thumb")
               begin
                 return Redmine::Thumbnail.generate(self.diskfile, target, size)
               rescue => e
                 logger.error "An error occured while generating thumbnail for #{disk_filename} to #{target}\nException was: #{e.message}" if logger
                 return nil
-              end
+              end           
             end
             if image_convertable? && readable?
               options[:size] = "#{size}x"
               options[:render_page] = (!(options[:pages].nil?) && options[:pages].match(/^\d+$/)) ? options[:pages].to_i : nil 
-              render_to_image(options)
+              return render_to_image(options)
             end
           end          
         end
@@ -140,26 +140,26 @@
             end
           end
           
-          def download
-            if @attachment.container.is_a?(Version) || @attachment.container.is_a?(Project)
-              @attachment.increment_download
-            end
-            diskfile = @attachment.thumbnail({:size => 300, :pages => params[:pages]}) 
+          # def download
+          #   if @attachment.container.is_a?(Version) || @attachment.container.is_a?(Project)
+          #     @attachment.increment_download
+          #   end
+          #   diskfile = @attachment.thumbnail({:size => 300, :pages => params[:pages]}) 
             
-            if stale?(:etag => diskfile)
-              # images are sent inline
-              send_file diskfile, :filename => filename_for_content_disposition(diskfile),
-                                              :type => 'jpeg',
-                                              :disposition => (@attachment.image? ? 'inline' : 'attachment')
-            end
-          end
+          #   if stale?(:etag => diskfile)
+          #     # images are sent inline
+          #     send_file diskfile, :filename => filename_for_content_disposition(diskfile),
+          #                                     :type => 'jpeg',
+          #                                     :disposition => (@attachment.image? ? 'inline' : 'attachment')
+          #   end
+          # end
 
           def thumbnail
             if @attachment.thumbnailable? && thumbnail = @attachment.thumbnail({:size => params[:size], :pages => params[:pages]})
               if stale?(:etag => thumbnail)
                 send_file thumbnail,
-                  :filename => filename_for_content_disposition(@attachment.filename),
-                  :type => detect_content_type(@attachment),
+                  :filename => thumbnail,
+                  :type =>  'image/jpeg',
                   :disposition => 'inline'
               end
             else

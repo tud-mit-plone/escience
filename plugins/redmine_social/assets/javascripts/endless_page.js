@@ -1,6 +1,10 @@
 var currentPage = 1;
 
 function checkScroll() {
+  if ($("#render_show_images img").length < 0) {
+      return; 
+  }
+
   if (nearBottomOfPage()) {
    $.ajax({ //other options here
       complete: function () {
@@ -30,8 +34,9 @@ function checkScroll() {
         new_image.attr("id", id);
       }
       new_image.attr("src", path);  // change image back when ajax request is complete
-
+      new_image.hide();
       $("#render_show_images").append(new_image);
+      new_image.fadeIn();
       setTimeout("$(document).ready(function(){ checkScroll(); });",3000);
     } });
   } else {

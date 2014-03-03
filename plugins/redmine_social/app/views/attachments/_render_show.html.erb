@@ -1,4 +1,5 @@
-<%= image_tag(thumbnail_attachment_url(:id => @attachment.id, :size => "1000", :pages => params[:pages]),:id => "render_image") %>
+
+<%#= image_tag(thumbnail_attachment_url(:id => @attachment.id, :size => "1000", :pages => params[:pages]),:id => "render_image") %>
 <%#= link_to "next", thumbnail_attachment_url(:id => @attachment.id, :size => "1000", :pages => "2") %>
 
 <%#= javascript_tag ' 
@@ -7,3 +8,23 @@
     }
     $("#render_image").annotatableImage(blackNote());
 '%> 
+
+<%= javascript_tag do %>
+  $(document).ready(function(){ 
+    var thumb_url =  '<%= thumbnail_attachment_url(:id => @attachment.id, :size => "1000", :pages => params[:pages])%>'
+    var thumb_size = $('#render_show_images').width()
+    var arr = thumb_url.split("/")
+
+    thumb_url = ""
+    for(var i=0;i<arr.length-1;i++){
+          thumb_url += arr[i] + "/";
+    }
+    thumb_url += thumb_size;
+    
+    var img = $("<img />").attr('src', thumb_url); 
+    img.hide();
+    $("#render_show_images").append(img);
+    img.fadeIn();
+    checkScroll(); 
+  });
+<%end%> 
