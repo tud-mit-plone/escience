@@ -111,7 +111,7 @@ textarea {
 }
 
 .link_to_news .author {
-  position: absolute;
+  position: relative;
   right: 7px;
   top: 15px;
 }
