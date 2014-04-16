@@ -60,16 +60,3 @@
   </div>
 </div>
 <% end -%>
-
-<% content_for :header_tags do %>
-  <#%= javascript_tag '
-    $(function() {addToolTip_withTitle("#main fieldset .list.issues img.progress")});
-    $(function() {addToolTip_withTitle("#main fieldset .list.issues a.closed", "top")});
-  ' %>
-  <#%= javascript_tag '
-    $(document).ready(function() {
-      $(".linkToIssue a.link_href").click(function(e) {$(this).parent().toggleClass("selected"); e.preventDefault();});
-      $(".linkToIssue a.link_href").dblclick(function() {self.location.href=$(this).attr("href");});
-    });
-  ' %>  
-<% end %>
