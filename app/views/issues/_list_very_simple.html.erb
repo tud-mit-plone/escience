@@ -26,11 +26,11 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 <% content_for :header_tags do %>
-  <%= javascript_tag '
+  <#%= javascript_tag '
     $(function() {addToolTip_withTitle("#main fieldset .list.issues img.progress")});
     $(function() {addToolTip_withTitle("#main fieldset .list.issues a.closed", "top")});
   '%>
-  <%= javascript_tag '
+  <#%= javascript_tag '
     $(document).ready(function() {
       $(".list.issues .linkToIssue").each(function(){
         var innerInfo = $(this).find(".innerInfo.collapsed");
