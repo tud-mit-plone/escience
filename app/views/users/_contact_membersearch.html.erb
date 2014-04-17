@@ -35,7 +35,9 @@
                         }).always(function(json){
                               if(ajax.readyState == 4 && ajax.status == 200){
                                 response = JSON.parse(ajax.responseText);
-                                
+                                if(response == null){
+                                  return false;
+                                }
                                 $.each(response, function( prjct,roles){
                                   console.log(prjct);  
                                   var $element = $("<fieldset class=\'project\' />");
