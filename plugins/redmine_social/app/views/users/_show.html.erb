@@ -1,6 +1,17 @@
-<%= image_tag( user.avatar_photo_url(:thumb), :size => "100x100", :class => "rounded_image" )%>
+<%if User.current.allowed_to?(:show, user) %>
+  <%= link_to(user_path(user.id))  do %>
+    <%= image_tag( user.avatar_photo_url(:thumb), :size => "100x100", :class => "rounded_image" )%>
+  <% end %>
+<% else %>
+  <%= image_tag( user.avatar_photo_url(:thumb), :size => "100x100", :class => "rounded_image" )%>
+<% end %>
 
 <div class="user_information_main">
+<% content_for :header do %>
+  <%= stylesheet_link_tag "font-awesome"%>
+<% end %>
+
+<%= link_to('',user_friendships_path(user.id),:class => 'icon icon-plus-sign-alt', :confirm => l(:are_you_sure_you_want_to_create_a_friendship_with_this_user), :method => :post) %>
   <% unless user.pref.hide_mail %>
     <label><%=l(:field_mail)%>:</label> <%= mail_to(h(user.mail), nil, :encode => 'hex') %><br/>
   <% end %>
@@ -25,3 +36,9 @@
   <% end %>
   </ul>
 <% end %>
+
+<%= javascript_tag '
+  $( document ).ready(function() {
+    addToolTip(".icon.icon-plus-sign-alt","'+l(:tooltip_addUser)+'","top");
+  });
+'%>
