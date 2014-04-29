@@ -14,8 +14,7 @@
      tooltip_events = "<ul class='tooltip'>"
      tooltip_events += "</ul>"
   %>
-
-<% selectedChild = params[:navigation_group].nil? ? '0' : params[:navigation_group] %>
+<% selectedChild = session[:current_view_of_eScience].to_s ? session[:current_view_of_eScience].to_s : '0' %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
@@ -79,14 +78,26 @@
   		startingChild: '+selectedChild+',
   		triggerFocusEvents: true,
     });
-    $("ul.roundabout-holder li").focus(function() {setParam($("ul.roundabout-holder").roundabout("getChildInFocus"));});
+    $("ul.roundabout-holder li").focus(function() {
+      param = $("ul.roundabout-holder").roundabout("getChildInFocus");
+      send_new_scope(param);});
   });
-  function setParam(param) {
-    if (param=="0") url = "/my/page";
-    if (param=="1") url = "/user_messages";
-    if (param=="2") url = "/projects/kein";
-    self.location.href = url+"?navigation_group="+param;
-  }'%>
+
+  function send_new_scope(scope){
+    var ajax = $.ajax({
+      url: "'+url_for(:set_user_session_scope)+'",
+      dataType: "json",
+      data: {
+        scope_select: scope
+      },
+      success: function( data ) {
+          self.location.href = "'+"#{request.protocol}#{request.host_with_port}#{request.fullpath}"+'";
+        }
+      }).always(function(json){
+            if(ajax.readyState == 4 && ajax.status == 200){
+              return true;
+          }
+        });}'%>
   
   <%= heads_for_theme %>
   <!--[if IE 6]>

@@ -47,5 +47,8 @@ Rails.configuration.to_prepare do
   require File.join(File.dirname(__FILE__),'patch_setting' )
   SettingsHelper.send(:include, ::RedmineSocialExtends::SettingsHelperExtension)
     
+  
+  require File.join(File.dirname(__FILE__),'patch_application_controller' )
+  ApplicationController.send(:include, ::RedmineSocialExtends::ApplicationControllerExtension)
 end
 require File.join(File.dirname(__FILE__),'patch_pagination')

@@ -49,27 +49,13 @@ class ProjectsController < ApplicationController
 
   # Lists visible projects
   def index
+          scope = Project
+          projects = scope.group(User.current)
+
+
     respond_to do |format|
       format.html {
-        scope = Project
-        unless params[:closed]
-          scope = scope.active
-        end
-
-        if !params[:sub].nil? && session[:current_view_of_eScience] == "0"
-          projects = scope.own(User.current)
-        else
-          projects = scope.visible.all
-        end
-        @name_dir = 'desc'
-        @newest_dir = 'desc'
-        if params[:order] == 'name'
-          @name_dir = params[:dir] == 'asc' ? 'desc' : 'asc'
-        elsif params[:order] == 'created_on'
-          @newest_dir = params[:dir] == 'desc' ? 'asc' : 'desc'
-        end
-        @projects = project_nested_list(projects)
-
+        projects_html_format()
       }
       format.api  {
         @offset, @limit = api_offset_and_limit
@@ -84,6 +70,33 @@ class ProjectsController < ApplicationController
     end
   end
   
+  def projects_html_format()
+        scope = Project
+        
+        unless params[:closed]
+          scope = scope.active
+        end
+        
+        current_view = session[:current_view_of_eScience].to_s
+
+        if(!params[:sub].nil? && current_view == "0")
+          projects = scope.own(User.current)
+        elsif(!params[:sub].nil? && current_view == "1")
+          projects = scope.group_view(User.current)
+        else
+          projects = scope.community_view(User.current)
+        end
+        @name_dir = 'desc'
+        @newest_dir = 'desc'
+        if params[:order] == 'name'
+          @name_dir = params[:dir] == 'asc' ? 'desc' : 'asc'
+        elsif params[:order] == 'created_on'
+          @newest_dir = params[:dir] == 'desc' ? 'asc' : 'desc'
+        end
+        @projects = project_nested_list(projects)
+  end
+
+
   def project_nested_list(projects)
     if projects.any?
       if params[:order] == 'created_on'

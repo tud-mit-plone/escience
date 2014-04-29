@@ -143,7 +143,21 @@ class Project < ActiveRecord::Base
 
   def self.own(user=User.current, order='name DESC')
     visible(user).find(:all, :conditions => ["(creator = #{user.id})"], :order => order)
-  end	
+  end
+
+  def self.group_view(user=User.current, order='name DESC')
+    return visible(user).find_by_sql(["SELECT p.*
+                                   FROM projects p, members m
+                                   WHERE p.id = m.project_id
+                                   AND m.user_id = ?
+                                   AND (p.creator <> ? or p.creator is null)
+                                   ORDER BY ?
+                                   ","#{user.id}", "#{user.id}","#{order}"])
+  end
+
+  def self.community_view(user=User.current, order='name DESC')
+    return (self.visible(user) - (self.own(user,order) + self.group_view(user,order)) + Project.where("is_public = 1")).uniq
+  end
 
   # Returns true if the project is visible to +user+ or to the current user.
   def visible?(user=User.current)

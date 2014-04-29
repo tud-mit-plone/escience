@@ -76,5 +76,6 @@ RedmineApp::Application.routes.draw do
       end
   end
   match '/qr_gen(/:p_url)',:controller => 'application', :action => 'generate_qr_code', as: :generate_qr_code, :method => :get
+  match '/userSessionScope/(:scope_select)',:controller => 'application', :action => 'set_user_session_scope',:scope_select => /\d+/, as: :set_user_session_scope, :method => [:post,:get]
 end
 
