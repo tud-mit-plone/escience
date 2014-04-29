@@ -562,7 +562,10 @@ function updateIssueFrom(url) {
   $.ajax({
     url: url,
     type: 'post',
-    data: $('#issue-form').serialize()
+    data: $('#issue-form').serialize(),
+    success: function(data){
+        CKEDITOR.replaceAll();
+      }
   });
 }
 
