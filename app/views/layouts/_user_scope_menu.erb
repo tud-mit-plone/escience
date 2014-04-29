@@ -1,0 +1,24 @@
+<div class="container_16">
+  <div id="navigation_group" class="grid_3 roundabout-holder">
+    <ul class="roundabout-holder">
+      <li class="roundabout-moveable-item roundabout-in-focus" id="private">
+        <div class="roundabout_label"><%= l(:label_private) %></div>
+        <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.logged? && User.current.female)? 'w' : 'm' %>_grau.png" />
+      </li>
+      <li class="roundabout-moveable-item" id="team">
+        <div class="roundabout_label"><%= l(:label_team) %></div>
+        <img src="<%= Redmine::Utils.relative_url_root %>/images/team_grau.png" />
+      </li>
+      <li class="roundabout-moveable-item" id="community">
+        <div class="roundabout_label"><%= l(:label_community) %></div>
+        <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
+      </li>
+      <%if(User.current.admin?)%>
+      <li class="roundabout-moveable-item" id="admin">
+        <div class="roundabout_label"><%= l(:label_administration) %></div>
+        <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
+      </li>
+      <%end%>
+    </ul>
+  </div>
+</div>       

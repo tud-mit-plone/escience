@@ -1,15 +1,6 @@
 <%= render :partial => '/layouts/header' %>
     	<!-- Navigation for Team/Community/Private -->
-    	<div class="container_16">
-    		<div id="navigation_group" class="grid_3 roundabout-holder">
-    		  <ul class="roundabout-holder">
-      		  <li class="roundabout-moveable-item roundabout-in-focus" id="admin">
-        		  <div class="roundabout_label"><%= l(:label_admin) %></div>
-        		  <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.logged? && User.current.female)? 'w' : 'm' %>_grau.png" />
-      		  </li>
-      		</ul>
-    		</div>
-    	</div>	    
+      <%= render :partial => '/layouts/user_scope_menu' %>
     </header>
 
     <div id="container">
