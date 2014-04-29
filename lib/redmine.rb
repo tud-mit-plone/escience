@@ -214,7 +214,7 @@ end
 Redmine::MenuManager.map :project_menu do |menu|
   menu.push :overview, { :controller => 'projects', :action => 'show' }, :html => {:class => "first icon icon-desktop"}
   #menu.push :activity, { :controller => 'activities', :action => 'index' }
-  menu.push :roadmap, { :controller => 'versions', :action => 'index' }, :param => :project_id,
+  menu.push :roadmap, { :controller => 'versions', :action => 'index' }, :html => {:class => "icon .icon-road"}, :param => :project_id,
               :if => Proc.new { |p| p.shared_versions.any? }
   menu.push :issues, { :controller => 'issues', :action => 'index' }, :html => {:class => "icon icon-check"}, :param => :project_id, :caption => :label_issue_plural
 #  menu.push :new_issue, { :controller => 'issues', :action => 'new' }, :param => :project_id, :caption => :label_issue_new, :html => { :accesskey => Redmine::AccessKeys.key_for(:new_issue) }

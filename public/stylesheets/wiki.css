@@ -38,3 +38,6 @@
   font-size: 18px;
   width: 98%;
 }
+.wiki-page table tr td{
+  border: dashed 1px #DDD8D8;
+}
