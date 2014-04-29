@@ -1750,3 +1750,4 @@ en:
   account_readable_for_user: 'Can other users see my account?'
   no_name: 'No name given'
   label_album_delete: 'Delete album'
+  label_project_private: 'My'

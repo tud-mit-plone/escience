@@ -1457,3 +1457,4 @@ de:
   account_readable_for_user: 'Können andere meine Benutzerkonto sehen?'
   no_name: 'Kein Name vergeben'
   label_album_delete: 'Album entfernen'
+  label_project_private: 'Mein'
