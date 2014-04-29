@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
 
   def set_last_visited_page
     controllers = %w(documents issues my journals messages news boards projects reports repositories user_contact user_messages versions wiki wikis)
-    unallowed_actions = %w(logout login generate_qr_code)
+    unallowed_actions = %w(logout login generate_qr_code contact_member_search)
     
     if controllers.include?(params[:controller]) || !(unallowed_actions.include?(params[:action]))
       page = request.url
@@ -612,20 +612,6 @@ class ApplicationController < ActionController::Base
   # doesn't use the layout for api requests
   def _include_layout?(*args)
     api_request? ? false : super
-  end
-
-  def generate_qr_code(url = params[:p_url], size_x=30, size_y=30)
-    qr = nil
-    qr_size = 3
-    while(qr == nil && qr_size < 10)
-      begin
-        qr = RQRCode::QRCode.new( url, :size => qr_size, :level => :h )
-        png = qr.to_img
-        send_data(png.resize(size_x, size_y), :type => 'image/png', :disposition => 'inline')
-      rescue RQRCode::QRCodeRunTimeError => e
-        qr_size += 1
-      end
-    end
   end
 end
  
