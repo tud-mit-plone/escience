@@ -24,19 +24,19 @@
   	    </div>
   	    <div id="right" class="grid_3">
   		    <div id="sidebar_right" class="sidebar<%= ' empty' if ((yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") %>">
-  		    	<%#= render_menu :sidebarright_menu %>
-  		    	<% unless (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n" %>
-    		    	<div class="headline"><%= l(:label_specific) %></div>
-    		    	<div id="sitespecivic">
-    	        	<%= yield :sidebar_right %>
-    		    	</div>
-  		      <% end %>
-  		      <% unless params[:action]=='account' %>
-              <div class="<%= ((yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") ? 'headline' : 'splitter'%>">
-               <%= l :label_administration %>
-              </div>
-              <%= render_menu :admin_menu %>
-            <% end %>
+  		    	 <%#= render_menu :sidebarright_menu %>
+  		    	 <% unless (yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n" %>
+      		    	 <div class="headline"><%= l(:label_specific) %></div>
+                        <div id="sitespecivic">
+      	        	   <%= yield :sidebar_right %>
+      		    	  </div>
+    		       <% end %>
+    		       <% unless params[:action]=='account' %>
+                    <div class="<%= ((yield :sidebar_right) == "" || (yield :sidebar_right) == "  \n") ? 'headline' : 'splitter'%>">
+                      <%= l :label_administration %>
+                    </div>
+                    <%= render_menu :admin_menu %>
+                  <% end %>
           </div>
           <%#= call_hook :view_layouts_base_sidebar %>
   	    </div>

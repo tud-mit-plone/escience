@@ -16,7 +16,7 @@
     <% end %>
     </ul>
   <% else %>
-    <%  @user = session[:user].nil? ? User.new : session[:user] %>
+    <% @user = session[:user].nil? ? User.new : session[:user] %>
     <%= render :partial => 'welcome/sidebar' %>
   <% end%>
 <% end %>
@@ -93,12 +93,12 @@
                         </div>
                       <% end %>
                     </div>
-                <%  end
-                   end %>
+                  <% end %>
+                <% end %>
                 </div>
               </div>
-          <%  end
-             end %>
+            <% end %>
+          <% end %>
           </div>
           
         </div>
