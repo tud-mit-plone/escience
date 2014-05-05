@@ -1,11 +1,5 @@
 <%= stylesheet_link_tag 'font-awesome' %>
 
-$(document).ready(function() {
-    externalLinks().attr({target: "_blank"});
-    addToolTip(".sidebar .my","'+l(:tooltip_sidebar_organize)+'");
-    }
-
-
 <div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
   <div class='btn' style="
     float: right; 
