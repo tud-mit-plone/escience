@@ -23,6 +23,10 @@ class GroupInvitation < ActiveRecord::Base
     @@invitation_groups    
   end
   
+  def answer
+    return friendship_status_id
+  end
+
   private 
 
   def need_two_users

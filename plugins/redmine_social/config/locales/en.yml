@@ -1753,3 +1753,5 @@ en:
   label_project_private: 'My'
   label_my_document_plural: 'My documents'
   label_create: 'Create'
+
+  tooltip_double_click_open_message: 'Double click to open this message'

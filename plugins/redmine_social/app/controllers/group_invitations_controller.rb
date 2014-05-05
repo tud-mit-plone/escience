@@ -28,10 +28,13 @@ class GroupInvitationsController < ApplicationSocialController
       roles =  @group_invitation.role_ids.any? ? @group_invitation.role_ids : [Setting.plugin_redmine_social['invitation_default_role_id']]
       
       m = Member.new(:user_id => @user.id, :project => @group_invitation.group, :role_ids => roles)
-      m.save!
-      @group_invitation.group.members << m
-      @group_invitation.save!
-      flash[:notice] = l(:project_invitation_accepted, project: group_invitation.group.name)
+      if(m.save)
+        @group_invitation.group.members << m
+        @group_invitation.save!
+        flash[:notice] = l(:project_invitation_accepted, project: group_invitation.group.name)
+      else
+        flash[:error] = "Member not created"
+      end
     else 
       @group_invitation.friendship_status_id = FriendshipStatus[:denied].id
       @group_invitation.save!
