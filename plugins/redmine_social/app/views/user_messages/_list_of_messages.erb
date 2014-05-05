@@ -35,15 +35,18 @@
             <% case inv.friendship_status_id %>
               <% when FriendshipStatus["accepted"].id %>
                 <div class="icon-ok" style="font-size: 20px; top: -15px; left: 155px; opacity: 0.4; position: relative; 
-                                                                writing-mode: tb-rl; -webkit-transform: rotate(-30deg); -moz-transform: rotate(-30deg);
-                                                                -ms-transform: rotate(-30deg); -o-transform: rotate(-30deg); transform: rotate(-30deg);">
+                                                                writing-mode: tb-rl; -webkit-transform: rotate(-25deg); -moz-transform: rotate(-25deg);
+                                                                -ms-transform: rotate(-25deg); -o-transform: rotate(-25deg); transform: rotate(-25deg);">
                   <%= l(:accepted)%>
                 </div>
               <%when FriendshipStatus["denied"].id%>
                 <div class="icon-remove" style="font-size: 20px; top: -15px; left: 155px; opacity: 0.4; position: relative; 
-                                                                writing-mode: tb-rl; -webkit-transform: rotate(-30deg); -moz-transform: rotate(-30deg);
-                                                                -ms-transform: rotate(-30deg); -o-transform: rotate(-30deg); transform: rotate(-30deg);">
+                                                                writing-mode: tb-rl; -webkit-transform: rotate(-25deg); -moz-transform: rotate(-25deg);
+                                                                -ms-transform: rotate(-25deg); -o-transform: rotate(-25deg); transform: rotate(-25deg);">
                   <%= l(:denied)%>
+                </div>
+              <%when FriendshipStatus["pending"].id%>
+                <div class="icon-question" style="font-size: 50px; left: 210px; opacity: 0.4; margin-left: 220px; margin-top: -40px;">
                 </div>
               <%else%>
             <%end%>

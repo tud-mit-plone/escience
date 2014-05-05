@@ -31,9 +31,9 @@ class GroupInvitationsController < ApplicationSocialController
       if(m.save)
         @group_invitation.group.members << m
         @group_invitation.save!
-        flash[:notice] = l(:project_invitation_accepted, project: group_invitation.group.name)
+        flash[:notice] = l(:project_invitation_accepted, project: @group_invitation.group.name)
       else
-        flash[:error] = "Member not created"
+        flash[:error] = l(:sorry_there_was_an_error)
       end
     else 
       @group_invitation.friendship_status_id = FriendshipStatus[:denied].id
@@ -148,7 +148,7 @@ class GroupInvitationsController < ApplicationSocialController
 #    redirect_to :controller =>  @model_name.pluralize
   
     respond_to do |format|
-      flash[:notice] = :project_invitation_sent
+      flash[:notice] = l(:project_invitation_sent)
       format.html { redirect_to :controller =>  @model_name.pluralize }
       format.js {
         render :js => "$.notification({ message:'"+l(:project_invitation_sent)+"', type:'notice' })";

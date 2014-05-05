@@ -4,7 +4,11 @@
         <div class="icon-ok" style="font-size: 50px; top: -40px; left: 40px; opacity: 0.4; position: relative; 
                                                         writing-mode: tb-rl; -webkit-transform: rotate(-30deg); -moz-transform: rotate(-30deg);
                                                         -ms-transform: rotate(-30deg); -o-transform: rotate(-30deg); transform: rotate(-30deg);">
-          <%= l(:accepted)%>
+          <%if invitation.group.class == Project %>
+            <%= link_to(l(:accepted), project_path(invitation.group))%>
+          <%else%>
+            <%= l(:accepted)%>
+          <%end%>
         </div>
       <% when FriendshipStatus["pending"].id %>
         <%= form_tag url_for(:controller => 'group_invitations', :action => 'selection', :id => invitation.id), :remote => true do%> 

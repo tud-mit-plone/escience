@@ -1755,3 +1755,5 @@ en:
   label_create: 'Create'
 
   tooltip_double_click_open_message: 'Double click to open this message'
+
+  path_to_project: "Path to the project %{name}"
