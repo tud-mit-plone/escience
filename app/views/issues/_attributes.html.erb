@@ -14,11 +14,11 @@
 <div class="w33"><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></div>
 <% end %>
 
-<% if @issue.safe_attribute? 'assigned_to_id' && session[:current_view_of_eScience] != '0' %>
-<div class="w33 last"><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></div>
+<% if @issue.safe_attribute?('assigned_to_id') && !(session[:current_view_of_eScience].to_s == '0') %>
+  <div class="w33 last"><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></div>
 <% else %>
-<div class="w33 last"><input type="hidden" value="<%= User.current.id %>" name="issue[assigned_to_id]" /></div>
-<div class="clear"></div>
+  <div class="w33 last"><input type="hidden" value="<%= User.current.id %>" name="issue[assigned_to_id]" /></div>
+  <div class="clear"></div>
 <% end %>
 
 <% if @issue.safe_attribute?('category_id') && !@issue.project.nil? && @issue.project.issue_categories.any? %>
