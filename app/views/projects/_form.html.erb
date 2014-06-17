@@ -14,11 +14,11 @@
   <legend><%= l(:label_general) %></legend>
   <p style="float: right; margin:5px" class="project_public<%= ' checked' if @project[:is_public] %>"><%= f.check_box :is_public, :onclick => "$('.project_public').toggleClass('checked')" %></p>
   <p><%= f.text_field :name, :required => true, :size => 60, :style => "font-size:18px; height:20px;margin-bottom:3px;width: 100%;" %></p>
-  
+  <%= hidden_field_tag('project[parent_id]', params[:parent_id]) unless params[:parent_id].nil? %>
   <!--
-  <% unless @project.allowed_parents.compact.empty? %>
-      <p><%= label(:project, :parent_id, l(:field_parent)) %><%= parent_project_select_tag(@project) %></p>
-  <% end %>
+  <%# unless @project.allowed_parents.compact.empty? %>
+      <p><%#= label(:project, :parent_id, l(:field_parent)) %><%#= parent_project_select_tag(@project) %></p>
+  <%# end %>
   -->
   
   <p><label><%= l(:field_description) %></label>

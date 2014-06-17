@@ -14,6 +14,7 @@
   </div>
   <div class="clear"></div>
   <%= hidden_field_tag 'hidden_submit', '' %>
+
   <%= render :partial => 'form', :locals => { :f => f } %>
   <div class="btn-group" style="float:right;">
     <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_project').submit();" %>

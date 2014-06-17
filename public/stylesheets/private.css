@@ -1200,16 +1200,19 @@ ul.bc_submenu li {
 }
 
 #main fieldset .innerInfo.collapsed {
-  max-height: 0px;
+  /*max-height: 100%;*/
+  max-height: 0;
   overflow: hidden;
-  transition: max-height .5s, padding .3s, margin .5s;
+  /*display: none;*/
+  transition:  height .5s, max-height .5s, padding .3s, margin .5s;
   -moz-transition: max-height .5s, padding .3s, margin .5s;
-  -webkit-transition: max-height .5s, padding .3s, margin .5s;
-  -o-transition: max-height .5s, padding .3s, margin .5s;
+  -webkit-transition: height .5s, max-height .5s, padding .3s, margin .5s;
+  -o-transition:  height .5s, max-height .5s, padding .3s, margin .5s;
 }
 
 #main fieldset .innerInfo.open {
   height: auto;
+  max-height: 100%;
 }
 
 #main fieldset .tools {

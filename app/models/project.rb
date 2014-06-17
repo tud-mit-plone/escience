@@ -146,13 +146,17 @@ class Project < ActiveRecord::Base
   end
 
   def self.group_view(user=User.current, order='name DESC')
-    return visible(user).find_by_sql(["SELECT p.*
-                                   FROM projects p, members m
-                                   WHERE p.id = m.project_id
-                                   AND m.user_id = ?
-                                   AND (p.creator <> ? or p.creator is null)
-                                   ORDER BY ?
-                                   ","#{user.id}", "#{user.id}","#{order}"])
+    return visible(user).find_by_sql(["Select DISTINCT p.* 
+                                                     FROM projects p, 
+                                                      (Select p.id, p.name, m.user_id,count(m.project_id) as members 
+                                                                                FROM projects p, members m 
+                                                                                WHERE m.project_id = p.id group by m.project_id having count(m.project_id) > 1) as temp,
+                                                      members m 
+                                                      WHERE temp.id = p.id and p.id = m.project_id 
+                                                        AND (m.user_id = ? or p.creator = ?)
+                                                        AND (p.is_private_project is NULL or p.is_private_project <> 't')
+                                                      ORDER BY ?",
+                                  "#{user.id}","#{user.id}", "#{order}"])
   end
 
   def self.community_view(user=User.current, order='name DESC')
@@ -367,7 +371,9 @@ class Project < ActiveRecord::Base
       if p.to_s.blank?
         p = nil
       else
-        p = Project.find_by_id(p)
+        p1 = Project.find_by_id(p)
+        p1 = Project.find(p) unless p1
+        p = p1  
         return false unless p
       end
     end

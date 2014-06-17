@@ -144,11 +144,18 @@
       $("fieldset").each(function(){
         var innerInfo = $(this).find(".innerInfo.collapsed");
         $(this).hover(function(){
-          var height = innerInfo.height("auto").height();
-          innerInfo.height(height);
+          if ( innerInfo.hasClass( "collapsed" )){
+              innerInfo.removeClass("collapsed");
+              innerInfo.fadeIn(500,function(){
+                  innerInfo.addClass("open");
+                });
+          }
         },
         function() {
-          innerInfo.height(0);
+          if ( innerInfo.hasClass( "open" )){
+            innerInfo.removeClass("open");
+            innerInfo.addClass("collapsed");
+          }
         });
       });
     });
