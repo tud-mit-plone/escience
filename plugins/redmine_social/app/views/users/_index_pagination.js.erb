@@ -1,0 +1,4 @@
+$('#users_table').remove();
+$('.autoscroll', 'div').append('<%= escape_javascript(render :partial => 'users_table', :locales => {@users => @users}) %>');
+
+$(".pagination").html("<%= escape_javascript(pagination_links_full @user_pages, @user_count)%>");

@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     else
       @limit = per_page_option
     end
-
+    logger.info("offset: #{@offset},limit #{@limit}, return #{api_offset_and_limit}")
     @status = params[:status] || 1
 
     scope = User.logged.status(@status)
@@ -53,13 +53,13 @@ class UsersController < ApplicationController
                         :order => sort_clause,
                         :limit  =>  @limit,
                         :offset =>  @offset
-
     respond_to do |format|
       format.html {
         @groups = Group.all.sort
         render :layout => !request.xhr?
       }
-      format.api
+      format.api {}
+      format.js{ render :partial => "index_pagination" }
     end	
   end
 
