@@ -1200,10 +1200,9 @@ ul.bc_submenu li {
 }
 
 #main fieldset .innerInfo.collapsed {
-  /*max-height: 100%;*/
   max-height: 0;
   overflow: hidden;
-  /*display: none;*/
+  display: none;
   transition:  height .5s, max-height .5s, padding .3s, margin .5s;
   -moz-transition: max-height .5s, padding .3s, margin .5s;
   -webkit-transition: height .5s, max-height .5s, padding .3s, margin .5s;
