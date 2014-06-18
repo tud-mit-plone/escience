@@ -1200,18 +1200,22 @@ ul.bc_submenu li {
 }
 
 #main fieldset .innerInfo.collapsed {
-  max-height: 0;
   overflow: hidden;
   display: none;
-  transition:  height .5s, max-height .5s, padding .3s, margin .5s;
+/*  transition:  height .5s, max-height .5s, padding .3s, margin .5s;
   -moz-transition: max-height .5s, padding .3s, margin .5s;
   -webkit-transition: height .5s, max-height .5s, padding .3s, margin .5s;
   -o-transition:  height .5s, max-height .5s, padding .3s, margin .5s;
+*/}
+#main fieldset .innerInfo {
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 #main fieldset .innerInfo.open {
-  height: auto;
-  max-height: 100%;
+  
 }
 
 #main fieldset .tools {

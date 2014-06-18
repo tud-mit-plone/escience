@@ -144,17 +144,21 @@
       $("fieldset").each(function(){
         var innerInfo = $(this).find(".innerInfo.collapsed");
         $(this).hover(function(){
+
           if ( innerInfo.hasClass( "collapsed" )){
+              v_height = innerInfo.hide().height("auto").height();
+              innerInfo.height("0px");
+              innerInfo.show();
               innerInfo.removeClass("collapsed");
-              innerInfo.fadeIn(500,function(){
-                  innerInfo.addClass("open");
-                });
+              innerInfo.addClass("open");
+              innerInfo.animate({ height: v_height},500,function(){console.log("triggered")});
           }
         },
         function() {
           if ( innerInfo.hasClass( "open" )){
             innerInfo.removeClass("open");
             innerInfo.addClass("collapsed");
+            innerInfo.removeAttr("style");
           }
         });
       });
