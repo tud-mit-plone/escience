@@ -15,7 +15,7 @@
 	            <%= link_to l(:label_password_lost), :controller => 'account', :action => 'lost_password' %>
 	            </div>
 	        <% end %>
-			<%= javascript_tag "Form.Element.focus('username');" %>
+			<%= javascript_tag "$(\"#username\").focus()" %>
 			<% end %>
 		</div>
 	</div>
@@ -33,14 +33,14 @@
 					  	<%= f.text_field :login, :size => 25, :required => true %><br />
 					<%# end %>
 					<!--
-					<p><%= f.text_field :mail, :required => true %></p>
-					<p><%= f.select :language, lang_options_for_select %></p>
-					  <em class="info"><%= l(:text_caracters_minimum, :count => Setting.password_min_length) %></em></p>
+					<p><%#= f.text_field :mail, :required => true %></p>
+					<p><%#= f.select :language, lang_options_for_select %></p>
+					  <em class="info"><%#= l(:text_caracters_minimum, :count => Setting.password_min_length) %></em></p>
 					-->
 					  
 					<%= f.password_field :password, :size => 25, :required => true %><br />
 					<%= f.password_field :password_confirmation, :size => 25, :required => true %>
-				  <%= check_box_tag :confirm, true %><span id="confirmation"><%= l(:field_confirmation).html_safe %></span>					
+				  	<%= check_box_tag :confirm, true %><span id="confirmation"><%= l(:field_confirmation).html_safe %></span>					
 					<!--
 					<%# if Setting.openid? %>
 					  <p><%#= f.text_field :identity_url  %></p>
