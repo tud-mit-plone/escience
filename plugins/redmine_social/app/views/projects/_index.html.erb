@@ -103,9 +103,11 @@
           
         </div>
       <% end %>
-      <div class="invitation" style="display:none">
-        <%= render :partial => 'group_invitations/group_invitation', :locals => {:group => "project", :group_id => project.id}%>
-      </div>
+      <% if User.current.logged? %>
+        <div class="invitation" style="display:none">
+          <%= render :partial => 'group_invitations/group_invitation', :locals => {:group => "project", :group_id => project.id}%>
+        </div>
+      <% end %>
     </fieldset>
   <% end %>
 
@@ -148,10 +150,11 @@
           if ( innerInfo.hasClass( "collapsed" )){
               v_height = innerInfo.hide().height("auto").height();
               innerInfo.height("0px");
+              innerInfo.css("opacity","0");
               innerInfo.show();
               innerInfo.removeClass("collapsed");
               innerInfo.addClass("open");
-              innerInfo.animate({ height: v_height},500,function(){console.log("triggered")});
+              innerInfo.delay(500).animate({ height: v_height, opacity: 1},300,function(){});
           }
         },
         function() {

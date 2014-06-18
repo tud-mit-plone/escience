@@ -282,4 +282,12 @@ fieldset .author {
 
 #lostpassword input[type=text] {
 	width: 300px;
-}	
+}
+#main fieldset .innerInfo.collapsed {
+  overflow: hidden;
+  display: none;
+}
+
+#main fieldset .innerInfo.open {
+  
+}
