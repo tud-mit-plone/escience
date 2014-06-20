@@ -37,7 +37,7 @@
 </fieldset>
 
 <% if authorize_for('documents', 'add_attachment') %>
-  <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document },:remote => true, :multipart => true, :id => "attachments_form", :style => "display:none;") do %>
+  <%= form_tag({ :controller => 'documents', :action => 'add_attachment', :id => @document },:remote => true, :multipart => true, :id => "attachments_form", :style => "display:block;") do %>
     <div class="box"><%= render :partial => 'attachments/form' %></div>
   <% end %>
 <% end %>

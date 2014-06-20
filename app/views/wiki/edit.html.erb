@@ -39,7 +39,12 @@
   <% unless @project == User.current.private_project %>
   <p><label><%= l(:field_comments) %></label><%= f.text_area :comments, :rows => 3 %></p>
   <% end %>
-  <p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+  <p>
+    <label>
+      <%=l(:label_attachment_plural)%>
+    </label>
+    <%= render :partial => 'attachments/form', :locals => { :no_form => :true } %>
+  </p>
   </div>
 
   <%= hidden_field_tag 'hidden_submit', '' %>

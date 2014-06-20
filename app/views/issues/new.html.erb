@@ -30,7 +30,7 @@
       </div>
     </fieldset>
 
-    <p><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
+    <p><%= render :partial => 'attachments/form', :locals => {:container => @issue, :no_form => :true} %></p>
     
     <% if @issue.safe_attribute? 'watcher_user_ids' -%>
     <fieldset>

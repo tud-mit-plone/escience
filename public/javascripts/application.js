@@ -564,7 +564,6 @@ function updateIssueFrom(url) {
     type: 'post',
     data: $('#issue-form').serialize(),
     success: function(data){
-        CKEDITOR.replaceAll();
       }
   });
 }

@@ -1,5 +1,5 @@
 <% javascriptString = "" %>
-<div class="attachments">
+<div class="attachments" id="attachments">
 <% attachments.each do |attachment| %>
   <div class="attachement">
     <% mimetype = Redmine::MimeType.main_mimetype_of(attachment.filename) 

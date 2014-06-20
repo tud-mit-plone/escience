@@ -60,15 +60,14 @@
 <% end %>
 
 <%= render(:partial => "wiki/content", :locals => {:content => @content}) %>
-
 <%= link_to_attachments @page %>
 
 <% if @editable && authorize_for('wiki', 'add_attachment') %>
   <div id="wiki_add_attachment">
     <%= form_tag({:controller => 'wiki', :action => 'add_attachment',
                   :project_id => @project, :id => @page.title},
-                  :multipart => true, :id => "add_attachment_form",
-                  :style => "display:none;") do %>
+                  :multipart => true, :id => "attachments_form",
+                  :style => "display:block;") do %>
       <%= render :partial => 'attachments/form' %>
     <% end %>
   </div>

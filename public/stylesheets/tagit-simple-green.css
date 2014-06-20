@@ -80,6 +80,7 @@ ul.tagit li.tagit-choice {
     color: #ffffff;
     border: 0px solid #caf3cd;
     padding: 1px 13px 2px 4px;
+    background-image:none
 }
 
 ul.tagit li.tagit-choice.selected {
@@ -135,4 +136,8 @@ ul.tagit input[type="text"] {
 
 .tagit-hiddenSelect {
     display:none;
+}
+span.ui-icon.ui-icon-close{
+    height:auto;
+    width: auto;
 }

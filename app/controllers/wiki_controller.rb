@@ -417,7 +417,26 @@ class WikiController < ApplicationController
     attachments = Attachment.attach_files(@page, params[:attachments])
     render_attachment_warning_if_needed(@page)
     render_attachment_notice_if_upload_failed(attachments)
-    redirect_to :action => 'show', :id => @page.title, :project_id => @project
+#  redirect_to :action => 'show', :id => @page.title, :project_id => @project
+
+    errors = (attachments[:files].empty? && attachments[:unsaved].empty?) ? [l(:no_file_given)] : []
+    attachments[:errors].each do |error|
+      error.each do |k,v| 
+        errors << l(k) + " #{v.first}" if (k != :base)
+        errors << v.flatten if (k == :base)
+      end
+    end 
+    if errors.empty?
+      respond_to do |format|
+        format.js { render :partial => 'update_attachment'}
+      end
+    else
+      respond_to do |format|
+        format.json {
+          render :js => "$.notification({ message:'#{errors.join('\\n')}', type:'error' })";
+        }
+      end
+    end
   end
 
 private
