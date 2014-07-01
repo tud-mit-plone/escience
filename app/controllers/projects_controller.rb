@@ -94,6 +94,7 @@ class ProjectsController < ApplicationController
           @newest_dir = params[:dir] == 'desc' ? 'asc' : 'desc'
         end
         @projects = project_nested_list(projects)
+        return @projects
   end
 
 
@@ -129,8 +130,10 @@ class ProjectsController < ApplicationController
 
 
       parents = []
+      @show_parents = [] 
       projects.each do |project_element|
         project = projects_with_activities.nil? ? project_element : project_element[:project]
+        parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
         unless params[:show_all]
           projects_hierarchy = project.hierarchy()
           start = 0
@@ -139,24 +142,24 @@ class ProjectsController < ApplicationController
             start = 1
           end
           parent = projects_hierarchy[0]
-          if parent[:id] != 6 && !parents.any? { |b| b[:id] == parent[:id]}
+          if !@show_parents.any? { |b| b[:id] == parent[:id]}
             newest = projects_with_activities.nil? ? project_element.id : project_element[:project].id
             last_activity = projects_with_activities.nil? ? project_element.updated_on : project_element[:last_activity]
-            parents << {:id => parent.id, :project => parent, :date => last_activity, :start => start, :newest => newest}
+            @show_parents << {:id => parent.id, :project => parent, :date => last_activity, :start => start, :newest => newest}
           end
         else
-          parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
+          @show_parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
         end
       end
-      
+
       if params[:order] == 'name' || params[:order].nil?
         if params[:dir].nil? || params[:dir] == 'asc'
-          parents.sort! { |a,b| a[:project].name.downcase <=> b[:project].name.downcase }
+          @show_parents.sort! { |a,b| a[:project].name.downcase <=> b[:project].name.downcase }
         else
-          parents.sort! { |a,b| b[:project].name.downcase <=> a[:project].name.downcase }
+          @show_parents.sort! { |a,b| b[:project].name.downcase <=> a[:project].name.downcase }
         end
       end
-      
+
       return parents
     end
   end

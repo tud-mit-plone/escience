@@ -85,7 +85,7 @@
                 <div>
                 <% subproject.children().each_with_index do |subsubproject, i| 
                     if subsubproject.visible? %>
-                    <div>
+                    <div style='background-color: rgb(240, 240, 240);'>
                       <%= link_to(subsubproject.name, {:controller => 'projects', :action => 'show', :id => subsubproject}, :class => "link_to_project") %>
                       <% if subsubproject.id==project_element[:newest] %>
                         <div class="newest_project">
