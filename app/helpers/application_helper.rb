@@ -1485,7 +1485,6 @@ module ApplicationHelper
 
   def calendar_for(field_id)
     include_calendar_headers_tags
-#    image_tag("calendar.png", {:id => "#{field_id}_trigger",:class => "calendar-trigger"}) +
     javascript_tag("$(function() { $('##{field_id}').datepicker(datepickerOptions); });")
   end
 
@@ -1503,9 +1502,9 @@ module ApplicationHelper
                    "var datepickerOptions={dateFormat: '#{t("date.formats.jquery")}', constrainInput: false, firstDay: #{start_of_week}, " +
                      "showOn: 'button', buttonText:''};")
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
-        unless jquery_locale == 'en'
-          tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
-        end
+#        unless jquery_locale == 'en'
+        tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
+#        end
         tags << stylesheet_link_tag('jquery/jquery-ui-custom')
         tags
       end
