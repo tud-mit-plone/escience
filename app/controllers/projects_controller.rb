@@ -356,6 +356,7 @@ class ProjectsController < ApplicationController
     if errors.empty?
       respond_to do |format|
         format.js { render :partial => 'update_attachment'}
+        format.json { render :partial => 'update_attachment'}
       end
     else
       respond_to do |format|

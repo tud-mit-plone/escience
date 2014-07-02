@@ -18,12 +18,22 @@
            render_page = options && options[:render_page] ? options[:render_page] : 1
 
            filename_without_extension = attachment.disk_filename.to_s.match(/(.*)(\.)/)[1]
+           begin
+             max_pages = Docsplit.extract_length(File.join(input,attachment.disk_filename)).to_i
+           rescue => e 
+             logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
+             max_pages = 1
+           end
 
-           max_pages = Docsplit.extract_length(File.join(input,attachment.disk_filename)).to_i
+           
            render_page = render_page.to_i > max_pages ? 1 : render_page
-           pages = pages.to_i > max_pages ? 1 : pages 
+           pages = pages.to_i > max_pages ? 1 : pages
 
-           Docsplit.extract_images(File.join(input,attachment.disk_filename),:size => size,:output => output ,:format => [:jpg], :pages => pages)
+           begin
+             Docsplit.extract_images(File.join(input,attachment.disk_filename),:size => size,:output => output ,:format => [:jpg], :pages => pages)
+           rescue => e 
+              logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
+           end
 
            render_file = "#{File.join(output,"#{filename_without_extension}_#{render_page}.jpg")}"
            return render_file
@@ -155,7 +165,8 @@
           # end
 
           def thumbnail
-            if @attachment.thumbnailable? && thumbnail = @attachment.thumbnail({:size => params[:size], :pages => params[:pages]})
+            thumbnail = @attachment.thumbnail({:size => params[:size], :pages => params[:pages]})
+            if @attachment.thumbnailable? && thumbnail && File.exist?(thumbnail)
               if stale?(:etag => thumbnail)
                 send_file thumbnail,
                   :filename => thumbnail,

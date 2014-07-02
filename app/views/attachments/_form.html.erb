@@ -8,10 +8,14 @@
 <% end %>
 <div id="attachments_fields" style="width:100%">
   <fieldset>
-    <!--
-      <div class="toggleButton"><%= link_to_function('', 'toggleFieldsetNew(jQuery(this).parent().parent())', :title => (l(:button_toggle))) %></div>
-      <div class="deleteButton disabled"><%= link_to_function('', 'removeFileField(this)', :title => (l(:button_delete))) %></div>
-    -->
+  
+      <div class="toggleButton">
+        <%= link_to_function('', 'toggleFieldsetNew(jQuery(this).parent().parent())', :title => (l(:button_toggle))) %>
+      </div>
+      <div class="deleteButton disabled">
+        <%= link_to_function('', "removeFileField(jQuery(this).parent().parent(), '#{l(:label_fileupload)}')", :title => (l(:button_delete))) %>
+      </div>
+
       <legend><%= l(:label_fileupload) %></legend>
     <div class="toToggle">
       <div class="cover_input">

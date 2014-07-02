@@ -331,20 +331,18 @@ function addFileField(message) {
   });
 }
 
-function removeFileField(el) {
+function removeFileField(el,text) {
   var fields = $('attachments_fields');
-  var s = $(el).first();
+  var s = $(el);
   if (fields.children().length > 1) {
     s.remove();
     jQuery('.add_attachment').removeClass('disabled');
   } else {
-    s.update(s.innerHTML);
-    jQuery(s).removeClass('fileselected');
-    jQuery('#attachments_fields legend').html('Datei auswählen');
-    jQuery('#attachments_fields .fileupload').html('Datei auswählen');
-    jQuery('#attachments_fields .input').each(function(n,e) {jQuery(e).val('')});
-    jQuery('#attachments_fields .meta').html("<ul class = 'meta_information'></ul>");
-    jQuery('.meta_information').tagit({select:true, sortable:true, fieldName: "attachments[1][meta_information]" });
+    jQuery(s).find('div.fileselected').removeClass('fileselected');
+    jQuery('#attachments_fields legend').html(text);
+    jQuery('#attachments_fields input').each(function(n,e) {jQuery(e).val('')});
+    jQuery(s).find('div.editfilename').find('span').html('');
+    jQuery('#attachments_fields .meta').find('.tagit-choice').detach();
     jQuery('.add_attachment').addClass('disabled');
     jQuery('.deleteButton').addClass('disabled');
     if (jQuery(s).hasClass('collapsed')) toggleFieldsetNew($(s));

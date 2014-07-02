@@ -37,13 +37,13 @@
       %>
       <% end %>
     <% if options[:author] || !attachment.description.empty? %>
-    <% file_information = ''
-       file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(thumbnail_attachment_url(:id => attachment.id, :size => "155"), :width=>"155px") + "</div>".html_safe if mimetype == 'image'
-       file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(:controller => 'attachments', :action => 'thumbnail', :id => attachment.id), :height=>"64px") + "</div>".html_safe if filetype == 'pdf' || filetype == 'xls' || filetype == 'ods'
+    <% file_information = '' %>
+    <% file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(thumbnail_attachment_url(:id => attachment.id, :size => "155"), :width=>"155px") + "</div>".html_safe if mimetype == 'image' %>
+    <% file_information += '<div class="thumbnail" style="max-width:180px !important;">'+image_tag(url_for(:controller => 'attachments', :action => 'thumbnail', :id => attachment.id), :height=>"64px") + "</div>".html_safe if filetype == 'pdf' || filetype == 'xls' || filetype == 'ods' %>
        
-       file_information += '<i>'.html_safe+h(attachment.author)+', ' + format_time(attachment.created_on)+'</i>'.html_safe
-       file_information += '</br><div style="max-width:180px">'+h(" #{attachment.description}")+'</div>'.html_safe unless attachment.description.empty?
-       javascriptString += 'addToolTip("#fileinfo_'+attachment.id.to_s+'",\''+file_information+'\',"left");' %>
+    <% file_information += '<i>'.html_safe+h(attachment.author)+', ' + format_time(attachment.created_on)+'</i>'.html_safe %>
+    <% file_information += '</br><div style="max-width:180px">'+h(" #{attachment.description}")+'</div>'.html_safe unless attachment.description.empty? %>
+    <% javascriptString += 'addToolTip("#fileinfo_'+attachment.id.to_s.html_safe+'",\''+file_information.html_safe+'\',"left");' %>
     <% end %>
     </div>
   </div>

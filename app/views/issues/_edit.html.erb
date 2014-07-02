@@ -11,7 +11,7 @@
     <% end %>
 
     <%= link_to_attachments @issue %>
-    <p><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
+    <p><%= render :partial => 'attachments/form', :locals => {:container => @issue, :no_form => :true} %></p>
     </div>
 
     <%= f.hidden_field :lock_version %>
