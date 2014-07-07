@@ -22,6 +22,7 @@
              max_pages = Docsplit.extract_length(File.join(input,attachment.disk_filename)).to_i
            rescue => e 
              logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
+             logger.error "#{e.backtrace}"
              max_pages = 1
            end
 

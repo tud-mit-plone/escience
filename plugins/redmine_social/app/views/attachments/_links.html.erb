@@ -3,7 +3,7 @@
 <% attachments.each do |attachment| %>
   <div class="attachement">
     <% mimetype = Redmine::MimeType.main_mimetype_of(attachment.filename) 
-       filetype = attachment.filename[(attachment.filename.rindex('.')+1)..-1] %>
+       filetype = attachment.filename[((attachment.filename.rindex('.').nil? ? -1 : attachment.filename.rindex('.'))+1)..-1] %>
     <% if filetype == 'pdf' %>
       <%= link_to_attachment attachment, :download => true, :class => 'fancybox '+filetype.to_s+' '+mimetype.to_s, :target => '_self', :rel=> 'group', :id=>'fileinfo_'+attachment.id.to_s, :title => attachment.description.blank? ? attachment.filename.to_s : attachment.description.to_s -%>
     <% else %>
