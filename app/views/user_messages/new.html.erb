@@ -2,35 +2,68 @@
 
 <%= form_for(@user_message) do |f| %>
   <div style="top:-40px; position:relative;">
-    <%= f.submit l(:label_user_messages_send) %>
-    <%= link_to l(:button_cancel), request.referer, :class => "icon icon-history", :class => 'button' %>
+    <%= hidden_field_tag 'hidden_submit', '' %>
+
+    <%#= f.submit l(:label_user_messages_send)%>
+    <div class="btn-group" style="float:right">
+      <%= link_to l(:label_user_messages_send), "#top", :class => 'button', :onclick =>"$('#hidden_submit').attr('name','commit');$('form.new_user_message').submit();" %>
+      <%= link_to l(:button_cancel), request.referer, :class => "icon icon-history", :class => 'button' %>
+    </div>
   </div>
   <%#= f.error_messages %>
   <p>
     <%= f.label l(:label_user_messages_receiver) %><br />
     <div class="ui-widget ui-widget-content" id="recipient_autocomplete">
-    	<input id="user_message_receiver_visible" />
-    	<%= f.hidden_field :receiver %>
-    	<%= hidden_field_tag("buffer", @user_message_reply_id) %>
-    	<%= hidden_field_tag("reply_mail", @user_message_reply_mail) %>
-    	<div class="clear">&nbsp;</div>
+      <input id="user_message_receiver_visible" />
+      <%= f.hidden_field :receiver %>
+      <% if !@user_message_reply_mail.nil? %>
+        <%= hidden_field_tag("buffer", @user_message_reply_mail.author) %>
+        <%= hidden_field_tag("reply", @user_message_reply_mail.id) %>
+      <% end %> 
+      <div class="clear">&nbsp;</div>
     </div>
-  	<div class="clear"></div>
+    <div class="clear"></div>
   </p>
+  <%= hidden_field_tag(:hide_receivers, false) %>
+  <%= check_box_tag(:hide_receivers,true,false) %> 
+  <%= label_tag(l(:user_message_hide_receivers))%>
   <p>
     <%= f.label l(:label_user_messages_subject) %><br />
-    <%= f.text_field :subject %>
+    <%= f.text_field :subject, :value => @user_message_reply_mail.nil? ? '' : "Re: #{@user_message_reply_mail.subject}"%>
   </p>
+  <%if !@user_message_reply_mail.nil? %>
+    <fieldset class="collapsable" id='previous_message'>
+      <legend onclick="toggleFieldset(this)"><%= l(:user_message_previous_message) %></legend>
+      <div> 
+        <%= textilizable @user_message_reply_mail, :body %>
+      </div>
+    </fieldset>
+    
+    <fieldset class="collapsable" id='message_history'>
+    <legend onclick="toggleFieldset(this)"><%= "History" %></legend>
+    <% @user_message_reply_mail.get_history.each do |msg| %>
+    <div class= <%= msg.user == User.current ? "my_message" :  "their_message" %>> 
+      <fieldset class="collapsable">
+        <legend onclick="toggleFieldset(this)"><%= msg.user == User.current ? l(:user_message_me) : "#{msg.user.lastname}, #{msg.user.firstname}" %></legend>
+        <div> 
+          <%= textilizable msg, :body %>
+        </div>
+      </fieldset>
+    </div>
+    <% end %>
+    </fieldset>
+    <%= javascript_tag("$( document ).ready( function() { toggleFieldset($('#message_history').find('legend')[0])});")%>
+  <% end %> 
   <p>
     <%= f.label l(:label_user_messages_body) %><br />
     <%= f.text_area :body, :class => 'ckeditor' %>
   </p>
   <p>
-    <%= f.submit l(:label_user_messages_send) %>
+    <%#= f.submit l(:label_user_messages_send) %>
+    <%= link_to l(:label_user_messages_send), "#top", :class => 'button', :onclick =>"$('#hidden_submit').attr('name','commit');$('form.new_user_message').submit();" %>
     <%= link_to l(:button_cancel), user_messages_path, :class => "icon icon-history", :class => 'button' %>
   </p>
 <% end %>
-
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'user_message' %>
   <%= javascript_include_tag 'visualsearch/jquery.ui.core.js' %>
@@ -41,45 +74,50 @@
   <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
   <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
   
+  <%= javascript_tag("$( document ).ready( function() { setTimeout( function(){toggleFieldset($('#previous_message').find('legend'))}, 700); });")%>
   <%= javascript_tag '
-  	$(function() {
-		$( "#recipient_autocomplete" ).click(function() {
-		  user_message_receiver_visible.focus();
-		});
-		
-		$( "#user_message_receiver_visible" ).autocomplete({
-			source: function( request, response ) {
-				$.ajax({
-					url: "/usersearch",
-  				dataType: "json",
-					data: {
-						maxRows: 12,
-						q: request.term
-					},
-			success: function( data ) {
-				response( $.map( data, function( item ) {
-					return {
-					  id: item.user.id,
-						label: item.user.firstname + " " +item.user.lastname
-						}
-						}));
-					}
-				});
-			},
-			minLength: 2,
-			select: function( event, ui ) {
-				addUserToReceivers(ui.item.label, ui.item.id);
-				return false;
-			},
-			open: function() {
-				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-			},
-			close: function() {
-				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-			}
-		});'+@user_message_reply+
-'});
-	      ' %>
+    $( document ).ready( function() {
+    $("#user_message_receiver").val("");
+    $( "#recipient_autocomplete" ).click(function() {
+      user_message_receiver_visible.focus();
+    });
+    
+    $( "#user_message_receiver_visible" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "/usersearch",
+          dataType: "json",
+          data: {
+            maxRows: 12,
+            q: request.term
+          },
+      success: function( data ) {
+        response( $.map( data, function( item ) {
+          return {
+            id: item.user.id,
+            label: item.user.firstname + " " +item.user.lastname
+            }
+            }));
+          }
+        });
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        addUserToReceivers(ui.item.label, ui.item.id);
+        return false;
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    });
+        });' %>
+
+      <% @receivers.each do |r| %>
+        <%= add_user_to_receivers(r) %>
+      <% end unless @receivers.nil? %>
 <% end %>
 
 <%= render :partial => "user_message_side_menu"%>

@@ -180,7 +180,7 @@ a.link_to_message {
 } 
 
 #new_user_message input[type=text], .ui-widget {
-  width: 80%;
+  width: 565px;
   border: solid 1px #e1e1e1;
   height: 27px;
   -moz-border-radius: 5px;
@@ -200,7 +200,7 @@ a.link_to_message {
 }
 
 .ui-widget {
-  width: 81%;
+  width: 573px;
   cursor: text;
   height: auto;
 }
@@ -281,4 +281,81 @@ div.name_element {
 
 .delete_button:hover {
   background-position-y: 100%;
+}
+.their_message{
+  position: relative;
+  width: 100%;
+  height: inherit;
+  padding: 0px;
+  background: rgba(211,224,235,1.00);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: #dddddd solid 1px;
+  margin-bottom: 10px;
+}
+
+.their_message:after{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 5px 12px 5px 0;
+  border-color: transparent  rgba(211,224,235,1.00);
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -12px;
+  top: 12px;
+}
+
+.their_message:before{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 5px 12px 5px 0;
+  border-color: transparent #dddddd;
+  display: block;
+  width: 0;
+  z-index: 0;
+  left: -13px;
+  top: 12px;
+}
+
+.my_message{
+  position: relative;
+  width: 100%;
+  height: inherit;
+  padding: 0px;
+  background: #DEDEDE;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: #dddddd solid 1px;
+  margin-bottom: 10px;
+}
+
+.my_message:after{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 5px 0 5px 12px;
+  border-color: transparent #DEDEDE;
+  display: block;
+  width: 0;
+  z-index: 1;
+  right: -12px;
+  top: 12px;
+}
+
+.my_message:before{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 5px 0 5px 12px;
+  border-color: transparent #dddddd;
+  display: block;
+  width: 0;
+  z-index: 0;
+  right: -13px;
+  top: 12px;
 }

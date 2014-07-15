@@ -65,16 +65,6 @@
   float: left;
 }
 
-.collapsable.collapsed {
-  border: none;
-  padding: 2px 20px;
-  margin: -2px 0;
-  background-color: #fff;
-}
-
-.collapsable.collapsed legend {
-  font-size: 12px;
-}
 .openUser, .sendMessage, .addUser, .deleteUser {
   float: right;
 	width:13px;

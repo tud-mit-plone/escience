@@ -1,6 +1,9 @@
 <% content_for :sidebar_right do %>
     <ul>
      <li><%= link_to(l(:label_user_messages_new), {:action => "new"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'new'}") %></li>
+     <% if @user_message.id && !(@user_message.new_record?) %>
+     <li><%= link_to(l(:label_user_messages_reply), {:action => "new",:reply => "#{@user_message.id}"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'new'}") %></li>
+     <% end %>
      <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'index'}") %></li>
      <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
      <li><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>

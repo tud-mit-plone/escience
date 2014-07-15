@@ -1758,3 +1758,6 @@ en:
 
   path_to_project: "Path to the project %{name}"
   label_newest_project: "latest project"
+  user_message_previous_message: "Previous message"
+  user_message_me: "Me"
+  user_message_hide_receivers: "Recipients as BCC"

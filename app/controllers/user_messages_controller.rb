@@ -99,14 +99,15 @@ class UserMessagesController < ApplicationController
   # GET /user_messages/new.xml
   def new
     @user_message = UserMessage.new
-    @user_message_reply_mail = params[:reply]
-    @user_message_reply = ""
-    if !params[:id].nil?
-      user = User.find(params[:id])
-      if !user.nil?
-        @user_message_reply_id = user.id
-        @user_message_reply = " addUserToReceivers('#{user.firstname} #{user.lastname}', '#{user.id}');"
-      end
+    if !@user_message_reply_mail.nil?
+      @receivers = [] 
+      @receivers += @user_message_reply_mail.receiver_list if !@user_message_reply_mail.receiver_list.nil?
+      @receivers << @user_message_reply_mail.user if !@user_message_reply_mail.user.nil?
+      @receivers << @user_message_reply_mail.receiver if !@user_message_reply_mail.receiver.nil?
+      @receivers.uniq!
+      @receivers.delete(User.current)
+    else 
+      params.delete :reply 
     end
     respond_to do |format|
       format.html # new.html.erb
