@@ -138,7 +138,7 @@ module ActionMailer
         s
       end
       info("\nSent email \"#{event.payload[:subject]}\" (%1.fms)#{recipients}" % event.duration)
-      debug(event.payload[:mail])
+      #debug(event.payload[:mail])
     end
   end
 end
