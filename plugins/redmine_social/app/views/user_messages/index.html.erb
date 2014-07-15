@@ -1,0 +1,43 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'user_message' %>
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_social' %>
+  <%= javascript_include_tag 'jquery.dataTables.min.js'%>
+  <%= javascript_tag '
+    $(function() {addToolTip(".inbox .user_message_links div.delete, .archive .user_message_links div.delete, .sent .user_message_links div.delete","'+l(:tooltip_user_message_delete)+'","left")});
+    $(function() {addToolTip(".trash .user_message_links div.delete","'+l(:tooltip_user_message_deleteFin)+'","left")});
+    $(function() {addToolTip(".user_message_links div.archive","'+l(:tooltip_user_message_archive)+'","left")});
+    $(function() {addToolTip("#emptytrash_user_message_link","'+l(:tooltip_user_message_emptyTrash)+'","top")});
+    $(function() {addToolTip("#new_user_message_link","'+l(:tooltip_user_message_newMessage)+'","top")});
+  '%>
+<% end %>
+
+<div id="list_of_user_messages"><%= render :partial => 'list_of_messages' %></div>
+
+<% content_for :sidebar_right do %>
+    <ul>
+     <li><%= link_to(l(:label_user_messages_new), {:action => "new"}) %></li>
+     <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' unless params[:directory]}") %></li>
+     <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
+     <li class='<%= 'droppable' if @directory != "archive" && @directory != "sent" %>' id="to_archive"><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
+     <li class='droppable' id="to_trash"><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
+    <% if !@user_messages.empty? && @directory == "trash" %>
+      <li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
+    <% end %>
+    </ul>
+<% end %>
+
+<%= javascript_tag "
+  $(document).ready(function() {
+    $('.droppable').droppable({ 
+       accept: '.draggable',
+       snap: false,
+       hoverClass: 'ui-droppable-hover',       
+       drop: function(event, ui) {
+          type = $(event.target).attr('id');
+          action = 'GET';
+          if (type == 'to_trash') {action = 'DELETE';}
+          $(ui.draggable).find('a.'+type).click();
+       }
+    });
+  });
+" %>
