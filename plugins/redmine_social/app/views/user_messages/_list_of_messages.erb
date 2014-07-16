@@ -10,10 +10,18 @@
   <% elsif !@user_messages.empty? %>
     <div id="emptytrash_user_message_link"><%= link_to({:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) do %><div></div><%end %></div>
   <% end %>
-   
-   
+  <div class="clear"></div>
+  <div style="width: 20%; display: table;">
+    <div style="display: table-row; padding-right: 5px;">
+      <div style="display: table-cell; padding-right: 5px;"><%= "#{l(:user_message_sort)}:"%></div>
+      <div style="display: table-cell; padding-right: 5px;"><%= link_to(l(:user_message_sort_content),'#', :onclick => "$('#list_of_messages').find('th')[0].click();",:remote => true) %></div>
+      <div style="display: table-cell; padding-right: 5px;"><%= link_to(l(:user_message_sort_date),'#', :onclick => "$('#list_of_messages').find('th')[1].click();",:remote => true) %></div>
+      <div style="display: table-cell; padding-right: 5px;"><%= link_to(l(:user_message_sort_author),'#', :onclick => "$('#list_of_messages').find('th')[2].click();",:remote => true) %></div>
+    </div>
+  </div>
+  
   <table id="list_of_messages" width="100%" cellpadding="0" cellspacing="0">
-    <thead><tr><th></th></tr></thead>
+    <thead><tr><th></th><th></th><th></th></tr></thead>
     <tbody>
   <% @user_messages.each do |user_message| %>
     <tr>
@@ -66,6 +74,14 @@
       </div>
     </div>
       </td>
+      <td style="display: none"><%= format_time(user_message.created_at) %></td>
+      <td style="display: none">
+        <% if(@directory == 'sent') %>
+          <%= render :partial => 'sent', :locals => { :user_message => user_message } %>
+        <% else %>
+          <%= render :partial => 'received', :locals => { :user_message => user_message } %>
+        <% end %>
+      </td>
     </tr>
   <% end unless @user_messages.nil? %>
     </tbody>
@@ -76,7 +92,12 @@
     </div>
   <% end %>
 </div>
+<%#= javascript_include_tag("http://cdn.datatables.net/1.10.1/js/jquery.dataTables.min.js") %>
 <%= javascript_tag "
+  function filterGlobal () {
+      $('#list_of_messages').DataTable().search($('#global_filter').val(), false, true).draw();
+  };
+
   updateDraggableMessages();
   $('.user_message').click(function() {$(this).parent().toggleClass('selected');});
   $('.user_message').dblclick(function() {self.location.href=$(this).find('input').val();});" + '
@@ -114,7 +135,8 @@
               "sNext":     "&nbsp;",
               "sLast":     "&nbsp;",
           }
-        }
+        },
+      "order": [[1,"desc"]]
     });
     $("#recipient_autocomplete").droppable({ 
        accept: ".draggable",
@@ -123,5 +145,8 @@
           addUserToReceivers(ui.helper.context.innerHTML, ui.helper.context.id);
        }
     });
+    $("input.global_filter").on("keyup click", function () {
+        filterGlobal();
+    } );
   $(".dataTables_filter input").attr("placeholder", "'+l(:filter)+'");
 });' %>

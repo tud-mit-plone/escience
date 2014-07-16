@@ -1761,3 +1761,8 @@ en:
   user_message_previous_message: "Previous message"
   user_message_me: "Me"
   user_message_hide_receivers: "Recipients as BCC"
+  user_message_history: "History"
+  user_message_sort: "Sorting"
+  user_message_sort_content: "Content"
+  user_message_sort_date: "Date"
+  user_message_sort_author: "Author"

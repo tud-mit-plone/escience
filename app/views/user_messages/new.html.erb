@@ -40,7 +40,7 @@
     </fieldset>
     
     <fieldset class="collapsable" id='message_history'>
-    <legend onclick="toggleFieldset(this)"><%= "History" %></legend>
+    <legend onclick="toggleFieldset(this)"><%= l(:user_message_history) %></legend>
     <% @user_message_reply_mail.get_history.each do |msg| %>
     <div class= <%= msg.user == User.current ? "my_message" :  "their_message" %>> 
       <fieldset class="collapsable">

@@ -7,16 +7,25 @@
 </h1>
 
 <div id="show_user_message">
-  <div class="date"><%= format_time(@user_message.created_at) %></div>
-  <div class="author">
-    <% if(@directory == 'sent') %>
-      <%= render :partial => 'sent', :locals => { :user_message => @user_message } %>
-    <% else %>
-      <%= render :partial => 'received', :locals => { :user_message => @user_message } %>
-    <% end %>
-  </div>
-  <span class="subject"><%=h @user_message.subject %></span>
-  <p><%= @user_message.body.html_safe %></p>
+    <fieldset>
+    <legend><%=h @user_message.subject.truncate(20) %></legend>
+    <%= "#{l(:label_user_messages_subject)}: "%><span class="subject"><%=h @user_message.subject %></span>
+    <div class="date" style="float: right"><%= format_time(@user_message.created_at) %></div>
+    <div class="author">
+      <%= "#{l(:author)}: "%>
+      <% if(@directory == 'sent') %>
+        <%= render :partial => 'sent', :locals => { :user_message => @user_message } %>
+      <% else %>
+        <%= render :partial => 'received', :locals => { :user_message => @user_message } %>
+      <% end %>
+    </div>
+  </fieldset>
+  <fieldset class="collapsable" id='previous_message'>
+      <legend onclick="toggleFieldset(this)"><%= l(:message) %></legend>
+      <div> 
+        <%= textilizable @user_message, :body %>
+      </div>
+    </fieldset>
 </div>
 
 <%= render :partial => "user_message_side_menu"%>

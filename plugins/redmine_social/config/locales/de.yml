@@ -1465,3 +1465,8 @@ de:
   user_message_previous_message: 'Vorherige Nachricht'
   user_message_me: "Ich"
   user_message_hide_receivers: "Empfänger als BCC"
+  user_message_history: "Gesprächsverlauf"
+  user_message_sort: "Sortierung"
+  user_message_sort_content: "Inhalt"
+  user_message_sort_date: "Datum"
+  user_message_sort_author: "Author"
