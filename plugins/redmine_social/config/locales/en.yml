@@ -685,7 +685,7 @@ en:
   #en: insert: Insert
   insert: Insert
   #en: invite_a_friend: Invite a friend
-  invitation_for_project_subject: I want to ivite you to a project.
+  invitation_for_project_subject: I want to invite you to a project.
   invitation_for_project_message: "Do you want to accept the invitation to the project %{project}."
   invite_a_friend: Invite a friend
   invite_friend_to_project_first: "Do you want to invite <i>"

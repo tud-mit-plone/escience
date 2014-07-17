@@ -60,7 +60,7 @@
             <%end%>
           <%end%>
         <%end%>
-        <div class="message"><%= user_message.body.html_safe %></div>
+        <div class="message"><%= textilizable user_message, :body %></div>
       </div>
       <div class="user_message_links ">
         <%= link_to({:controller => "user_messages", :action => "destroy", :id => user_message.id, :directory => @directory}, :confirm => self.l(:text_message_destroy_confirmation), :method => :delete, :remote => true, :class=> "to_trash") do %>
