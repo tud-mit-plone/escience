@@ -1,12 +1,12 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
 gem 'rails', '3.2.19'
 gem "jquery-rails", "~> 2.0.2"
 gem "i18n", "~> 0.6.0"
 gem "coderay", "~> 1.0.6"
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :mingw_18, :jruby]
 gem "builder", "3.0.0"
+gem 'sprockets'
 
 # Optional gem for LDAP authentication
 group :ldap do
@@ -46,9 +46,11 @@ platforms :mri_18, :mingw_18 do
   end
 end
 
-platforms :mri_19, :mingw_19 do
-  group :mysql do
-    gem "mysql2", "~> 0.3.11"
+if RUBY_VERSION =~ /^1/
+  platforms :mri_19, :mingw_19 do
+    group :mysql do
+      gem "mysql2", "~> 0.3.11"
+    end
   end
 end
 
@@ -79,6 +81,7 @@ end
 group :development do
   gem "rdoc", ">= 2.4.2"
   gem "yard"
+  #gem "debugger"
 end
 
 group :test do
@@ -88,7 +91,10 @@ group :test do
   platforms = [:mri_19]
   platforms << :jruby if defined?(JRUBY_VERSION) && JRUBY_VERSION >= "1.7"
   gem "test-unit", :platforms => platforms
-  gem "mocha", "0.12.3"
+  gem 'minitest', '3.5.0'
+  gem "mocha", "~>0.13.3", :require => false
+  gem 'cane', '~> 2.6.2'
+  gem 'flay'
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
@@ -118,7 +124,6 @@ gem "pry"
 #dropbox plugin
 gem "oauth"
 gem  "multipart-post"
-gem "dropbox-sdk"
 # htmlentities are needed for decoding wysiwyg into wiki
 gem "htmlentities"
 gem "rghost"
@@ -133,8 +138,10 @@ gem "power_enum"
 gem 'acts_as_commentable', '3.0.1'
 gem 'cocaine','0.3.2'
 gem 'paperclip','3.1.4'
-gem 'docsplit'
+gem 'docsplit', '~> 0.7.5'
 gem 'iconv'
 gem 'capit'
 gem 'rqrcode_png'
 gem 'pismo'
+gem 'sys-proctable'
+gem 'simplecov', :require => false, :group => :test
