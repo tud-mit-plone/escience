@@ -1079,6 +1079,7 @@ de:
   text_own_membership_delete_confirmation: "Sie sind dabei, einige oder alle Ihre Berechtigungen zu entfernen. Es ist möglich, dass Sie danach das Projekt nicht mehr ansehen oder bearbeiten dürfen.\nSind Sie sicher, dass Sie dies tun möchten?"
   text_zoom_in: Zoom in
   text_zoom_out: Zoom out
+  text_created_on: Angelegt am
 
   default_role_manager: ProjektleiterIn
   default_role_developer: ForscherIn

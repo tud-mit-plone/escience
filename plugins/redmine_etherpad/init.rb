@@ -5,11 +5,18 @@
 require 'redmine'
 require 'uri'
 
+def hash_to_querystring(hash)
+  hash.keys.inject('') do |query_string, key|
+    query_string << '&' unless key == hash.keys.first
+    query_string << "#{URI.encode(key.to_s)}=#{URI.encode(hash[key].to_s)}"
+  end
+end
+
 Redmine::Plugin.register :redmine_etherpad do
   name 'Redmine Etherpad plugin'
   author 'Charlie DeTar'
   description 'Embed etherpad-lite pads in redmine wikis.'
-  version '0.0.1'
+  version '0.0.2'
   url 'https://github.com/yourcelf/redmine_etherpad'
   author_url 'https://github.com/yourcelf'
 
@@ -17,6 +24,7 @@ Redmine::Plugin.register :redmine_etherpad do
     desc "Embed etherpad"
     macro :etherpad do |obj, args|
       conf = Redmine::Configuration['etherpad']
+      p Redmine::Configuration
       unless conf and conf['host'] 
         raise "Please define etherpad parameters in configuration.yml."
       end
@@ -52,15 +60,8 @@ Redmine::Plugin.register :redmine_etherpad do
 
       width = controls.delete('width')
       height = controls.delete('height')
-
-      def hash_to_querystring(hash)
-        hash.keys.inject('') do |query_string, key|
-          query_string << '&' unless key == hash.keys.first
-          query_string << "#{URI.encode(key.to_s)}=#{URI.encode(hash[key].to_s)}"
-        end
-      end
       
-      return CGI::unescapeHTML("<iframe src='#{conf['host']}/p/#{URI.encode(padname)}?' width='#{width}' height='#{height}'></iframe>").html_safe
+      return CGI::unescapeHTML("<iframe src='#{conf['host']}/p/#{URI.encode(padname)}?#{hash_to_querystring(controls)}' width='#{width}' height='#{height}'></iframe>").html_safe
     end
   end
 end

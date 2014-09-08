@@ -1150,6 +1150,7 @@ en:
   text_project_closed: This project is closed and read-only.
   text_welcome: This platform provides a virtual space where scientists can communicate with each other to generate new knowledge and to develop common resources for research and sharing. In addition to tools for work organization and coordination of activities can be found here extensive knowledge, media and documentation, as well as software and data for scientific experiments. You decide what, with what and whom you are researching. A strong community is always at your side.
   text_headline: The Research Network for Saxony
+  text_created_on: Angelegt am
 
   default_role_manager: Manager
   default_role_developer: Developer

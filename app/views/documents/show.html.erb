@@ -1,6 +1,7 @@
 <div id="titleOfProject"><h1><%= link_to(h(@project.name), :controller => 'projects', :action => 'show', :id => @project.id).html_safe unless @project.nil? %> <i class="icon-beaker"></i></h1></div>
 
-<% content_for :sidebar_right do %>
+<% content_for :sidebar_rights do %>
+<!--
   <ul>
     <li><%= link_to l(:button_back), project_documents_path(@project), :class => 'icon icon-chevron-left' %></li>
     <% if User.current.allowed_to?(:manage_documents, @project) %>
@@ -9,13 +10,16 @@
       <li><%= delete_link document_path(@document), :class => 'icon icon-trash' %></li>
     <% end %>
   </ul>
+-->
 <%end%>
 
-<h2><%=h @document.title %> <i class="icon-book"></i></h2>
-<div style="float:right; margin-top: -45px; text-align:right">
+<h2 style="float:left;"><%=h @document.title %> <i class="icon-book"></i></h2>
+<%= link_to(l(:button_back),  project_documents_path(@project), :class => "btn", :style => 'float:right') %>
+<div style="float:right; margin-right: 10px; text-align:right">
     <%=h @document.category.name %><br />
-    <%= format_date @document.created_on %>
+    <%=l(:text_created_on)%> <%= format_date @document.created_on %>
 </div>
+<div class="clear"></div>
 <% unless @document.description.nil? || @document.description.empty? %>
   <div id="documents">
     <div class="wiki description" >
@@ -24,9 +28,9 @@
   </div>
 <% end %>
 <% if @document.category.name == 'Kooperatives Tabellendokument'%>
-  <%= textilizable "{{ethersheet(#{@document.title}, useMonospaceFont=true, width=100%)}}" %>
+  <%= textilizable "{{ethersheet(#{@document.title}_#{@project.name}, useMonospaceFont=false, width=100%)}}" %>
 <% elsif @document.category.name == 'Kooperatives Textdokument'%>
-  <%= textilizable "{{etherpad(#{@document.title.gsub(' ','_')}, useMonospaceFont=true, width=100%)}}" %>
+  <%= textilizable "{{etherpad(#{@document.title.gsub(' ','_')}__#{@project.name.gsub(' ','_')}, useMonospaceFont=true, width=100%)}}" %>
 <% end %>
 
 <fieldset>
