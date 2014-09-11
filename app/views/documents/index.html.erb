@@ -32,7 +32,7 @@
   
   <% @grouped.keys.sort.each do |group| %>
     <fieldset id="document_<%= group %>">
-      <legend><%= @sort_by == 'date' ? format_date(group) : group %></legend>
+      <legend><%= @sort_by == 'date' ? format_date(group) : l('text_doctype_' + group.name) %></legend>
       <div style="margin-top:-10px;">
         <%= render :partial => 'documents/document', :collection => @grouped[group] %>
       </div>

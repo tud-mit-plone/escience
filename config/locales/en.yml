@@ -500,6 +500,10 @@ en:
   project_module_calendar: Calendar
   project_module_gantt: Gantt
 
+  label_wiki_dialog_title: Add/change a wiki page
+  label_wiki_dialog_text: Please insert the name for the wiki page
+  label_coop_text_dialog_title: Add/change a cooperative text document
+  label_coop_text_dialog_text: Please insert the name for the cooperative text document
   label_community: Community
   label_estimated_hours: h estimated
   label_navigation: Issuehierarchie

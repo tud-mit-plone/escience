@@ -798,8 +798,10 @@ de:
   label_wiki_page_plural: Wiki-Seiten
   label_wiki_toc: Inhaltsverzeichnis
   label_wiki_toplink: Zum Seitenanfang
-  label_wiki_dialog_title: Wiki-Seite hinzufügen/ ändern
+  label_wiki_dialog_title: Wiki-Seite hinzufügen/ändern
   label_wiki_dialog_text: Bitte geben Sie die Bezeichnung der Wiki-Seite ein
+  label_coop_text_dialog_title: Kooperatives Textdokument einfügen/ändern
+  label_coop_text_dialog_text: Bitte geben Sie eine Bezeichnung für des Textdokument ein
   label_index_by_title: Seiten nach Titel sortiert
   label_index_by_date: Seiten nach Datum sortiert
   label_current_version: Gegenwärtige Version
@@ -1008,6 +1010,8 @@ de:
 
   field_active: Aktiv
 
+  text_doctype_coop_text: Kooperatives Textdokument
+  text_doctype_coop_sheet: Kooperatives Tabellendokument
   text_user_messages_empty: Keine Nachrichten vorhanden.
   text_personalize_account: Hier haben Sie die Möglichkeit Ihre Übersichtsseite anzupassen. Wählen Sie anzuzeigende Elemente aus und verändern Sie deren Reihenfolge.
   text_member_search: Bitte geben Sie das zu suchende Mitglied in das Eingabefeld ein. Es wird automatisch anhand der Eingabe (mindestens 3 Zeichen) das Ergebnis generiert.

@@ -2,6 +2,7 @@
 Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
 
 body
 {
@@ -13,13 +14,28 @@ body
 }
 
 .wiki-page {
-  color:#8d8d8d;
   display:inline-block;
   background-image: url('/javascripts/ckeditor/plugins/insert_page/insert_page_small.png');
   background-repeat: no-repeat;
   background-position: 0% 50%;
   padding-left: 15px;
+}
+
+.makro {
   text-decoration: none;
+  color:#8d8d8d;
+}
+
+.coop-text::before {
+	margin-right: 4px;
+}
+
+.coop-text {
+  width: 98%;
+  padding: 3px 5px;
+  display: block;
+  border: solid 1px #F0F0F0;
+  margin-bottom: 5px;
 }
 
 .cke_editable

@@ -97,6 +97,7 @@ module ApplicationHelper
       :ul  => {:replace => "$$content$$\r\n\r\n"},
       :ol  => {:replace => "$$content$$\r\n\r\n"},
       :span => {:spec => [
+          {:attr => 'class', :value => 'coop-text', :replace => "{{etherpad($$content$$,width=100%)}}", :pre => true },
           {:attr => 'class', :value => 'wiki-page', :replace => "[[$$content$$]]", :pre => true },
           {:attr => 'class', :value => 'toc', :replace => "{{toc($$content$$)}}"},
           {:attr => 'class', :value => 'toplink', :replace => "\r\n\r\n\{{top_link|$$content$$}}"}
@@ -1257,8 +1258,14 @@ module ApplicationHelper
     end
 #    output.gsub!(/(<a.*class="wiki-page.*>(.*)<\/a>)/i) do
     output.gsub!(/(\[\[([^\]]*)\]\])/i) do
-      out = '<span class="wiki-page">'+$2+'</span>'
-      out
+      '<span class="wiki-page makro">'+$2+'</span>'
+    end
+    output.gsub!(/\{\{ethersheet[(](...*)[)]\}\}/i) do
+      '<span class="coop-sheet makro fa-table fa">'+name+'</span>'
+    end
+    output.gsub!(/\{\{etherpad[(](...*)[)]\}\}/i) do
+      name = $1.rpartition(',')[0]
+      '<span class="coop-text makro fa-file-text-o fa">'+name+'</span>'
     end
     return output
   end
@@ -1642,7 +1649,14 @@ module ApplicationHelper
   end
   
   def ckeditor_localize
-    return %Q{var text_for_wiki_dialog = '#{l(:label_wiki_dialog_text)}'; var title_for_wiki_dialog = '#{l(:label_wiki_dialog_title)}'}
+    return %Q{
+    	var text_for_wiki_dialog = '#{l(:label_wiki_dialog_text)}'; 
+    	var title_for_wiki_dialog = '#{l(:label_wiki_dialog_title)}';
+    	var text_for_coop_text_dialog = '#{l(:label_coop_text_dialog_text)}'; 
+    	var title_for_coop_text_dialog = '#{l(:label_coop_text_dialog_title)}';
+    	var text_for_coop_sheet_dialog = '#{l(:label_coop_sheet_dialog_text)}'; 
+    	var title_for_coop_sheet_dialog = '#{l(:label_coop_sheet_dialog_title)}';
+    }
   end
 
   def favicon

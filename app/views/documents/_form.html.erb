@@ -1,7 +1,7 @@
 <%= error_messages_for @document %>
 
 <div class="box tabular">
-<p><%= f.select :category_id, DocumentCategory.active.collect {|c| [c.name, c.id]} %></p>
+<p><%= f.select :category_id, DocumentCategory.active.collect {|c| [l('text_doctype_' + c.name), c.id]} %></p>
 <p><%= f.text_field :title, :required => true, :style => 'font-size:20px;', :size => 71 %></p>
 <p><%#= f.text_area :description, :cols => 60, :rows => 15, :class => 'wiki-edit' %></p>
 <label style="margin-bottom:5px;"><%= l(:label_description) %></label>

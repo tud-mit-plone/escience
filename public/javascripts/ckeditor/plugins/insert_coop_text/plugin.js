@@ -1,15 +1,15 @@
-CKEDITOR.plugins.add('insert_page',{init:function(editor){
-  editor.addCommand( 'insert_page',new CKEDITOR.dialogCommand('insert_page'));
-  var b='insert_page';
-  var c=editor.lang.wiki_page;
-  editor.ui.addButton('insert_page',{label:c.toolbar,command:b,icon:this.path+'insert_page.png'});
+CKEDITOR.plugins.add('insert_coop_text',{init:function(editor){
+  editor.addCommand( 'insert_coop_text',new CKEDITOR.dialogCommand('insert_coop_text'));
+  var b='insert_coop_text';
+  var c=editor.lang.coop_text;
+  editor.ui.addButton('insert_coop_text',{label:c.toolbar,command:b,icon:this.path+'insert_coop_text.png'});
 
   if (editor.contextMenu) {
 			editor.addMenuGroup( 'mygroup', 10 );
 			editor.addMenuItem( 'My Dialog',
 			{
-				label : title_for_wiki_dialog,
-				command : 'insert_page',
+				label : title_for_coop_text_dialog,
+				command : 'insert_coop_text',
 				group : 'mygroup'
 			});
 			editor.contextMenu.addListener( function( element )
@@ -17,9 +17,9 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
  				return { 'My Dialog' : CKEDITOR.TRISTATE_OFF };
 			});
   }
-  CKEDITOR.dialog.add('insert_page', function(api){
+  CKEDITOR.dialog.add('insert_coop_text', function(api){
   	var dialogDefinition = {
-  		title : title_for_wiki_dialog,
+  		title : title_for_coop_text_dialog,
   		minWidth : 390,
   		minHeight : 130,
   		contents : [{
@@ -30,7 +30,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   			padding : 0,
   			elements :[{
   					type : 'html',
-  					html : text_for_wiki_dialog
+  					html : text_for_coop_text_dialog
   				},{
   					type : 'textarea',
   					id : 'textareaId',
@@ -43,7 +43,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
     		var elem= api.getSelection().getSelectedText();
     		if (elem != "") {
     			var e = api.document.createElement('span');
-          e.setAttribute('class','wiki-page makro');
+          e.setAttribute('class','coop-text makro fa-file-text-o fa');
           e.appendHtml(elem);
           api.insertElement(e);
           CKEDITOR.dialog.getCurrent().hide();
@@ -52,7 +52,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   		onOk : function() {
   			var textareaObj = this.getContentElement( 'tab1', 'textareaId' );
   			var e = api.document.createElement('span');
-        e.setAttribute('class','wiki-page makro');
+        e.setAttribute('class','coop-text makro fa-file-text-o fa');
         e.appendHtml(textareaObj.getValue());
         api.insertElement(e);
   		}
@@ -60,6 +60,6 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   	return dialogDefinition;
   });
   editor.on( 'doubleclick', function( evt ) {
-    if ($(evt.data.element).attr('class')=='wiki-page') alert("Dies ist ein Link zu einer Wiki-Page");
+    if ($(evt.data.element).attr('class')=='coop-text') alert("Dies ist ein Platzhalter für ein kooperatives Textdokument.");
   });
 }});
