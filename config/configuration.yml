@@ -81,7 +81,7 @@
 # default configuration options for all environments
 default:
   ethersheet:
-    host: https://141.57.11.240:8080
+    host: http://141.57.11.240:8080
   etherpad:
     host: https://141.57.11.240:8000 #beta.etherpad.org
     showLineNumbers: false
