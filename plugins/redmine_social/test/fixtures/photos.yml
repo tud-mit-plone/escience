@@ -3,11 +3,9 @@ photos_001:
   id:1
   user: users_002
   album: albums_001
-  photo: attachement_010
 photos_002:
   id:2
   user: users_002
   album: albums_001
-  photo: attachement_011
 
   
