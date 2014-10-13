@@ -97,6 +97,8 @@ group :test do
   gem "mocha", "~>0.13.3", :require => false
   gem 'cane', '~> 2.6.2'
   gem 'flay'
+  # for rolling back each modification during a test
+  gem 'database_cleaner'
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")

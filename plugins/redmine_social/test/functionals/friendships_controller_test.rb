@@ -2,6 +2,17 @@ require File.expand_path('../../../../../test/test_helper', __FILE__)
 
 class FriendshipsControllerTest < ActionController::TestCase
   fixtures :users
+
+  def setup
+    # track all changes during the test to rollback
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.start
+  end
+  
+  def teardown
+    # rollback any changes during the test
+    DatabaseCleaner.clean
+  end
   
   test "unable to create a friendship request if user not logged in" do
     current_user = users(:users_002)
