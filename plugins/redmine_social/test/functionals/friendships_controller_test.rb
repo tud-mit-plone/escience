@@ -100,7 +100,7 @@ class FriendshipsControllerTest < ActionController::TestCase
     # create one more dummy user than the daily request limit
     dummies = []
     (1..limit + 1).each do |i|
-      dummies << create_dummy_user(i, "login#{i}")
+      dummies << create_dummy_user("templogin#{i}")
     end
     
     @request.session[:user_id] = current_user.id
@@ -144,25 +144,16 @@ class FriendshipsControllerTest < ActionController::TestCase
     return friendship
   end
   
-  def create_dummy_user(id, login)
+  def create_dummy_user(login)
     user = User.new(
-      :created_on => "2006-07-19 19:32:09 +02:00",
-      :status => 1,
-      :last_login_on => "2006-07-19 22:42:15 +02:00",
-      :language => "en",
-      :salt => "67eb4732624d5a7753dcea7ce0bb7d7d",
-      :hashed_password => "bfbe06043353a677d0215b26a5800d128d5413bc",
-      :updated_on => "2006-07-19 22:42:15 +02:00",
-      :admin => false,
-      :mail => "jsmith@somenet.foo",
-      :lastname => "Smith",
-      :firstname => "John",
-      :auth_source_id => nil,
-      :mail_notification => "all",
-      :type => "User"
+      :login => login,
+      :firstname => 'John',
+      :lastname => 'Smith',
+      :mail => login + "@example.net",
+      :confirm => true
     )
-    user.id = id
     user.login = login
+    user.save!
     return user
   end
 end
