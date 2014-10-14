@@ -1,11 +1,7 @@
---- 
-photos_001:
-  id:1
-  user: users_002
-  album: albums_001
-photos_002:
-  id:2
-  user: users_002
-  album: albums_001
-
-  
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+photos_001: 
+  id: 1
+  user_id: 2
+  created_at: 2014-10-14 16:35:38
+  updated_at: 2014-10-14 16:35:38
+  photo_file_name: 101223161450_testfile_2.png

@@ -46,7 +46,7 @@ class AlbumTest < ActiveSupport::TestCase
       :user => user
       #:user_id => user.id
       )
-    album.user = user
+    #album.user = user
     assert album.save!
     return album
   end
