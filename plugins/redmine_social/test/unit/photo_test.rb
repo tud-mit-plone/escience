@@ -45,7 +45,7 @@ class PhotoTest < ActiveSupport::TestCase
 
   private
   def create_photo_from_file(user, file, type)
-    assert Photo.file_exists?(file)
+    file = uploaded_test_file(file, type)
     if File.exist?(file)
       photo = Photo.create(
         :user => user,
