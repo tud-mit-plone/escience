@@ -179,3 +179,10 @@ production:
 # specific configuration options for development environment
 # that overrides the default ones
 development:
+
+# specific configuration options for test environment
+# that overrides the default ones
+test:
+  email_delivery:
+    # do not send read emails
+    delivery_method: :test
