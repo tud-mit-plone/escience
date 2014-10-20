@@ -2,6 +2,7 @@ require File.expand_path('../../../../../test/test_helper', __FILE__)
 
 class PhotoTest < ActiveSupport::TestCase
   fixtures :users, :attachments
+  #ActiveSupport::TestCase.fixture_path = File.expand_path("/../fixtures", __FILE__) 
 
   ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
                             [:photos])
@@ -26,16 +27,37 @@ class PhotoTest < ActiveSupport::TestCase
   
   test "load photo from File" do
     user = users(:users_002)
-    file = uploaded_test_file("101223161450_testfile_2.png", "image/png")
-    photo = Photo.new
-    photo.user = user
-    photo.photo = file
-    assert photo.save!
+    photo = create_photo_from_file(user, "101223161450_testfile_2.png", "image/png")
     assert photo.valid?
   end
 
   test "load photo from fixtures" do
-    photo = photos(:photos_001)
-    assert photo.valid?
+    #photo = photos(:photos_001)
+    #assert photo.valid?
   end
+
+  test "previous photo" do
+    user = users(:users_002)
+    photo1 = create_photo_from_file(user, "101223161450_testfile_2.png", "image/png")
+    photo2 = create_photo_from_file(user, "101123161450_testfile_1.png", "image/png")
+    assert_equal photo1, photo2.previous_photo
+  end
+
+  private
+  def create_photo_from_file(user, file, type)
+    file = uploaded_test_file(file, type)
+    if File.exist?(file)
+      photo = Photo.create(
+        :user => user,
+        :photo => file
+        )
+      #photo.user = user
+      #photo.photo = file
+      #photo.save!
+      return photo
+    else
+      return nil
+    end
+  end
+
 end

@@ -31,7 +31,7 @@ class AlbumTest < ActiveSupport::TestCase
     user = users(:users_002)
     album = create_album(user)
     assert_equal 0, album.comments.count
-    comment = Comment.new(:commented => album, :author => user, :comments => "da comment")
+    comment = Comment.create(:commented => album, :author => user, :comments => "da comment")
     assert comment.save!
     assert_equal 1, album.comments.count
     #album.delete
