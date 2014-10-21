@@ -44,20 +44,17 @@ class PhotoTest < ActiveSupport::TestCase
   end
 
   private
-  def create_photo_from_file(user, file, type)
+  def create_photo(user, file, type)
     file = uploaded_test_file(file, type)
     if File.exist?(file)
-      photo = Photo.create(
-        :user => user,
-        :photo => file
-        )
-      #photo.user = user
-      #photo.photo = file
-      #photo.save!
+      photo = Photo.new
+      photo.user = user
+      photo.photo = file
+      photo.save!
       return photo
     else
       return nil
     end
   end
-
+  
 end

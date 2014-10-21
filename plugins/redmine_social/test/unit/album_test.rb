@@ -43,10 +43,8 @@ class AlbumTest < ActiveSupport::TestCase
   def create_album(user)
     album = Album.create(
       :title => "Album-Title 1",
-      :user => user
-      #:user_id => user.id
       )
-    #album.user = user
+    album.user = user
     assert album.save!
     return album
   end

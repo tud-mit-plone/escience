@@ -17,21 +17,23 @@ class PhotosControllerTest < ActionController::TestCase
   test "add comment if logged in" do
     current_user = users(:users_002)
     photo = current_user.photos[0]
-    comments_count = photo.comments.count
     @request.session[:user_id] = current_user.id
-    post :add_comment, :photo_id => photo.id, :comment => {:comments => 'Test-Comment'}
-    assert_equal comments_count + 1, current_user.photos[0].comments.count
-    assert_equal 'Test-Comment', current_user.photos[0].comments[comments_count].comments
+    assert_difference 'photo.comments.count' do 
+      post :add_comment, :photo_id => photo.id, :comment => {:comments => 'Test-Comment'} 
+    end
+    comments_count = photo.comments.count
+    assert_equal 'Test-Comment', current_user.photos[0].comments[comments_count - 1].comments
+    assert_redirected_to user_photo_path(current_user, photo)
   end
 
-  test "add comment anonym" do
+  test "add comment as anonym user" do
     user = users(:users_003)
     photo = create_photo(user, "101123161450_testfile_1.png", "image/png")
-    comments_count = photo.comments.count
-    post :add_comment, :photo_id => photo.id, :comment => {:comments => 'Test-Comment'}
-    comment = photo.comments.last
-    assert_equal comments_count  + 1, photo.comments.count
-    assert_equal User.anonymous, comment.author
+    assert_difference 'photo.comments.count' do 
+      post :add_comment, :photo_id => photo.id, :comment => {:comments => 'Test-Comment'} 
+    end
+    assert_equal User.anonymous, photo.comments.last.author
+    assert_redirected_to user_photo_path(user, photo)
   end
 
 
