@@ -27,7 +27,7 @@ class PhotoTest < ActiveSupport::TestCase
   
   test "load photo from File" do
     user = users(:users_002)
-    photo = create_photo_from_file(user, "101223161450_testfile_2.png", "image/png")
+    photo = create_photo(user, "101223161450_testfile_2.png", "image/png")
     assert photo.valid?
   end
 
@@ -38,8 +38,8 @@ class PhotoTest < ActiveSupport::TestCase
 
   test "previous photo" do
     user = users(:users_002)
-    photo1 = create_photo_from_file(user, "101223161450_testfile_2.png", "image/png")
-    photo2 = create_photo_from_file(user, "101123161450_testfile_1.png", "image/png")
+    photo1 = create_photo(user, "101223161450_testfile_2.png", "image/png")
+    photo2 = create_photo(user, "101123161450_testfile_1.png", "image/png")
     assert_equal photo1, photo2.previous_photo
   end
 
@@ -47,7 +47,7 @@ class PhotoTest < ActiveSupport::TestCase
   def create_photo(user, file, type)
     file = uploaded_test_file(file, type)
     if File.exist?(file)
-      photo = Photo.new
+      photo = Photo.create()
       photo.user = user
       photo.photo = file
       photo.save!
@@ -56,5 +56,5 @@ class PhotoTest < ActiveSupport::TestCase
       return nil
     end
   end
-  
+
 end
