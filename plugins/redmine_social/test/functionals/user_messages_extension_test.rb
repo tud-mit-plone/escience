@@ -1,9 +1,14 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
 
-class UserMessagesExtensionTest < ActiveSupport::TestCase
+class UserMessagesExtensionTest < ActionController::TestCase
   fixtures :users
   
   def setup
+    # broken naming convention: controller can't infer from TestCase name
+    # needed for tests for UserMessagesController
+    # but isn't needed for tests for UserMessages
+    @controller = UserMessagesController.new
+    
     # track all changes during the test to rollback
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
@@ -152,6 +157,25 @@ class UserMessagesExtensionTest < ActiveSupport::TestCase
     assert_not_nil mails
     assert mails.include?(receiver_2.mail)
     assert mails.include?(receiver_3.mail)
+  end
+  
+  test "messages history contains self" do
+    from = users(:users_002)
+    to = users(:users_003)
+    message = create_user_message_stub(from, to)
+    message.save
+    begin
+      @request.session[:user_id] = from.id
+      # no route defined for action history_messages
+      # we have to define it at manually
+      Rails.application.routes.draw { get 'history_messages' => 'user_messages#history_messages' }
+      get :history_messages, :id => message.id, :format => :json
+      assert_response :success
+      assert assigns(:history).include? message
+    ensure
+      # restore routes
+      Rails.application.reload_routes!
+    end
   end
   
   private
