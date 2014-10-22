@@ -93,6 +93,67 @@ class UserMessagesExtensionTest < ActiveSupport::TestCase
     assert history.include?(parent_1) # because Current.user is the author of parent_1
   end
   
+  test "receiver_list returns nil if no receiver set" do
+    from = users(:users_002)
+    to = users(:users_003)
+    message = create_user_message_stub(from, to)
+    assert_nil message.receiver_list 
+  end
+  
+  test "receiver_list returns all receiver" do
+    from = users(:users_002)
+    to = users(:users_003)
+    receiver_1 = users(:users_004)
+    receiver_2 = users(:users_005)
+    receiver_3 = users(:users_006)
+    message = UserMessage.new(
+      :author => from,
+      :user => to,
+      :subject => 'Some Subject',
+      :body => 'Some Message',
+      :receiver => to,
+      :receiver_list => [receiver_1, receiver_2, receiver_3]
+    )
+    receiver_list = message.receiver_list
+    assert_not_nil receiver_list
+    assert receiver_list.include?(receiver_1)
+    assert receiver_list.include?(receiver_2)
+    assert receiver_list.include?(receiver_3)
+    assert_equal 3, receiver_list.count
+  end
+  
+  test "recipients_mail includes receiver and receiver_list" do
+    from = users(:users_002)
+    to = users(:users_003)
+    receiver_1 = users(:users_004)
+    receiver_2 = users(:users_005)
+    receiver_3 = users(:users_006)
+    message = UserMessage.new(
+      :author => from,
+      :user => to,
+      :subject => 'Some Subject',
+      :body => 'Some Message',
+      :receiver => receiver_1,
+      :receiver_list => [receiver_2, receiver_3]
+    )
+    mails = message.recipients_mail
+    assert_not_nil mails
+    assert mails.include?(receiver_1.mail)
+    
+    # no receiver defined
+    message = UserMessage.new(
+      :author => from,
+      :user => to,
+      :subject => 'Some Subject',
+      :body => 'Some Message',
+      :receiver_list => [receiver_2, receiver_3]
+    )
+    mails = message.recipients_mail
+    assert_not_nil mails
+    assert mails.include?(receiver_2.mail)
+    assert mails.include?(receiver_3.mail)
+  end
+  
   private
   def create_user_message_stub(from, to, parent=nil)
     UserMessage.new(
