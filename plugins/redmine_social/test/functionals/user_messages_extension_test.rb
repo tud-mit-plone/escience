@@ -159,6 +159,30 @@ class UserMessagesExtensionTest < ActionController::TestCase
     assert mails.include?(receiver_3.mail)
   end
   
+  test "origin receivers added to reply message" do
+    from = users(:users_002)
+    to = users(:users_003)
+    receiver_1 = users(:users_004)
+    receiver_2 = users(:users_005)
+    
+    origin = UserMessage.new(
+      :author => from,
+      :user => from,
+      :subject => 'Some Subject',
+      :body => 'Some Message',
+      :receiver_list => [receiver_1, receiver_2]
+    )
+    origin.save!
+    
+    @request.session[:user_id] = from.id
+    # we're reply to origin
+    get :new, :reply => origin.id
+    # receivers for the new message
+    new_receivers = assigns(:receivers)
+    assert new_receivers.include?(receiver_1)
+    assert new_receivers.include?(receiver_2)
+  end
+  
   test "messages history contains self" do
     from = users(:users_002)
     to = users(:users_003)
