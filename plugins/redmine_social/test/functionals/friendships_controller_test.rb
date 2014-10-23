@@ -131,6 +131,34 @@ class FriendshipsControllerTest < ActionController::TestCase
       "Friendship does not exists from #{dummies.last.id} to #{current_user.login}"
   end
   
+  test "friendship and reverse does no more exist after destroy" do
+    current_user = users(:users_002)
+    friend_user = users(:users_003)
+    friendship = create_friendship(current_user, friend_user)
+    reverse = friendship.reverse
+    
+    @request.session[:user_id] = current_user.id
+    assert_difference 'Friendship.count', -2 do      
+      delete :destroy, :id => friendship.id, :user_id => current_user.id
+    end
+    assert_nil Friendship.find_by_id(friendship.id)
+    assert_nil Friendship.find_by_id(reverse.id)
+  end
+  
+  test "unable to destroy foreign friendship" do
+    current_user = users(:users_002)
+    friend_user = users(:users_003)
+    other_user = users(:users_004)
+    
+    friendship = create_friendship(current_user, friend_user)
+    reverse = friendship.reverse
+    
+    @request.session[:user_id] = other_user.id
+    assert_no_difference 'Friendship.count' do      
+      delete :destroy, :id => friendship.id, :user_id => current_user.id
+    end
+  end
+  
   private
   def find_friendship(from_user, to_user)
     Friendship.find(:first, :conditions => ["user_id = ? AND friend_id = ?",
