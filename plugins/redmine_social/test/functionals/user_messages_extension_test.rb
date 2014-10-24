@@ -9,6 +9,9 @@ class UserMessagesExtensionTest < ActionController::TestCase
     # but isn't needed for tests for UserMessages
     @controller = UserMessagesController.new
     
+    # some actions redirects to referer url
+    @request.env['HTTP_REFERER'] = 'http://foo.bar'
+    
     # track all changes during the test to rollback
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
@@ -181,6 +184,121 @@ class UserMessagesExtensionTest < ActionController::TestCase
     new_receivers = assigns(:receivers)
     assert new_receivers.include?(receiver_1)
     assert new_receivers.include?(receiver_2)
+  end
+  
+  test "can't create message if not logged in" do
+    to = users(:users_003)
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {:receiver => to.id.to_s, :subject => 'Lorem', :body => 'Ipsum'}
+    end
+  end
+  
+  test "empty message will not created" do
+    from = users(:users_002)
+    to = users(:users_003)
+    @request.session[:user_id] = from.id
+    
+    # anything is empty
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {:receiver => '', :subject => '', :body => ''}
+    end
+    # subject is empty
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {:receiver => from.id.to_s, :subject => '', :body => 'Lorem Ipsum'}
+    end
+    # body is empty
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {:receiver => from.id.to_s, :subject => 'Lorem Ipsum', :body => ''}
+    end
+    
+    # nil parameters
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {}
+    end
+  end
+  
+  test "message for unknown user will not created" do
+    from = users(:users_002)
+    unknown_id = 99999
+    @request.session[:user_id] = from.id
+    assert_no_difference 'UserMessage.count' do
+      post :create, :user_message => {:receiver => unknown_id.to_s, :subject => 'Lorem', :body => 'Ipsum'}
+    end
+  end
+  
+  test "message exists after creating it" do
+    from = users(:users_002)
+    to = users(:users_003)
+    @request.session[:user_id] = from.id
+    
+    # message and copy of it will created
+    assert_difference 'UserMessage.count', 2 do
+      post :create, :user_message => {:receiver => to.id.to_s, :subject => 'Lorem', :body => 'Ipsum'}
+    end
+    # newly created usermessage bye create action
+    message = assigns(:user_message)
+    assert_not_nil message
+    assert_equal 'Lorem', message.subject
+    assert_equal 'Ipsum', message.body
+    
+    # find copy of message
+    copy = UserMessage.where(:user_message_parent_id => message.id).first
+    assert_not_nil copy
+    assert_equal 'Lorem', copy.subject
+    assert_equal 'Ipsum', copy.body
+  end
+  
+  test "copy receiver_list contains all receivers" do
+    from = users(:users_002)
+    receiver_1 = users(:users_003)
+    receiver_2 = users(:users_004)
+    @request.session[:user_id] = from.id
+    
+    receiver_ids = [receiver_1.id, receiver_2.id]
+    post :create, :user_message => {:receiver => receiver_ids, :subject => 'Lorem', :body => 'Ipsum'}
+    # newly created usermessage bye create action
+    message = assigns(:user_message)
+    copy = UserMessage.where(:user_message_parent_id => message.id).first
+    assert message.receiver_list.include?(receiver_1)
+    assert message.receiver_list.include?(receiver_2)
+  end
+  
+  test "copy receiver_list is empty when hide_receivers" do
+    from = users(:users_002)
+    receiver_1 = users(:users_003)
+    receiver_2 = users(:users_004)
+    @request.session[:user_id] = from.id
+    
+    receiver_ids = [receiver_1.id, receiver_2.id]
+    post :create, :user_message => {
+        :hide_receiver => true,
+        :receiver => receiver_ids,
+        :subject => 'Lorem',
+        :body => 'Ipsum'
+      }
+    # newly created usermessage bye create action
+    message = assigns(:user_message)
+    copy = UserMessage.where(:user_message_parent_id => message.id).first
+    assert copy.receiver_list.nil? or copy.receiver_list.empty?
+  end
+  
+  test "reply message status is updated to answered" do
+    from = users(:users_002)
+    to = users(:users_002)
+    
+    origin = create_user_message_stub(from, to)
+    sent_state = 3 # message was sent
+    origin.state = sent_state
+    origin.save
+    
+    # 'to' sends answer to 'from'
+    @request.session[:user_id] = to.id
+    post :create, :reply_mail => origin.id, 
+      :user_message => {:receiver => from.id.to_s, :subject => 'Lorem', :body => 'Ipsum'}
+    
+    origin = origin.reload
+    answered_state = 4 # message was answered
+    assert_equal answered_state, origin.state
   end
   
   test "messages history contains self" do
