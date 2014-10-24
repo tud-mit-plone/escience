@@ -32,9 +32,12 @@ class UserMessagesExtensionTest < ActionController::TestCase
     assert_difference 'Mailer.deliveries.count' do      
       message.save
     end
-    mail = Mailer.deliveries.last
-    receivers = mail.to + mail.cc + mail.bcc
+    email = Mailer.deliveries.last
+    receivers = email.to + email.cc + email.bcc
     assert receivers.include?(to_user.mail), "to_user receives email"
+    # test text and html body contains message (ignore case)
+    assert get_plain_text(email).downcase.include?(message.body.downcase)
+    assert get_html_text(email).downcase.include?(message.body.downcase)
   end
   
   test "history of single usermessage includes it self if author is logged in" do
@@ -332,21 +335,21 @@ class UserMessagesExtensionTest < ActionController::TestCase
     )
   end
   
-  def get_plain_text(mail)
-    if mail.multipart? then
-      if mail.text_part? then
-        message.text_part.body.decoded 
+  def get_plain_text(email)
+    if email.multipart? then
+      if !email.text_part.nil? then
+        email.text_part.body.decoded 
       else
         nil
       end
     else
-      message.body.decoded
-    end
+      email.body.decoded
+    end 
   end
   
-  def get_html_text(mail)
-    if message.html_part? then
-      message.html_part.body.decoded
+  def get_html_text(email)
+    if !email.html_part.nil? then
+      email.html_part.body.decoded
     else
       nil
     end
