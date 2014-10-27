@@ -14,29 +14,30 @@ class PhotosControllerTest < ActionController::TestCase
     DatabaseCleaner.clean
   end
 
-  test "test create users photo" do
-    # current_user = users(:users_002)
-    # #index muss aufgerufen werden, weil ansonsten user nicht belegt ist
-    # get :index, :user_id => current_user.id, format: "html"
-    # file = uploaded_test_file("101123161450_testfile_1.png", "image/png")
-    # assert_difference 'current_user.photos.count' do
-    #   post :create, :user_id => current_user.id, :photo => file
-    # end
-    # assert_redirected_to user_photos_path
+  test "test create users photo if logged in" do
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    assert_difference 'current_user.photos.count' do
+      post :create, :photo =>{:photo => uploaded_test_file("101123161450_testfile_1.png", "image/png")}
+    end
+    assert_equal @controller.l(:photo_was_successfully_created), flash[:notice]
+    assert_redirected_to user_photo_path(current_user, assigns(:photo).id)
+    #assert_select "page", {count: 1, text: ""}
+    #assert_select "alert", "elcome"
   end
 
-  #TODO Funktioniert nicht, weil nicht eingeloggt
   test "respond to show photo if logged in" do
     current_user = users(:users_002)
-    # @request.session[:user_id] = current_user.id
-    get :index, :user_id => current_user.id
+    @request.session[:user_id] = current_user.id
     photo = create_photo(current_user, "101123161450_testfile_1.png", "image/png")
-    post :show, :user_id => current_user.id, :id => photo.id
-    assert_redirected_to user_photo_url(photo)
+    get :show, :id => photo.id
+    assert_response :success
+    assert_equal photo, assigns(:photo)
   end
   
   test "add comment to photo if logged in" do
     current_user = users(:users_002)
+    photo = create_photo(current_user, "101123161450_testfile_1.png", "image/png")
     photo = current_user.photos[0]
     @request.session[:user_id] = current_user.id
     assert_difference 'photo.comments.count' do 
@@ -66,7 +67,6 @@ class PhotosControllerTest < ActionController::TestCase
       photo = Photo.create()
       photo.user_id = user.id
       photo.photo = file
-      #photo.comments = []
       photo.save!
       return photo
     else
