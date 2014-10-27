@@ -85,6 +85,36 @@ class FriendshipTest < ActiveSupport::TestCase
     assert !(Friendship.friends? users(:users_002), users(:users_003))
     assert !(Friendship.friends? users(:users_003), users(:users_002))
   end
+
+  test "pending? returns the right result" do
+    friendship = Friendship.new
+    friendship.friendship_status = FriendshipStatus[:pending]
+    assert friendship.pending?
+    friendship.friendship_status = FriendshipStatus[:accepted]
+    assert !friendship.pending?
+    friendship.friendship_status = FriendshipStatus[:denied]
+    assert !friendship.pending?
+  end
+  
+  test "denied? returns the right result" do
+    friendship = Friendship.new
+    friendship.friendship_status = FriendshipStatus[:pending]
+    assert !friendship.denied?
+    friendship.friendship_status = FriendshipStatus[:accepted]
+    assert !friendship.denied?
+    friendship.friendship_status = FriendshipStatus[:denied]
+    assert friendship.denied?
+  end
+  
+  test "accepted? returns the right result" do
+    friendship = Friendship.new
+    friendship.friendship_status = FriendshipStatus[:pending]
+    assert !friendship.accepted?
+    friendship.friendship_status = FriendshipStatus[:accepted]
+    assert friendship.accepted?
+    friendship.friendship_status = FriendshipStatus[:denied]
+    assert !friendship.accepted?
+  end
   
   test "friendship cannot create for the same user" do
     friendship = Friendship.new(
