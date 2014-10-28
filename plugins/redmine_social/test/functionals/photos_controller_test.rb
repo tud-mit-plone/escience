@@ -14,7 +14,44 @@ class PhotosControllerTest < ActionController::TestCase
     DatabaseCleaner.clean
   end
 
-  test "test create users photo if logged in" do
+  test "" do
+
+  end
+
+  test "destroy users photo if logged in" do
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    photo = current_user.photos.last
+    assert_difference 'current_user.photos.count', -1 do
+      delete :destroy, :user_id => current_user.id, :id => photo.id
+    end
+    assert_redirected_to user_photos_path(current_user)
+  end
+
+  test "destroy users photo if not logged in" do
+    User.current = nil
+    user = users(:users_002)
+    photo = user.photos.last
+    assert_difference 'user.photos.count', 0 do
+      delete :destroy, :user_id => user.id, :id => photo.id
+    end
+    #assert_redirected_to :back
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fusers%2F2%2Fphotos%2F1'
+  end
+
+  test "destroy users photo if logged as wrong user" do
+    User.current = nil
+    #works with @request.session[:user_id] = users(:users_005)
+    @request.session[:user_id] = users(:users_003)
+    user = users(:users_002)
+    photo = user.photos.last
+    assert_difference 'user.photos.count', 0 do
+      delete :destroy, :user_id => user.id, :id => photo.id
+    end
+    #assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fusers%2F2%2Fphotos%2F1'
+  end
+
+  test "create users photo if logged in" do
     current_user = users(:users_002)
     @request.session[:user_id] = current_user.id
     assert_difference 'current_user.photos.count' do
@@ -22,8 +59,37 @@ class PhotosControllerTest < ActionController::TestCase
     end
     assert_equal @controller.l(:photo_was_successfully_created), flash[:notice]
     assert_redirected_to user_photo_path(current_user, assigns(:photo).id)
-    #assert_select "page", {count: 1, text: ""}
-    #assert_select "alert", "elcome"
+    #puts @response.body
+    #assert_select "alert", ""
+  end
+
+  test "create not valid photo" do
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    photo = Photo.new
+    assert_difference 'current_user.photos.count', 0 do
+      post :create, :photo => photo
+    end
+  end
+
+  test "update description of Photo" do
+    description = "Das ist ein Test"
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    photo = current_user.photos.last
+    put :update, :id => photo.id, :photo =>{:description => description}
+    assert_redirected_to user_photo_path(current_user, assigns(:photo).id)
+    assert_equal description , assigns(:photo).description
+  end
+
+  test "update description of Photo as wrong user" do
+    @request.session[:user_id] = users(:users_005)
+    description = "Das ist ein Test"
+    user = users(:users_002)
+    photo = user.photos.last
+    put :update, :id => photo.id, :photo =>{:description => description}
+    assert_not_equal description, photo.description 
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fphotos%2F1'
   end
 
   test "respond to show photo if logged in" do
@@ -32,6 +98,7 @@ class PhotosControllerTest < ActionController::TestCase
     photo = create_photo(current_user, "101123161450_testfile_1.png", "image/png")
     get :show, :id => photo.id
     assert_response :success
+    assert_template :show
     assert_equal photo, assigns(:photo)
   end
   
@@ -43,8 +110,7 @@ class PhotosControllerTest < ActionController::TestCase
     assert_difference 'photo.comments.count' do 
       post :add_comment, :photo_id => photo.id, :comment => {:comments => 'Test-Comment'} 
     end
-    comments_count = photo.comments.count
-    assert_equal 'Test-Comment', current_user.photos[0].comments[comments_count - 1].comments
+    assert_equal 'Test-Comment', assigns(:comment).comments
     assert_redirected_to user_photo_path(current_user, photo)
   end
 
