@@ -11,10 +11,7 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     # track all changes during the test to rollback
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
-    
-    # store attachments in #{Rails.root}/tmp/test/attachments
-    set_tmp_attachments_directory
-    
+
     # fixture_file_upload (called by uploaded_test_file) has a bug.
     # It calls fixture_path method on TestCase not on the overriden
     # method. We have to repair the fixture_path manually.
