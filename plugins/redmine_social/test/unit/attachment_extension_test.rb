@@ -2,6 +2,8 @@ require File.expand_path('../../../../../test/test_helper', __FILE__)
 require File.join(File.dirname(__FILE__), '../fix_image_extractor')
 
 class AttachmentExtensionTest < ActiveSupport::TestCase
+  self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
+  
   # we need for Attachments some container type, so lets take Issue 
   fixtures :issues
   # we also need an Author for Attachments
@@ -34,16 +36,6 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     
     # remove temporary render storage
     FileUtils.remove_entry_secure @temp_render_storage if File.exists?(@temp_render_storage)
-  end
-  
-  # Because a bug, a overriden fixture_path method get not called,
-  # so we have to set the variable manually.
-  # https://github.com/rspec/rspec-rails/issues/252#issuecomment-1438267
-  def fix_fixture_path
-    ActiveSupport::TestCase.class_eval do
-      include ActiveRecord::TestFixtures
-      self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
-    end
   end
 
   test "rendered thumbnails for a pdf has the right size" do
@@ -152,6 +144,15 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
   end
   
   private
+  # Because a bug, a overriden fixture_path method get not called for files,
+  # so we have to set the variable manually.
+  # https://github.com/rspec/rspec-rails/issues/252#issuecomment-1438267
+  def fix_fixture_path
+    ActiveSupport::TestCase.class_eval do
+      include ActiveRecord::TestFixtures
+      self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
+    end
+  end
   
   def create_attachment(container, author, file)
     User.current = author
