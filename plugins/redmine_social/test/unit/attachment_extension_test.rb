@@ -47,22 +47,8 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
   end
 
   test "rendered thumbnails for a pdf has the right size" do
-    User.current = users(:users_002)
-    
-    # An Attachment needs at least one MetaInformation
-    meta = MetaInformation.new(
-      :meta_information => 'Foo',
-      :user => User.current
-    )
-    meta.save!
-    
-    attachment = Attachment.new(
-      :container => @container,
-      :file => uploaded_test_file("lorem_hipsum_2_pager.pdf", "application/pdf"),
-      :author => @author,
-      :meta_information => [meta]
-    )
-    attachment.save!
+    file = uploaded_test_file("lorem_hipsum_2_pager.pdf", "application/pdf")
+    attachment = create_attachment(@container, @author, file)
 
     # Docsplit can create thumbnails for PDFs 
     assert attachment.image_convertable?
@@ -112,7 +98,81 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     end
   end
   
+  test "supported file types are thumbnailable" do
+    attachment = Attachment.new
+    
+    # test supported file types
+    supported_extensions = 
+      ['jpg', 'jpeg', 'gif', 'png', 'doc', 'docx', 'ppt', 'xls', 'html', 'odf', 'rtf', 'swf', 'svg', 'wpd', 'pdf', 'ods']
+    supported_extensions.each do |ext|
+      # make attachment.filename to return "document.#{ext}"
+      attachment.stubs(:filename).returns("document.#{ext}")
+      assert attachment.thumbnailable?, "a .#{ext} document is thumbnailable"
+    end
+
+    # test unsupported file types
+    unsupported_extensions = 
+      ['txt', 'bin', 'cab', 'exe', 'jar', 'so', 'psd', 'ai', 'zip']
+    unsupported_extensions.each do |ext|
+      # make attachment.filename to return "document.#{ext}"
+      attachment.stubs(:filename).returns("document.#{ext}")
+      assert !attachment.thumbnailable?, "a .#{ext} document is not thumbnailable"
+    end
+  end
+  
+  test "thumbnail returns an image with the right size" do
+    # images converted by Redmine, documents like PDFs by redmine_social
+    # so test this two types at onces
+    
+    # upload a jpeg
+    file = uploaded_test_file("simons_cat.jpg", "image/jpeg")
+    image_attachment = create_attachment(@container, @author, file)
+    
+    # upload a pdf 
+    file = uploaded_test_file("lorem_hipsum_2_pager.pdf", "application/pdf")
+    pdf_attachment = create_attachment(@container, @author, file)
+    
+    # jpeg thumbnail
+    thumbnail_file = image_attachment.thumbnail(:size => 100)
+    assert_file_exists thumbnail_file
+    thumbnail = Magick::Image::read(thumbnail_file).first
+    assert_not_nil thumbnail
+    width, height = thumbnail.columns, thumbnail.rows
+    # either width or height is 100px. the other side should less or equal
+    assert_equal 100, [width, height].max
+    
+    # pdf thumbnail
+    thumbnail_file = pdf_attachment.thumbnail(:size => 100)
+    assert_file_exists thumbnail_file
+    thumbnail = Magick::Image::read(thumbnail_file).first
+    assert_not_nil thumbnail
+    width, height = thumbnail.columns, thumbnail.rows
+    # either width or height is 100px. the other side should less or equal
+    assert_equal 100, [width, height].max
+  end
+  
   private
+  
+  def create_attachment(container, author, file)
+    User.current = author
+    
+    # An Attachment needs at least one MetaInformation
+    meta = MetaInformation.new(
+      :meta_information => 'Foo',
+      :user => author
+    )
+    meta.save!
+    
+    attachment = Attachment.new(
+      :container => @container,
+      :file => file,
+      :author => author,
+      :meta_information => [meta]
+    )
+    attachment.save!
+    
+    attachment
+  end
   
   # this is a bug fix of Docsplit for windows
   # it overides ImageExtractor.convert used in Attachment#render_to_image
