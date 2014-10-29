@@ -46,7 +46,7 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     end
   end
 
-  test "test rendered thumbnail for pdf has the right size" do
+  test "rendered thumbnails for a pdf has the right size" do
     User.current = users(:users_002)
     
     # An Attachment needs at least one MetaInformation
@@ -67,22 +67,27 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     # Docsplit can create thumbnails for PDFs 
     assert attachment.image_convertable?
     
-    # render thumbnail for the first page of the PDF
-    size = 100
-    output_file = attachment.render_to_image(
-      :size => size,
-      :pages => 1,
-      :input => Attachment.storage_path,
-      :output => @temp_render_storage
-    )
-    
-    # load rendered thumbnail image
-    assert_file_exists output_file
-    thumbnail = Magick::Image::read(output_file).first
-    assert_not_nil thumbnail
-    width, height = thumbnail.columns, thumbnail.rows
-    # either width or height is 100px. the other side should less or equal
-    assert_equal size, [width, height].max
+    page_count = Docsplit.extract_length(File.join(Attachment.storage_path, attachment.disk_filename)).to_i
+    # render thumbnail for all pages of the PDF
+    pages = 1..page_count
+    size = 100 # in px
+    pages.each do |page|
+      output_file = attachment.render_to_image(
+        :size => size,
+        :pages => page,
+        :render_page => page,
+        :input => Attachment.storage_path,
+        :output => @temp_render_storage
+      )
+      
+      # load rendered thumbnail image
+      assert_file_exists output_file
+      thumbnail = Magick::Image::read(output_file).first
+      assert_not_nil thumbnail
+      width, height = thumbnail.columns, thumbnail.rows
+      # either width or height is 100px. the other side should less or equal
+      assert_equal size, [width, height].max
+    end
   end
 
   test "supported file types are image_convertable" do
