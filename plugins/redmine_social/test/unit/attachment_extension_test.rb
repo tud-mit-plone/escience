@@ -165,7 +165,7 @@ class AttachmentExtensionTest < ActiveSupport::TestCase
     meta.save!
     
     attachment = Attachment.new(
-      :container => @container,
+      :container => container,
       :file => file,
       :author => author,
       :meta_information => [meta]
