@@ -32,6 +32,8 @@ class PhotoTest < ActiveSupport::TestCase
   end
 
   test "load photo from fixtures" do
+    user = users(:users_002)
+    assert_equal 1, user.photos.count
     #photo = photos(:photos_001)
     #assert photo.valid?
   end
@@ -41,6 +43,29 @@ class PhotoTest < ActiveSupport::TestCase
     photo1 = create_photo(user, "101223161450_testfile_2.png", "image/png")
     photo2 = create_photo(user, "101123161450_testfile_1.png", "image/png")
     assert_equal photo1, photo2.previous_photo
+  end
+
+  test "next in album" do
+    user = users(:users_002)
+    album = Album.create(
+      :title => "Album-Title 1",
+      )
+    album.user = user
+    album.save!
+    photo1 = create_photo(user, "101223161450_testfile_2.png", "image/png")
+    assert_equal nil, photo1.next_in_album
+    photo1.album = album
+    photo1.save!
+    photo2 = create_photo(user, "101123161450_testfile_1.png", "image/png")
+    photo2.album = album
+    photo2.save!
+    assert_equal photo2, photo1.next_in_album
+  end
+
+  test "file exists" do
+    user = users(:users_002)
+    photo = create_photo(user, "101223161450_testfile_2.png", "image/png")
+    puts Photo.file_exists?(photo)
   end
 
   private
