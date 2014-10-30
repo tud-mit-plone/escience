@@ -13,7 +13,8 @@ class MyControllerExtensionTest < ActionController::TestCase
     # needed for tests for MyController
     @controller = MyController.new
     @request    = ActionController::TestRequest.new
-    @request.session[:user_id] = users(:users_002)
+    @user = users(:users_002)
+    @request.session[:user_id] = @user
     @response   = ActionController::TestResponse.new
     
     # track all changes during the test to rollback
@@ -57,8 +58,9 @@ class MyControllerExtensionTest < ActionController::TestCase
   end
   
   # test "redirect to index if render block has no blockname attribut" do
-    # get :render_block, :blockname => 'test'
-    # #assert_redirect 'my/index'
+    # uid = @user.id
+    # get :render_block, :blockname => nil
+    # assert_redirected_to '/my?user_id='+uid.to_s
   # end
   
   test "update account" do
