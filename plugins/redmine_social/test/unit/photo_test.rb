@@ -32,7 +32,7 @@ class PhotoTest < ActiveSupport::TestCase
 
   test "load photo from fixtures" do
     user = users(:users_002)
-    assert_equal 1, user.photos.count
+    assert_equal 2, user.photos.count
     #photo = photos(:photos_001)
     #assert photo.valid?
   end
