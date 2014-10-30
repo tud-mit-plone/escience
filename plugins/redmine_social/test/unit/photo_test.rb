@@ -1,16 +1,15 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
 
 class PhotoTest < ActiveSupport::TestCase
-  fixtures :users, :attachments
-  #ActiveSupport::TestCase.fixture_path = File.expand_path("/../fixtures", __FILE__) 
+  self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
 
-  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
-                            [:photos])
+  fixtures :users, :attachments, :photos
   
   def setup
     # track all changes during the test to rollback
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
+    fix_fixture_path
   end
   
   def teardown
@@ -69,6 +68,16 @@ class PhotoTest < ActiveSupport::TestCase
   end
 
   private
+  # Because a bug, a overriden fixture_path method get not called for files,
+  # so we have to set the variable manually.
+  # https://github.com/rspec/rspec-rails/issues/252#issuecomment-1438267
+  def fix_fixture_path
+    ActiveSupport::TestCase.class_eval do
+      include ActiveRecord::TestFixtures
+      self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
+    end
+  end
+
   def create_photo(user, file, type)
     file = uploaded_test_file(file, type)
     if File.exist?(file)

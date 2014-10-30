@@ -1,12 +1,18 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
 
 class PhotosControllerTest < ActionController::TestCase
-  fixtures :users
+  self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
+
+  fixtures :users, :photos
+
+#ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+#                            [:photos])
 
   def setup
     # track all changes during the test to rollback
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
+    fix_fixture_path
   end
   
   def teardown
@@ -14,9 +20,6 @@ class PhotosControllerTest < ActionController::TestCase
     DatabaseCleaner.clean
   end
 
-  test "" do
-
-  end
 
   test "destroy users photo if logged in" do
     current_user = users(:users_002)
@@ -41,14 +44,12 @@ class PhotosControllerTest < ActionController::TestCase
 
   test "destroy users photo if logged as wrong user" do
     User.current = nil
-    #works with @request.session[:user_id] = users(:users_005)
     @request.session[:user_id] = users(:users_003)
     user = users(:users_002)
     photo = user.photos.last
     assert_difference 'user.photos.count', 0 do
       delete :destroy, :user_id => user.id, :id => photo.id
     end
-    #assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fusers%2F2%2Fphotos%2F1'
   end
 
   test "create users photo if logged in" do
@@ -60,7 +61,6 @@ class PhotosControllerTest < ActionController::TestCase
     assert_equal @controller.l(:photo_was_successfully_created), flash[:notice]
     assert_redirected_to user_photo_path(current_user, assigns(:photo).id)
     #puts @response.body
-    #assert_select "alert", ""
   end
 
   test "create not valid photo" do
@@ -102,6 +102,14 @@ class PhotosControllerTest < ActionController::TestCase
     assert_equal photo, assigns(:photo)
   end
   
+  test "respond to show photo if not logged in" do
+    user = users(:users_002)
+    photo = create_photo(user, "101123161450_testfile_1.png", "image/png")
+    get :show, :id => photo.id
+    assert_equal @controller.l(:please_log_in), flash[:error]
+    assert_response :redirect
+  end
+
   test "add comment to photo if logged in" do
     current_user = users(:users_002)
     photo = create_photo(current_user, "101123161450_testfile_1.png", "image/png")
@@ -137,6 +145,16 @@ class PhotosControllerTest < ActionController::TestCase
       return photo
     else
       return nil
+    end
+  end
+
+  # Because a bug, a overriden fixture_path method get not called for files,
+  # so we have to set the variable manually.
+  # https://github.com/rspec/rspec-rails/issues/252#issuecomment-1438267
+  def fix_fixture_path
+    ActiveSupport::TestCase.class_eval do
+      include ActiveRecord::TestFixtures
+      self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
     end
   end
 
