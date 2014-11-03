@@ -62,6 +62,61 @@ class AttachmentsControllerExtensionTest < ActionController::TestCase
     assert_response 304
   end
   
+  test "show responds the right form for the content type" do
+    container = issues(:issues_001)
+    author = users(:users_002)
+    @request.session[:user_id] = author.id
+        
+    # show can differentiate between diff, text, pdf, xls and other
+    # upload all attachments
+    file = uploaded_test_file("subversion.diff", "text/plain")
+    diff_attachment = create_attachment(container, author, file)
+    
+    file = uploaded_test_file("lorem_hipsum.txt", "text/plain")
+    text_attachment = create_attachment(container, author, file)
+    
+    file = uploaded_test_file("lorem_hipsum_2_pager.pdf", "application/pdf")
+    pdf_attachment = create_attachment(container, author, file)
+    
+    file = uploaded_test_file("lorem_hipsum.xls", "application/vnd.ms-excel")
+    xls_attachment = create_attachment(container, author, file)
+    
+    file = uploaded_test_file("simons_cat.jpg", "image/jpeg")
+    other_attachment = create_attachment(container, author, file)
+    
+    # diffs/patches rendered in a special template to colorize differences
+    # also show memorize the display type (inline or sbs) as user preferences
+    get :show, :id => diff_attachment.id, :type => 'inline'
+    assert_response :success
+    assert_template :diff
+    assert_not_nil assigns(:diff)
+    assert_equal 'inline', assigns(:diff_type)
+    assert 'inline', author.pref[:diff_type]
+    
+    # texts rendered in a special template that can do syntax highlighting
+    get :show, :id => text_attachment.id
+    assert_response :success
+    assert_template :file
+    assert_not_nil assigns(:content)
+    
+    # pdfs previewed by a 1000px thumbnial
+    get :show, :id => pdf_attachment.id, :pages => 1
+    assert_response :success
+    assert_template :render_show
+    
+    # excel spreadsheets sent back as images
+    get :show, :id => xls_attachment.id, :pages => 1
+    assert_response :success
+    thumbnail = Magick::Image.from_blob(@response.body).first
+    assert_not_nil thumbnail
+    
+    # other files sent as download
+    get :show, :id => other_attachment.id
+    assert_response :success
+    assert_equal other_attachment.filesize, @response.body.length
+    assert_equal 'binary', @response.header['Content-Transfer-Encoding']
+  end
+  
   private
   
   # Because a bug, a overriden fixture_path method get not called for files,
