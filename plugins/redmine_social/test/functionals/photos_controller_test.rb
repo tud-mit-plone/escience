@@ -1,5 +1,5 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
-
+#SimpleCov.start
 class PhotosControllerTest < ActionController::TestCase
   self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
 
@@ -20,6 +20,15 @@ class PhotosControllerTest < ActionController::TestCase
     DatabaseCleaner.clean
   end
 
+  test "show index" do
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    #photo = current_user.photos.last
+    get :index, :user_id => current_user.id
+    assert_response :success
+    assert_template :index
+    assert_equal current_user.photos.count, assigns(:photos).count
+  end
 
   test "destroy users photo if logged in" do
     current_user = users(:users_002)
@@ -39,7 +48,7 @@ class PhotosControllerTest < ActionController::TestCase
       delete :destroy, :user_id => user.id, :id => photo.id
     end
     #assert_redirected_to :back
-    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fusers%2F2%2Fphotos%2F1'
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fusers%2F2%2Fphotos%2F2'
   end
 
   test "destroy users photo if logged as wrong user" do
@@ -89,7 +98,7 @@ class PhotosControllerTest < ActionController::TestCase
     photo = user.photos.last
     put :update, :id => photo.id, :photo =>{:description => description}
     assert_not_equal description, photo.description 
-    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fphotos%2F1'
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fphotos%2F2'
   end
 
   test "respond to show photo if logged in" do

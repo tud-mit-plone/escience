@@ -64,7 +64,13 @@ class PhotoTest < ActiveSupport::TestCase
   test "file exists" do
     user = users(:users_002)
     photo = create_photo(user, "101223161450_testfile_2.png", "image/png")
-    puts Photo.file_exists?(photo)
+    assert Photo.file_exists?(photo)
+  end
+
+  test "photo geometry" do
+    user = users(:users_002)
+    photo = create_photo(user, "101223161450_testfile_2.png", "image/png")
+    assert_equal Paperclip::Geometry.new(300, 200).to_s, photo.photo_geometry.to_s
   end
 
   private
