@@ -46,7 +46,7 @@ class UserExtensionTest < ActiveSupport::TestCase
     assert_equal 2, User.method_missing("account_readable_for_user")
   end
   
-  test "avatar_photo_url" do
+  test "avatar photo url" do
     user_1 = users(:users_002)
     photo = Photo.find(1)
     path_before = user_1.avatar_photo_url
@@ -127,7 +127,7 @@ class UserExtensionTest < ActiveSupport::TestCase
     assert !user.friendship_exists_with?(user)
   end
   
-  test "user has_reached_daily_friend_request_limit" do
+  test "user has reached daily friend request limit" do
     current_user = users(:users_002)
     limit = Friendship.daily_request_limit
     
