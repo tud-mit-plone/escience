@@ -64,7 +64,6 @@ class AlbumsControllerTest < ActionController::TestCase
     assert_difference 'current_user.albums.count' do
       post :create, :user_id => current_user.id, :album => {:user_id => current_user.id,
         :title => "Test-Title", :description => "Test-Description"}, :commit => 'only_create'
-        #,:container => {:author => current_user, :comments => "Test-Comment"}}
     end
     assert_redirected_to edit_user_album_path(current_user.id, assigns(:album).id)
     assert_equal current_user.albums.last, assigns(:album)
@@ -106,6 +105,14 @@ class AlbumsControllerTest < ActionController::TestCase
     assert_redirected_to user_albums_path
   end
 
+  test "add photo to album" do
+    current_user = users(:users_002)
+    @request.session[:user_id] = current_user.id
+    album = albums(:albums_001)
+    put :update, :user_id => current_user.id, :id => album.id
+    assert_redirected_to new_user_album_photo_path(current_user.id, album.id)
+  end
+
 	private
   	# Because a bug, a overriden fixture_path method get not called for files,
   	# so we have to set the variable manually.
@@ -114,20 +121,7 @@ class AlbumsControllerTest < ActionController::TestCase
     	ActiveSupport::TestCase.class_eval do
       	include ActiveRecord::TestFixtures
       	self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
-    end
+      end
   	end
-
-    def create_photo(user, file, type)
-    file = uploaded_test_file(file, type)
-    if File.exist?(file)
-      photo = Photo.create()
-      photo.user_id = user.id
-      photo.photo = file
-      photo.save!
-      return photo
-    else
-      return nil
-    end
-  end
 
 end
