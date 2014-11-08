@@ -47,20 +47,16 @@ class AlbumsController < ApplicationSocialController
         if @project 
           if params[:commit] == 'only_create'
             flash[:notice] = l(:album_was_successfully_created)
-            #format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
             format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
           else
-            #format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
-            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
           end
         else
           if params[:commit] == 'only_create'
             flash[:notice] = l(:album_was_successfully_created)
-            #format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :album_id => @album.id})}
             format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :id => @album.id})}
           else
-            #format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
-            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :id => @album.id})}
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
           end
         end
       else
@@ -88,20 +84,16 @@ class AlbumsController < ApplicationSocialController
         if @project 
           if params[:go_to] == 'only_create'
             flash[:notice] = l(:album_updated)
-            #format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
             format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
           else
-            #format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
-            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
           end
         else
           if params[:go_to] == 'only_create'
             flash[:notice] = l(:album_updated)
-            #format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :album_id => @album.id})}
             format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :id => @album.id})}
           else
-            #format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
-            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :id => @album.id})}
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
           end
         end
       else
