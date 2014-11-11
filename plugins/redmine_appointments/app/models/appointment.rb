@@ -40,6 +40,7 @@ class Appointment < ActiveRecord::Base
       # set default values for new records only
       self.watcher_user_ids = []
     end
+    self.cycle  ||= 0
   end
 
   def css_classes
