@@ -54,7 +54,13 @@ class AppointmentsControllerTest < ActionController::TestCase
   end
 
   test "test show if cycle not set" do
-    #TODO
+    user = users(:users_002)
+    @request.session[:user_id] = user.id
+    appointment = Appointment.create(:author_id => user.id, :subject => 'test',
+      :start_date => Date.new(2014,11))
+    get :show, :id => appointment.id
+    assert_response :success
+    assert_template :show
   end
 
   test "index" do
@@ -72,9 +78,8 @@ class AppointmentsControllerTest < ActionController::TestCase
     assert_redirected_to appointment_path(assigns(:appointment).id)
     assert_equal @controller.l(:notice_appointment_successful_create), flash[:notice]
     assert_equal user.id, assigns(:appointment).author_id
-    #result.all.include?
 
-    #Wieviele werden nach dem create angezeigt? Seite wird nicht neugelande(?)
+    #Wieviele werden nach dem create angezeigt? Seite wird nicht neugeladen(?)
   end
 
   test "create not valid appointment" do
