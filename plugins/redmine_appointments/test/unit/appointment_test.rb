@@ -65,7 +65,16 @@ class AppointmentTest < ActiveSupport::TestCase
   end
 
   test "save attributes" do
+    user = users(:users_002)
+    User.current = user
+    appointment = Appointment.create(:author_id => user.id, :subject => 'test',
+      :start_date => Date.new(2014,11), :cycle => 3)
+    assert appointment.save!
+    attrs = Hash.new
+    attrs['cycle'] = 1
     #TODO
+    appointment.safe_attributes= attrs
+    assert_equal 1, appointment.cycle
   end
 
   private

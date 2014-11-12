@@ -103,16 +103,16 @@ class AppointmentsControllerTest < ActionController::TestCase
     assert_equal 1, assigns(:appointment).cycle
   end
 
-  # test "update appointment as other user" do
-  #   user = users(:users_002)
-  #   current_user = users(:users_003)
-  #   @request.session[:user_id] = current_user.id
-  #   appointment = appointments(:appointments_001)
-  #   put :update, :id => appointment.id, :appointment =>{:subject => 'test',
-  #     :start_date => '11/14/2014', :start_time => '16:35:38',
-  #     :due_date => '12/14/2014', :due_time => '16:35:38', :cycle => 1}
-  #   assert_not_equal 1, assigns(:appointment).cycle
-  # end
+  test "update public appointment as other user" do
+    #user = users(:users_002)
+    current_user = users(:users_003)
+    @request.session[:user_id] = current_user.id
+    appointment = appointments(:appointments_001)
+    put :update, :id => appointment.id, :appointment =>{:subject => 'test',
+      :start_date => '11/14/2014', :start_time => '16:35:38',
+      :due_date => '12/14/2014', :due_time => '16:35:38', :cycle => 1}
+    assert_not_equal 1, assigns(:appointment).cycle
+  end
 
   test "destroy appointment if logged in" do
     appointmentscount = (Appointment.getAllEventsWithCycle(Date.new(2014,11), Date.new(2015,1))).count - 1
