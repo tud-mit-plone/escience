@@ -122,25 +122,48 @@ class UsersControllerExtensionTest < ActionController::TestCase
     assert_equal contact_member.lastname, lastname
   end
   
-  # this method is already tested through 'show'-method-test
-  test "require user security" do
+  # # this method is already tested through 'show'-method-test
+  # test "require user security" do
+    # admin = users(:users_001)
+    # user_1 = users(:users_002)
+    # user_2 = users(:users_003) 
+#     
+    # # 1. case: logged in user is the same user for request
+    # # @request.session[:user_id] = user_1.id  
+    # # @controller.require_user_security(user_1.id)
+# 
+    # # 2. case: account have to be readable for user
+    # user_2.security_number = User.account_readable_for_user
+    # user_2.confirm = true
+    # user_2.save!
+    # assert @controller.require_user_security(user_2.id)
+#     
+    # # 3. case: admin is logged in
+    # # @request.session[:user_id] = admin.id 
+    # # assert @controller.require_user_security(user_1.id)
+  # end 
+  
+  test "require user security through show method" do
     admin = users(:users_001)
     user_1 = users(:users_002)
-    user_2 = users(:users_003) 
+    user_2 = users(:users_003)
     
     # 1. case: logged in user is the same user for request
-    # @request.session[:user_id] = user_1.id  
-    # @controller.require_user_security(user_1.id)
+    @request.session[:user_id] = user_1.id  
+    # get :show, :id => user_1.id
+    # assert_response :success
 
-    # 2. case: account have to be readable for user
+    # 2. case: account is readable for user
     user_2.security_number = User.account_readable_for_user
     user_2.confirm = true
     user_2.save!
-    assert @controller.require_user_security(user_2.id)
+    get :show, :id => user_2.id
+    assert_response :success
     
     # 3. case: admin is logged in
-    # @request.session[:user_id] = admin.id 
-    # assert @controller.require_user_security(user_1.id)
+    @request.session[:user_id] = admin.id 
+    get :show, :id => user_1.id
+    assert_response :success
   end 
   
   
