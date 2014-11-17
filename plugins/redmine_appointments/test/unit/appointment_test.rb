@@ -64,6 +64,30 @@ class AppointmentTest < ActiveSupport::TestCase
     assert_not_equal 2, appointments.count
   end
 
+  test "appointment visible?" do
+    #appointment is public
+    user = users(:users_002)
+    appointment = Appointment.create(:author_id => user.id, :subject => 'test',
+      :start_date => Date.new(2014,11), :due_date => Date.new(2014,12), :cycle => 0)
+    assert appointment.visible?
+
+    #appointment ist privat
+    appointment = Appointment.create(:author_id => user.id, :subject => 'test',
+      :start_date => Date.new(2014,11), :due_date => Date.new(2014,12), :cycle => 0, :is_private => true)
+    assert !appointment.visible?
+
+    assert appointment.visible?(user)
+
+  end
+
+  test "appointment clone" do
+    user = users(:users_002)
+    appointment = Appointment.create(:author_id => user.id, :subject => 'test',
+      :start_date => Date.new(2014,11), :due_date => Date.new(2014,12), :cycle => 0)
+    appointment1 = appointment.clone
+    assert_equal appointment1, appointment
+  end
+
   test "save attributes" do
     user = users(:users_002)
     User.current = user
@@ -71,9 +95,9 @@ class AppointmentTest < ActiveSupport::TestCase
       :start_date => Date.new(2014,11), :cycle => 3)
     assert appointment.save!
     attrs = Hash.new
-    attrs['cycle'] = 1
+    attrs[:cycle] = 1
     #TODO
-    appointment.safe_attributes= attrs
+    appointment.safe_attributes= attrs, user
     assert_equal 1, appointment.cycle
   end
 

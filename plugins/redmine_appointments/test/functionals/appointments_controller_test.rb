@@ -131,7 +131,7 @@ class AppointmentsControllerTest < ActionController::TestCase
     
     current_user = users(:users_003)
     @request.session[:user_id] = current_user
-    assert_difference '(Appointment.getAllEventsWithCycle(Date.new(2014,11), Date.new(2015,1))).count', 0 do
+    assert_difference '(Appointment.getListOfDaysBetween(Date.new(2014,11), Date.new(2015,1))).count', 0 do
       delete :destroy, :id => appointment.id
     end
   end

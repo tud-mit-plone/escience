@@ -3,6 +3,7 @@ appointments_001:
   start_date: 2014-11-14 16:35:38
   subject: 'Das ist ein Termin-01'
   cycle: 2
+  is_private: false
   due_date: 2014-12-14 16:35:38
   description: 'nothing to say'
   created_on: 2014-11-14 16:35:38
