@@ -31,4 +31,13 @@ class MailerExtensionTest < ActiveSupport::TestCase
     end
   end
 
+  test "message id for" do
+    author = users(:users_002)
+    User.current = author
+    to_user = users(:users_003)
+    user_message = UserMessage.create(:author => author, :user => author,
+      :subject => 'test Subject', :body => 'Test Message', :receiver => to_user, :parent => nil)
+
+    assert_not_nil Mailer.message_id_for(user_message)
+  end
 end
