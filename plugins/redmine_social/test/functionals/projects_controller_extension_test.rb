@@ -27,6 +27,12 @@ class ProjectsControllerExtensionTest < ActionController::TestCase
     assert !project.users.include?(user)
     get :show, :id => project.id
     assert_response(403)
+
+    #Project is public
+    project = Project.find(3)    
+    get :show, :id => project.id
+    assert_response :success
+    assert_template :show
   end
 
 end
