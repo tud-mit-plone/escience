@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.13'
 gem 'rails', '3.2.19'
 gem "jquery-rails", "~> 2.0.2"
 gem "i18n", "~> 0.6.0"
@@ -29,6 +28,7 @@ platforms :mri, :mingw do
   end
 end
 
+=begin
 # Database gems
 platforms :mri, :mingw do
   group :postgresql do
@@ -75,10 +75,16 @@ platforms :jruby do
     gem "activerecord-jdbcsqlite3-adapter"
   end
 end
+=end
+
+group :production do
+  gem "mysql2"
+end
 
 group :development do
   gem "rdoc", ">= 2.4.2"
   gem "yard"
+  gem "sqlite3"
 end
 
 group :test do
