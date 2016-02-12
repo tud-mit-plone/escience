@@ -14,8 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 #require 'shoulda'
+#require 'minitest'
+require 'simplecov'
+SimpleCov.start 'rails'
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'rails/test_help'
@@ -23,6 +25,10 @@ require Rails.root.join('test', 'mocks', 'open_id_authentication_mock.rb').to_s
 
 require File.expand_path(File.dirname(__FILE__) + '/object_helpers')
 include ObjectHelpers
+require 'awesome_nested_set/version'
+
+require 'mocha/setup'
+require 'mocha/integration/test_unit'
 
 class ActiveSupport::TestCase
   include ActionDispatch::TestProcess

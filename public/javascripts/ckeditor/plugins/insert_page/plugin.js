@@ -43,7 +43,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
     		var elem= api.getSelection().getSelectedText();
     		if (elem != "") {
     			var e = api.document.createElement('span');
-          e.setAttribute('class','wiki-page');
+          e.setAttribute('class','wiki-page makro');
           e.appendHtml(elem);
           api.insertElement(e);
           CKEDITOR.dialog.getCurrent().hide();
@@ -52,7 +52,7 @@ CKEDITOR.plugins.add('insert_page',{init:function(editor){
   		onOk : function() {
   			var textareaObj = this.getContentElement( 'tab1', 'textareaId' );
   			var e = api.document.createElement('span');
-        e.setAttribute('class','wiki-page');
+        e.setAttribute('class','wiki-page makro');
         e.appendHtml(textareaObj.getValue());
         api.insertElement(e);
   		}

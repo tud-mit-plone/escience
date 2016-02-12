@@ -44,11 +44,20 @@ class AlbumsController < ApplicationSocialController
     
     respond_to do |format|
       if @album.save
-        if params[:commit] == 'only_create'
-          flash[:notice] = l(:album_was_successfully_created) 
-          format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+        if @project 
+          if params[:commit] == 'only_create'
+            flash[:notice] = l(:album_was_successfully_created)
+            format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
+          else
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+          end
         else
-          format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+          if params[:commit] == 'only_create'
+            flash[:notice] = l(:album_was_successfully_created)
+            format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :id => @album.id})}
+          else
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
+          end
         end
       else
         format.html { render :action => 'new' }
@@ -72,11 +81,20 @@ class AlbumsController < ApplicationSocialController
     
     respond_to do |format|
       if @album.update_attributes(params[:album])
-        if params[:go_to] == 'only_create'
-          flash[:notice] = l(:album_updated)
-          format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+        if @project 
+          if params[:go_to] == 'only_create'
+            flash[:notice] = l(:album_updated)
+            format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :project_id => @project.id, :id => @album.id})}
+          else
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+          end
         else
-          format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :project_id => @project.id, :album_id => @album.id})}
+          if params[:go_to] == 'only_create'
+            flash[:notice] = l(:album_updated)
+            format.html { redirect_to({:action => 'edit', :user_id => User.current.id, :id => @album.id})}
+          else
+            format.html { redirect_to({:controller => 'photos', :action => 'new', :user_id => User.current.id, :album_id => @album.id})}
+          end
         end
       else
         format.html { render :action => "edit" }
@@ -124,11 +142,13 @@ private
       @albums = @user.albums
     end
     @container = {}
-    @albums.each do |album|
-      container_name = album.container.name == User.current.mail ? l(:label_project_private) : album.container.name
-      @container[container_name] ||= []
-      @container[container_name] << album
-    end 
+    unless @album.container.nil? 
+      @albums.each do |album|
+        container_name = album.container.name == User.current.mail ? l(:label_project_private) : album.container.name
+        @container[container_name] ||= []
+        @container[container_name] << album
+      end 
+    end
   end
 
   def project_album_if_visible

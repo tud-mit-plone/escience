@@ -48,3 +48,5 @@ public/images/logo_e-science_network.png
 public/system/attachments/development/files/*
 *.haml
 plugins/redmine_reddrop/
+/plugins/redmine_social/test/*/coverage
+/test/*/coverage

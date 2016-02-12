@@ -1,4 +1,9 @@
+<fieldset>
   <% unless invitation.answer.nil? %>
+    <legend>
+      <%= l(:group_invitation_for) %>
+      <%= "#{l("label_#{invitation.group.class.name.singularize.downcase}".to_sym)}: "%><u style="color: #606060"><%= " #{invitation.group.name}" %></u>
+    </legend>
     <% case invitation.friendship_status_id %>
       <% when FriendshipStatus["accepted"].id %>
         <div class="icon-ok" style="font-size: 50px; top: -40px; left: 40px; opacity: 0.4; position: relative; 
@@ -11,13 +16,11 @@
           <%end%>
         </div>
       <% when FriendshipStatus["pending"].id %>
-        <%= form_tag url_for(:controller => 'group_invitations', :action => 'selection', :id => invitation.id), :remote => true do%> 
-          <h2>
-            <%= l(:group_invitation_for) %>
-            <%= l("label_#{invitation.group.class.name.singularize.downcase}".to_sym) %><%= " #{invitation.group.name}" %>
-          </h2>
-            <%=submit_tag(l(:label_accept),:name => "true")%>
-            <%=submit_tag(l(:label_cancel),:name => "false")%>
+        <%= form_tag url_for(:controller => 'group_invitations', :action => 'selection', :id => invitation.id),:id => "group_invitation_#{invitation.id}", :remote => true do%> 
+            <%= hidden_field_tag 'hidden_submit', '' %>
+            <%= link_to l(:label_cancel), "#top", :class => 'button', :onclick =>"$('#hidden_submit').attr('name','false');$('#group_invitation_#{invitation.id}').submit();" %>
+            <%= link_to l(:label_accept), "#top", :class => 'button', :onclick =>"$('#hidden_submit').attr('name','true');$('#group_invitation_#{invitation.id}').submit();" %>
+
         <%end%>
       <%when FriendshipStatus["denied"].id%>
         <div class="icon-remove" style="font-size: 50px; top: -40px; left: 40px; opacity: 0.4; position: relative; 

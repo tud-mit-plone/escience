@@ -8,7 +8,7 @@
 
 <div id="show_user_message">
     <fieldset>
-    <legend><%=h @user_message.subject.truncate(20) %></legend>
+    <legend><%=h @user_message.subject.truncate(40) %></legend>
     <%= "#{l(:label_user_messages_subject)}: "%><span class="subject"><%=h @user_message.subject %></span>
     <div class="date" style="float: right"><%= format_time(@user_message.created_at) %></div>
     <div class="author">

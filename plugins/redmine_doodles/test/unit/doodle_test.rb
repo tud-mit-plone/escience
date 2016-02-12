@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class DoodleTest < Test::Unit::TestCase
+class DoodlesControllerTest < ActionController::TestCase
+  self.fixture_path= File.join(File.dirname(__FILE__),'../fixtures')
   fixtures :doodles
 
   # Replace this with your real tests.

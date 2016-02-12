@@ -26,7 +26,7 @@
 <fieldset>
 <legend style="font-size: 20px;"><%= h @album.title %> <i class="icon icon-picture"></i></legend>
 
-<% unless @album.description.empty? %>
+<% unless @album.description.nil? || @album.description.empty? %>
   <div class="wiki description"><%= h @album.description %></div>
 <% end %>
 <div id='photos'>

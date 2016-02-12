@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class DoodleAnswersTest < Test::Unit::TestCase
+class DoodleAnswersControllerTest < ActionController::TestCase
   fixtures :doodle_answers
 
   # Replace this with your real tests.

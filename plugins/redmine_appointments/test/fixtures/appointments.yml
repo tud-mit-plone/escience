@@ -1,0 +1,25 @@
+appointments_001: 
+  author_id: 2
+  start_date: 2014-11-14 16:35:38
+  subject: 'Das ist ein Termin-01'
+  cycle: 2
+  is_private: false
+  due_date: 2014-12-14 16:35:38
+  description: 'nothing to say'
+  created_on: 2014-11-14 16:35:38
+  updated_on: 2014-11-14 16:35:38
+appointments_002: 
+  author_id: 2
+  start_date: 2014-11-15 16:35:38
+  subject: 'Das ist ein Termin-02'
+  created_on: 2014-11-15 16:35:38
+  updated_on: 2014-11-15 16:35:38
+appointments_003: 
+  author_id: 3
+  start_date: 2014-12-14 16:35:38
+  due_date: 2014-12-16 16:35:38
+  cycle: 0
+  subject: 'Das ist ein Termin-03'
+  created_on: 2014-12-14 16:35:38
+  updated_on: 2014-12-14 16:35:38
+
