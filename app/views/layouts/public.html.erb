@@ -43,7 +43,7 @@
         <!-- backgrounds for the top-navigations -->
       	<div class="bar"></div>
       	<div id="header_bg_bar"></div>
-      	
+
       	<!-- logo -->
       	<div class="inside container_16">
       		<div id="logo" class="grid_3 prefix_12">
@@ -53,10 +53,10 @@
       		</div>
       		<div class="clear"></div>
       	</div>
-      	
+
       	<!-- Navigation with green background -->
       	<div id="main_navigation"></div>
-      
+
       	<!-- Navigation with gray background -->
       	<div id="navigation">
       		<div class="inside container_16">
@@ -66,7 +66,7 @@
       		  <div class="clear"></div>
       	  </div>
       	</div>
-      	
+
       	<!-- Navigation for Team/Community/Private -->
       	<div class="container_16">
       		<div id="navigation_group" class="grid_4 prefix_1 roundabout-holder">
@@ -85,7 +85,7 @@
         		  </li>
         		</ul>
       		</div>
-      	</div>	    
+      	</div>
       </header>
 
       <div class="nosidebar" id="container">
@@ -99,28 +99,12 @@
     	    <div id="right" class="grid_3"><div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div></div>
     	    <div class="clear"></div>
         </div>
-      </div>    
+      </div>
       <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
       <div id="ajax-modal" style="display:none;"></div>
     </div>
   </div>
-  <div id="footer">
-  	<div style="background-color:#fff; height:3px; width:100%"></div>
-  	<div class="inside">
-  		<div id="copyright">© eScience – Netzwerk Sachsen 2012</div>
-  		<div id="eu"><a href="http://europa.eu/" title="<%= l(:label_eu) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/eu.png" width="54" height="39" /></a></div>
-  		<div id="esf"><a href="http://www.esf.de/" title="<%= l(:label_esf) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/esf.png" width="89" height="39" /></a></div>
-  		<div id="sachsen"><a href="http://www.smwk.sachsen.de/" title="<%= l(:label_smwk) %>" target="_blank"><img src="<%= Redmine::Utils.relative_url_root %>/images/sachsen.png" width="32" height="39"/></a></div>
-  		<div id="miscellaneous">
-  		   <ul>
-  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
-  		      <li class="withborder"><a href="/static/agb.html" title="<%= l(:label_termsconditions) %>"><%= l(:label_termsconditions) %></a></li>
-  		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
-  		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>
-  		   </ul>
-  		</div> 
-  	</div>
-  </div>
+  <%= render :partial => '/layouts/footer' %>
   <%= call_hook :view_layouts_base_body_bottom %>
 </body>
 </html>

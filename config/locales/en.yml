@@ -509,14 +509,12 @@ en:
   label_navigation: Issuehierarchie
   label_team: Team
   label_star_mandatory: Fields marked with * are mandatory.
-  label_eu: European Union
-  label_esf: European Social Fund
-  label_smwk: Ministry of Science and Art
   label_sortby: Sort by
   label_back: Back
   label_user_add: Add to contact list
   label_subprojectof: Overall project
   label_fileupload: Choose file
+  label_copyright: © TU Dresden %{year}
   label_contact: Contact
   label_privacypolicy: Privacy Policy
   label_imprint: Impres

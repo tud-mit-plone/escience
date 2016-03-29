@@ -480,14 +480,12 @@ de:
   label_community: Gemeinschaft
   label_team: Gruppe
   label_user_add: zur Kontaktliste
-  label_eu: Europäische Union
-  label_esf: Europäische Sozialfond
-  label_smwk: Staatsministerium für Wissenschaft und Kunst
   label_fileupload: Datei auswählen
   label_sortby: Sortieren nach
   label_subissue: Unteraufgabe von
   label_issue_id: Aufgabe Nr.
   label_subprojectof: Übergeordnetes Projekt
+  label_copyright: © TU Dresden %{year}
   label_contact: Kontakt
   label_privacypolicy: Datenschutz
   label_imprint: Impressum
