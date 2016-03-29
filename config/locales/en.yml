@@ -241,15 +241,15 @@ en:
   field_firstname: First name
   field_lastname: Last name
   field_phone: Phone
-  field_fax: Fax  
+  field_fax: Fax
   field_mail: Email
   field_department: Institution
   field_street: Street/No.
-  field_city: City  
-  field_zipcode: Zipcode 
+  field_city: City
+  field_zipcode: Zipcode
   field_adress: address
   field_confirm: Terms & Privacy
-  field_confirmation: I accept the <a href="/static/datenschutz.html">Privacy Policy</a> and <a href="/static/agb.html">Terms and Conditions</a> of eScience – Research Network Sachsen
+  field_confirmation: I accept the <a href="/static/datenschutz.html">Privacy Policy</a> and <a href="/static/agb.html">Terms and Conditions</a> of eScience – Research Platform TU Dresden
   field_filename: File
   field_filesize: Size
   field_downloads: Downloads
@@ -610,7 +610,7 @@ en:
   label_my_members: Contact list
   label_my_inbox: Inbox
   label_my_doodles: Survey
-  label_my_doodles_plural: Surveys  
+  label_my_doodles_plural: Surveys
   label_user_messages: Own messages
   label_user_messages_new: New message
   label_user_messages_inbox: Inbox
@@ -645,7 +645,7 @@ en:
   label_assigned_to_me_issues: Issues assigned to me
   label_last_login: Last connection
   label_registered_on: Registered on
-  label_register_submit: Register  
+  label_register_submit: Register
   label_activity: Activity
   label_overall_activity: Overall activity
   label_user_activity: "%{value}'s activity"
@@ -1153,7 +1153,7 @@ en:
   text_session_expiration_settings: "Warning: changing these settings may expire the current sessions including yours."
   text_project_closed: This project is closed and read-only.
   text_welcome: This platform provides a virtual space where scientists can communicate with each other to generate new knowledge and to develop common resources for research and sharing. In addition to tools for work organization and coordination of activities can be found here extensive knowledge, media and documentation, as well as software and data for scientific experiments. You decide what, with what and whom you are researching. A strong community is always at your side.
-  text_headline: The Research Network for Saxony
+  text_headline: The Research Platform TU Dresden
   text_created_on: Angelegt am
 
   default_role_manager: Manager
@@ -1202,13 +1202,13 @@ en:
   description_date_to: Enter end date
   text_repository_identifier_info: 'Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.'
 
-  tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.). 
+  tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.).
   tooltip_sidebar_projects: Manage your projects, create new, or change the settings.
-  tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform. 
+  tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform.
   tooltip_sidebar_sent: Find the messages that you have written.
   tooltip_sidebar_archive: All important messages that you deem worthy of archiving.
   tooltip_sidebar_trash: The recycle bin for your internal message to the eScience platform
-  tooltip_sidebar_overview: Get an overview of the project »%{project}«. 
+  tooltip_sidebar_overview: Get an overview of the project »%{project}«.
   tooltip_sidebar_issues_all: See the issues of the individual projects, where you are a member.
   tooltip_sidebar_issues: See the issues of the project »%{project}«.
   tooltip_sidebar_calendar_all: Get an overview of the dates of the issues.
@@ -1221,7 +1221,7 @@ en:
   tooltip_sidebar_files: All files that have been attached to this project, can be found here.
   tooltip_sidebar_settings: To change the settings for this project, click here.
   tooltip_sidebar_doodles: Create a small survey for certain group members.
-  
+
   tooltip_project_message_delete: Delete.
   tooltip_project_message_settings: Settings.
   tooltip_project_message_issues: Issues in this project.
@@ -1234,13 +1234,13 @@ en:
   tooltip_user_message_newMessage: Create a new message.
   tooltip_navbar_issues_count: "See the instructions, which have been assigned to you in each project."
   tooltip_and: and
-  tooltip_navbar_user_messages_count: You received %{count} message(s) from %{persons}. 
+  tooltip_navbar_user_messages_count: You received %{count} message(s) from %{persons}.
   tooltip_navbar_issues_explain: "There is %{position} issue(s) that is asigned to you."
   tooltip_sidebar_contactlist: Here is a list of your contacts. At this point you can also search for contacts from different projects and add them to your contact list.
   tooltip_navbar_account: Hello %{name}. By clicking here, you can change your account-details.
   tooltip_navbar_logout: To unsubscribe please click here ... Until next time.
   tooltip_navbar_help: You have questions and get stuck? Look here first for answers. If you can't find help please contact us.
-  
+
   tooltip_addUser: Add member to contact list
   tooltip_deleteUser: Remove member to contact list
   tooltip_openUser: Show member informations

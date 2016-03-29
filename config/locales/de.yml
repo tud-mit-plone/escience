@@ -257,15 +257,15 @@ de:
   field_firstname: Vorname
   field_lastname: Nachname
   field_phone: Telefon
-  field_fax: Telefax  
+  field_fax: Telefax
   field_mail: E-Mail
   field_department: Institution
-  field_street: Straße/H-Nr.  
-  field_city: Stadt  
-  field_zipcode: Postleitzahl 
+  field_street: Straße/H-Nr.
+  field_city: Stadt
+  field_zipcode: Postleitzahl
   field_adress: Anschrift
   field_confirm: AGB & Datenschutz
-  field_confirmation: Ich akzeptiere die <a href="/static/datenschutz.html">Datenschutzbestimmungen</a> und <a href="/static/agb.html">AGB</a> des eScience – Forschungsnetzwerk Sachsen
+  field_confirmation: Ich akzeptiere die <a href="/static/datenschutz.html">Datenschutzbestimmungen</a> und <a href="/static/agb.html">AGB</a> des eScience – Forschungsplattform TU Dresden
   field_filename: Datei
   field_filesize: Größe
   field_downloads: Downloads
@@ -542,7 +542,7 @@ de:
   label_document_plural: Dokumente
   label_my_document_plural: Meine Dokumente
   label_document_added: Dokument hinzugefügt
-  label_document_edit: Dokument bearbeiten 
+  label_document_edit: Dokument bearbeiten
   label_document_delete: Dokument löschen
   label_document_show: Dokument anzeigen
   label_role: Rolle
@@ -1202,7 +1202,7 @@ de:
   button_export: Exportieren
   label_export_options: "%{export_format} Export-Eigenschaften"
   error_attachment_too_big: Diese Datei kann nicht hochgeladen werden, da sie die maximale Dateigröße von (%{max_size}) überschreitet.
-  notice_failed_to_save_time_entries: "Gescheitert %{count} Zeiteinträge für %{total} von ausgewählten: %{ids} zu speichern." 
+  notice_failed_to_save_time_entries: "Gescheitert %{count} Zeiteinträge für %{total} von ausgewählten: %{ids} zu speichern."
   label_x_issues:
     zero:  0 Anweisungen
     one:   1 Anweisung
@@ -1223,18 +1223,18 @@ de:
   label_search_for_watchers: Nach hinzufügbaren Beobachtern suchen
   lable_click_user_message_to_admin: klicken Sie hier, wenn die Weiterleitung nicht funktioniert
   text_welcome: Diese Plattform bietet einen virtuellen Raum mit anderen Wissenschaftlern zu kommunizieren, zusammen neue  Erkenntnisse zu gewinnen und gemeinsame Ressourcen für Forschungszwecke zu entwickeln und teilen. Neben Werkzeuge zur Arbeitsorganisation und Koordinierung von Aktivitäten finden Sie hier umfangreiches Wissen, Medieninhalte und Dokumentationen, sowie Software und Daten für wissenschaftliche Experimente. Sie entscheiden selbst, was, womit und mit wem Sie forschen. Eine starke Community ist stets an Ihrer Seite.
-  text_headline: Das Forschungsnetzwerk Sachsen
+  text_headline: Die Forschungsplattform TU Dresden
 
   notice_user_successful_added: "%{member} wurde erfolgreich zu Ihrer Kontaktliste hinzugefügt."
   notice_user_successful_deleted: "%{member} wurde erfolgreich aus Ihrer Kontaktliste gelöscht."
-  
-  tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.). 
+
+  tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.).
   tooltip_sidebar_projects: Verwalten Sie Ihre Projekte, legen Sie neue an oder ändern Sie die Einstellungen.
-  tooltip_sidebar_user_messages: Ihr Posteingang für interne Nachrichten auf der eScience-Plattform. 
-  tooltip_sidebar_sent: Finden Sie die Nachrichten, die Sie verfasst haben. 
+  tooltip_sidebar_user_messages: Ihr Posteingang für interne Nachrichten auf der eScience-Plattform.
+  tooltip_sidebar_sent: Finden Sie die Nachrichten, die Sie verfasst haben.
   tooltip_sidebar_archive: Alle wichtigen Nachrichten, die Sie für archivierungswürdig halten.
   tooltip_sidebar_trash: Der Papierkorb für Ihre internen Nachrichten auf der eScience-Plattform
-  tooltip_sidebar_overview: Verschaffen Sie sich einen Überblick über das Projekt »%{project}«. 
+  tooltip_sidebar_overview: Verschaffen Sie sich einen Überblick über das Projekt »%{project}«.
   tooltip_sidebar_issues_all: Sehen Sie die Aufgaben der einzelnen Projekte an, bei denen Sei Mitglied sind.
   tooltip_sidebar_issues: Sehen Sie die Aufgaben des Projekts »%{project}« an.
   tooltip_sidebar_calendar_all: Verschaffen Sie sich einen Überblick über die Stichtage der Aufgaben.
@@ -1248,7 +1248,7 @@ de:
   tooltip_sidebar_settings: Um die Einstellungen zu diesem Projekt zu ändern, klicken Sie hier.
   tooltip_sidebar_doodles: Erstellen Sie eine kleine Umfrage und lassen Sie bestimmte Gruppenmitglieder abstimmen.
   tooltip_sidebar_contactlist: Hier finden Sie eine Auflistung Ihrer Kontakt. Auch können Sie an dieser Stelle nach Kontakten aus verschiedenen Projekten suchen und zu Ihrer Kontaktliste hinzufügen.
-    
+
   tooltip_project_message_delete: Löschen.
   tooltip_project_message_settings: Einstellungen.
   tooltip_project_message_issues: Aufgaben in diesem Projekt.
@@ -1261,12 +1261,12 @@ de:
   tooltip_user_message_newMessage: Erstellen Sie eine neue Nachricht.
   tooltip_navbar_issues_count: "Sehen Sie die Aufgaben, die Ihnen in den einzelnen Projekt zugeordnet wurden."
   tooltip_and: und
-  tooltip_navbar_user_messages_count: Sie haben %{count} Nachricht(en) von %{persons} erhalten. 
+  tooltip_navbar_user_messages_count: Sie haben %{count} Nachricht(en) von %{persons} erhalten.
   tooltip_navbar_issues_explain: "Ihnen wurde(n) %{position} Aufgabe(n) in verschiednen Projekten zugewiesen."
   tooltip_navbar_account: Hallo %{name}. Wenn Sie hier klicken, können Sie Ihre Angaben ändern.
   tooltip_navbar_logout: Zum Abmelden bitte hier klicken... Bis zum nächsten Mal.
   tooltip_navbar_help: Sie haben Fragen und kommen nicht weiter? Schauen Sie zunächst hier nach einer Antwort. Sollten Sie nicht fündig werde stehen wir Ihnen gern zur Verfügung.
-  
+
   tooltip_addUser: Mitglied Anfrage für Kontakt senden
   tooltip_deleteUser: Mitglied aus Kontaktliste entfernen
   tooltip_openUser: Mitgliedinformationen anzeigen
