@@ -88,7 +88,7 @@ group :development do
   gem "rdoc", ">= 2.4.2"
   gem "yard"
   gem "sqlite3"
-  #gem "debugger"
+  gem "byebug"
 end
 
 group :test do
