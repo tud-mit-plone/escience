@@ -4,6 +4,7 @@
 /.codeintel/config
 *.orig
 *.svn
+*.swp
 /changed_files
 /backup
 /nbproject
@@ -50,3 +51,5 @@ public/system/attachments/development/files/*
 plugins/redmine_reddrop/
 /plugins/redmine_social/test/*/coverage
 /test/*/coverage
+/.byebug_history
+*.kdev4
