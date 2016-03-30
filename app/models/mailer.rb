@@ -384,7 +384,8 @@ class Mailer < ActionMailer::Base
     cc = [contact_message.email] if contact_message.send_copy_to_sender
     mail :to => Setting.mail_from,
       :cc => cc,
-      :subject => l(:contact_message_subject, :subject => contact_message.subject)
+      :subject => l(:contact_message_subject, :subject => contact_message.subject),
+      :reply_to => contact_message.email
   end
 
   def mail(headers={})
