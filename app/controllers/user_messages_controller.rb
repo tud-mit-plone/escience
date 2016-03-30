@@ -4,7 +4,7 @@ class UserMessagesController < ApplicationController
 
   before_filter :is_author?, :only => [:update, :show, :destroy, :edit, :archive]
   before_filter :require_login, :only => [:index, :create, :update, :show, :sent_messages, :new, :destroy, :emptytrash, :edit, :archive]
-  
+
   # GET /user_messages
   # GET /user_messages.xml
   def index
@@ -15,7 +15,7 @@ class UserMessagesController < ApplicationController
     end
   end
 
-  def get_directory_and_messages 
+  def get_directory_and_messages
     dir = "received"
     if !params[:directory].nil?
       dir = case params[:directory]
@@ -36,44 +36,12 @@ class UserMessagesController < ApplicationController
     end
   end
 
-  def contact_message
-    @user_message = UserMessage.new()
-    
-    respond_to do |format|
-      format.html # contact_message.html.erb
-    end
-  end
-
-  def send_contact_message
-
-    email = params[:email]
-    if email.match(EMAIL_REGEX).nil? || params[:captcha].nil? || !(params[:captcha].to_s.downcase == 'escience')
-      flash[:notice] = l(:text_message_sent_error_fields)
-    else
-      @user_message = UserMessage.new()
-      contact = User.find(1)
-      @user_message.receiver_id = contact.id
-      @user_message.author = contact.id
-      @user_message.user_id = contact.id
-      flash[:notice] = l(:text_message_sent_done)
-      @user_message.body = params[:user_message]["body"]
-      @user_message.subject = "from #{email} #{params[:user_message]["subject"]}"
-      @user_message.state = 1
-      @user_message.directory = UserMessage.received_directory
-      @user_message.save!
-    end
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-    end
-  end
-  
-  # GET /user_messages/1
   # GET /user_messages/1.xml
   def show
     @user_message = UserMessage.find(params[:id])
     @user_message.state = 0
     @user_message.save!
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @user_message }
@@ -100,14 +68,14 @@ class UserMessagesController < ApplicationController
   def new
     @user_message = UserMessage.new
     if !@user_message_reply_mail.nil?
-      @receivers = [] 
+      @receivers = []
       @receivers += @user_message_reply_mail.receiver_list if !@user_message_reply_mail.receiver_list.nil?
       @receivers << @user_message_reply_mail.user if !@user_message_reply_mail.user.nil?
       @receivers << @user_message_reply_mail.receiver if !@user_message_reply_mail.receiver.nil?
       @receivers.uniq!
       @receivers.delete(User.current)
-    else 
-      params.delete :reply 
+    else
+      params.delete :reply
     end
     respond_to do |format|
       format.html # new.html.erb
@@ -125,12 +93,12 @@ class UserMessagesController < ApplicationController
   def create
     noerror = true
     notice = ""
-    
-    if (params[:user_message]["receiver"].empty? || params[:user_message]["subject"].empty? || params[:user_message]["body"].empty?) 
+
+    if (params[:user_message]["receiver"].empty? || params[:user_message]["subject"].empty? || params[:user_message]["body"].empty?)
       noerror = false;
       notice = l(:error_empty_message)
       @user_message_reply = notice
-    else 
+    else
       unless params[:user_message]["receiver"].nil?
         @receiver_arr = params[:user_message]["receiver"].split(",")
         @receiver_arr.each do |receiver_id|
@@ -142,7 +110,7 @@ class UserMessagesController < ApplicationController
               format.html { redirect_to(:action => 'new', :notice => 'Receiver not known') }
               format.xml  { render :xml => @user_message.errors, :status => :unprocessable_entity }
             end
-            return 
+            return
           end
           @user_message = UserMessage.new()
           @user_message.body = params[:user_message]["body"]
@@ -213,7 +181,7 @@ class UserMessagesController < ApplicationController
       @user_message.save
     end
     get_directory_and_messages()
-    
+
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_delete_done)) }
       format.js  { @update_messages = true; render :partial => 'update'}
@@ -224,19 +192,19 @@ class UserMessagesController < ApplicationController
   def archive
     @user_message = UserMessage.find(params[:id])
     @user_message.directory = UserMessage.archive_directory
-    if (@user_message.state == 2) 
+    if (@user_message.state == 2)
       @user_message.state = 0
     end
     @user_message.save
     get_directory_and_messages()
-    
+
     respond_to do |format|
       format.html { redirect_to(request.referer, :notice => l(:text_message_archive_done)) }
       format.js  { @update_messages = true; render :partial => 'update'}
       format.xml  { head :ok }
     end
   end
-  
+
   def emptytrash
     del_msg = UserMessage.destroy_all("author=#{User.current.id} AND state=2")
 
@@ -268,7 +236,7 @@ class UserMessagesController < ApplicationController
     @user_message = UserMessage.find(params[:id])
     if !(@user_message.read_attribute("author").to_i == User.current.id.to_i)
       render_403
-      return false 
+      return false
     end
     return true
   end

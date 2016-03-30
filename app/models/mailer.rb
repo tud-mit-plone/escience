@@ -379,6 +379,14 @@ class Mailer < ActionMailer::Base
     ActionMailer::Base.delivery_method = saved_method
   end
 
+  def contact_message(contact_message)
+    @contact_message = contact_message
+    cc = [contact_message.email] if contact_message.send_copy_to_sender
+    mail :to => Setting.mail_from,
+      :cc => cc,
+      :subject => l(:contact_message_subject, :subject => contact_message.subject)
+  end
+
   def mail(headers={})
     headers.merge! 'X-Mailer' => 'Redmine',
             'X-Redmine-Host' => Setting.host_name,
@@ -426,7 +434,7 @@ class Mailer < ActionMailer::Base
     set_language_if_valid Setting.default_language
     super
   end
-  
+
   def self.deliver_mail(mail)
     return false if mail.to.blank? && mail.cc.blank? && mail.bcc.blank?
     super

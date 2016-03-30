@@ -1200,6 +1200,14 @@ en:
   description_date_to: Enter end date
   text_repository_identifier_info: 'Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.'
 
+  label_contact_message_email: Your email address
+  label_contact_message_name: Your name
+  label_contact_message_subject: Subject
+  label_contact_message_body: Message (not more than 2000 characters)
+  label_contact_message_send_copy_to_sender: Send a copy of the message to me
+  contact_message_from: Contact query from %{name}
+  contact_message_subject: "Contact query: %{subject}"
+
   tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.).
   tooltip_sidebar_projects: Manage your projects, create new, or change the settings.
   tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform.

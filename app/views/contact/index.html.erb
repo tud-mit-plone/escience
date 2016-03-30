@@ -1,0 +1,30 @@
+<h1><%= l(:label_contact) %></h1>
+
+<%= form_for(@contact_message, :url => { :action => "send_message" }) do |f| %>
+  <p>
+    <%= f.label :name, l(:label_contact_message_name) %><br />
+    <%= f.text_field :name, size: 80 %>
+  </p>
+  <p>
+    <%= f.label :email, l(:label_contact_message_email) %><br />
+    <%= f.text_field :email, size: 80 %>
+  </p>
+  <p>
+    <%= f.label :subject, l(:label_contact_message_subject) %><br />
+    <%= f.text_field :subject, :size => 80 %>
+  </p>
+  <p>
+    <%= f.label :body, l(:label_contact_message_body) %><br />
+    <%= f.text_area :body, :size => "82x10" %>
+  </p>
+  <p>
+    <label>
+      <%= f.check_box :send_copy_to_sender %>
+      <%= l(:label_contact_message_send_copy_to_sender) %>
+    </label>
+  </p>
+  <p>
+    <%= f.submit l(:label_user_messages_send) %>
+  </p>
+<% end %>
+

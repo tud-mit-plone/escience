@@ -4,7 +4,7 @@
   		<div id="copyright"><%= l(:label_copyright, :year => Time.current.year) %></div>
   		<div id="miscellaneous">
   		   <ul>
-  		      <li class="withborder"><%= link_to(:controller => 'user_messages', :action => 'contact_message') do %><%= l(:label_contact) %><%end%></li>
+  		      <li class="withborder"><%= link_to(:controller => 'contact', :action => 'index') do %><%= l(:label_contact) %><%end%></li>
   		      <li class="withborder"><a href="/static/agb.html" title="<%= l(:label_termsconditions) %>"><%= l(:label_termsconditions) %></a></li>
   		      <li class="withborder"><a href="/static/datenschutz.html" title="<%= l(:label_privacypolicy) %>"><%= l(:label_privacypolicy) %></a></li>
   		      <li><a href="/static/impressum.html" title="<%= l(:label_imprint) %>"><%= l(:label_imprint) %></a></li>

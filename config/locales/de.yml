@@ -600,8 +600,8 @@ de:
   label_user_messages_sent: Gesendet
   label_user_messages_archive: Archiv
   label_user_messages_receiver: Empfänger
-  label_user_messages_subject: Thema
-  label_user_messages_body: Inhalt (max 2000 Zeichen)
+  label_user_messages_subject: Betreff
+  label_user_messages_body: Inhalt (max. 2000 Zeichen)
   label_user_messages_send: Nachricht senden
   label_user_messages_from: Nachricht von
   label_user_messages_to: Nachricht an
@@ -1225,6 +1225,14 @@ de:
 
   notice_user_successful_added: "%{member} wurde erfolgreich zu Ihrer Kontaktliste hinzugefügt."
   notice_user_successful_deleted: "%{member} wurde erfolgreich aus Ihrer Kontaktliste gelöscht."
+
+  label_contact_message_email: Ihre E-Mail-Adresse
+  label_contact_message_name: Ihr Name
+  label_contact_message_subject: Betreff
+  label_contact_message_body: Nachricht (maximal 2000 Zeichen)
+  label_contact_message_send_copy_to_sender: Sende eine Kopie der Nachricht an mich
+  contact_message_from: Kontaktanfrage von %{name}
+  contact_message_subject: "Kontaktanfrage: %{subject}"
 
   tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.).
   tooltip_sidebar_projects: Verwalten Sie Ihre Projekte, legen Sie neue an oder ändern Sie die Einstellungen.

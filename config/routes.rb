@@ -76,7 +76,7 @@ RedmineApp::Application.routes.draw do
 
   match 'metatagssearch', :controller => 'meta_information', :action => 'retrieve_all_tags'
 
-  match 'users/online_live_count', :to => 'users#online_live_count', :via => :get 
+  match 'users/online_live_count', :to => 'users#online_live_count', :via => :get
   resources :users
   match 'usersearch', :controller => 'users', :action => 'user_search'
   match 'contact_membersearch', :controller => 'users', :action => 'contact_member_search'
@@ -279,7 +279,7 @@ RedmineApp::Application.routes.draw do
   resources :attachments, :only => [:show, :destroy]
 
   resources :contents, :only => [:show, :destroy]
-  
+
   resources :groups do
     member do
       get 'autocomplete_for_user'
@@ -314,22 +314,20 @@ RedmineApp::Application.routes.draw do
   get 'search', :controller => 'search', :action => 'index'
 
   match 'mail_handler', :controller => 'mail_handler', :action => 'index', :via => :post
-  
-  match 'user_message/contact_message', :controller => 'user_messages', :action => 'contact_message', :via => :get
-  match 'user_message/send_contact_message', :controller => 'user_messages', :action => 'send_contact_message', :via => :post
+
   match 'user_messages/emptytrash', :controller => 'user_messages', :action => 'emptytrash', :via => :get
   match 'user_messages/reply', :controller => 'user_messages', :action => 'reply', :via => :get
   resources :user_messages
-  match 'user_messages/:id/search', :controller => 'search', :action => 'index', :id => /\d+/, :via => :get 
+  match 'user_messages/:id/search', :controller => 'search', :action => 'index', :id => /\d+/, :via => :get
   match 'user_messages/:id/archive', :controller => 'user_messages', :action => 'archive', :id => /\d+/, :via => :get
-  
+
   match 'info/news', :controller => 'welcome', :action => 'news', :via => :get
   match 'info/events', :controller => 'welcome', :action => 'events', :via => :get
   match 'knowledge', :controller => 'wiki', :action => 'show_all', :via => :get
   match 'knowledge/show', :controller => 'wiki', :action => 'show', :via => :get
   match 'knowledge/index', :controller => 'wiki', :action => 'index', :via => :get
   match 'knowledge/date_index', :controller => 'wiki', :action => 'date_index', :via => :get
-  
+
   match 'admin', :controller => 'admin', :action => 'index', :via => :get
   match 'admin/projects', :controller => 'admin', :action => 'projects', :via => :get
   match 'admin/plugins', :controller => 'admin', :action => 'plugins', :via => :get
@@ -358,6 +356,9 @@ RedmineApp::Application.routes.draw do
   match 'sys/projects', :to => 'sys#projects', :via => :get
   match 'sys/projects/:id/repository', :to => 'sys#create_project_repository', :via => :post
   match 'sys/fetch_changesets', :to => 'sys#fetch_changesets', :via => :get
+
+  match '/contact', :controller => 'contact', :action => 'index', :via => :get
+  match '/contact/send_message', :controller => 'contact', :action => 'send_message', :via => :post
 
   match 'static/:id', :controller => 'pages', :action => 'show', :via => :get, :id => /.+/
 
