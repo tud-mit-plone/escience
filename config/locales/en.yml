@@ -1208,6 +1208,13 @@ en:
   contact_message_from: Contact query from %{name}
   contact_message_subject: "Contact query: %{subject}"
 
+  simple_captcha:
+    placeholder: ""
+    label: Please enter the code
+    message:
+      default: The entered code is incorrect.
+      user: The entered code is incorrect.
+
   tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.).
   tooltip_sidebar_projects: Manage your projects, create new, or change the settings.
   tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform.

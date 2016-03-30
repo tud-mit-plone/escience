@@ -23,7 +23,8 @@ class Unauthorized < Exception; end
 
 class ApplicationController < ActionController::Base
   include Redmine::I18n
-  
+  include SimpleCaptcha::ControllerHelpers
+ 
   class_attribute :accept_api_auth_actions
   class_attribute :accept_rss_auth_actions
   class_attribute :model_object
@@ -49,8 +50,8 @@ class ApplicationController < ActionController::Base
   @@online_count_lock = Mutex.new
 
   def thread_safe_set_online_users
-    @@online_count_lock.synchronize do 
-      set_online_users 
+    @@online_count_lock.synchronize do
+      set_online_users
     end
   end
 
@@ -105,11 +106,11 @@ class ApplicationController < ActionController::Base
   def set_last_visited_page
     controllers = %w(documents issues my journals messages news boards projects reports repositories user_contact user_messages versions wiki wikis)
     unallowed_actions = %w(logout login generate_qr_code contact_member_search)
-    
+
     if controllers.include?(params[:controller]) || !(unallowed_actions.include?(params[:action]))
       page = request.url
     else
-      page = session[:last_page_visited]  
+      page = session[:last_page_visited]
     end
     return page
   end
@@ -266,7 +267,7 @@ class ApplicationController < ActionController::Base
   # Authorize the user for the requested action
   def authorize(ctrl = params[:controller], action = params[:action], global = false)
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, @project || @projects, :global => global)
-    
+
     if allowed
       true
     else
@@ -423,7 +424,7 @@ class ApplicationController < ActionController::Base
       format.json { head @status }
     end
   end
-  
+
   # Filter for actions that provide an API response
   # but have no HTML representation for non admin users
   def require_admin_or_api_request
@@ -614,4 +615,3 @@ class ApplicationController < ActionController::Base
     api_request? ? false : super
   end
 end
- 

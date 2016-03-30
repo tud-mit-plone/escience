@@ -1234,6 +1234,13 @@ de:
   contact_message_from: Kontaktanfrage von %{name}
   contact_message_subject: "Kontaktanfrage: %{subject}"
 
+  simple_captcha:
+    placeholder: ""
+    label: Bitte geben Sie den Code ein
+    message:
+      default: "Code falsch eingeben."
+      user: "Code falsch eingeben."
+
   tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.).
   tooltip_sidebar_projects: Verwalten Sie Ihre Projekte, legen Sie neue an oder ändern Sie die Einstellungen.
   tooltip_sidebar_user_messages: Ihr Posteingang für interne Nachrichten auf der eScience-Plattform.

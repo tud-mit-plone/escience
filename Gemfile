@@ -125,10 +125,10 @@ end
 gem "thin"
 gem "SyslogLogger"  # in production mode log to syslog
 gem "acts-as-taggable-on"
-#piwik analytics 
+#piwik analytics
 gem 'piwik_analytics', '~> 1.0.0'
 #gem 'turbolinks'
-#pry console no need for readline 
+#pry console no need for readline
 gem "pry"
 #dropbox plugin
 gem "oauth"
@@ -138,9 +138,9 @@ gem "htmlentities"
 gem "rghost"
 gem 'render_parent', '>= 0.0.4'
 gem "xml-object"
-# Activities rendering 
+# Activities rendering
 gem "nokogiri"
-# for redmine_social_plugin 
+# for redmine_social_plugin
 gem "meta_search"
 gem "will_paginate"
 gem "power_enum"
@@ -154,3 +154,4 @@ gem 'rqrcode_png'
 gem 'pismo'
 gem 'sys-proctable'
 gem 'simplecov', :require => false, :group => :test
+gem "galetahub-simple_captcha", :require => "simple_captcha"
