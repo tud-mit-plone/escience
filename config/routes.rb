@@ -323,10 +323,6 @@ RedmineApp::Application.routes.draw do
 
   match 'info/news', :controller => 'welcome', :action => 'news', :via => :get
   match 'info/events', :controller => 'welcome', :action => 'events', :via => :get
-  match 'knowledge', :controller => 'wiki', :action => 'show_all', :via => :get
-  match 'knowledge/show', :controller => 'wiki', :action => 'show', :via => :get
-  match 'knowledge/index', :controller => 'wiki', :action => 'index', :via => :get
-  match 'knowledge/date_index', :controller => 'wiki', :action => 'date_index', :via => :get
 
   match 'admin', :controller => 'admin', :action => 'index', :via => :get
   match 'admin/projects', :controller => 'admin', :action => 'projects', :via => :get
