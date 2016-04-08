@@ -1139,6 +1139,7 @@ de:
   text_time_entries_destroy_confirmation: Sind Sie sicher, dass Sie die ausgewählten Zeitaufwände löschen möchten?
   label_role_anonymous: Anonymous
   label_role_non_member: Nichtmitglied
+  label_role_owner: Besitzer
   label_issue_note_added: Notiz hinzugefügt
   label_issue_status_updated: Status aktualisiert
   label_issue_priority_updated: Priorität aktualisiert

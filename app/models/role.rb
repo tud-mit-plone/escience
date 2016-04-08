@@ -32,6 +32,7 @@ class Role < ActiveRecord::Base
   # Built-in roles
   BUILTIN_NON_MEMBER = 1
   BUILTIN_ANONYMOUS  = 2
+  BUILTIN_OWNER      = 3
 
   ISSUES_VISIBILITY_OPTIONS = [
     ['all', :label_issues_visibility_all],
@@ -124,6 +125,7 @@ class Role < ActiveRecord::Base
     case builtin
     when 1; l(:label_role_non_member, :default => read_attribute(:name))
     when 2; l(:label_role_anonymous,  :default => read_attribute(:name))
+    when 3; l(:label_role_owner,  :default => read_attribute(:name))
     else; read_attribute(:name)
     end
   end
@@ -137,7 +139,11 @@ class Role < ActiveRecord::Base
   def anonymous?
     builtin == 2
   end
-  
+
+  def owner?
+    builtin == Role::BUILTIN_OWNER
+  end
+
   # Return true if the role is a project member role
   def member?
     !self.builtin?
@@ -178,6 +184,10 @@ class Role < ActiveRecord::Base
   # it will be created on the fly.
   def self.anonymous
     find_or_create_system_role(BUILTIN_ANONYMOUS, 'Anonymous')
+  end
+
+  def self.owner
+    find_or_create_system_role(BUILTIN_OWNER, 'Owner')
   end
 
 private
