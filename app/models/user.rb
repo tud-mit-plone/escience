@@ -110,15 +110,16 @@ class User < Principal
   validates_acceptance_of :confirm, :allow_nil => false, :accept => true
 # validates_confirmation_of :confirm
 
-  before_create :set_mail_notification
-  before_save   :update_hashed_password
+  before_create  :set_mail_notification
+  before_save    :update_hashed_password
+  before_save    :create_project_for_user
   before_destroy :remove_references_before_destroy
 
   has_many :user_messages #User.current.user_messages --> sent
   has_many :receivers, :through => :user_messages
 
   has_many :user_contacts
-  
+
   scope :in_group, lambda {|group|
     group_id = group.is_a?(Group) ? group.id : group.to_i
     { :conditions => ["#{User.table_name}.id IN (SELECT gu.user_id FROM #{table_name_prefix}groups_users#{table_name_suffix} gu WHERE gu.group_id = ?)", group_id] }
@@ -162,7 +163,7 @@ class User < Principal
     end
     self.read_attribute(:identity_url)
   end
-  
+
   # Returns the user that matches provided login and password, or nil
   def self.try_to_login(login, password)
     login = login.to_s
@@ -251,7 +252,7 @@ class User < Principal
   end
 
   def activate
-    self.status = STATUS_ACTIVE    
+    self.status = STATUS_ACTIVE
   end
 
   def register
@@ -265,22 +266,22 @@ class User < Principal
   def get_project_identifier
     return project_name
   end
-  
+
   def create_project_for_user
     identifier = self.login.gsub('.','_')
     identifier["@"] = "_"
-    if Project.find_by_identifier(identifier).nil?
+    project = Project.find_by_identifier(identifier)
+    if project.nil?
       project = Project.new
       project.creator = self.id
       project.name = self.name
       project.identifier = identifier
       project.is_public = false
       project.status = 1
-      m = Member.new(:user => self, :roles => [Role.givable.first], :project => project)
+      m = Member.new(:user => self, :roles => [Role.owner], :project => project)
       project.members << m
-      project.save!
-      self.privateproject = project.id
     end
+    self.private_project = project
   end
 
   def activate!
@@ -452,7 +453,7 @@ class User < Principal
   def male
     if (@current_user.salutation == 'female' || @current_user.salutation != '')
       return false
-    else 
+    else
       return true
     end
   end
@@ -460,7 +461,7 @@ class User < Principal
   def female
     if (User.current.salutation == 'male' || User.current.salutation == '')
       return false
-    else 
+    else
       return true
     end
   end
@@ -687,11 +688,11 @@ class User < Principal
   end
 
   def last_user_activity=(time)
-   @last_user_activity ||= time 
+   @last_user_activity ||= time
   end
 
   def last_user_activity
-    @last_user_activity 
+    @last_user_activity
   end
 
   def self.online_live_count
