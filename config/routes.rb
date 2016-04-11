@@ -321,9 +321,6 @@ RedmineApp::Application.routes.draw do
   match 'user_messages/:id/search', :controller => 'search', :action => 'index', :id => /\d+/, :via => :get
   match 'user_messages/:id/archive', :controller => 'user_messages', :action => 'archive', :id => /\d+/, :via => :get
 
-  match 'info/news', :controller => 'welcome', :action => 'news', :via => :get
-  match 'info/events', :controller => 'welcome', :action => 'events', :via => :get
-
   match 'admin', :controller => 'admin', :action => 'index', :via => :get
   match 'admin/projects', :controller => 'admin', :action => 'projects', :via => :get
   match 'admin/plugins', :controller => 'admin', :action => 'plugins', :via => :get

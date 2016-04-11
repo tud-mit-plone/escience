@@ -3,15 +3,13 @@
       <%= render :partial => '/layouts/user_scope_menu' %>
     </header>
       <div class="nosidebar" id="container">
-      	<div class="container_inner container_16">
-    	    <div id="left" class="grid_2"><div id="sidebar_left" class="sidebar">&nbsp;</div></div>
-    	    <div id="main" class="grid_10">
-  	        <%= yield %>
-  	        <%= call_hook :view_layouts_base_content %>
-  	        <div style="clear:both;"></div>
-    	    </div>
-    	    <div id="right" class="grid_3"><div id="sidebar_right" class="sidebar"><%= yield :sidebar_right %></div></div>
-    	    <div class="clear"></div>
+        <div class="container_inner container_16">
+          <div id="main" class="grid_16">
+            <%= yield %>
+            <%= call_hook :view_layouts_base_content %>
+            <div style="clear:both;"></div>
+          </div>
+          <div class="clear"></div>
         </div>
       </div>
       <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>

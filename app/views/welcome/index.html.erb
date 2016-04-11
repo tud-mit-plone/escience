@@ -1,12 +1,8 @@
-<% content_for :sidebar_right do %>
-  <%= render :partial => 'sidebar' %>
-<% end %>
-
 <%unless User.current.logged? %>
 <article class="article">
 	<div class="inside">
 		<h1><%= l(:text_headline) %></h1>
-		<div class="column" style="padding-right:50px">
+		<div class="column">
 		<p><br /><img style="float: right;" title="images/grafik.png" src="images/grafik.png" alt="/images/grafik.png" width="280" height="220" /><%= l(:text_welcome) %></p>
 		</div>
 	</div>
@@ -21,7 +17,7 @@
 	<% content_for :sidebar_left do %>
 		<div id="login">
 		</div>
-	<%end%>	
+	<%end%>
 <%end%>
 
 <div class="splitcontentleft">
@@ -36,7 +32,7 @@
   <%= call_hook(:view_welcome_index_left, :projects => @projects) %>
 </div>
 
-<% if User.current.logged? %>    
+<% if User.current.logged? %>
 <div class="splitcontentright">
     <% if @projects.any? %>
   <div class="projects box">
