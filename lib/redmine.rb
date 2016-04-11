@@ -167,7 +167,7 @@ Redmine::MenuManager.map :account_menu do |menu|
   menu.push :login, :signin_path, :if => Proc.new { !User.current.logged? }
   menu.push :my_account, { :controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => {:name => Proc.new {"#{User.current.name}"}}, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
   menu.push :help, "/static/hilfe.html"
-  menu.push :logout, :signout_path, :html => {:class => "last withnoborder"}, :last => true , :if => Proc.new { User.current.logged? }
+  menu.push :logout, :signout_path, :if => Proc.new { User.current.logged? }
 end
 
 Redmine::MenuManager.map :application_menu do |menu|

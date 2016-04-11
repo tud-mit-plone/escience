@@ -2,8 +2,13 @@
   <div id="navigation_group" class="grid_3 roundabout-holder">
     <ul class="roundabout-holder">
       <li class="roundabout-moveable-item roundabout-in-focus" id="private">
-        <div class="roundabout_label"><%= l(:label_private) %></div>
-        <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.logged? && User.current.female)? 'w' : 'm' %>_grau.png" />
+        <% if User.current.logged? %>
+          <div class="roundabout_label"><%= l(:label_private) %></div>
+          <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.female)? 'w' : 'm' %>_grau.png" />
+        <% else %>
+          <div class="roundabout_label"><%= l(:label_guest) %></div>
+          <img src="<%= Redmine::Utils.relative_url_root %>/images/gast_gruen.png" />
+        <% end %>
       </li>
       <li class="roundabout-moveable-item" id="team">
         <div class="roundabout_label"><%= l(:label_team) %></div>
@@ -21,4 +26,4 @@
       <%end%>
     </ul>
   </div>
-</div>       
+</div>

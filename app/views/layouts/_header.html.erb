@@ -14,8 +14,7 @@
      tooltip_events = "<ul class='tooltip'>"
      tooltip_events += "</ul>"
   %>
-<% selectedChild = session[:current_view_of_eScience].to_s ? session[:current_view_of_eScience].to_s : '0' %>
-
+<% selectedChild = session[:current_view_of_eScience].to_s.empty? ? '0' : session[:current_view_of_eScience].to_s  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
 <head>
@@ -28,7 +27,7 @@
   <%= favicon %>
   <%= stylesheet_link_tag 'application', :media => 'all' %>
   <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
-  <%= stylesheet_link_tag 'public', :media => 'all' unless User.current.logged?%>
+  <%= stylesheet_link_tag 'public', :media => 'all' %>
   <%= stylesheet_link_tag 'private', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'navigation', :media => 'all' if User.current.logged?%>
   <%= stylesheet_link_tag 'jquery.confirm', :media => 'all' if User.current.logged?%>
@@ -76,7 +75,8 @@
       maxScale: 1.0,
       shape: "tearDrop",
       startingChild: '+selectedChild+',
-      triggerFocusEvents: true,
+      triggerFocusEvents: ' + (User.current.logged? ? "true" : "false") + ',
+      clickToFocus: ' + (User.current.logged? ? "true" : "false") + ',
     });
     $("ul.roundabout-holder li").focus(function() {
       param = $("ul.roundabout-holder").roundabout("getChildInFocus");
@@ -126,14 +126,16 @@
           <div class="clear"></div>
         </div>
 
-        <!-- Navigation with gray background -->
+        <!-- Navigation -->
         <div id="navigation">
           <div class="inside container_16">
             <div class="grid_5 prefix_3">
-              <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get, :class => 'quick-search' ) do %>
-                <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
-                <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
-                <%= submit_tag "" %>
+              <% if User.current.logged? %>
+                <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get, :class => 'quick-search' ) do %>
+                  <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
+                  <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
+                  <%= submit_tag "" %>
+                <% end %>
               <% end %>
             </div>
             <div class="grid_8 account_menu">
