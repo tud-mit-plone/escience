@@ -268,20 +268,18 @@ class User < Principal
   end
 
   def create_project_for_user
-    identifier = self.login.gsub('.','_')
-    identifier["@"] = "_"
-    project = Project.find_by_identifier(identifier)
-    if project.nil?
+    if self.private_project.nil?
       project = Project.new
       project.creator = self.id
       project.name = self.name
+      identifier = self.login.gsub('.','_').gsub('@', '_')
       project.identifier = identifier
       project.is_public = false
       project.status = 1
       m = Member.new(:user => self, :roles => [Role.owner], :project => project)
       project.members << m
+      self.private_project = project
     end
-    self.private_project = project
   end
 
   def activate!
