@@ -1,5 +1,5 @@
   <% issues = Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)})
-#     project = @project.nil? ? 'eScience' : @project 
+#     project = @project.nil? ? 'eScience' : @project
      project = @project
      user_messages = UserMessage.where("receiver_id = ? AND state = 1", User.current.id).count
      message_persons = []
@@ -36,7 +36,7 @@
   <%= javascript_heads %>
   <%= yield :jquery_tags -%>
   <%= yield :header_tags -%>
-  
+
   <%= javascript_tag '
   function externalLinks() {return $("a[href^=\'http\']:not([href^=\'http://" + window.location.host + "\'])");}
   var message_yes = "'+l(:general_text_Yes)+'";
@@ -71,12 +71,12 @@
     addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom");
     addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom");
     $("ul.roundabout-holder").roundabout({
-  		minScale: 0.60,
-  		minOpacity: 0.9,
-  		maxScale: 1.0,
-  		shape: "tearDrop",
-  		startingChild: '+selectedChild+',
-  		triggerFocusEvents: true,
+      minScale: 0.60,
+      minOpacity: 0.9,
+      maxScale: 1.0,
+      shape: "tearDrop",
+      startingChild: '+selectedChild+',
+      triggerFocusEvents: true,
     });
     $("ul.roundabout-holder li").focus(function() {
       param = $("ul.roundabout-holder").roundabout("getChildInFocus");
@@ -98,7 +98,7 @@
               return true;
           }
         });}'%>
-  
+
   <%= heads_for_theme %>
   <!--[if IE 6]>
       <style type="text/css">
@@ -115,43 +115,30 @@
   <div id="wrapper">
     <div id="separate_footer">
       <header id="header">
-        <!-- backgrounds for the top-navigations -->
-      	<div class="bar"></div>
-      	<div id="header_bg_bar"></div>
-      	
-      	<!-- logo -->
-      	<div class="inside container_16">
-      		<div id="logo" class="grid_3 prefix_13">
-      			<%= link_to({:controller => 'welcome'}) do %>
-      				<img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
-      			<%end%>
-      		</div>
-      		<div class="clear"></div>
-      	</div>
-      	
-      	<!-- Navigation with green background -->
-      	<div id="main_navigation">
-      		<div class="inside container_16">
-      			<div class="grid_13 prefix_3 account_menu">
-      				<%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
-      		  </div>
-      		  <div class="clear"></div>
-      		</div>
-      	</div>
-      
-      	<!-- Navigation with gray background -->
-      	<div id="navigation">
-      		<div class="inside container_16">
-      			<div class="grid_13 prefix_3">
-      	      <%= render_menu :account_menu -%>
-      	    </div>
-    		    <div id="quick-search">
-    	        <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
-    		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
-    		        <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
-    		        <%= submit_tag "" %>
-    	        <% end %>
-    		    </div>
-      		  <div class="clear"></div>
-      	  </div>
-      	</div>
+
+        <!-- logo -->
+        <div class="inside container_16">
+          <div id="logo" class="grid_3 prefix_13">
+            <%= link_to({:controller => 'welcome'}) do %>
+              <img src="<%= Redmine::Utils.relative_url_root %>/images/logo_e-science_network.png" />
+            <%end%>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <!-- Navigation with gray background -->
+        <div id="navigation">
+          <div class="inside container_16">
+            <div class="grid_5 prefix_3">
+              <%= form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get, :class => 'quick-search' ) do %>
+                <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
+                <%= text_field_tag 'q', @question, :placeholder => l(:label_search_plural), :accesskey => accesskey(:quick_search) %>
+                <%= submit_tag "" %>
+              <% end %>
+            </div>
+            <div class="grid_8 account_menu">
+              <%= render_menu :account_menu -%>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>

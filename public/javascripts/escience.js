@@ -26,7 +26,7 @@ function upload_attachment(el) {
 
 function updateDraggableMessages() {
   $('.draggable').draggable({
-    cursor: 'alias', 
+    cursor: 'alias',
     revert: 'invalid',
     cursorAt: { top: 5, left: 5 },
     helper: function( event ) {return $("<div class='mail_icon\'></div>");}
@@ -34,22 +34,7 @@ function updateDraggableMessages() {
 }
 
 function checkDockNav() {
-	if ($(window).scrollTop() > 165) {
-	 $('#navigation').css("position","fixed");
-	 $('#navigation').css("top","0");
-	 $('#navigation').css("width","100%");
-	 $('#navigation').css("z-index","16");
-	 $('#main_navigation').css("margin-bottom","25px");
-	 $('#navigation').css("background-color","#7DB414");
-	 $('#navigation a').css("color","#FFF");
-	 $('#quick-search input[type="submit"]').css('background','url(/images/arrow_collapsed_white.png) 20%');
-  } else {
-	 $('#navigation').css("position","relative");
-	 $('#main_navigation').css("margin-bottom","0px");
-	 $('#navigation').css("background-color","#E9E9E9");
-	 $('#navigation a').css("color","#707070");
-	 $('#quick-search input[type="submit"]').css('background','url(/images/arrow_collapsed.png) 20%');
-  }
+  $('#navigation').toggleClass('fixed', $(window).scrollTop() > 145);
 }
 
 function addToolTip_withTitle() {
@@ -82,14 +67,14 @@ function addToolTip() {
     case 'bottom': direction = 'top'; break;
   }
   $(selector).qtip({
-    content: content, 
+    content: content,
     style: {
       name: 'eScience',
       tip: ''+direction+'Middle',
-    }, 
+    },
     position: {
       corner: {
-        target:''+position+'Middle', 
+        target:''+position+'Middle',
         tooltip:''+direction+'Middle'
       }
     }
@@ -136,21 +121,21 @@ function tagItForUs(el,text,id) {
           }
        });
      },
-     allowSpaces: false, 
-     select:true, 
-     sortable:true, 
+     allowSpaces: false,
+     select:true,
+     sortable:true,
      itemName: "attachments",
-     fieldName: id+"][meta_information", 
+     fieldName: id+"][meta_information",
      maxLength: 400,
      placeholderText: text
   });
 }
     function is_input_in_autocomplete(html_autocomplete_id, message){
-      var flag = false; 
+      var flag = false;
       $(html_autocomplete_id+" .name_element").each(function() {
-        
+
         if($(this).text() == message){
-          flag = true; 
+          flag = true;
           return false;
         }
       });
@@ -159,17 +144,17 @@ function tagItForUs(el,text,id) {
 
     function autocomplete_keydown_events(html_insert_id, html_autocomplete_id) {
     $(html_insert_id+"_visible").on("keydown",function(e) {
-      
+
       /* 32 => space, 13 => enter */
 
-      if (e.which == 32 || e.which == 13 && (e.preventDefault() || 1)){ 
-        var inserted_one = false; 
+      if (e.which == 32 || e.which == 13 && (e.preventDefault() || 1)){
+        var inserted_one = false;
         input = $(html_insert_id+"_visible").val();
-        
+
         $.map($.redmine_social, function (auto_suggest) {
           if(auto_suggest["tag"]["name"] == input ){
             addElementToHtmlElement(html_insert_id,html_autocomplete_id, auto_suggest["tag"]["name"], auto_suggest["tag"]["id"]);
-            inserted_one = true; 
+            inserted_one = true;
             return false;
           }
         });
@@ -183,13 +168,13 @@ function tagItForUs(el,text,id) {
 
 	function addElementToHtmlElement(html_insert_id,html_autocomplete_id, message, id) {
         if(is_input_in_autocomplete(html_autocomplete_id, message) == true){
-          return; 
+          return;
         }
 	  var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
 	  var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
 	  var id = $(this).attr('class').split(' ')[1].substring(8);
 	  var olddata_arr = $(html_insert_id).val().split(',');
-        
+
          if (olddata_arr.length == 0) {
 	    $(html_insert_id).val("");
 	  }else{
@@ -211,7 +196,7 @@ function tagItForUs(el,text,id) {
          }else{
            olddata = id;
          }
-         
+
           $(html_insert_id).val(olddata);
 	   $(html_insert_id+"_visible").val("");
 	}

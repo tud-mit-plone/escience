@@ -165,11 +165,8 @@ end
 
 Redmine::MenuManager.map :account_menu do |menu|
   menu.push :login, :signin_path, :if => Proc.new { !User.current.logged? }
-  menu.push :register, { :controller => 'account', :action => 'register' }, :if => Proc.new { !User.current.logged? && Setting.self_registration? }
-  menu.push :my_account, { :controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => {:name => Proc.new {"#{User.current.name}"}, :text => :label_hello}, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
-  menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_usermessage }
-  menu.push :calendar_all, { :controller => 'calendars', :action => 'show', :sub => 'calendar_all'}, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_calendar }
-#  menu.push :issues, { :controller => 'issues', :action => 'index', :show => "new", :sub => "issues_all" }, :param => :project_id, :id => "new_issues", :caption => {"value"=>Proc.new {"#{Issue.visible.open.count(:conditions => {:assigned_to_id => [User.current.id]})}"},"text" => :label_mymessage}, :html => {:class => "newmessage"}, :if => Proc.new {Issue.visible.open.count(:conditions => {:assigned_to_id => ([User.current.id] + User.current.group_ids)}) > 0}
+  menu.push :my_account, { :controller => 'my', :action => 'account', :sub => 'my_account'}, :caption => {:name => Proc.new {"#{User.current.name}"}}, :html => {:class => "first"} , :if => Proc.new { User.current.logged? }
+  menu.push :help, "/static/hilfe.html"
   menu.push :logout, :signout_path, :html => {:class => "last withnoborder"}, :last => true , :if => Proc.new { User.current.logged? }
 end
 
@@ -206,6 +203,7 @@ Redmine::MenuManager.map :private_menu do |menu|
   menu.push :my_account, {:controller => 'my', :action => 'account', :sub => 'my_account'}, :html => {:class => 'icon icon-user'}, :caption => :label_my_account
   menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :html => {:class => 'icon icon-beaker'}, :caption => :label_project_plural
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' }, :caption => :label_issues_plural, :html => {:class => "newmessage icon icon-check"}
+  menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_usermessage }
  # menu.push :doodle_all, { :controller => 'doodles', :action => 'list', :sub => "doodle_all" }, :caption => :label_my_doodles_plural
  # menu.push :my_members, {:controller => 'my', :action => 'members', :sub => 'my_members'}, :caption => :label_my_members
 end
