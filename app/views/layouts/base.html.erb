@@ -1,30 +1,7 @@
-<%# if User.current.admin?
-     session[:current_view_of_eScience] = '3'
-   elsif !params[:navigation_group].nil? 
-     session[:current_view_of_eScience] = params[:navigation_group]
-   elsif session[:current_view_of_eScience]
-     params[:navigation_group] = session[:current_view_of_eScience]
-   else
-     session[:current_view_of_eScience] = '0'
-   end 
- %>
 <% unless User.current.logged? %>
   <%#= "public" %>
   <%= render :file => "layouts/public" %>
 <% else %>
   <% session[:current_view_of_eScience] = '0' if session[:current_view_of_eScience].nil? %>
-  <% case session[:current_view_of_eScience].to_s %>
-    <% when '0' %>
-      <%#= "private" %>
-      <%= render :file => "layouts/private" %>
-    <% when '1' %>
-      <%#= "team" %>
-      <%= render :file => "layouts/team" %>
-    <% when '2' %>
-      <%#= "community" %>
-      <%= render :file => "layouts/community" %>
-    <% when '3' %>
-      <%#= "admin" %>
-      <%= render :file => "layouts/admin" %>
-  <% end %>
+  <%= render :file => "layouts/default" %>
 <% end %>

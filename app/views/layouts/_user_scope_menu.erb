@@ -18,12 +18,6 @@
         <div class="roundabout_label"><%= l(:label_community) %></div>
         <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
       </li>
-      <%if(User.current.admin?)%>
-      <li class="roundabout-moveable-item" id="admin">
-        <div class="roundabout_label"><%= l(:label_administration) %></div>
-        <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
-      </li>
-      <%end%>
     </ul>
   </div>
 </div>
