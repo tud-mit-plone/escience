@@ -12,7 +12,7 @@ module RedmineAppointmentExtension
   }
 
   Redmine::MenuManager.map(:private_menu).delete(:calendar_all)
-  Redmine::MenuManager.map(:private_menu).push :calendar_all, { :controller => 'calendars', :action => 'show_user_calendar', :sub => 'calendar_all'}, :caption => {:value_behind => events, :text => :label_calendar }
+  Redmine::MenuManager.map(:private_menu).push :calendar_all, { :controller => 'calendars', :action => 'show_user_calendar', :sub => 'calendar_all'}, :caption => {:value_behind => events, :text => :label_calendar }, :html => {:class => "icon icon-calendar"}
 
   module CalendarsController
     module ClassMethods

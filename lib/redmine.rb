@@ -200,10 +200,9 @@ end
 
 Redmine::MenuManager.map :private_menu do |menu|
   menu.push :my, { :controller => 'my', :action => 'page' }, :html => {:class => 'icon icon-dashboard'},:caption => :label_organisation, :if => Proc.new { User.current.logged? }
-  menu.push :my_account, {:controller => 'my', :action => 'account', :sub => 'my_account'}, :html => {:class => 'icon icon-user'}, :caption => :label_my_account
   menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :html => {:class => 'icon icon-beaker'}, :caption => :label_project_plural
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' }, :caption => :label_issues_plural, :html => {:class => "newmessage icon icon-check"}
-  menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_usermessage }
+  menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :html => {:class => "icon icon-comments"}, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_usermessage}
  # menu.push :doodle_all, { :controller => 'doodles', :action => 'list', :sub => "doodle_all" }, :caption => :label_my_doodles_plural
  # menu.push :my_members, {:controller => 'my', :action => 'members', :sub => 'my_members'}, :caption => :label_my_members
 end
