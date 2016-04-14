@@ -16,8 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class IssueStatusesController < ApplicationController
-  layout 'admin'
-
   before_filter :require_admin, :except => :index
   before_filter :require_admin_or_api_request, :only => :index
   accept_api_auth :index
@@ -68,7 +66,7 @@ class IssueStatusesController < ApplicationController
   rescue
     flash[:error] = l(:error_unable_delete_issue_status)
     redirect_to :action => 'index'
-  end  	
+  end
 
   def update_issue_done_ratio
     if request.post? && IssueStatus.update_issue_done_ratios

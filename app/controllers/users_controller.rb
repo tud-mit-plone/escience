@@ -16,8 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class UsersController < ApplicationController
-  layout 'admin'
-
   before_filter :require_admin, :except => [:create, :show, :user_search, :contact_member_search, :online_live_count]
   before_filter :require_login, :only => [:user_search, :contact_member_search,:show,:online_live_count]
   before_filter :find_user, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership]
@@ -60,7 +58,7 @@ class UsersController < ApplicationController
       }
       format.api {}
       format.js{ render :partial => "index_pagination" }
-    end	
+    end
   end
 
   def user_search
@@ -81,7 +79,7 @@ class UsersController < ApplicationController
     end
   end
 
-  
+
   def contact_member_search
     others = []
     if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
@@ -91,7 +89,7 @@ class UsersController < ApplicationController
         :select => "firstname, lastname, id",
         :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ?',
         "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}"],:limit => 5, :order => 'lastname')
-                                 
+
 #      others = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id, p.name
 #                                 FROM users u, projects p, members m
 #                                 WHERE (u.lastname LIKE ? OR u.firstname LIKE ?)
@@ -133,17 +131,17 @@ class UsersController < ApplicationController
         users.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
         @projects += [[project.name, users]]
       end
-      if !n_users.empty? 
+      if !n_users.empty?
         @n_projects[project.name] = n_users
       end
     end
     @allusers.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
-    
+
     @n_projects[l(:no_common_project)] = {}
     @n_projects[l(:no_common_project)][""] = User.find((others - @allusers[0]).flatten.map{|m| m.id} )
-    
+
     #@projects += [["Noch nicht gekannt", [[User.find((others - @allusers).flatten.map{|m| m.id} ),"nix" ]]]]
-    
+
     respond_to do |format|
       format.xml { render :xml => @users }
       format.js # user_search.js.erb
@@ -258,8 +256,8 @@ class UsersController < ApplicationController
       @user.password = @user.password_confirmation = nil
 
       respond_to do |format|
-       
-        format.html { 
+
+        format.html {
          flash[:notice] = @user.errors.full_messages
          render :action => :edit }
         format.api  { render_validation_errors(@user) }
@@ -313,7 +311,7 @@ class UsersController < ApplicationController
   def online_live_count
     respond_to do |format|
       format.json{ render :json => {:success => true, :data => User.online_live_count.to_json }}
-    end 
+    end
   end
 
   private

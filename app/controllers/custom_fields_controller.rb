@@ -16,8 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CustomFieldsController < ApplicationController
-  layout 'admin'
-
   before_filter :require_admin
   before_filter :build_new_custom_field, :only => [:new, :create]
   before_filter :find_custom_field, :only => [:edit, :update, :destroy]

@@ -16,8 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class WorkflowsController < ApplicationController
-  layout 'admin'
-
   before_filter :require_admin, :find_roles, :find_trackers
 
   def index

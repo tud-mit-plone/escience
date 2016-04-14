@@ -16,8 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class EnumerationsController < ApplicationController
-  layout 'admin'
-
   before_filter :require_admin, :except => :index
   before_filter :require_admin_or_api_request, :only => :index
   before_filter :build_new_enumeration, :only => [:new, :create]

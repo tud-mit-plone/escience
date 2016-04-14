@@ -16,19 +16,18 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AdminController < ApplicationController
-  layout 'admin'
   menu_item :projects, :only => :projects
   menu_item :plugins, :only => :plugins
   menu_item :info, :only => :info
 
   before_filter :require_admin
   helper :sort
-  include SortHelper	
+  include SortHelper
 
   def index
     @no_configuration_data = Redmine::DefaultData::Loader::no_data?
   end
-	
+
   def projects
     @status = params[:status] || 1
 
