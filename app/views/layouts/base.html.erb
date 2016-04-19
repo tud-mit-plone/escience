@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <% unless User.current.logged? %>
   <%#= "public" %>
   <%= render :file => "layouts/public" %>
@@ -5,3 +7,4 @@
   <% session[:current_view_of_eScience] = '0' if session[:current_view_of_eScience].nil? %>
   <%= render :file => "layouts/default" %>
 <% end %>
+</html>
