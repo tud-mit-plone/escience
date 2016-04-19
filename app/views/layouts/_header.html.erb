@@ -14,7 +14,7 @@
      tooltip_events = "<ul class='tooltip'>"
      tooltip_events += "</ul>"
   %>
-<% selectedChild = session[:current_view_of_eScience].to_s.empty? ? '0' : session[:current_view_of_eScience].to_s  %>
+<% current_mode = session[:current_view_of_eScience].to_s.empty? ? '0' : session[:current_view_of_eScience].to_s  %>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title><%=h html_title %></title>
@@ -67,35 +67,8 @@
     addToolTip("#navigation .my-account","'+l(:tooltip_navbar_account, :name => "#{User.current}") + '", "bottom");
     addToolTip("#navigation .help","'+l(:tooltip_navbar_help) + '", "bottom");
     addToolTip("#navigation .logout","'+l(:tooltip_navbar_logout) + '", "bottom");
-    $("ul.roundabout-holder").roundabout({
-      minScale: 0.60,
-      minOpacity: 0.9,
-      maxScale: 1.0,
-      shape: "tearDrop",
-      startingChild: '+selectedChild+',
-      triggerFocusEvents: ' + (User.current.logged? ? "true" : "false") + ',
-      clickToFocus: ' + (User.current.logged? ? "true" : "false") + ',
-    });
-    $("ul.roundabout-holder li").focus(function() {
-      param = $("ul.roundabout-holder").roundabout("getChildInFocus");
-      send_new_scope(param);});
-  });
-
-  function send_new_scope(scope){
-    var ajax = $.ajax({
-      url: "'+url_for(:set_user_session_scope)+'",
-      dataType: "json",
-      data: {
-        scope_select: scope
-      },
-      success: function( data ) {
-          self.location.href = "'+"#{request.protocol}#{request.host_with_port}#{request.fullpath}"+'";
-        }
-      }).always(function(json){
-            if(ajax.readyState == 4 && ajax.status == 200){
-              return true;
-          }
-        });}'%>
+  });'
+  %>
 
   <%= heads_for_theme %>
   <!--[if IE 6]>
@@ -108,7 +81,7 @@
   <!-- page specific tags -->
 </head>
 
-<body class="<%=h body_css_classes %>">
+<body class="<%=h body_css_classes %>" data-mode="<%=h current_mode %>">
   <div id="confirm" style="width:300px; height:200px; position:absolute"></div>
   <div id="wrapper">
     <div id="separate_footer">

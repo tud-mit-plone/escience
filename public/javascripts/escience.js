@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	$(window).resize(checkDockNav);
-	$(window).scroll(checkDockNav);
+  $(window).resize(checkDockNav);
+  $(window).scroll(checkDockNav);
   $.fn.qtip.styles.eScience = {
     background: '#c7da9c',
     color: 'black',
@@ -8,7 +8,39 @@ $(document).ready(function() {
     border: {width: 2, radius: 2, color: '#7DB414'},
     tip: {color: '#7DB414', size: {x: 8, y : 8}}
   }
+
+  var $roundabout = $("ul.roundabout-holder")
+  var roundaboutEnabled = $roundabout.hasClass('enabled')
+  $roundabout.roundabout({
+    minScale: 0.60,
+    minOpacity: 0.9,
+    maxScale: 1.0,
+    shape: "tearDrop",
+    startingChild: $('body').attr('data-mode'),
+    triggerFocusEvents: roundaboutEnabled,
+    clickToFocus: roundaboutEnabled
+  });
+  $("ul.roundabout-holder li").focus(function() {
+      param = $("ul.roundabout-holder").roundabout("getChildInFocus");
+      send_new_scope(param);
+  });
+
 });
+
+function send_new_scope(scope) {
+  var ajax = $.ajax({
+    url: "/userSessionScope",
+    dataType: "json",
+    data: {
+      scope_select: scope
+    },
+    success: function(data) {
+         location.reload();
+    }}).always(function(json) {
+        if(ajax.readyState == 4 && ajax.status == 200){
+          return true;
+    }});
+}
 
 function upload_attachment(el) {
   if (!$('.add_attachment').hasClass('disabled')) {
@@ -115,9 +147,9 @@ function tagItForUs(el,text,id) {
           dataType:   "json",
           data:       { q: request.term },
           success: function(data) {
-						response(jQuery.map( data, function( item ) {
+            response(jQuery.map( data, function( item ) {
                return item.meta_information.meta_information;
-						}));
+            }));
           }
        });
      },
@@ -166,31 +198,31 @@ function tagItForUs(el,text,id) {
     });
     }
 
-	function addElementToHtmlElement(html_insert_id,html_autocomplete_id, message, id) {
+  function addElementToHtmlElement(html_insert_id,html_autocomplete_id, message, id) {
         if(is_input_in_autocomplete(html_autocomplete_id, message) == true){
           return;
         }
-	  var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
-	  var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
-	  var id = $(this).attr('class').split(' ')[1].substring(8);
-	  var olddata_arr = $(html_insert_id).val().split(',');
+    var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
+    var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
+    var id = $(this).attr('class').split(' ')[1].substring(8);
+    var olddata_arr = $(html_insert_id).val().split(',');
 
          if (olddata_arr.length == 0) {
-	    $(html_insert_id).val("");
-	  }else{
+      $(html_insert_id).val("");
+    }else{
            olddata_arr.splice($.inArray(id, olddata_arr), 1 );
-	    $(html_insert_id).val(olddata_arr.join(','));
-	    $(this).parent().remove();
-	  }
-	  });
-	  var oldelements = $(html_autocomplete_id).find(".name_element");
-	  if (oldelements.length < 1){
+      $(html_insert_id).val(olddata_arr.join(','));
+      $(this).parent().remove();
+    }
+    });
+    var oldelements = $(html_autocomplete_id).find(".name_element");
+    if (oldelements.length < 1){
           element.prependTo(html_autocomplete_id);
          }else{
            element = oldelements.last().after(element);
          }
-	   $(html_autocomplete_id).scrollTop( 0 );
-	   var olddata = $(html_insert_id).val();
+     $(html_autocomplete_id).scrollTop( 0 );
+     var olddata = $(html_insert_id).val();
          if (olddata != ""){
            olddata = olddata+","+id;
          }else{
@@ -198,33 +230,33 @@ function tagItForUs(el,text,id) {
          }
 
           $(html_insert_id).val(olddata);
-	   $(html_insert_id+"_visible").val("");
-	}
+     $(html_insert_id+"_visible").val("");
+  }
 
     function addUserToReceivers(message, id) {
         addElementToHtmlElement('#user_message_receiver','#recipient_autocomplete', message, id);
     }
 
-	/*function addUserToReceivers(message, id) {
-		var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
-		var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
-		 var id = $(this).attr('class').split(' ')[1].substring(8);
-		 var olddata_arr = $("#user_message_receiver").val().split(',');
-		 if (olddata_arr.length == 0) {
-		   $("#user_message_receiver").val("");
-		 } else {
-			 olddata_arr.splice($.inArray(id, olddata_arr), 1 );
-			 $("#user_message_receiver").val(olddata_arr.join(','));
-			 $(this).parent().remove();
-		 }
-	  });
-		var oldelements = $("#recipient_autocomplete").find(".name_element");
-		if (oldelements.length < 1) element.prependTo( "#recipient_autocomplete" );
-		else element = oldelements.last().after(element);
-		$( "#recipient_autocomplete" ).scrollTop( 0 );
-		var olddata = $("#user_message_receiver").val();
-		if (olddata != "") olddata = olddata+","+id;
-		else olddata = id;
-		$("#user_message_receiver").val(olddata);
-		$("#user_message_receiver_visible").val("");
-	}*/
+  /*function addUserToReceivers(message, id) {
+    var element = $( "<div class='name_element element_"+id+"' />" ).text( message );
+    var delete_item = $( "<div class='delete_button element_"+id+"' />" ).prependTo( element ).click(function(){
+     var id = $(this).attr('class').split(' ')[1].substring(8);
+     var olddata_arr = $("#user_message_receiver").val().split(',');
+     if (olddata_arr.length == 0) {
+       $("#user_message_receiver").val("");
+     } else {
+       olddata_arr.splice($.inArray(id, olddata_arr), 1 );
+       $("#user_message_receiver").val(olddata_arr.join(','));
+       $(this).parent().remove();
+     }
+    });
+    var oldelements = $("#recipient_autocomplete").find(".name_element");
+    if (oldelements.length < 1) element.prependTo( "#recipient_autocomplete" );
+    else element = oldelements.last().after(element);
+    $( "#recipient_autocomplete" ).scrollTop( 0 );
+    var olddata = $("#user_message_receiver").val();
+    if (olddata != "") olddata = olddata+","+id;
+    else olddata = id;
+    $("#user_message_receiver").val(olddata);
+    $("#user_message_receiver_visible").val("");
+  }*/

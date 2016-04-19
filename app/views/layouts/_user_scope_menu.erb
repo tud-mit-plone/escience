@@ -1,6 +1,6 @@
 <div class="container_16">
   <div id="navigation_group" class="grid_3 roundabout-holder">
-    <ul class="roundabout-holder">
+    <ul class="roundabout-holder <%= User.current.logged? ? 'enabled' : 'disabled' %>">
       <li class="roundabout-moveable-item roundabout-in-focus" id="private">
         <% if User.current.logged? %>
           <div class="roundabout_label"><%= l(:label_private) %></div>
