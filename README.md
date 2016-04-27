@@ -109,7 +109,7 @@ To launch the rails development server, execute:
 rails server -e development
 ```
 
-This launches a local HTTP server. Visit http://localhost:3000 to see the platform in action.
+This launches a local HTTP server. Visit [http://localhost:3000](http://localhost:3000) to see the platform in action.
 
 # Credits
-The _eScience platform_ is based on [Redmine](http://redmine.org).
+The eScience platform is based on [Redmine](http://redmine.org).
