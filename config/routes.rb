@@ -217,6 +217,7 @@ RedmineApp::Application.routes.draw do
   match '/time_entries/destroy', :to => 'timelog#destroy', :via => :delete
 
   # TODO: port to be part of the resources route(s)
+  match '/scope/:scope', :controller => 'application', :action => 'set_scope', :via => :get
   match 'projects/:id/settings/:tab', :to => 'projects#settings', :via => :get
 
   get 'projects/:id/activity', :to => 'activities#index'

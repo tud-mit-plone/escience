@@ -1,23 +1,17 @@
 <div class="container_16">
-  <div id="navigation_group" class="grid_3 roundabout-holder">
-    <ul class="roundabout-holder <%= User.current.logged? ? 'enabled' : 'disabled' %>">
-      <li class="roundabout-moveable-item roundabout-in-focus" id="private">
-        <% if User.current.logged? %>
-          <div class="roundabout_label"><%= l(:label_private) %></div>
-          <img src="<%= Redmine::Utils.relative_url_root %>/images/privat_<%= (User.current.female)? 'w' : 'm' %>_grau.png" />
-        <% else %>
-          <div class="roundabout_label"><%= l(:label_guest) %></div>
-          <img src="<%= Redmine::Utils.relative_url_root %>/images/gast_gruen.png" />
+  <div id="navigation_group" class="grid_3">
+    <%= content_tag(:ul, class: ['rotation-switch', rotation_switch_enabled? ? 'active': 'inactive']) do %>
+      <% rotation_switch_elements.each do |element| %>
+        <%= content_tag(:li, class: element[:class]) do %>
+          <% if rotation_switch_enabled? %>
+            <%= content_tag(:a, href: element[:href]) do %>
+              <span class="label"><%= element[:label] %></span>
+            <% end %>
+          <% else %>
+            <span class="label"><%= element[:label] %></span>
+          <% end %>
         <% end %>
-      </li>
-      <li class="roundabout-moveable-item" id="team">
-        <div class="roundabout_label"><%= l(:label_team) %></div>
-        <img src="<%= Redmine::Utils.relative_url_root %>/images/team_grau.png" />
-      </li>
-      <li class="roundabout-moveable-item" id="community">
-        <div class="roundabout_label"><%= l(:label_community) %></div>
-        <img src="<%= Redmine::Utils.relative_url_root %>/images/community_grau.png" />
-      </li>
-    </ul>
+      <% end %>
+    <% end %>
   </div>
 </div>

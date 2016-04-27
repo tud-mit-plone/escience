@@ -24,7 +24,7 @@ class Unauthorized < Exception; end
 class ApplicationController < ActionController::Base
   include Redmine::I18n
   include SimpleCaptcha::ControllerHelpers
- 
+
   class_attribute :accept_api_auth_actions
   class_attribute :accept_rss_auth_actions
   class_attribute :model_object
@@ -45,6 +45,18 @@ class ApplicationController < ActionController::Base
   include Redmine::Search::Controller
   include Redmine::MenuManager::MenuController
   helper Redmine::MenuManager::MenuHelper
+
+  def set_scope
+    scope_view = params[:scope].to_i
+
+    if scope_view < 0 || scope_view > 2
+      head  :forbidden
+    else
+      session[:current_view_of_eScience] = scope_view.to_s
+      redirect_to projects_url, action: 'index'
+    end
+  end
+
 
   before_filter :thread_safe_set_online_users
   @@online_count_lock = Mutex.new
@@ -614,4 +626,5 @@ class ApplicationController < ActionController::Base
   def _include_layout?(*args)
     api_request? ? false : super
   end
+
 end

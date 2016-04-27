@@ -9,38 +9,34 @@ $(document).ready(function() {
     tip: {color: '#7DB414', size: {x: 8, y : 8}}
   }
 
-  var $roundabout = $("ul.roundabout-holder")
-  var roundaboutEnabled = $roundabout.hasClass('enabled')
-  $roundabout.roundabout({
-    minScale: 0.60,
-    minOpacity: 0.9,
-    maxScale: 1.0,
-    shape: "tearDrop",
-    startingChild: $('body').attr('data-mode'),
-    triggerFocusEvents: roundaboutEnabled,
-    clickToFocus: roundaboutEnabled
-  });
-  $("ul.roundabout-holder li").focus(function() {
-      param = $("ul.roundabout-holder").roundabout("getChildInFocus");
-      send_new_scope(param);
-  });
 
+  var rotationSwitchTimer = 0;
+  $('ul.rotation-switch a').click(function(event) {
+    var $link = $(event.currentTarget);
+    var $elem = $link.parent('li');
+    if ($elem.hasClass('inactive')) {
+      event.preventDefault();
+      var $left = $('ul.rotation-switch li.left');
+      var $right = $('ul.rotation-switch li.right');
+      var $front = $('ul.rotation-switch li.front');
+      if ($elem.hasClass('left')) {
+        $right.removeClass('right').addClass('left');
+        $front.removeClass('front active').addClass('right inactive');
+        $left.removeClass('left inactive').addClass('front active');
+      }
+      else {
+        $left.removeClass('left').addClass('right');
+        $front.removeClass('front active').addClass('left inactive');
+        $right.removeClass('right inactive').addClass('front active');
+      }
+      clearTimeout(rotationSwitchTimer);
+      rotationSwitchTimer = setTimeout(function() {
+        console.log($link.attr('href'));
+        location.href = $link.attr('href');
+      }, 300);
+    }
+  });
 });
-
-function send_new_scope(scope) {
-  var ajax = $.ajax({
-    url: "/userSessionScope",
-    dataType: "json",
-    data: {
-      scope_select: scope
-    },
-    success: function(data) {
-         location.reload();
-    }}).always(function(json) {
-        if(ajax.readyState == 4 && ajax.status == 200){
-          return true;
-    }});
-}
 
 function upload_attachment(el) {
   if (!$('.add_attachment').hasClass('disabled')) {

@@ -33,7 +33,7 @@ module ApplicationHelper
   require 'htmlentities'
   include REXML
 
-  
+
   def with_format(format, &block)
     old_format = @template_format
     @template_format = format
@@ -102,7 +102,7 @@ module ApplicationHelper
           {:attr => 'class', :value => 'toc', :replace => "{{toc($$content$$)}}"},
           {:attr => 'class', :value => 'toplink', :replace => "\r\n\r\n\{{top_link|$$content$$}}"}
       ]}
-    }    
+    }
     decoder = HTMLEntities.new
     decoder.decode(replaceElement(translation.root))
   end
@@ -113,9 +113,9 @@ module ApplicationHelper
     end
     return 'welcome'
   end
-  
+
   def beautyfulDate(date)
-    s = Date.parse(date.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe  
+    s = Date.parse(date.to_s).strftime("<span class=\"day\">%d</span><br/><span class=\"month\">%b</span><br/><span class=\"year\">%Y</span>").html_safe
   end
 
   def replaceElement(elements)
@@ -154,7 +154,7 @@ module ApplicationHelper
                   replacement.gsub!('$$'+placeholder+'$$', elements.attributes[placeholder])
                 end
               end
-              return replacement 
+              return replacement
             end
           end
         else
@@ -178,11 +178,11 @@ module ApplicationHelper
     end
     return elements.nil? ? "" : elements.to_s
   end
-  
+
   def breadcrumb_list(options = {:max_crumblength => 80, :max_layerblength => 120})
     unless (@project.nil?)
       parent_id = @project.parent_id
-      projectArray = Array.new {Array.new} 
+      projectArray = Array.new {Array.new}
       breadcrumb = [@project]
       while !(parent_id.nil?)
         breadcrumb_project = Project.visible.where(:id => parent_id).first
@@ -199,7 +199,7 @@ module ApplicationHelper
         unless projects.nil?
           projects.each do |project|
             unless breadcrumb.include?(project)
-              if projectArray[level].nil? 
+              if projectArray[level].nil?
                 projectArray[level] = [project]
               else
                 projectArray[level] << project
@@ -214,7 +214,7 @@ module ApplicationHelper
       breadcrumb.each_with_index do |currentProjectElement, level|
          class_name = ''
          class_name = 'has_submenu' if (!projectArray[level].nil? && (projectArray[level].length > 1 || projectArray[level][0] != @project))
-         class_name += ' last_element' if breadcrumb.length-1 == level 
+         class_name += ' last_element' if breadcrumb.length-1 == level
          s << '<li class="' + class_name + '">'
          if currentProjectElement == @project
            s << h(truncate(@project.name, :length => options[:max_crumblength]))
@@ -238,8 +238,8 @@ module ApplicationHelper
     s << '</ul>'
     s.html_safe
   end
-  
-  
+
+
   # Return true if user is authorized for controller/action, otherwise false
   def authorize_for(controller, action)
     User.current.allowed_to?({:controller => controller, :action => action}, @project)
@@ -311,10 +311,10 @@ module ApplicationHelper
       s = link_to(link_text, {:controller => "issues", :action => "show", :id => issue},
                                                  :class => issue.css_classes,
                                                  :title => title)
-    else 
+    else
       s = ""
     end
-    
+
     s << h("#{subject}") if subject
     s = h("#{issue.project} - ") + s if options[:project]
     s
@@ -516,12 +516,12 @@ module ApplicationHelper
   end
 
   def shorten (string, count = 30)
-			if string.length > count 
+			if string.length > count
 				shortened = string[0, count]
 				splitted = shortened.split(/ /)
 				words = splitted.length
 				splitted.join(" ") + '...'
-			else 
+			else
 				string
 			end
 		end
@@ -534,20 +534,20 @@ module ApplicationHelper
     if projects.any?
       if @project.nil?
         project_name = l(:label_projectspec)
-      else 
+      else
         project_name = "#{@project}"
         if project_name == ""
           project_name = l(:label_projectnew)
         end
         project_name = shorten(project_name,15)
-      end    
-      
+      end
+
       s = '<div class="splitter">' +
           '<div id="projects_styled" class="styled_select "><span>'+project_name+'</span><b><i></i></b></div>' +
           '<select onchange="if (this.value != \'\') { window.location = this.value; }" style="opacity: 0; margin-bottom: 4px; ">' +
             "<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
             '<option value="" disabled="disabled">---</option>'
-            
+
       s << project_tree_options_for_select(projects, :selected => @project) do |p|
         { :value => project_path(:id => p, :jump => current_menu_item) }
       end
@@ -567,7 +567,7 @@ module ApplicationHelper
       else
         tag_options[:selected] = nil
       end
-      tag_options.merge!(yield(project)) if block_given? 
+      tag_options.merge!(yield(project)) if block_given?
       if options[:truncate].nil?
         s <<  content_tag('option', name_prefix + h(project), tag_options)
       else
@@ -841,7 +841,7 @@ module ApplicationHelper
       raise ArgumentError, 'invalid arguments to textilizable'
     end
     return '' if text.blank?
-    
+
     project = options[:project] || @project || (obj && obj.respond_to?(:project) ? obj.project : nil)
     only_path = options.delete(:only_path) == false ? false : true
 
@@ -962,7 +962,7 @@ module ApplicationHelper
             else
               wiki_page_id = page.present? ? Wiki.titleize(page) : nil
               parent = wiki_page.nil? && obj.is_a?(WikiContent) && obj.page && project == link_project ? obj.page.title : nil
-              url_for(:only_path => only_path, :controller => 'wiki', :action => 'show', :project_id => link_project, 
+              url_for(:only_path => only_path, :controller => 'wiki', :action => 'show', :project_id => link_project,
                :id => wiki_page_id, :version => nil, :anchor => anchor, :parent => parent)
             end
           end
@@ -1085,7 +1085,7 @@ module ApplicationHelper
                 params["id"] = 'hilfe.html'
               end
               link = link_to h(name), {:only_path => only_path, :controller => 'pages', :action => 'show', :id => params["id"], :anchor => 'top'}, :class => 'top_link'
-                            
+
           when 'version'
             if project && version = project.versions.visible.find_by_name(name)
               link = link_to h(version.name), {:only_path => only_path, :controller => 'versions', :action => 'show', :id => version},
@@ -1243,7 +1243,7 @@ module ApplicationHelper
       end
     end
   end
-  
+
   def replace_macros(text)
     output = text.gsub(/\{\{([<>]?)toc(\(([^\}]*)\))?\}\}/i) do
       out = '<span class="toc">'
@@ -1311,9 +1311,9 @@ module ApplicationHelper
         out << "<a href=\"#top\">#{$2}</a>"
       end
       out
-    end   
+    end
   end
-  
+
   # Same as Rails' simple_format helper without using paragraphs
   def simple_format_without_paragraph(text)
     text.to_s.
@@ -1335,7 +1335,7 @@ module ApplicationHelper
     end
     return result
   end
-  
+
   def title_options_for_select(blank=true)
     result = (blank ? [["", ""]] : [])
     (::I18n.t('field_title_vals')).each do |key, val|
@@ -1396,7 +1396,7 @@ module ApplicationHelper
       html << "</ul></div>\n"
     end
     html.html_safe
-  end  
+  end
 
   def delete_link(url, options={})
     options = {
@@ -1415,8 +1415,8 @@ module ApplicationHelper
 
   def preview_link(url, form, target='preview', options={})
     content_tag 'a', l(:label_preview), {
-        :href => "#", 
-        :onclick => %|submitPreview("#{escape_javascript url_for(url)}", "#{escape_javascript form}", "#{escape_javascript target}"); return false;|, 
+        :href => "#",
+        :onclick => %|submitPreview("#{escape_javascript url_for(url)}", "#{escape_javascript form}", "#{escape_javascript target}"); return false;|,
         :accesskey => accesskey(:preview)
       }.merge(options)
   end
@@ -1510,7 +1510,7 @@ module ApplicationHelper
                      "showOn: 'button', buttonText:''};")
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
 #        unless jquery_locale == 'en'
-        tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js") 
+        tags << javascript_include_tag("i18n/jquery.ui.datepicker-#{jquery_locale}.js")
 #        end
         tags << stylesheet_link_tag('jquery/jquery-ui-custom')
         tags
@@ -1630,10 +1630,8 @@ module ApplicationHelper
     tags << javascript_include_tag("jquery.qtip.min.js")
     tags << "\n".html_safe
     tags << javascript_include_tag("escience.js")
-    tags << javascript_include_tag("jquery.roundabout.min.js")
     tags << javascript_include_tag("jquery.event.drag-2.2.js")
     tags << javascript_include_tag("jquery.event.drop-2.2.js")
-    tags << javascript_include_tag("jquery.roundabout-shapes.min.js")
     tags << javascript_include_tag("jquery.confirm.js")
     tags << javascript_include_tag("bootstrap.min.js")
     tags << javascript_tag(ckeditor_localize)
@@ -1647,14 +1645,14 @@ module ApplicationHelper
     end
     tags
   end
-  
+
   def ckeditor_localize
     return %Q{
-    	var text_for_wiki_dialog = '#{l(:label_wiki_dialog_text)}'; 
+    	var text_for_wiki_dialog = '#{l(:label_wiki_dialog_text)}';
     	var title_for_wiki_dialog = '#{l(:label_wiki_dialog_title)}';
-    	var text_for_coop_text_dialog = '#{l(:label_coop_text_dialog_text)}'; 
+    	var text_for_coop_text_dialog = '#{l(:label_coop_text_dialog_text)}';
     	var title_for_coop_text_dialog = '#{l(:label_coop_text_dialog_title)}';
-    	var text_for_coop_sheet_dialog = '#{l(:label_coop_sheet_dialog_text)}'; 
+    	var text_for_coop_sheet_dialog = '#{l(:label_coop_sheet_dialog_text)}';
     	var title_for_coop_sheet_dialog = '#{l(:label_coop_sheet_dialog_title)}';
     }
   end
@@ -1726,4 +1724,35 @@ module ApplicationHelper
       $(\"\##{field_id}\").tagsInput(#{parameter.to_json});
     });"
   end
+
+  def rotation_switch_enabled?
+    User.current.logged?
+  end
+
+  def rotation_switch_elements
+    current_mode = session[:current_view_of_eScience].to_s.empty? ? '0' : session[:current_view_of_eScience].to_s
+    if current_mode.empty?
+      current_mode = '0'
+    end
+    elements = Array.new
+    if User.current.logged?
+      elements.push({:id => '0', :class => ['private'], :label => l(:label_private)})
+    else
+      elements.push({:id => '0', :class => ['guest'], :label => l(:label_guest)})
+    end
+    elements.push({:id => '1', :class => ['team'], :label => l(:label_team)})
+    elements.push({:id => '2', :class => ['community'], :label => l(:label_community)})
+
+    elements.each do |e|
+      e[:href] = url_for(controller: 'application', action: 'set_scope', scope: e[:id])
+    end
+
+    current_index = elements.find_index { |e| e[:id] == current_mode }
+    elements[current_index][:class].concat ["active", "front"]
+    elements[(current_index+1) % 3][:class].concat ["inactive", "right"]
+    elements[(current_index+2) % 3][:class].concat ["inactive", "left"]
+
+    elements
+  end
+
 end
