@@ -2,7 +2,7 @@ module RedmineSocialExtends
   module MyControllerExtension
     module ClassMethods
     end
-    
+
     module InstanceMethods
       def interest_search
 
@@ -43,12 +43,12 @@ module RedmineSocialExtends
         return tags
       end
     end
-    
+
     def self.included(receiver)
       receiver.extend         ClassMethods
       receiver.send :include, InstanceMethods
       receiver.class_eval do
-        helper ProjectsHelper        
+        helper ProjectsHelper
 
         def render_block
           if params['blockname'].nil?
@@ -69,7 +69,7 @@ module RedmineSocialExtends
             @user.pref.attributes = params[:pref]
             @user.pref[:no_self_notified] = (params[:no_self_notified] == '1')
             @user.login = params[:user][:mail]
-            
+
             @user.security_number = User.calc_security_number(params[:security])
 
             new_tags = prepare_tag_params(params[:my_interest])
@@ -77,18 +77,7 @@ module RedmineSocialExtends
             new_tags = prepare_tag_params(params[:my_skill])
             @user.skill_list = new_tags.uniq
 
-            @user.private_project.enabled_module_names = params[:enabled_module_names]
-            @user.private_project.save!
-
-            if  params[:wiki].nil? == false && params[:wiki][:start_page].nil? == false 
-              @wiki = @user.private_project.wiki || Wiki.new(:project => @user.private_project)
-              @wiki.safe_attributes = params[:wiki]
-              @wiki.save!
-            end
-
-            @user.save!
-            if @user.save
-              @user.pref.save
+            if @user.save && @user.pref.save
               @user.notified_project_ids = (@user.mail_notification == 'selected' ? params[:notified_project_ids] : [])
               set_language_if_valid @user.language
               flash[:notice] = l(:notice_account_updated)

@@ -1,0 +1,13 @@
+<fieldset>
+  <legend><%= l(:privacy_settings) %></legend>
+
+  <% selected = @user.selected_security_options %>
+  <% User.security_hash.keys.each do |k| %>
+    <p>
+      <%= label_tag do %>
+      <%= check_box_tag "security[#{k}]", "security[#{k}]", selected.include?(k) %>
+      <%="#{l(k.to_s)}" %>
+      <%end%>
+    </p>
+  <%end%>
+</fieldset>

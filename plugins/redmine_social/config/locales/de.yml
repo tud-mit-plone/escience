@@ -2,7 +2,7 @@ de:
   authorizations:
     create:
       success_existing_user: "Erfolgreich %{provider} Anmeldung hinzugefügt."
-      success_message: "Willkommen %{provider} Benutzer. Du bist angemeldet."      
+      success_message: "Willkommen %{provider} Benutzer. Du bist angemeldet."
     failure:
       notice: "Anmeldung nicht erfolgreich"
     destroy:
@@ -38,7 +38,7 @@ de:
     abbr_month_names: [~, Jan, Feb, Mär, Apr, Mai, Jun, Jul, Aug, Sep, Okt, Nov, Dez]
   time:
     formats:
-      published_date: "%d.%m.%Y"      
+      published_date: "%d.%m.%Y"
       short_published_date: "%d.%m.%y"
       literal_date: "%d %B, %Y"
       short_literal_date: "%d %b, %Y"
@@ -510,7 +510,7 @@ de:
   #en: get_popular: Get popular.
   get_popular: "Werde beliebt."
   #en: get_started: "Get started:"
-  get_started: "Erste Schritte:"  
+  get_started: "Erste Schritte:"
   #en: get_started_banner: Get started with <a href="/">%{site}</a> today!
   get_started_banner: Willkommen bei <a href="/">%{site}</a>!
   #en: get_started_invite_some_friends: "Get Started: Invite some friends!"
@@ -628,7 +628,7 @@ de:
   log_in_to_your: Einloggen zu deinem
   #en: log_out: Log Out
   log_out: Abmelden
-  #en: log_out_of_your: Log out of your 
+  #en: log_out_of_your: Log out of your
   log_out_of_your: Abmelden vom
   #en: logged_in: "Logged in:"
   logged_in: "Angemeldet:"
@@ -765,7 +765,7 @@ de:
   #en: no_messages: no messages
   no_messages: keine Nachrichten
   #en: no_profile_photo: "No profile photo?"
-  no_profile_photo: "Noch kein Profilfoto?" 
+  no_profile_photo: "Noch kein Profilfoto?"
   #en: no_recent_activity: No recent activity
   no_recent_acitivity: Keine aktuellen Einträge
   #en: no_tags: No tags
@@ -811,7 +811,7 @@ de:
   #en: pending_friendships: Pending Friendships
   friendships: Kontakte
   pending_friendship: Kontaktanfrage
-  pending_friendships: Kontaktanfragen 
+  pending_friendships: Kontaktanfragen
   pending_friendships_title: Eingegangene Kontaktanfragen
   wait_for_pending_friendship: Ein Mitglied hat Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
   wait_for_pending_friendships: Mehrere Mitglieder haben Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
@@ -822,7 +822,7 @@ de:
   #en: people: People
   people: Leute
   #en: people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on: People who sign up using your invitation will automatically be added as your friends on
-  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on: "Leute, die sich durch deine Einladung angemeldet haben, werden automatisch zu deinen Freunden hinzugef\xEF\xBF\xBD auf" 
+  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on: "Leute, die sich durch deine Einladung angemeldet haben, werden automatisch zu deinen Freunden hinzugef\xEF\xBF\xBD auf"
   #en: permanently_delete_this_clipping: Permanently delete this clipping?
   permanently_delete_this_clipping: "Soll das Clipping dauerhaft gelöscht werden?"
   #en: permanently_delete_this_event: Permanently delete this event?
@@ -1041,7 +1041,7 @@ de:
   #en: showing_ad: Showing Ad
   showing_ad: Zeige Anzeige
   #en: showing_categories: Showing categories
-  showing_categories: Zeige Kategorien 
+  showing_categories: Zeige Kategorien
   #en: showing_metro_area_details: Showing Metro Area Details
   showing_metro_area_details: Zeige Detals der MetroArea
   #en: showing_users: Showing users
@@ -1168,8 +1168,8 @@ de:
   to_accept: ", dass er bestätigt"
   #en: to_get_recommended_content_on_your_dashboard: to start getting recommended content on your dashboard.
   to_get_recommended_content_on_your_dashboard: "Zum Start bring Inhalt in deine Übersicht."
-  #en: to_get_started_with_clippings_first: To get started with clippings, first 
-  to_get_started_with_clippings_first: "Um mit den Clippings zu beginnen:" 
+  #en: to_get_started_with_clippings_first: To get started with clippings, first
+  to_get_started_with_clippings_first: "Um mit den Clippings zu beginnen:"
   #en: to_start_adding_friends: To start adding friends, you can
   to_start_adding_friends: "Um Freunde hinzuzufügen, kannst du"
   #en: to_you: You
@@ -1215,7 +1215,7 @@ de:
   #en: updated_their_profile: updated their profile
   updated_their_profile: "hat das persönliche Profil geändert"
   #en: upload_a_profile_photo: "Upload a profile photo"
-  upload_a_profile_photo: "Ein Profil Foto hochladen"  
+  upload_a_profile_photo: "Ein Profil Foto hochladen"
   #en: upload_an_image_for_your_post: Upload an image for your post
   upload_an_image_for_your_post: Foto zum Eintrag hochladen
   #en: upload_and_continue_to_step_two: Upload, and continue to step two
@@ -1298,7 +1298,7 @@ de:
   watch_topic: beobachte Thema
   #en: watching_topic: Watching topic
   watching_topic: Thema wird beobachtet
-  #en: we_just_sent_an_e_mail_to: "We just sent an e-mail to:" 
+  #en: we_just_sent_an_e_mail_to: "We just sent an e-mail to:"
   we_just_sent_an_e_mail_to: "Wir haben eine E-Mail geschickt an:"
   #en: we_need_you: We need you
   we_need_you: Wir brauchen dich
@@ -1399,7 +1399,7 @@ de:
   #en: photo_manager: "Photo manager"
   photo_manager: "Photo manager"
   #en: album: "Album"
-  album: "Album"  
+  album: "Album"
   #en: albums: "Albums"
   albums: "Albums"
   #en: album_added_photos: Photos added to album
@@ -1413,11 +1413,11 @@ de:
   #en: delete_album_and_photos: Delete album and its associated photos?
   delete_album_and_photos: "Delete album and its associated photos?"
   #en: album_was_successfully_created: "Album was successfully created"
-  album_was_successfully_created: "Album was successfully created"    
+  album_was_successfully_created: "Album was successfully created"
   #en: view_more: "View more"
   view_more: "View more"
   #en: assign_album: "Assign album"
-  assign_album: "Assign album" 
+  assign_album: "Assign album"
   #en: new_album: "New album"
   new_album: "Album hinzufügen"
   #en: created_an_album: "Created an album"
@@ -1442,9 +1442,9 @@ de:
   label_contact_captcha: "Wie lautet der Name unserer Plattform?"
 
   text_my_interest: 'Meine Forschungsgebiete'
-  label_my_interest_add: 'Ergänze deine Forschungsgebiete'
+  label_my_interest_add: 'Ergänzen Sie Ihre Forschungsgebiete'
   text_my_skill: 'Meine Fertigkeiten'
-  label_my_skill_add: 'Ergänze deine Fertigkeiten'
+  label_my_skill_add: 'Ergänze Sie Ihre Fertigkeiten'
   label_dashurl: 'Bookmark Website'
   label_album_plural: 'Bildersammlung'
   label_my_album_plural: 'Meine Bilderalben'
@@ -1453,8 +1453,8 @@ de:
   button_invite: 'Einladung schicken'
   no_common_project: 'In keinem gemeinsamen Projekt'
 
-  searchable_sql: 'Werde ich bei  Suchen angezeigt?'
-  account_readable_for_user: 'Können andere meine Benutzerkonto sehen?'
+  searchable_sql: 'Werde ich in Suchergebnissen angezeigt?'
+  account_readable_for_user: 'Können andere mein Benutzerkonto sehen?'
   no_name: 'Kein Name vergeben'
   label_album_delete: 'Album entfernen'
   label_project_private: 'Mein'
@@ -1470,3 +1470,6 @@ de:
   user_message_sort_content: "Inhalt"
   user_message_sort_date: "Datum"
   user_message_sort_author: "Author"
+
+  go_to_profile_page: "Gehe zu Profilseite"
+  privacy_settings: "Einstellungen zur Privatsphäre"

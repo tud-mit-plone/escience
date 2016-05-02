@@ -14,15 +14,14 @@
   <%= hidden_field_tag 'hidden_submit', '' %>
   <h2 style="float:left"><%=l(:label_my_account)%> <li class="icon-user"></li></h2>
   <div class="btn-group" style="float:right;">
-    <%= link_to l(:button_save), "#", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#my_account_form').submit();" %>
-    <%= link_to(l(:preview), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'btn') %>
-    <%= link_to(l(:button_change_password), {:action => 'password', :sub => 'my_account'}, :class => 'btn') if @user.change_password_allowed? %>
+    <%= link_to(l(:go_to_profile_page), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'button') %>
+    <%= link_to(l(:button_change_password), {:action => 'password', :sub => 'my_account'}, :class => 'button') if @user.change_password_allowed? %>
     <%#= submit_tag l(:button_save) %>
   </div>
   <div class="clear"></div>
 
   <%= error_messages_for 'user' %>
-  <%= render :partial => 'security_settings', :locals => {:user => @user}%>
+  <%= render :partial => 'privacy_settings', :locals => {:user => @user}%>
   <%= render :partial => 'edit_interest', :locals => {:user => @user}%>
   <div id="profile">
   <fieldset id="information" class="box tabular">
@@ -31,17 +30,17 @@
       <p>Avatar</p>
       <!-- div style="margin-top: 10px;" -->
       <div id="avatar_preview">
-      <a href="#" onclick="show_change_avatar();">
+      <a href="javascript:show_change_avatar();">
         <% if @user.avatar %>
           <%= image_tag( @user.avatar.photo(:medium), :height => '180', :id => 'preview') %>
         <% else %>
           <%= image_tag( 'avatar.png', :height => '180', :id => 'preview') %>
         <% end %>
-      </a>  
+      </a>
       </div>
     </div>
     <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
-    <%= f.select :title, title_options_for_select, :required => true %><br />
+    <%= f.select :title, title_options_for_select %><br />
     <%= f.text_field :mail, :required => true, :style => "width:437px;" %><br />
     <%= f.text_field :firstname, :required => true %><span class="distanceholder"></span>
     <%= f.text_field :lastname, :required => true %><br />
@@ -52,31 +51,25 @@
     <%= f.text_field :city, :required => false %><span class="distanceholder"></span>
     <%= f.text_field :zipcode, :required => false %><br />
     <%= f.select :language, lang_options_for_select %><br />
-  
+
     <% @user.custom_field_values.select(&:editable?).each do |value| %>
       <p><%= custom_field_tag_with_label :user, value %></p>
     <% end %>
     <%= call_hook(:view_my_account, :user => @user, :form => f) %>
   </fieldset>
-  
+
   <fieldset id="mailnews" class="box">
     <legend><%=l(:field_mail_notification)%></legend>
     <%= render :partial => 'users/mail_notifications' %>
   </fieldset>
-  
+
   <fieldset id="preferences" class="box tabular">
     <legend><%=l(:label_preferences)%></legend>
     <%= render :partial => 'users/preferences' %>
   </fieldset>
-  
-  <fieldset id="private_project">
-    <% @project = User.current.private_project%>
-    <% @wiki = @project.wiki %>
-    <%= render_tabs(private_project_settings_tabs(@project))%>  
-  </fieldset>
-  <%= link_to l(:button_save), "#", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#my_account_form').submit();", :style =>'float:right' %>
-  <%#= submit_tag l(:button_save) %>
-  
+
+  <%= submit_tag l(:button_save) %>
+
   </div>
 <% end %>
 
@@ -91,7 +84,7 @@
 <script type="text/Javascript" charset="utf-8">
 function hide_change_avatar() {
   $('#preview').css({
-    width:180, 
+    width:180,
     height:180,
     margin: 0
   });
@@ -113,6 +106,6 @@ function show_change_avatar() {
     aspectRatio: 1
   });
   <% end %>
-  return false;  
+  return false;
 }
 </script>

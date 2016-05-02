@@ -1,11 +1,11 @@
-# en: 
+# en:
 #   date:
 #     formats:
 #       published_date: "%m/%d/%Y"
 #       date_ago: "%b %Y"
 #   time:
 #     formats:
-#       published_date: "%m/%d/%Y"      
+#       published_date: "%m/%d/%Y"
 #       short_published_date: "%m/%d/%y"
 #       literal_date: "%B %d, %Y"
 #       short_literal_date: "%b %d, %Y"
@@ -23,7 +23,7 @@ en:
   authorizations:
     create:
       success_existing_user: "Successfully added %{provider} authentication"
-      success_message: "Welcome %{provider} user. You are logged in."      
+      success_message: "Welcome %{provider} user. You are logged in."
     failure:
       notice: "Sorry, You didn't authorize"
     destroy:
@@ -50,17 +50,17 @@ en:
       date_ago: "%b %Y"
   time:
     formats:
-      published_date: "%m/%d/%Y"      
+      published_date: "%m/%d/%Y"
       short_published_date: "%m/%d/%y"
       literal_date: "%B %d, %Y"
       short_literal_date: "%b %d, %Y"
       time_ago: "%l:%M%p"
 
   activerecord:
-    models: 
+    models:
       photo: "photo"
     attributes:
-      _all: 
+      _all:
         created_at: "created at"
         updated_at: "updated at"
       photo:
@@ -74,7 +74,7 @@ en:
           attributes:
             photo_file_size:
               less_than: "Filesize to large %{count}"
-  published_date: "%m/%d/%Y"   
+  published_date: "%m/%d/%Y"
   greeting: "Hello %{name}"
   #en: a_few_seconds_ago:  a few seconds ago
   a_few_seconds_ago:  a few seconds ago
@@ -111,7 +111,7 @@ en:
   #en: activation_email_not_sent_message: Activation e-mail could not be sent. Perhaps that user is already active?
   activation_email_not_sent_message: Activation e-mail could not be sent. Perhaps that user is already active?
   #en: activation_email_resent_message: An activation e-mail was resent to the e-mail address you used to sign up.
-  activation_email_resent_message: An activation e-mail was resent to the e-mail address you used to sign up.  
+  activation_email_resent_message: An activation e-mail was resent to the e-mail address you used to sign up.
   #en: active: active
   active: active
   #en: active_users: Active Users
@@ -171,7 +171,7 @@ en:
   #en: already_have_an_account: Already have an account?
   already_have_an_account: Already have an account?
   #en: anonymous: Anonymous
-  anonymous: Anonymous  
+  anonymous: Anonymous
   #en: an_error_occurred: An error occurred
   an_error_occurred: An error occurred
   #en: are_attending_this_event: are attending this event
@@ -182,7 +182,7 @@ en:
   are_you_sure: Are you sure?
   #en: are_you_sure_you_want_to_delete_this_page: "Are you sure you want to delete this page?"
   are_you_sure_you_want_to_delete_this_page: "Are you sure you want to delete this page?"
-  #en: are_you_sure_you_want_to_delete_this_photo: "Are you sure you want to delete this photo?"  
+  #en: are_you_sure_you_want_to_delete_this_photo: "Are you sure you want to delete this photo?"
   are_you_sure_you_want_to_delete_this_photo: "Are you sure you want to delete this photo?"
   #en: are_you_sure_you_want_to_delete_this_post: "Are you sure you want to delete this post?"
   are_you_sure_you_want_to_delete_this_post: "Are you sure you want to delete this post?"
@@ -244,7 +244,7 @@ en:
   #en: cache_cleared: The cache was cleared
   cache_cleared: The cache was cleared
   #en: cache_clear_link: Clear the cache
-  cache_clear_link: Clear the cache  
+  cache_clear_link: Clear the cache
   #en: cancel: Cancel
   cancel: Cancel
   #en: cancel_and_go_back_to: cancel and go back to
@@ -326,7 +326,7 @@ en:
   #en: comment_could_not_be_deleted: Comment could not be deleted.
   comment_could_not_be_deleted: Comment could not be deleted.
   #en: comment_notifications_off: Comment notifications are currently off
-  comment_notifications_off: Comment notifications are currently off  
+  comment_notifications_off: Comment notifications are currently off
   #en: comment_save_error: Your comment couldn't be saved.
   comment_save_error: "Your comment couldn't be saved: %{error}"
   #en: comment_was_successfully_created: Comment was successfully created.
@@ -334,13 +334,13 @@ en:
   #en: comment_author_email_required: Required, won't be shown on the site.
   comment_author_email_required: "Required, won't be shown on the site."
   #en: comment_web_site_label: "Web site (include http://)"
-  comment_web_site_label: "Web site (include http://)"  
-  #en: comment_spam_error: "Comment was flagged as spam. Please make sure you aren't including any spammy words or links and try again."  
-  comment_spam_error: "Comment was flagged as spam. Make sure you don't include spammy words or links and try again"  
+  comment_web_site_label: "Web site (include http://)"
+  #en: comment_spam_error: "Comment was flagged as spam. Please make sure you aren't including any spammy words or links and try again."
+  comment_spam_error: "Comment was flagged as spam. Make sure you don't include spammy words or links and try again"
   #en: comments: Comments
   comments: Comments
   #en: comments_count: %{count} comments
-  comments_count: 
+  comments_count:
     one: One comment
     other: "%{count} comments"
   #en: comments_deleted: Comments deleted
@@ -349,7 +349,7 @@ en:
   comments_rss: Comments RSS
   #en: community_tagline: CommunityEngine Rocks!
   community_tagline: CommunityEngine Rocks!
-  #en: comment_unsubscribe_succeeded: Thanks, you have been unsubscribed from notifications on this comment.  
+  #en: comment_unsubscribe_succeeded: Thanks, you have been unsubscribed from notifications on this comment.
   comment_unsubscribe_succeeded: "Thanks, you have been unsubscribed from notifications on this comment."
   #en: compose: Compose
   compose: Compose
@@ -386,13 +386,13 @@ en:
   #en: date_published: Date Published
   date_published: Date Published
   #en: days_ago: %{count} days ago
-  days_ago: 
+  days_ago:
     one: "one day ago"
     other: "%{count} days ago"
   #en: deactivate_link: Click here to deactivate your account
   deactivate_link: Click here to deactivate your account
-  #en: deactivate_tip: Deactivating your account will remove your profile from the site. 
-  deactivate_tip: Deactivating your account will remove your profile from the site. 
+  #en: deactivate_tip: Deactivating your account will remove your profile from the site.
+  deactivate_tip: Deactivating your account will remove your profile from the site.
   #en: deactivate_confirmation: Are you sure you want to deactivate your account?
   deactivate_confirmation: Are you sure you want to deactivate your account?
   #en: deactivate_completed: Thanks. Your account has been deactivated and you have been logged out.
@@ -402,7 +402,7 @@ en:
   #en: delete_selected: Delete selected
   delete_selected: Delete selected
   #en: delete_selected_mark_as_spam: Delete selected and mark spam
-  delete_selected_mark_as_spam: Mark as spam  
+  delete_selected_mark_as_spam: Mark as spam
   #en: delete_this_event: Delete this event
   delete_this_event: Delete this event
   #en: delete_this_forum: Delete this forum
@@ -661,7 +661,7 @@ en:
   #en: homepage_features: Homepage Features
   homepage_features: Homepage Features
   #en: homepage_feature_created: Homepage feature created
-  homepage_feature_created: Homepage feature created  
+  homepage_feature_created: Homepage feature created
   #en: hours_ago: %{count} hours ago
   hours_ago:
     one: "one hour ago"
@@ -749,8 +749,8 @@ en:
   log_in_to_your: Log in to your
   #en: log_out: Log Out
   log_out: Log Out
-  #en: log_out_of_your: Log out of your 
-  log_out_of_your: Log out of your 
+  #en: log_out_of_your: Log out of your
+  log_out_of_your: Log out of your
   #en: logged_in: "Logged in:"
   logged_in: "Logged in:"
   #en: logged_into_the_site: logged into the site
@@ -934,7 +934,7 @@ en:
   #en: notify_email_updates: Notify of community news
   notify_email_updates: Notify of community news
   #en: notify_me_of_follow_ups_via_email: Notify me of follow ups via e-mail
-  notify_me_of_follow_ups_via_email: Notify me of follow ups via e-mail  
+  notify_me_of_follow_ups_via_email: Notify me of follow ups via e-mail
   #en: notify_of_comments: Notify of comments
   notify_of_comments: Notify of comments
   #en: notify_of_friend_requests: Notify of friend requests
@@ -1188,7 +1188,7 @@ en:
   rsvp_for: RSVP for
   #en: rsvped_for_an_event: "RSVPed for an event:"
   rsvped_for_an_event: "RSVPed for an event:"
-  #en: rsvp: RSVP  
+  #en: rsvp: RSVP
   rsvp: RSVP
   #en: rsvps: RSVPs
   rsvps: RSVPs
@@ -1237,7 +1237,7 @@ en:
   #en: send: "Send"
   send: "Send"
   #en: send_comment_notifications: Send comment notifications?
-  send_comment_notifications: Send comment notifications?  
+  send_comment_notifications: Send comment notifications?
   #en: send_me_a_message: "Send me a message"
   send_me_a_message: "Send me a message"
   #en: send_invitations: Send Invitations!
@@ -1373,7 +1373,7 @@ en:
   #en: the_user_was_activated: The user was activated
   the_user_was_activated: The user was activated
   #en: the_user_was_deactivated: The user was deactivated
-  the_user_was_deactivated: The user was deactivated  
+  the_user_was_deactivated: The user was deactivated
   #en: the_user_was_deleted: The user was deleted.
   the_user_was_deleted: The user was deleted.
   #en: their: their
@@ -1408,7 +1408,7 @@ en:
   to_accept: to accept
   #en: to_get_recommended_content_on_your_dashboard: to start getting recommended content on your dashboard.
   to_get_recommended_content_on_your_dashboard: to start getting recommended content on your dashboard.
-  #en: to_get_started_with_clippings_first: To get started with clippings, first 
+  #en: to_get_started_with_clippings_first: To get started with clippings, first
   to_get_started_with_clippings_first: "To get started with clippings, first "
   #en: to_start_adding_friends: To start adding friends, you can
   to_start_adding_friends: "To start adding friends, you can"
@@ -1666,7 +1666,7 @@ en:
   #en: photo_manager: "Photo manager"
   photo_manager: "Photo manager"
   #en: album: "Album"
-  album: "Album"  
+  album: "Album"
   #en: albums: "Albums"
   albums: "Albums"
   #en: album_added_photos: Photos added to album
@@ -1680,11 +1680,11 @@ en:
   #en: delete_album_and_photos: Delete album and its associated photos?
   delete_album_and_photos: "Delete album and its associated photos?"
   #en: album_was_successfully_created: "Album was successfully created"
-  album_was_successfully_created: "Album was successfully created"    
+  album_was_successfully_created: "Album was successfully created"
   #en: view_more: "View more"
   view_more: "View more"
   #en: assign_album: "Assign album"
-  assign_album: "Assign album" 
+  assign_album: "Assign album"
   #en: new_album: "New album"
   new_album: "New album"
   #en: created_an_album: "Created an album"
@@ -1766,3 +1766,6 @@ en:
   user_message_sort_content: "Content"
   user_message_sort_date: "Date"
   user_message_sort_author: "Author"
+
+  go_to_profile_page: "Go to profile page"
+  privacy_settings: "Privacy settings"

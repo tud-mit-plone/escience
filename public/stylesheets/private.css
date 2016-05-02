@@ -5,7 +5,7 @@
 #container {
 	background-color: #fff
 }
-	
+
 fieldset {
 	margin-bottom:10px;
 	border:1px solid #DDD;
@@ -20,7 +20,7 @@ fieldset {
 fieldset legend {
 	font-size:13pt;
 }
-	
+
 fieldset.collapsable legend {
   cursor: pointer;
   padding-right: 15px;
@@ -37,7 +37,7 @@ fieldset.collapsable legend:hover {
 fieldset.collapsable.collapsed legend {
   background-image: url('/images/breadcrumb_arrow_right_green.png');
 }
-	
+
 label {
 	padding-right: 5px;
 }
@@ -46,7 +46,7 @@ fieldset label {
   clear: left;
 	display: inline-block
 }
-	
+
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   display: inline-block;
   padding: 2px 4px;
@@ -69,11 +69,11 @@ a.disabled {
 textarea {
 	width: 98%;
 }
-	
+
 #notified-projects p {
 	clear: both;
 }
-	
+
 #modalbg {
 	height: 0px !important;
 }
@@ -154,21 +154,21 @@ textarea {
   text-decoration: none;
 }
 
-/* !---------- profile layout ------------ */	
+/* !---------- profile layout ------------ */
 
   .block-receiver.ui-sortable fieldset:hover {
     border-color: #cbeb90 !important;
   }
-  
+
 	.block-receiver .mypage-box{
 		border-radius:10px;
 		-moz-border-radius:10px;
-		-webkit-border-radius:10px;		
+		-webkit-border-radius:10px;
 		border: solid 1px #F5F5F5;
 		transition: all 2s;
     -webkit-transition: all .5s;
 	}
-	
+
 	.block-receiver .handle {
 		padding: 10px;
 		display: block;
@@ -177,18 +177,18 @@ textarea {
 	.block-receiver .handle h3 {
 		margin: 0px;
 	}
-	
+
 	.block-receiver .mypage-box:hover {
 		border: solid 1px #D7D7D7;
 		cursor:move;
 		background-color: #F4F4F4 !important;
 	}
-	
+
 	#list-top .mypage-box {
 		margin-bottom: 20px;
 		border-radius:10px;
 		-moz-border-radius:10px;
-		-webkit-border-radius:10px;		
+		-webkit-border-radius:10px;
 		border: solid 2px #F0F0F0;
 		background-color: #FAFAFA;
 		padding:10px;
@@ -197,7 +197,7 @@ textarea {
 	#list-top .mypage-box div, #list-top .mypage-box form {
 	 padding: 0 20px;
   }
-	
+
 	#list-top .mypage-box div.calendar {
 		border: solid 1px #F0F0F0 !important;
 	}
@@ -215,7 +215,7 @@ textarea {
 
 	#list-top .mypage-box .small:hover {
 	  background-color: #7DB414;
-	}	
+	}
 
 	#list-top .mypage-box .small a {
 	 color: #707070;
@@ -224,23 +224,23 @@ textarea {
 
 	#list-top .mypage-box .small:hover a {
 	  color: #FFFFFF;
-	}	
+	}
 
 	#list-top .mypage-box.last {
 		margin-right: 0px;
 	}
-	
+
 	#list-top .mypage-box h3 {
 		margin-top: 0px;
 		background-color: #E9E9E9;
 		border: 0px solid black;
 		border-radius:10px;
 		-moz-border-radius:10px;
-		-webkit-border-radius:10px;	
-		padding: 4px 10px;	
+		-webkit-border-radius:10px;
+		padding: 4px 10px;
 		color: #707070
 	}
-	
+
 	#list-top .mypage-box ul {
 		padding-left: 10px;
 		background-image: url(../images/calender_bg.png);
@@ -248,7 +248,7 @@ textarea {
 		background-position-y: 16px;
 		line-height: 15pt;
 	}
-	
+
 	#list-top .mypage-box .linkToInfo a {
   	color: #ffffff;
   	text-decoration: none;
@@ -259,7 +259,7 @@ textarea {
   	text-decoration: none;
 	}
 
-		
+
 	a.close-icon {
 		display:block;
 		margin-top:13px;
@@ -270,16 +270,16 @@ textarea {
 		cursor:pointer;
 		background-image:url('../images/close.png');
 	}
-	
+
 	a.close-icon:hover {
 		background-image:url('../images/close_hl.png');
 	}
-	
+
 	.distanceholder {
 		width: 30px;
 		display: inline-block;
 	}
-	
+
 
 /* !---------- projects ---------- */
 
@@ -311,7 +311,7 @@ textarea {
 }
 
 #time_entry_project_id {
-  width: 100%; 
+  width: 100%;
 }
 
 select#membership_project_id {
@@ -321,38 +321,38 @@ select#membership_project_id {
 	#new_project label {
 		padding-right: 5px;
 		display: inline-block;
-	}	
-	
+	}
+
 	#new_project label.floating {
 		width:170px;
 		display: inline-block;
 	}
-	
+
 	#new_project #project_name {
   	width: 520px;
 	}
-	
+
 	#new_project #project_homepage, #project_parent_id {
 		width: 460px;
 	}
-	
+
 	#new_project textarea {
 		width: 98%;
 	}
-	
+
 	#new_project em.info {
 		display: block;
 	}
-	
+
 	.controller-my.action-page .mypage-box p {
     margin-bottom: 5px;
     margin-top: 0;
 	}
-	
+
 	.action-members fieldset {
 	  padding-top: 3px;
 	}
-	
+
 	#tab-content-members .member.edit {
   	background-color: #F9F9F9;
 	}
@@ -360,7 +360,7 @@ select#membership_project_id {
 	  padding-bottom: 5px;
 	  padding-top: 5px;
   }
-	  	
+
 	.action-members .openUser, .action-members .sendMessage, .action-members .addUser, .action-members .deleteUser {
 	  float: right;
   	width:13px;
@@ -371,7 +371,7 @@ select#membership_project_id {
 	.action-members .openUser {
   	background-image: url("../images/show.png");
   }
-  
+
 	.action-members .sendMessage {
   	background-image: url("../images/sendmessage.png");
 	}
@@ -393,23 +393,23 @@ select#membership_project_id {
   	margin-top: -3px;
   	float: right;
 	}
-	
+
 	.action-members #ausgabe {
   	margin-top: 20px;
 	}
-	
+
 	.new_membership p label {
   	width: 200px !important;
 	}
-	
+
 	.action-settings #tab-content-boards p {
   	 margin: 2px 0;
 	}
-	
+
 	.controller-users label {
 	  width: 50px;
 	}
-	
+
 	.controller-users.action-show #main label {
   	width: 55px;
   	display: inline-block;
@@ -420,7 +420,7 @@ select#membership_project_id {
 	  margin-left: 0px;
 	  padding-left: 0px;
 	}
-	
+
   input[type=submit] {
   	float: right;
 	}
@@ -434,7 +434,7 @@ select#membership_project_id {
 	 width: 55px;
 	 display: inline-block;
   }
-  
+
   .roles .edit_role {
     display: none;
     position: absolute;
@@ -443,17 +443,17 @@ select#membership_project_id {
     padding: 5px 10px;
     margin-left: -35px;
   }
-  
+
   .roles .edit_role label {
     line-height: 18.5px !important;
     width: auto !important;
   }
-  
+
   .controller-friendships ul {
     padding-left: 0;
     margin-left: 0;
   }
-  
+
 	.controller-projects.action-show #subprojects {
   	margin-top: 10px;
   	font-size: 16px;
@@ -462,13 +462,13 @@ select#membership_project_id {
 	.controller-users.action-show h4 {
 	 margin-bottom: 2px;
 	}
-	
+
 	.controller-users.action-show dl {
     margin-top: 2px;
 	}
-			
+
 /* /* !---------- Filter ------------ */
-	
+
 .filter label, .add-filter label{
   display: inline-block;
   width: auto;
@@ -603,7 +603,7 @@ select#values_project_id_1 {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   -khtml-border-radius: 3px;
-  border-radius: 3px;  
+  border-radius: 3px;
   border: 1px solid #e3e2e2;
   margin-top: 0px;
   text-align: right;
@@ -721,8 +721,8 @@ div .add_attachment a:hover {
 
 
 #sitespecivic .status {
-  float:right; 
-  padding-right:10px; 
+  float:right;
+  padding-right:10px;
   margin-top: 5px;
   font-style: italic;
 }
@@ -918,7 +918,7 @@ fieldset .attachments {
 }
 
 .attachement {
-  padding: 2px 0;  
+  padding: 2px 0;
 }
 
 .attachement:hover .options {
@@ -978,7 +978,7 @@ fieldset .attachments {
 .breadcrumb li {
   background: url('/images/breadcrumb_arrow_right.png') right center no-repeat;;
   float: left;
-  padding-right: 16px; 
+  padding-right: 16px;
 }
 
 .breadcrumb li.last_element {background: none;}
@@ -1109,7 +1109,7 @@ ul.bc_submenu li {
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=750)";
   filter: alpha(opacity=750);
   -khtml-opacity: 0.75;
-  
+
 }
 
 #filter {
@@ -1127,7 +1127,7 @@ ul.bc_submenu li {
   -moz-border-radius: 0 5px 5px 5px;
   -webkit-border-radius: 0 5px 5px 5px;
   -khtml-border-radius: 0 5px 5px 5px;
-  border-radius: 0 5px 5px 5px;  
+  border-radius: 0 5px 5px 5px;
   margin-top:-17px;
   border: 0px solid #F0F0F0;
   margin-top: 5px !important;
@@ -1163,10 +1163,10 @@ ul.bc_submenu li {
 
 #change_avatar {
   position:absolute;
-  top:150px;
+  top:420px;
   left:50%;
-  width:500px; 
-  height:400px; 
+  width:500px;
+  height:400px;
   z-index:1000;
   margin-left: -225px;
 }
@@ -1188,9 +1188,9 @@ ul.bc_submenu li {
   margin-top: 280px;
 }
 #avatar_preview {
-  margin-top: 10px; 
-  width:180px; 
-  height:180px; 
+  margin-top: 10px;
+  width:180px;
+  height:180px;
   overflow:hidden;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
@@ -1205,7 +1205,7 @@ ul.bc_submenu li {
 }
 
 #main fieldset .innerInfo.open {
-  
+
 }
 
 #main fieldset .tools {
@@ -1221,7 +1221,7 @@ ul.bc_submenu li {
   transition-delay: .5s;
   -moz-transition-delay: .5s;
   -webkit-transition-delay: .5s;
-  -o-transition-delay: .5s;  
+  -o-transition-delay: .5s;
   background-color: #EAEAEA;
   -moz-border-radius: 0 5px 5px 0px;
   -webkit-border-radius: 0 5px 5px 0px;
@@ -1234,7 +1234,7 @@ ul.bc_submenu li {
 }
 
 #main fieldset.has_collapsed:hover {
-  background: #F5F5F5;  
+  background: #F5F5F5;
 }
 
 #main fieldset.collapsed:hover .tools, #main fieldset.has_collapsed:hover .tools, #main fieldset.collapsed.selected .tools, #main fieldset.has_collapsed.selected .tools {
