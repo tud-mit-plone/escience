@@ -124,7 +124,7 @@ end
 
 gem "thin"
 gem "SyslogLogger"  # in production mode log to syslog
-gem "acts-as-taggable-on"
+gem "acts-as-taggable-on", '3.5.0'
 #piwik analytics
 gem 'piwik_analytics', '~> 1.0.0'
 #gem 'turbolinks'
