@@ -22,7 +22,7 @@ module MyHelper
   # The given collection may be a subset of the whole project tree
   # (eg. some intermediate nodes are private and can not be seen)
   def render_project_hierarchy
-	projects = Project.visible.find(:all, :order => 'lft')
+  projects = Project.visible.find(:all, :order => 'lft')
     s = ''
     if projects.any?
       ancestors = []
@@ -50,32 +50,13 @@ module MyHelper
     end
     s.html_safe
   end
-  
+
   def extract_block_name(block)
     return [block.split('_').first, block.split('_').length > 1 ? block.split('_').last : nil]
   end
 
-  def render_dash_block_image(dash_url,attachment_id)
-    
-    s =  "<fieldset style=\"overflow: hidden; height: 145px; width: 180px;\">"
-    s += "<legend style=\"font-size:13px;\">#{dash_url.to_s.length > 26 ? dash_url.truncate(26) : dash_url}</legend><p>"
-  
-    if /^(http:\/\/|https:\/\/)/.match(dash_url).nil? 
-      require 'erb'
-      dash_url = "http://#{dash_url}"
-      #dash_url = ::ERB::Util.url_encode("http://#{dash_url}")
-    else
-      #dash_url = ::ERB::Util.url_encode(dash_url)
-    end
-    s += link_to(dash_url) do 
-               image_tag url_for(:controller => 'attachments', :action => 'show', :id => attachment_id), :width => '180' 
-             end
-    s += "</p></fieldset>"
-    return s.html_safe
-  end
-
   def render_usermessage_inbox
-  	authors = UserMessage.get_names_of_sender
+    authors = UserMessage.get_names_of_sender
     s = ''
     if authors.any?
       s << "<ul class='authors'>\n"
@@ -88,5 +69,5 @@ module MyHelper
     end
     s.html_safe
   end
-  
+
 end
