@@ -81,7 +81,7 @@ end
 =end
 
 group :production do
-  gem "mysql2"
+  gem "mysql2", "~> 0.3.10"
 end
 
 group :development do
