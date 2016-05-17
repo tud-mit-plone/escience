@@ -34,8 +34,7 @@
 /tmp/sockets/*
 /tmp/test/*
 /tmp/thumbnails/*
-/vendor/cache
-/vendor/rails
+/vendor/
 *.rbc
 *.*DS_Store
 *._*
@@ -53,3 +52,5 @@ plugins/redmine_reddrop/
 /test/*/coverage
 /.byebug_history
 *.kdev4
+/Passengerfile.json
+

@@ -82,6 +82,7 @@ end
 
 group :production do
   gem "mysql2", "~> 0.3.10"
+  gem "passenger"
 end
 
 group :development do
