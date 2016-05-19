@@ -1,8 +1,13 @@
+Dir::foreach(File.join(File.dirname(__FILE__), 'lib')) do |file|
+  next if /\.{1,2}/ =~ file
+  next unless File.exist?(File.join(File.dirname(__FILE__), 'lib',file,"init.rb"))
+  p "shibboleth_login requires #{File.join(File.dirname(__FILE__), 'lib',file,"init.rb")}"
+  require File.join(File.dirname(__FILE__), 'lib',file,"init.rb")
+end
+
 Redmine::Plugin.register :shibboleth_login do
   name 'Shibboleth Login plugin'
-  author 'Author name'
-  description 'This is a plugin for Redmine'
+  author 'Sebastian Gottfried'
+  description 'Integrates authentication via a Shibboleth SP'
   version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
 end
