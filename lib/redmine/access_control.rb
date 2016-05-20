@@ -69,16 +69,6 @@ module Redmine
         return @available_project_modules
       end
 
-      def available_private_project_modules
-        project_modules ||= @permissions.collect(&:project_module).uniq.compact
-        private_modules = %w(issue_tracking time_tracking documents files wiki repository gantt user_calendar reddrop album)
-        @available_private_project_modules ||= []
-        project_modules.each do |m|
-          @available_private_project_modules << m if private_modules.include?(m.to_s)
-        end
-        @available_private_project_modules.uniq.compact
-      end
-
       def modules_permissions(modules)
         @permissions.select {|p| p.project_module.nil? || modules.include?(p.project_module.to_s)}
       end
@@ -87,7 +77,7 @@ module Redmine
     class Mapper
       def initialize
         @project_module = nil
-        @user_module = nil 
+        @user_module = nil
       end
 
       def permission(name, hash, options={})
@@ -101,11 +91,11 @@ module Redmine
         yield self
         @project_module = nil
       end
-      
+
       def user_module(name, options={})
-        @user_module = name 
+        @user_module = name
         yield self
-        @user_module = nil 
+        @user_module = nil
       end
 
       def mapped_permissions

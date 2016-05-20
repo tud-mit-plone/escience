@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
   has_many :repositories, :dependent => :destroy
   has_many :changesets, :through => :repository
   has_one :wiki, :dependent => :destroy
- 
+
   # Custom field for the project issues
   has_and_belongs_to_many :issue_custom_fields,
                           :class_name => 'IssueCustomField',
@@ -89,7 +89,7 @@ class Project < ActiveRecord::Base
   scope :status, lambda {|arg| arg.blank? ? {} : {:conditions => {:status => arg.to_i}} }
   scope :all_public, { :conditions => { :is_public => true } }
   scope :visible, lambda {|*args| {:conditions => Project.visible_condition(args.shift || User.current, *args) }}
-  scope :allowed_to, lambda {|*args| 
+  scope :allowed_to, lambda {|*args|
     user = User.current
     permission = nil
     if args.first.is_a?(Symbol)
@@ -138,23 +138,22 @@ class Project < ActiveRecord::Base
   # returns latest created projects
   # non public projects will be returned only if user is a member of those
   def self.latest(user=nil, count=5)
-    visible(user).find(:all, :limit => count, :order => "created_on DESC")	
-  end	
+    visible(user).find(:all, :limit => count, :order => "created_on DESC")
+  end
 
   def self.own(user=User.current, order='name DESC')
     visible(user).find(:all, :conditions => ["(creator = #{user.id})"], :order => order)
   end
 
   def self.group_view(user=User.current, order='name DESC')
-    return visible(user).find_by_sql(["Select DISTINCT p.* 
-                                                     FROM projects p, 
-                                                      (Select p.id, p.name, m.user_id,count(m.project_id) as members 
-                                                                                FROM projects p, members m 
+    return visible(user).find_by_sql(["Select DISTINCT p.*
+                                                     FROM projects p,
+                                                      (Select p.id, p.name, m.user_id,count(m.project_id) as members
+                                                                                FROM projects p, members m
                                                                                 WHERE m.project_id = p.id group by m.project_id having count(m.project_id) > 1) as temp,
-                                                      members m 
-                                                      WHERE temp.id = p.id and p.id = m.project_id 
+                                                      members m
+                                                      WHERE temp.id = p.id and p.id = m.project_id
                                                         AND (m.user_id = ? or p.creator = ?)
-                                                        AND (p.is_private_project is NULL or p.is_private_project <> 't')
                                                       ORDER BY ?",
                                   "#{user.id}","#{user.id}", "#{order}"])
   end
@@ -186,7 +185,6 @@ class Project < ActiveRecord::Base
   # * :member => limit the condition to the user projects
   def self.allowed_to_condition(user, permission, options={})
     base_statement = "#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"
-    base_statement << " AND (#{Project.table_name}.is_private_project!=#{connection.quoted_true} OR #{Project.table_name}.is_private_project IS NULL)"
     if perm = Redmine::AccessControl.permission(permission)
       unless perm.project_module.nil?
         # If the permission belongs to a project module, make sure the module is enabled
@@ -373,7 +371,7 @@ class Project < ActiveRecord::Base
       else
         p1 = Project.find_by_id(p)
         p1 = Project.find(p) unless p1
-        p = p1  
+        p = p1
         return false unless p
       end
     end

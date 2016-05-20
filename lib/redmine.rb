@@ -222,7 +222,7 @@ Redmine::MenuManager.map :project_menu do |menu|
               :if => Proc.new { |p| p.wiki && !p.wiki.new_record? }
   menu.push :boards, { :controller => 'boards', :action => 'index', :id => nil }, :html => {:class => "icon icon-group"}, :param => :project_id,
               :if => Proc.new { |p| p.boards.any? }, :caption => :label_board_plural
-  menu.push :files, { :controller => 'files', :action => 'index' }, :html => {:class => "icon icon-folder-open-alt"}, :caption => Proc.new { |p| (p.nil? || p.is_private_project) ? :label_my_file_plural : :label_file_plural }, :param => :project_id
+  menu.push :files, { :controller => 'files', :action => 'index' }, :html => {:class => "icon icon-folder-open-alt"}, :caption => :label_file_plural, :param => :project_id
   menu.push :repository, { :controller => 'repositories', :action => 'show', :repository_id => nil, :path => nil, :rev => nil }, :html => {:class => "icon icon-check"},
               :if => Proc.new { |p| p.repository && !p.repository.new_record? }
   menu.push :settings, { :controller => 'projects', :action => 'settings' }, :html => {:class => "icon icon-cog"}, :last => true

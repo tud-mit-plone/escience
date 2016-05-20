@@ -11,16 +11,9 @@
                 <% menu_items_for(:private_menu).each do |node| %>
                   <%= render_menu_node(node) %>
                 <% end %>
-              <%menu_items_for(:project_menu, User.current.private_project).each do |node| %>
-                <% unless ((node.name<=>:overview)==0 || (node.name<=>:settings)==0 || (node.name<=>:issues)==0) %>
-                  <% node = node.clone %>
-                  <% node.setCaptionPrefix("my") %>
-                  <%= render_menu_node(node, User.current.private_project) %>
-                <%end%>
-              <%end %>
               </ul>
             <%= call_hook :view_layouts_base_sidebar %>
-            <% if (!@project.nil? && @project != User.current.private_project) %>
+            <% if (!@project.nil?) %>
               <div class="splitter"><%= l :label_projectspec %></div>
               <ul>
               <%menu_items_for(:project_menu, @project).each do |node|%>

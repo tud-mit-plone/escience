@@ -97,7 +97,6 @@ class User < Principal
 
   validates_presence_of :login, :firstname, :lastname, :mail, :if => Proc.new { |user| !user.is_a?(AnonymousUser) }
   validates_uniqueness_of :login, :if => Proc.new { |user| user.login_changed? && user.login.present? }, :case_sensitive => false
-  validates_uniqueness_of :mail, :if => Proc.new { |user| !user.mail.blank? }, :case_sensitive => false
   # Login must contain lettres, numbers, underscores only
   validates_format_of :login, :with => /^[a-z0-9_\-@\.]*$/i
   validates_length_of :login, :maximum => LOGIN_LENGTH_LIMIT
@@ -112,7 +111,6 @@ class User < Principal
 
   before_create  :set_mail_notification
   before_save    :update_hashed_password
-  before_save    :create_project_for_user
   before_destroy :remove_references_before_destroy
 
   has_many :user_messages #User.current.user_messages --> sent
@@ -265,21 +263,6 @@ class User < Principal
 
   def get_project_identifier
     return project_name
-  end
-
-  def create_project_for_user
-    if self.private_project.nil?
-      project = Project.new
-      project.creator = self.id
-      project.name = self.name
-      identifier = self.login.gsub('.','_').gsub('@', '_')
-      project.identifier = identifier
-      project.is_public = false
-      project.status = 1
-      m = Member.new(:user => self, :roles => [Role.owner], :project => project)
-      project.members << m
-      self.private_project = project
-    end
   end
 
   def activate!
