@@ -5,8 +5,8 @@
 <div class="splitcontentleft">
 <fieldset class="box tabular">
   <legend><%=l(:label_information_plural)%></legend>
-  <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
-  <%= f.select :title, title_options_for_select, :required => true %><br />
+  <%= f.select :salutation, gender_options_for_select %><span class="distanceholder"></span>
+  <%= f.select :title, title_options_for_select %><br />
   <p><%= f.text_field :mail, :required => true, :onblur => "$('user_login').value = $('user_mail').value;" %></p>
   <p><%= f.hidden_field :login, :size => 25, :label => "Login"  %></p>
   <p><%= f.text_field :firstname, :required => true %><span class="distanceholder"></span><%= f.text_field :lastname, :required => true %></p>
