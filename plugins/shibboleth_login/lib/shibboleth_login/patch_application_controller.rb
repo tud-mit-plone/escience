@@ -15,18 +15,21 @@ module ShibbolethLoginExtends
           unless uid.nil?
             user = User.active.find_by_login(uid) rescue nil
             if user.nil?
+              gender_map = {
+                "1" => 'male',
+                "2" => 'female',
+              }
               user_data = {
                 :firstname => request.headers["Cn"],
                 :lastname => request.headers["Sn"],
                 :mail => request.headers["email"],
-                :confirm => true
-                # FIXME title
+                :confirm => true,
+                :salutation => gender_map[request.headers["gender"]] || "",
               }
               user = User.new(user_data)
               user.login = uid
               user.activate!
               user.save!
-              byebug
               user.reload
             end
           end
