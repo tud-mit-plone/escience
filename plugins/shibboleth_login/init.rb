@@ -10,4 +10,7 @@ Redmine::Plugin.register :shibboleth_login do
   author 'Sebastian Gottfried'
   description 'Integrates authentication via a Shibboleth SP'
   version '0.0.1'
+  settings(:default => {
+    "enabled" => false,
+  }, :partial => 'settings/shibboleth_login_settings')
 end
