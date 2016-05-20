@@ -2,25 +2,16 @@
   <fieldset>
     <legend><%= l(:text_select_project_modules) %></legend>
 
-  <%if @project.is_private_project == false || @project.is_private_project.nil? %>    
-      <% Redmine::AccessControl.available_project_modules.each do |m| %>
-      <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
-       <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
-      <% end %>
-  <%else%>
-    <% Redmine::AccessControl.available_private_project_modules.each do |m| %>
-        <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
-         <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
-        <% end %>
-  <% end %>
-   <div class="clear"></div>
+    <% Redmine::AccessControl.available_project_modules.each do |m| %>
+    <div style="float:left; width:230px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
+      <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
+    <% end %>
+    <div class="clear"></div>
     <p style="padding-top:10px"><%= check_all_links 'modules-form' %></p>
     <%= hidden_field_tag 'hidden_submit', '' %>
-    <% unless @project.is_private_project %>
     <div class="btn-group" style="float:right">
       <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#modules-form').submit();" %>
     </div>
-    <% end %>
     <div class="clear"></div>
   </fieldset>
 </div>

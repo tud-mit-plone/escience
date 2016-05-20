@@ -18,7 +18,7 @@
     <%= hidden_field_tag 'section_hash', @section_hash %>
   <% end %>
   <%= error_messages_for 'content' %>
-  
+
   <div class="box tabular">
   <%#= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25,:class => 'wiki-edit', :accesskey => accesskey(:edit) %>
   <%#= wikitoolbar_for 'content_text' %>
@@ -35,10 +35,8 @@
       </p>
     <% end %>
   <% end %>
-  
-  <% unless @project == User.current.private_project %>
+
   <p><label><%= l(:field_comments) %></label><%= f.text_area :comments, :rows => 3 %></p>
-  <% end %>
   <p>
     <label>
       <%=l(:label_attachment_plural)%>
@@ -52,7 +50,7 @@
     <%= link_to l(:button_cancel), :back, :class => 'btn' %>
     <%= link_to l(:button_save), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#wiki_form').submit();" %>
   </div>
-  
+
   <%#= submit_tag l(:button_save) %>
   <%#= preview_link({:controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title }, 'wiki_form') %>
 <% end %>
