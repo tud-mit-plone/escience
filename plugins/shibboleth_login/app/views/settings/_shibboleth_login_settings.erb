@@ -1,4 +1,13 @@
+<p>
 <label>
 <%= check_box_tag 'settings[enabled]', 'true', settings['enabled'] %>
 <%= t :enabled, scope: 'settings' %>
 </label>
+</p>
+
+<p>
+<label>
+<%= t :shibboleth_path, scope: 'settings' %><br>
+<%= text_field_tag 'settings[shibboleth_path]', settings['shibboleth_path'] %>
+</label>
+</p>

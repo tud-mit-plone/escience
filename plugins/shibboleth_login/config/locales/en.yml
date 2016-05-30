@@ -2,3 +2,4 @@
 en:
   settings:
     enabled: "Enable Shibboleth authentication"
+    shibboleth_path: "Path:"

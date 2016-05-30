@@ -12,5 +12,6 @@ Redmine::Plugin.register :shibboleth_login do
   version '0.0.1'
   settings(:default => {
     "enabled" => false,
+    "shibboleth_path" => '/Shibboleth.sso'
   }, :partial => 'settings/shibboleth_login_settings')
 end
