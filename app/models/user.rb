@@ -544,9 +544,6 @@ class User < Principal
     elsif options[:global]
       # Admin users are always authorized
       return true if admin?
-
-      # authorize if user has at least one role that has this permission
-      roles = memberships.collect {|m| m.roles}.flatten.uniq
       roles << (self.logged? ? Role.non_member : Role.anonymous)
       roles.any? {|role|
         role.allowed_to?(action) &&
