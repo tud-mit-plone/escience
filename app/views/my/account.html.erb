@@ -25,7 +25,7 @@
     <%= avatar(@user, :size => "180") %>
     </div>
   </div>
-  <%= f.select :salutation, gender_options_for_select, :required => true %><span class="distanceholder"></span>
+  <%= f.select :salutation, gender_options_for_select %><span class="distanceholder"></span>
   <%= f.select :title, title_options_for_select, :required => true %><br />
   <%= f.text_field :mail, :required => true, :style => "width:437px;" %><br />
   <%= f.text_field :firstname, :required => true %><span class="distanceholder"></span>

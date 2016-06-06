@@ -231,6 +231,7 @@ en:
   field_salutation_vals:
     male: Mr.
     female: Mrs.
+    '': None
   field_title: Title
   field_title_vals:
     bachelor: B.A.

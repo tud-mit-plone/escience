@@ -247,6 +247,7 @@ de:
   field_salutation_vals:
     male: Herr
     female: Frau
+    '': Keine
   field_title: Titel
   field_title_vals:
     bachelor: B.A.
