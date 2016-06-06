@@ -25,6 +25,7 @@ module ShibbolethLoginExtends
             }
             user = User.new(user_data)
             user.login = uid
+            user.password = SecureRandom.hex(16)
             user.activate!
             user.save!
             user.reload
