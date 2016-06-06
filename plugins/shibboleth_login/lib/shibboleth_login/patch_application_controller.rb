@@ -19,7 +19,7 @@ module ShibbolethLoginExtends
             user_data = {
               :firstname => request.headers["Cn"],
               :lastname => request.headers["Sn"],
-              :mail => request.headers["email"],
+              :mail => request.headers["mail"],
               :confirm => true,
               :salutation => gender_map[request.headers["gender"]] || "",
             }
