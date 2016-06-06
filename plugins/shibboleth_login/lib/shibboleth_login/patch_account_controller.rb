@@ -15,7 +15,7 @@ module ShibbolethLoginExtends
           return logout_without_shibboleth
         end
         return_to = Rack::Utils.escape(home_url)
-        redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Logout?target=#{return_to}"
+        redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Logout?return=#{return_to}"
       end
       def register_with_shibboleth
         unless shibboleth_enabled?
