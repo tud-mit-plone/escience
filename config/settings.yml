@@ -165,7 +165,7 @@ display_subprojects_issues:
 issue_done_ratio:
   default: 'issue_field'
 default_projects_public:
-  default: 1
+  default: 0
 default_projects_modules:
   serialized: true
   default:
