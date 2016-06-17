@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
 
   # Specific overidden Activities
   has_many :time_entry_activities
-  has_many :members, :include => [:principal, :roles], :conditions => "#{User.table_name}.type='User' AND #{User.table_name}.status=#{User::STATUS_ACTIVE}"
+  has_many :members, :include => [:principal, :roles]
   has_many :memberships, :class_name => 'Member'
   has_many :member_principals, :class_name => 'Member',
                                :include => :principal,
@@ -87,7 +87,6 @@ class Project < ActiveRecord::Base
   scope :has_module, lambda { |mod| { :conditions => ["#{Project.table_name}.id IN (SELECT em.project_id FROM #{EnabledModule.table_name} em WHERE em.name=?)", mod.to_s] } }
   scope :active, { :conditions => "#{Project.table_name}.status = #{STATUS_ACTIVE}"}
   scope :status, lambda {|arg| arg.blank? ? {} : {:conditions => {:status => arg.to_i}} }
-  scope :all_public, { :conditions => { :is_public => true } }
   scope :visible, lambda {|*args| {:conditions => Project.visible_condition(args.shift || User.current, *args) }}
   scope :allowed_to, lambda {|*args|
     user = User.current
@@ -108,6 +107,30 @@ class Project < ActiveRecord::Base
       {:conditions => ["LOWER(identifier) LIKE :p OR LOWER(name) LIKE :p", {:p => pattern}]}
     end
   }
+
+  scope :private, lambda {|user=User.current|
+                          # find all non-public projects the passed user is member of and he is the only member
+                          single_member_project_ids = Member.select('project_id').group('project_id').having('count(user_id) = 1')
+                          #joins(:members)
+                          joins("INNER JOIN (#{single_member_project_ids.to_sql}) AS m ON projects.id = m.project_id")
+                            .joins(:members)
+                            .where(is_public: false)
+                            .where("members.user_id = ?", user.id)
+                         }
+
+  scope :group, lambda {|user=User.current|
+                            # find all non-public projects the passed user is member of and he isn't the only member
+                            multiple_members_project_ids = Member.select('project_id').group('project_id').having('count(user_id) > 1')
+                            joins("INNER JOIN (#{multiple_members_project_ids.to_sql}) AS m ON projects.id = m.project_id")
+                              .joins(:members)
+                              .where(is_public: false)
+                              .where("members.user_id = ?", user.id)
+                           }
+
+  scope :community, lambda {|user=User.current|
+                          # public projects
+                          where(is_public: true)
+                        }
 
   def initialize(attributes=nil, *args)
     super
@@ -139,27 +162,6 @@ class Project < ActiveRecord::Base
   # non public projects will be returned only if user is a member of those
   def self.latest(user=nil, count=5)
     visible(user).find(:all, :limit => count, :order => "created_on DESC")
-  end
-
-  def self.own(user=User.current, order='name DESC')
-    visible(user).find(:all, :conditions => ["(creator = #{user.id})"], :order => order)
-  end
-
-  def self.group_view(user=User.current, order='name DESC')
-    return visible(user).find_by_sql(["Select DISTINCT p.*
-                                                     FROM projects p,
-                                                      (Select p.id, p.name, m.user_id,count(m.project_id) as members
-                                                                                FROM projects p, members m
-                                                                                WHERE m.project_id = p.id group by m.project_id having count(m.project_id) > 1) as temp,
-                                                      members m
-                                                      WHERE temp.id = p.id and p.id = m.project_id
-                                                        AND (m.user_id = ? or p.creator = ?)
-                                                      ORDER BY ?",
-                                  "#{user.id}","#{user.id}", "#{order}"])
-  end
-
-  def self.community_view(user=User.current, order='name DESC')
-    return (self.visible(user) - (self.own(user,order) + self.group_view(user,order)) + Project.where("is_public = 1")).uniq
   end
 
   # Returns true if the project is visible to +user+ or to the current user.

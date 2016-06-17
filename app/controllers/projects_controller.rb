@@ -49,10 +49,6 @@ class ProjectsController < ApplicationController
 
   # Lists visible projects
   def index
-          scope = Project
-          projects = scope.group(User.current)
-
-
     respond_to do |format|
       format.html {
         projects_html_format()
@@ -69,99 +65,57 @@ class ProjectsController < ApplicationController
       }
     end
   end
-  
+
   def projects_html_format()
-        scope = Project
-        
-        unless params[:closed]
-          scope = scope.active
-        end
-        
-        current_view = session[:current_view_of_eScience].to_s
+    scope = Project
 
-        if(!params[:sub].nil? && current_view == "0")
-          projects = scope.own(User.current)
-        elsif(!params[:sub].nil? && current_view == "1")
-          projects = scope.group_view(User.current)
-        else
-          projects = scope.community_view(User.current)
-        end
-        @name_dir = 'desc'
-        @newest_dir = 'desc'
-        if params[:order] == 'name'
-          @name_dir = params[:dir] == 'asc' ? 'desc' : 'asc'
-        elsif params[:order] == 'created_on'
-          @newest_dir = params[:dir] == 'desc' ? 'asc' : 'desc'
-        end
-        @projects = project_nested_list(projects)
-        return @projects
-  end
+    current_view = session[:current_view_of_eScience].to_s
 
-
-  def project_nested_list(projects)
-    if projects.any?
-      if params[:order] == 'created_on'
-        projects_with_activities = []
-        projects.each do |project|
-          @activity = Redmine::Activity::Fetcher.new(User.current, :project => project,
-                                                                   :with_subprojects => false,
-                                                                   :author => User.current)
-          events = @activity.events(nil, nil,{:limit=>1})
-          unless events.empty?
-            event = events.first
-            if (event[:updated_on]) && event[:updated_on].to_i > project.updated_on.to_i
-              projects_with_activities << {:last_activity => event.updated_on, :project => project}
-            elsif event[:created_on].to_i > project.updated_on.to_i
-              projects_with_activities << {:last_activity => event.created_on, :project => project}
-            else
-              projects_with_activities << {:last_activity => project.updated_on, :project => project}
-            end
-          else
-            projects_with_activities << {:last_activity => project.updated_on, :project => project}
-          end
-        end
-        if params[:dir].nil? || params[:dir] == 'desc'
-          projects_with_activities.sort! { |a, b| [b[:last_activity], b[:project]] <=> [a[:last_activity], a[:project]] }
-        else 
-          projects_with_activities.sort! { |a, b| [a[:last_activity], a[:project]] <=> [b[:last_activity], b[:project]] }
-        end
-        projects = projects_with_activities
-      end
-
-
-      parents = []
-      @show_parents = [] 
-      projects.each do |project_element|
-        project = projects_with_activities.nil? ? project_element : project_element[:project]
-        parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
-        unless params[:show_all]
-          projects_hierarchy = project.hierarchy()
-          start = 0
-          if projects_hierarchy.size() > 1
-            projects_hierarchy.slice!(0)
-            start = 1
-          end
-          parent = projects_hierarchy[0]
-          if !@show_parents.any? { |b| b[:id] == parent[:id]}
-            newest = projects_with_activities.nil? ? project_element.id : project_element[:project].id
-            last_activity = projects_with_activities.nil? ? project_element.updated_on : project_element[:last_activity]
-            @show_parents << {:id => parent.id, :project => parent, :date => last_activity, :start => start, :newest => newest}
-          end
-        else
-          @show_parents << {:id => project.id, :project => project, :date => project.updated_on, :start => 0, :newest => project.id}
-        end
-      end
-
-      if params[:order] == 'name' || params[:order].nil?
-        if params[:dir].nil? || params[:dir] == 'asc'
-          @show_parents.sort! { |a,b| a[:project].name.downcase <=> b[:project].name.downcase }
-        else
-          @show_parents.sort! { |a,b| b[:project].name.downcase <=> a[:project].name.downcase }
-        end
-      end
-
-      return parents
+    if(current_view == "0")
+      scope = scope.private(User.current)
+    elsif(current_view == "1")
+      scope = scope.group(User.current)
+    elsif(current_view == "2")
+      scope = scope.community(User.current)
     end
+
+    unless params[:closed]
+      scope = scope.active
+    end
+
+    inverse_dir = Proc.new {|dir| dir == :asc ? :desc : :asc }
+
+    sort_options = [
+      { :name => "updated_on", :default_dir => :desc, :icon => "number"},
+      { :name => "name", :default_dir => :asc, :icon => "letter" },
+    ]
+
+    @sort_options = sort_options.map do |o|
+      active = params[:order] == o[:name]
+      if params[:dir] == 'asc'
+        dir = :asc
+      elsif params[:dir] == 'desc'
+        dir = :desc
+      else
+        dir = o[:default_dir]
+      end
+      {
+        :name => o[:name],
+        :icon => o[:icon],
+        :active => active,
+        :dir => dir,
+        :link_dir => active ? inverse_dir.call(dir) : o[:default_dir],
+      }
+    end
+
+    @active_sort_option = @sort_options.find {|o| o[:active]} || @sort_options[0]
+    @active_sort_option[:active] = true
+
+    scope = scope.order("#{@active_sort_option[:name]} #{@active_sort_option[:dir].to_s.upcase}")
+    str = "#{@active_sort_option[:name]} #{@active_sort_option[:dir].to_s.upcase}"
+
+    @projects = scope.all()
+    return @projects
   end
 
   def new
@@ -189,7 +143,7 @@ class ProjectsController < ApplicationController
     params[:project][:description] = convertHtmlToWiki(params[:project][:description])
     @project.safe_attributes = params[:project]
     @project.creator = User.current.id
-    
+
     if Project.find_by_name(params[:project][:name]).nil? && !params[:project][:name].blank? && params[:project][:name].length<51 && validate_parent_id && @project.save!
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
       # Add current user as a project member if he is not admin
@@ -210,15 +164,15 @@ class ProjectsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { 
+        format.html {
           if params[:project][:name].length>50
             flash[:notice] = l(:error_projectname_tolong)
           elsif Project.find_by_name(params[:project][:name]).nil?
             flash[:notice] = l(:error_projectname_exists)
-          else 
+          else
             flash[:notice] = l(:error_projectname_exists)
-          end 
-          render :action => 'new' 
+          end
+          render :action => 'new'
         }
         format.api  { render_validation_errors(@project) }
       end
@@ -260,17 +214,17 @@ class ProjectsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     redirect_to :controller => 'admin', :action => 'projects'
   end
-	
+
   # Show @project
   def show
-    session[:selected_project] = @project.id 
+    session[:selected_project] = @project.id
 
     if params[:jump]
       # try to redirect to the requested menu item
       redirect_to_project_menu_item(@project, params[:jump]) && return
     end
 
-    @users_by_role = @project.users_by_role 
+    @users_by_role = @project.users_by_role
     @subprojects = @project.children.visible.all
     @topproject = @project.parent
     @news = @project.news.find(:all, :limit => 5, :include => [ :author, :project ], :order => "#{News.table_name}.created_on DESC")
@@ -297,8 +251,8 @@ class ProjectsController < ApplicationController
       end
     else
       @last_update = @project.updated_on
-    end 
-    
+    end
+
     @key = User.current.rss_key
 
     respond_to do |format|
@@ -348,11 +302,11 @@ class ProjectsController < ApplicationController
 #    p attachments[:errors]
     errors = (attachments[:files].empty? && attachments[:unsaved].empty?) ? [l(:no_file_given)] : []
     attachments[:errors].each do |error|
-      error.each do |k,v| 
+      error.each do |k,v|
         errors << l(k) + " #{v.first}" if (k != :base)
         errors << v.flatten if (k == :base)
       end
-    end 
+    end
     if errors.empty?
       respond_to do |format|
         format.js { render :partial => 'update_attachment'}
@@ -367,7 +321,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  
+
   def modules
     @project.enabled_module_names = params[:enabled_module_names]
     flash[:notice] = l(:notice_successful_update)
@@ -401,7 +355,7 @@ class ProjectsController < ApplicationController
 
   # Delete @project
   def destroy
-    session[:selected_project] = nil if session[:selected_project] == @project.id 
+    session[:selected_project] = nil if session[:selected_project] == @project.id
     @project_to_destroy = @project
     if api_request? || params[:confirm]
       @project_to_destroy.destroy

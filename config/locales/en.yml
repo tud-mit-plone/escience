@@ -943,7 +943,7 @@ en:
   label_example: Example
   label_display: Display
   label_sort: Sort
-  label_sort_by_update: by last change
+  label_sort_by_updated_on: by last change
   label_sort_by_name: by name
   label_ascending: Ascending
   label_descending: Descending

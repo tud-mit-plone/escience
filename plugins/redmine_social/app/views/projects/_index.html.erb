@@ -15,9 +15,6 @@
         <li><%= link_to(l(:label_overall_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub]}, :class => "icon icon-time") %></li>
     <% end %>
     </ul>
-  <% else %>
-    <% @user = session[:user].nil? ? User.new : session[:user] %>
-    <%= render :partial => 'welcome/sidebar' %>
   <% end%>
 <% end %>
 
@@ -25,15 +22,15 @@
 <div style="float:right; margin-top:-44px;">
   <div class="sortby" style="float:left;"><%= l(:label_sort) %></div>
   <div class="btn-group" style="float:left;">
-    <%= link_to(l(:label_sort_by_update), {:action => 'index', :order => 'created_on', :dir => @newest_dir, :sub => params[:sub]}, :class => "icon #{'active icon_number_'+@newest_dir if params[:order] == 'created_on'} btn") %>
-    <%= link_to(l(:label_sort_by_name), {:action => 'index', :order => 'name', :dir => @name_dir, :sub => params[:sub] }, :class => "icon btn #{'active icon_letter_'+@name_dir if params[:order].nil? || params[:order] == 'name'}") %>
+    <% @sort_options.each do |sort_option| %>
+      <%= link_to(l("label_sort_by_#{sort_option[:name]}"), {:action => 'index', :order => sort_option[:name], :dir => sort_option[:link_dir].to_s}, :class => "icon #{sort_option[:active] ? 'active' : ''} icon_#{sort_option[:icon]}_#{sort_option[:dir]} btn") %>
+    <% end %>
   </div>
 </div>
 <div class="clear"></div>
 <% unless @projects.nil? %>
-  <% @projects.each do |project_element| %>
-    <% project = project_element[:project] %>
-    <% date = project_element[:date] %>
+  <% @projects.each do |project| %>
+    <% date = project.updated_on %>
     <fieldset class="has_collapsed project">
       <div class="tools">
         <% if User.current.allowed_to?(:close_project, nil, :global => true) %>
@@ -46,11 +43,11 @@
             <%= link_to(content_tag("i","",:class=> "icon-cog #{@projects.count < 5 ? 'icon-2x' : 'icon-large'}"), {:controller => 'projects', :action => 'settings', :id => project.id, :sub => params[:sub]}) %>
           </div>
         <% end %>
-        <% visible_issues = false 
+        <% visible_issues = false
            Issue.find(:all, :conditions => "project_id = #{project.id}").each do |e|
-             if e.visible? 
+             if e.visible?
                visible_issues = true
-             end 
+             end
            end %>
         <% if User.current.allowed_to?(:view_issues, project) && visible_issues %>
           <div class="issues_project">
@@ -71,27 +68,17 @@
           </div>
           <div class="clear"></div>
           <%= content_tag('div', l(:label_last_modified) +": "+ format_time(date), :class => 'last_modified') %>
-  
+
           <div <%= 'class=has_subproject' if project.children().count > 0 %>>
-          <% project.children().each_with_index do |subproject, i| 
+          <% project.children().each_with_index do |subproject, i|
               if subproject.visible? %>
               <div>
               <%= link_to(subproject.name, {:controller => 'projects', :action => 'show', :id => subproject}, :class => "link_to_project") %>
-                <% if subproject.id==project_element[:newest] %>
-                <div class="newest_project">
-                  <table cellpadding="0" cellspacing="0"><tr><td valign="middle" class="arrow"><img src="/images/arrow-left.png" /></td><td class="text"><%= l(:label_newest_project) %></td></tr></table>
-                </div>
-                <% end %>
                 <div>
-                <% subproject.children().each_with_index do |subsubproject, i| 
+                <% subproject.children().each_with_index do |subsubproject, i|
                     if subsubproject.visible? %>
                     <div style='background-color: rgb(240, 240, 240);'>
                       <%= link_to(subsubproject.name, {:controller => 'projects', :action => 'show', :id => subsubproject}, :class => "link_to_project") %>
-                      <% if subsubproject.id==project_element[:newest] %>
-                        <div class="newest_project">
-                          <table cellpadding="0" cellspacing="0"><tr><td valign="middle" class="arrow"><img src="/images/arrow-left.png" /></td><td class="text"><%= l(:label_newest_project) %></td></tr></table>
-                        </div>
-                      <% end %>
                     </div>
                   <% end %>
                 <% end %>
@@ -100,7 +87,7 @@
             <% end %>
           <% end %>
           </div>
-          
+
         </div>
       <% end %>
       <% if User.current.logged? %>
@@ -127,7 +114,7 @@
     $(function() {addToolTip(".issues_project","'+l(:tooltip_project_message_issues)+'","left")});' if User.current.confirm %>
   <%= javascript_tag '
     $(document).ready(function() {
-      $(".project").droppable({ 
+      $(".project").droppable({
          accept: ".draggable",
          snap: true,
          drop: function(event, ui) {

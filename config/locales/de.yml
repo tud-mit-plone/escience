@@ -910,7 +910,7 @@ de:
   label_example: Beispiel
   label_display: Anzeige
   label_sort: Sortierung
-  label_sort_by_update: nach letzter Änderung
+  label_sort_by_updated_on: nach letzter Änderung
   label_sort_by_name: nach Name
   label_ascending: Aufsteigend
   label_descending: Absteigend
