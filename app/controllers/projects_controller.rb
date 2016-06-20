@@ -112,7 +112,6 @@ class ProjectsController < ApplicationController
     @active_sort_option[:active] = true
 
     scope = scope.order("#{@active_sort_option[:name]} #{@active_sort_option[:dir].to_s.upcase}")
-    str = "#{@active_sort_option[:name]} #{@active_sort_option[:dir].to_s.upcase}"
 
     @projects = scope.all()
     return @projects
