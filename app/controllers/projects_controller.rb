@@ -72,11 +72,11 @@ class ProjectsController < ApplicationController
     current_view = session[:current_view_of_eScience].to_s
 
     if(current_view == "0")
-      scope = scope.private(User.current)
+      scope = scope.private_scope(User.current)
     elsif(current_view == "1")
-      scope = scope.group(User.current)
+      scope = scope.group_scope(User.current)
     elsif(current_view == "2")
-      scope = scope.community(User.current)
+      scope = scope.community_scope(User.current)
     end
 
     unless params[:closed]

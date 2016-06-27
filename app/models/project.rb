@@ -108,7 +108,8 @@ class Project < ActiveRecord::Base
     end
   }
 
-  scope :private, lambda {|user=User.current|
+  scope :private_scope, lambda {|user=nil|
+                          user = user or User.current
                           # find all non-public projects the passed user is member of and he is the only member
                           single_member_project_ids = Member.select('project_id').group('project_id').having('count(user_id) = 1')
                           #joins(:members)
@@ -118,7 +119,8 @@ class Project < ActiveRecord::Base
                             .where("members.user_id = ?", user.id)
                          }
 
-  scope :group, lambda {|user=User.current|
+  scope :group_scope, lambda {|user=nil|
+                            user = user or User.current
                             # find all non-public projects the passed user is member of and he isn't the only member
                             multiple_members_project_ids = Member.select('project_id').group('project_id').having('count(user_id) > 1')
                             joins("INNER JOIN (#{multiple_members_project_ids.to_sql}) AS m ON projects.id = m.project_id")
@@ -127,7 +129,8 @@ class Project < ActiveRecord::Base
                               .where("members.user_id = ?", user.id)
                            }
 
-  scope :community, lambda {|user=User.current|
+  scope :community_scope, lambda {|user=nil|
+                          user = user or User.current
                           # public projects
                           where(is_public: true)
                         }
