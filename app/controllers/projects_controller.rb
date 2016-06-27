@@ -145,12 +145,9 @@ class ProjectsController < ApplicationController
 
     if Project.find_by_name(params[:project][:name]).nil? && !params[:project][:name].blank? && params[:project][:name].length<51 && validate_parent_id && @project.save!
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
-      # Add current user as a project member if he is not admin
-      unless User.current.admin?
-        r = Role.givable.find_by_id(Setting.new_project_user_role_id.to_i) || Role.givable.first
-        m = Member.new(:user => User.current, :roles => [r])
-        @project.members << m
-      end
+      # Add current user as a project member
+      @project.members << [Member.new(:user => User.current, :roles => [Role.owner])]
+      @project.save!
       respond_to do |format|
         format.html {
           flash[:notice] = l(:notice_successful_create)

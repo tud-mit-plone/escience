@@ -179,10 +179,6 @@ default_projects_modules:
   - boards
   - calendar
   - gantt
-# Role given to a non-admin user who creates a project
-new_project_user_role_id:
-  format: int
-  default: ''
 sequential_project_identifiers:
   default: 0
 # encodings used to convert repository files content to UTF-8

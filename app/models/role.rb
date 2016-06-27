@@ -16,23 +16,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Role < ActiveRecord::Base
-  # Custom coder for the permissions attribute that should be an
-  # array of symbols. Rails 3 uses Psych which can be *unbelievably*
-  # slow on some platforms (eg. mingw32).
-  class PermissionsAttributeCoder
-    def self.load(str)
-      str.to_s.scan(/:([a-z0-9_]+)/).flatten.map(&:to_sym)
-    end
-
-    def self.dump(value)
-      YAML.dump(value)
-    end
-  end
-
   # Built-in roles
   BUILTIN_NON_MEMBER = 1
   BUILTIN_ANONYMOUS  = 2
   BUILTIN_OWNER      = 3
+  BUILTIN_MEMBER     = 4
 
   ISSUES_VISIBILITY_OPTIONS = [
     ['all', :label_issues_visibility_all],
@@ -40,8 +28,10 @@ class Role < ActiveRecord::Base
     ['own', :label_issues_visibility_own]
   ]
 
+  serialize :permissions, Array
+
   scope :sorted, order("#{table_name}.builtin ASC, #{table_name}.position ASC")
-  scope :givable, order("#{table_name}.position ASC").where(:builtin => 0)
+  scope :givable, order("#{table_name}.position ASC").where("builtin != ?", BUILTIN_NON_MEMBER).where("builtin != ?", BUILTIN_ANONYMOUS)
   scope :builtin, lambda { |*args|
     compare = (args.first == true ? 'not' : '')
     where("#{compare} builtin = 0")
@@ -58,7 +48,6 @@ class Role < ActiveRecord::Base
   has_many :members, :through => :member_roles
   acts_as_list
 
-  serialize :permissions, ::Role::PermissionsAttributeCoder
   attr_protected :builtin
 
   validates_presence_of :name
@@ -68,6 +57,7 @@ class Role < ActiveRecord::Base
     :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
     :if => lambda {|role| role.respond_to?(:issues_visibility)}
 
+
   # Copies attributes from another role, arg can be an id or a Role
   def copy_from(arg, options={})
     return unless arg.present?
@@ -75,11 +65,6 @@ class Role < ActiveRecord::Base
     self.attributes = role.attributes.dup.except("id", "name", "position", "builtin", "permissions")
     self.permissions = role.permissions.dup
     self
-  end
-
-  def permissions=(perms)
-    perms = perms.collect {|p| p.to_sym unless p.blank? }.compact.uniq if perms
-    write_attribute(:permissions, perms)
   end
 
   def add_permission!(*perms)
@@ -123,9 +108,10 @@ class Role < ActiveRecord::Base
 
   def name
     case builtin
-    when 1; l(:label_role_non_member, :default => read_attribute(:name))
-    when 2; l(:label_role_anonymous,  :default => read_attribute(:name))
-    when 3; l(:label_role_owner,  :default => read_attribute(:name))
+    when Role::BUILTIN_NON_MEMBER; l(:label_role_non_member, :default => read_attribute(:name))
+    when Role::BUILTIN_ANONYMOUS; l(:label_role_anonymous,  :default => read_attribute(:name))
+    when Role::BUILTIN_OWNER; l(:label_role_owner,  :default => read_attribute(:name))
+    when Role::BUILTIN_MEMBER; l(:label_role_member,  :default => read_attribute(:name))
     else; read_attribute(:name)
     end
   end
@@ -146,7 +132,7 @@ class Role < ActiveRecord::Base
 
   # Return true if the role is a project member role
   def member?
-    !self.builtin?
+    self.builtin? != Role::BUILTIN_ANONYMOUS && self.builtin != Role::BUILTIN_NON_MEMBER
   end
 
   # Return true if role is allowed to do the specified action
@@ -190,6 +176,59 @@ class Role < ActiveRecord::Base
     find_or_create_system_role(BUILTIN_OWNER, 'Owner')
   end
 
+  def self.member
+    find_or_create_system_role(BUILTIN_MEMBER, 'Member')
+  end
+
+  def self.default_permissions(role)
+    permissions = case role
+    when BUILTIN_ANONYMOUS
+      []
+    when BUILTIN_NON_MEMBER
+      Role.perms(:add_project)
+    when BUILTIN_OWNER
+      Role.perms([:add_project, :manage_members, :add_subprojects, :view_calendar, :edit_project,
+                  :select_project_modules, :manage_versions, :group_invitations_create]) \
+      + Role.perms([:album_create]) \
+      + Role.perms([:manage_boards, :edit_messages, :delete_messages, :add_messages,
+                    :edit_own_messages, :delete_own_messages]) \
+      + Role.perms([:view_calendar]) \
+      + Role.perms([:manage_documents, :view_documents]) \
+      + Role.perms([:manage_doodles, :delete_doodles, :create_doodles, :answer_doodles, :view_doodles]) \
+      + Role.perms([:view_gantt]) \
+      + Role.perms([:manage_categories, :view_issues, :add_issues, :edit_issues, :manage_issue_relations,
+                    :manage_subtasks, :set_issues_private, :set_own_issues_private, :add_issue_notes,
+                    :edit_issue_notes, :edit_own_issue_notes, :move_issues, :delete_issues,
+                    :manage_public_queries, :save_queries, :view_issue_watchers, :add_issue_watchers,
+                    :delete_issue_watchers]) \
+      + Role.perms([:manage_news, :comment_news]) \
+      + Role.perms([:manage_repository, :browse_repository, :view_changesets, :commit_access,
+                    :manage_related_issues]) \
+      + Role.perms([:log_time, :view_time_entries, :edit_time_entries, :edit_own_time_entries,
+                    :manage_project_activities]) \
+      + Role.perms([:appointments_create, :appointments_add_watchers, :group_invitations_create]) \
+      + Role.perms([:manage_wiki, :rename_wiki_pages, :delete_wiki_pages, :view_wiki_pages,
+                    :export_wiki_pages, :view_wiki_edits, :edit_wiki_pages, :delete_wiki_pages_attachments,
+                    :protect_wiki_pages])
+    when BUILTIN_MEMBER
+      Role.perms([:view_calendar]) \
+      + Role.perms([:album_create]) \
+      + Role.perms([:add_messages, :edit_own_messages]) \
+      + Role.perms([:view_calendar]) \
+      + Role.perms([:manage_documents, :view_documents]) \
+      + Role.perms([:manage_doodles, :delete_doodles, :create_doodles, :answer_doodles, :view_doodles]) \
+      + Role.perms([:view_gantt]) \
+      + Role.perms([:view_issues, :add_issues, :edit_issues, :manage_issue_relations, :manage_subtasks,
+                    :add_issue_notes, :edit_own_issue_notes, :save_queries, :delete_issue_watchers]) \
+      + Role.perms([:comment_news]) \
+      + Role.perms([:browse_repository, :view_changesets, :commit_access, :manage_related_issues]) \
+      + Role.perms([:log_time, :view_time_entries, :edit_own_time_entries]) \
+      + Role.perms([:rename_wiki_pages, :delete_wiki_pages, :view_wiki_pages, :view_wiki_edits,
+                    :edit_wiki_pages, :delete_wiki_pages_attachments, :protect_wiki_pages])
+    end
+    return permissions.map {|p| p.name}
+  end
+
 private
 
   def allowed_permissions
@@ -208,11 +247,23 @@ private
   def self.find_or_create_system_role(builtin, name)
     role = where(:builtin => builtin).first
     if role.nil?
+      permissions = self.default_permissions(builtin)
       role = create(:name => name, :position => 0) do |r|
+        r.permissions = permissions
         r.builtin = builtin
       end
       raise "Unable to create the #{name} role." if role.new_record?
     end
     role
   end
+
+  def self.perms(what=nil)
+    if what.class == Symbol
+      return [Redmine::AccessControl.permission(what)]
+    elsif what.class == Array
+      return what.map {|name| Redmine::AccessControl.permission(name)}
+    end
+  end
+
+
 end
