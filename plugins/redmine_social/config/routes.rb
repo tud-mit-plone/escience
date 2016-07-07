@@ -17,15 +17,6 @@ RedmineApp::Application.routes.draw do
   match 'my/interest_search', :controller => 'my', :action => 'interest_search', :via => :get
   match 'my/skill_search', :controller => 'my', :action => 'skill_search', :via => :get
 
-  resources :projects do
-    resources :photos do
-      post 'add_comment', :action => :add_comment
-    end
-    resources :albums do
-     get 'show', :action => :show
-    end
-  end
-
   resources :users do
     member do
       get 'statistics'
@@ -50,24 +41,10 @@ RedmineApp::Application.routes.draw do
     resources :photos do
       get 'page/:page', :action => :index, :on => :collection
     end
-  resources :albums do
-	resources :photos do
-	  collection do
-	    post :swfupload
-	    get :slideshow
-	  end
-	end
-  end
   end
 
   controller :comments do
     post '/comments/create', :action => :create_general_comment, :as => 'create_general_comments'
-  end
-  resources :photos do
-    post 'add_comment', :action => :add_comment
-  end
-  resources :albums do
-    get 'show', :action => :show
   end
   resources :group_invitations, :except => [:show, :new, :edit, :update] do
       member do

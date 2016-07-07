@@ -52,11 +52,6 @@ Redmine::Plugin.register :redmine_social do
   menu :private_menu, :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}, :html => {:class => "icon icon-user"}
   menu :private_menu, :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}, :html => {:class => "icon icon-group"}
 
-  menu :project_menu, :albums, {:controller => 'albums', :action => 'index'}, :caption => :label_album_plural, :param => :project_id, :html => {:class => "icon icon-picture"}
-
-  project_module :album do
-    permission :album_create, {:albums => [:create,:index]}
-  end
 
   Redmine::AccessControl.map do |map|
     map.permission :group_invitations_create, :group_invitations => [:create], :require => :member

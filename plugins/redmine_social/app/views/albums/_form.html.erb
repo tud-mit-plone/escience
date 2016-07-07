@@ -1,9 +1,0 @@
-<%= f.text_field :title, :style => 'font-size:20px;', :size => 72 %><br/>
-<%= f.text_area :description, :size => "58x5", :class => "ckeditor" %>
-
-<%= hidden_field_tag 'hidden_submit', '' %>
-<div class="btn-group" style="float:right; margin:10px 5px;">
-  <%= link_to l(:button_cancel), {:controller => 'documents', :action => 'index', :id => @document}, :class => 'btn'  if @albums.any? %>
-  <%= link_to l(:create_album), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#new_album').submit();" %>
-  <%= link_to l(:create_and_add_photos), "", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#new_album').submit();" %>
-</div>
