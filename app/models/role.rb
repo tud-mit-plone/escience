@@ -189,7 +189,6 @@ class Role < ActiveRecord::Base
     when BUILTIN_OWNER
       Role.perms([:add_project, :manage_members, :add_subprojects, :view_calendar, :edit_project,
                   :select_project_modules, :manage_versions, :group_invitations_create]) \
-      + Role.perms([:album_create]) \
       + Role.perms([:manage_boards, :edit_messages, :delete_messages, :add_messages,
                     :edit_own_messages, :delete_own_messages]) \
       + Role.perms([:view_calendar]) \
@@ -202,8 +201,6 @@ class Role < ActiveRecord::Base
                     :manage_public_queries, :save_queries, :view_issue_watchers, :add_issue_watchers,
                     :delete_issue_watchers]) \
       + Role.perms([:manage_news, :comment_news]) \
-      + Role.perms([:manage_repository, :browse_repository, :view_changesets, :commit_access,
-                    :manage_related_issues]) \
       + Role.perms([:log_time, :view_time_entries, :edit_time_entries, :edit_own_time_entries,
                     :manage_project_activities]) \
       + Role.perms([:appointments_create, :appointments_add_watchers, :group_invitations_create]) \
@@ -212,7 +209,6 @@ class Role < ActiveRecord::Base
                     :protect_wiki_pages])
     when BUILTIN_MEMBER
       Role.perms([:view_calendar]) \
-      + Role.perms([:album_create]) \
       + Role.perms([:add_messages, :edit_own_messages]) \
       + Role.perms([:view_calendar]) \
       + Role.perms([:manage_documents, :view_documents]) \
@@ -221,7 +217,6 @@ class Role < ActiveRecord::Base
       + Role.perms([:view_issues, :add_issues, :edit_issues, :manage_issue_relations, :manage_subtasks,
                     :add_issue_notes, :edit_own_issue_notes, :save_queries, :delete_issue_watchers]) \
       + Role.perms([:comment_news]) \
-      + Role.perms([:browse_repository, :view_changesets, :commit_access, :manage_related_issues]) \
       + Role.perms([:log_time, :view_time_entries, :edit_own_time_entries]) \
       + Role.perms([:rename_wiki_pages, :delete_wiki_pages, :view_wiki_pages, :view_wiki_edits,
                     :edit_wiki_pages, :delete_wiki_pages_attachments, :protect_wiki_pages])
