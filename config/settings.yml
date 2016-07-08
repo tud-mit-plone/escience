@@ -170,7 +170,6 @@ default_projects_modules:
   serialized: true
   default:
   - issue_tracking
-  - time_tracking
   - news
   - documents
   - files
@@ -178,7 +177,7 @@ default_projects_modules:
   - repository
   - boards
   - calendar
-  - gantt
+  - doodles
 sequential_project_identifiers:
   default: 0
 # encodings used to convert repository files content to UTF-8
