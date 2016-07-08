@@ -1242,6 +1242,9 @@ de:
       default: "Code falsch eingeben."
       user: "Code falsch eingeben."
 
+  issue_categories:
+    task: Aufgabe
+
   tooltip_sidebar_organize: Verschaffen Sie sich einen Überblick über Ihr eScience (Ihre Projekte, Posteingang usw.).
   tooltip_sidebar_projects: Verwalten Sie Ihre Projekte, legen Sie neue an oder ändern Sie die Einstellungen.
   tooltip_sidebar_user_messages: Ihr Posteingang für interne Nachrichten auf der eScience-Plattform.

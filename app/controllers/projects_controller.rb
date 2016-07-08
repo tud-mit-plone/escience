@@ -147,6 +147,9 @@ class ProjectsController < ApplicationController
       @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
       # Add current user as a project member
       @project.members << [Member.new(:user => User.current, :roles => [Role.owner])]
+      @project.issue_categories << Setting.default_project_issue_categories.map do |name|
+        IssueCategory.new(:name => l(name, scope: [:issue_categories]))
+      end
       @project.save!
       respond_to do |format|
         format.html {
