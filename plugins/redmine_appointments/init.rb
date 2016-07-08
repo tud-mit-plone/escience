@@ -14,7 +14,5 @@ Redmine::Plugin.register :redmine_appointments do
   author_url 'https://escience.htwk-leipzig.de'
 
   activity_provider :appointments, :default => false, :class_name => ['Appointment']
-  project_module :user_calendar do 
-    permission :appointments_create, :calendars => :show_user_calendar
-  end
+  permission :appointments_create, :calendars => :show_user_calendar, :require => :loggedin
 end

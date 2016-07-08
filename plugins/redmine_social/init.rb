@@ -55,15 +55,11 @@ Redmine::Plugin.register :redmine_social do
 
   Redmine::AccessControl.map do |map|
     map.permission :group_invitations_create, :group_invitations => [:create], :require => :member
+    map.permission :view_calendar, {:calendar => [:show, :update]}, :read => true
+    map.permission :appointments_add_watchers, :appointments => :add_watchers
+    map.permission :group_invitations_create, :group_invitations => :create
   end
 
-  project_module :user_calendar do
-    permission :appointments_add_watchers, :appointments => :add_watchers
-    permission :group_invitations_create, :group_invitations => :create
-  end
-  user_module :user_clandar do
-    permission :view_calendar, {:calendar => [:show, :update]}, :read => true
-  end
   Redmine::Search.map do |search|
     search.register :users, :sort_function => 'sort', :limit_date_function => 'updated_on', :show_result_partial => 'users/show',
                              :show_result_partial_locals => Proc.new {|e|  {:user => e, :memberships => e.memberships}}
