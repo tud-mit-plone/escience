@@ -25,7 +25,7 @@ class Board < ActiveRecord::Base
   acts_as_list :scope => '(project_id = #{project_id} AND parent_id #{parent_id ? "= #{parent_id}" : "IS NULL"})'
   acts_as_watchable
 
-  validates_presence_of :name, :description
+  validates_presence_of :name
   validates_length_of :name, :maximum => 30
   validates_length_of :description, :maximum => 255
   validate :validate_board
