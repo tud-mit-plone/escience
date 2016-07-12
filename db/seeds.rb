@@ -12,13 +12,13 @@ Project.create :name => "eScience",
                :status => Project::STATUS_ACTIVE,
                :trackers => [default_tracker]
 
-IssueStatus.create :name => "Offen",
-                   :is_default => true,
-                   :is_closed => false
+status_open = IssueStatus.create :name => "Offen",
+                                :is_default => true,
+                                :is_closed => false
 
-IssueStatus.create :name => "Abgeschlossen",
-                   :is_default => false,
-                   :is_closed => true
+status_closed = IssueStatus.create :name => "Abgeschlossen",
+                                  :is_default => false,
+                                  :is_closed => true
 
 IssuePriority.create :name => "Niedrig",
                      :is_default => false,
@@ -31,3 +31,14 @@ IssuePriority.create :name => "Normal",
 IssuePriority.create :name => "Hoch",
                      :is_default => false,
                      :active => true
+
+[Role.member, Role.owner].each do |role|
+  WorkflowTransition.create :role => role,
+                            :tracker => default_tracker,
+                            :old_status => status_open,
+                            :new_status => status_closed
+  WorkflowTransition.create :role => role,
+                            :tracker => default_tracker,
+                            :old_status => status_closed,
+                            :new_status => status_open
+end
