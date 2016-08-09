@@ -54,23 +54,21 @@ class IssuesController < ApplicationController
   helper :gantt
 #  include ApplicationHelper
   include Redmine::Export::PDF
-  
+
   def index
+    # byebug
     unless params['id'].nil?
       @project = Project.find(params['id']);
     else
-      unless (params['sub'].nil? || !params['set_filter'].nil?) 
+      unless (params['sub'].nil? || !params['set_filter'].nil?)
         bufferProjectId = @project
-        unless session[:query].nil? 
+        unless session[:query].nil?
           session[:query][:project_id] = nil
         end
         @project = nil
-        params["f"] = !params['f'].nil? && !params['f'].include?('project_id') ? params['f'] : ["status_id", "project_id"]
-        params["f"][2] = "assigned_to_id" if params['show'] == 'new'
-        params["op"] = !params['op'].nil? && !params['op'][:project_id].nil? ? params['op'] : {"status_id"=>"o", "project_id"=>"="}
-        params['op'][:assigned_to_id] = '=' if params['show'] == 'new'
-        params["v"] = !params['v'].nil? && !params['v'][:project_id].nil? ? params['v'] : {"project_id"=>["mine"]}
-        params['v'][:assigned_to_id] = ["me"] if params['show'] == 'new'
+        params["f"] = !params['f'].nil? && !params['f'].include?('project_id') ? params['f'] : ["status_id", "assigned_to_id"]
+        params["op"] = !params['op'].nil? && !params['op'][:project_id].nil? ? params['op'] : {"status_id"=>"o", "assigned_to_id"=>"="}
+        params["v"] = !params['v'].nil? && !params['v'][:project_id].nil? ? params['v'] : {:assigned_to_id => ["me"] }
       end
     end
     params["c"] = ["project", "tracker", "status", "priority", "subject", "assigned_to", "updated_on"]
@@ -83,7 +81,7 @@ class IssuesController < ApplicationController
       @project = bufferProjectId
     end
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
-    sort_update(@query.sortable_columns)    
+    sort_update(@query.sortable_columns)
 
     if @query.valid?
       case params[:format]
@@ -111,10 +109,10 @@ class IssuesController < ApplicationController
                                 :conditions => ["(issues.parent_id IS NULL)"],
                                 :order => sort_clause,
                                 :offset => @offset,
-                                :limit => @limit) 
+                                :limit => @limit)
       end
       @issue_count_by_group = @query.issue_count_by_group
-      
+
       if !(params[:group_by].nil? || params[:group_by].empty?)
         @query.group_by = params[:group_by].to_sym
       else
@@ -126,8 +124,8 @@ class IssuesController < ApplicationController
       else
         @issues_by_group = { "" => @issues }
       end
-      
-      
+
+
       respond_to do |format|
         format.html { render :template => 'issues/index', :layout => !request.xhr? }
         format.api  {
@@ -151,7 +149,7 @@ class IssuesController < ApplicationController
   def show
     if session[:current_view_of_eScience] == "0"
       @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
-    else 
+    else
       @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
     end
     @journals.each_with_index {|j,i| j.indice = i+1}
@@ -245,9 +243,9 @@ class IssuesController < ApplicationController
           if params[:form] == 'new_with_decision'
             @projects = Project.own
             flash[:notice] = l(:notice_issue_error_create)+"<br>"+@issue.errors.full_messages * '<br>'
-            render :action => 'new_with_decision' 
+            render :action => 'new_with_decision'
           else
-            render :action => 'new' 
+            render :action => 'new'
           end
         }
         format.api  { render_validation_errors(@issue) }
@@ -273,7 +271,7 @@ class IssuesController < ApplicationController
       saved = false
     end
     return unless update_issue_from_params
-    
+
     begin
       saved = @issue.save_issue_with_child_records(params, @time_entry)
     rescue ActiveRecord::StaleObjectError
@@ -425,12 +423,12 @@ private
     else
      d = Date.strptime(date,::I18n.t("date.formats.default",{ :locale => User.current.language }))
     end
-    return d 
+    return d
   end
 
   def correct_time_format()
-    return if params.nil? || params[:issue].nil? 
-    
+    return if params.nil? || params[:issue].nil?
+
     unless params[:issue][:start_date].nil?
       params[:issue][:start_date] = formated_date_to_db(params[:issue][:start_date])
     end
@@ -462,7 +460,7 @@ private
 			end
 		end
   end
-  
+
   def find_issue
     # Issue.visible.find(...) can not be used to redirect user to the login form
     # if the issue actually exists but requires authentication
