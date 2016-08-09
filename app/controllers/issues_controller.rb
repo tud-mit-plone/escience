@@ -190,7 +190,7 @@ class IssuesController < ApplicationController
 
   def new_with_decision
     if session[:current_view_of_eScience] == "0"
-        @projects = Project.own
+        @projects = Project.private_scope.all
     else
     end
     unless params[:issue].nil?
@@ -224,7 +224,7 @@ class IssuesController < ApplicationController
           flash[:notice] = l(:notice_issue_successful_create, :id => "<a href='#{issue_path(@issue)}'>##{@issue.id}</a>")
           if params[:continue]
             if params[:form] == 'new_with_decision'
-              @projects = Project.own
+              @projects = Project.private_scope.all
               redirect_to({ :action => 'new_with_decision'})
             else
               redirect_to({ :action => 'new', :project_id => @issue.project, :issue => {:tracker_id => @issue.tracker, :parent_issue_id => @issue.parent_issue_id}.reject {|k,v| v.nil?} })
@@ -241,7 +241,7 @@ class IssuesController < ApplicationController
       respond_to do |format|
         format.html {
           if params[:form] == 'new_with_decision'
-            @projects = Project.own
+            @projects = Project.private_scope.all
             flash[:notice] = l(:notice_issue_error_create)+"<br>"+@issue.errors.full_messages * '<br>'
             render :action => 'new_with_decision'
           else

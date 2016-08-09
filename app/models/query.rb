@@ -275,9 +275,9 @@ class Query < ActiveRecord::Base
         project_values = []
         if User.current.logged? && User.current.memberships.any?
           project_values << ["<< #{l(:label_my_projects)} >>", "mine"]
-        end        
+        end
         project_values += all_projects_values
-        
+
         @available_filters["project_id"] = {
           :type => :list, :order => 1, :values => project_values
         } unless project_values.empty?
@@ -385,7 +385,7 @@ class Query < ActiveRecord::Base
 
   def all_projects
     if @view == "0"
-      @all_projects = Project.own
+      @all_projects = Project.private_scope.all
     else
       @all_projects ||= Project.visible.all
     end

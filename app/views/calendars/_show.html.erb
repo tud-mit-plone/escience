@@ -4,7 +4,7 @@
 <div style="float:right">
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'btn' %>
-<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.private_scope.count > 0 %>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'btn' %>
 <% end %>
 </div>
@@ -31,7 +31,7 @@
       <%#= submit_tag l(:button_apply) %>
     </div>
   </fieldset>
-  
+
   <div id="changeMonth">
     <div class="prev"><%= link_to_previous_month(@year, @month,:remote => true) %></div><div class="next"><%= link_to_next_month(@year, @month) %></div>
   </div>

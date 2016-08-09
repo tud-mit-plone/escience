@@ -13,7 +13,7 @@
 <div style="float:right">
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'btn' %>
-<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.own.count > 0 %>
+<% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.private_scope.count > 0 %>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new_with_decision'}, :param => :project_id, :class => 'btn' %>
 <% end %>
 </div>
@@ -76,13 +76,13 @@
   <% else %>
     <%= render :partial => 'issues/list', :locals => {:issues => @issues} %>
   <% end %>
-  
+
   <% other_formats_links do |f| %>
     <%= f.link_to 'Atom', :url => params.merge(:key => User.current.rss_key) %>
     <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
     <%= f.link_to 'PDF', :url => params %>
   <% end %>
-  
+
   <div id="csv-export-options" style="display:none;">
     <h3 class="title"><%= l(:label_export_options, :export_format => 'CSV') %></h3>
     <%= form_tag(params.merge({:format => 'csv',:page=>nil}), :method => :get, :id => 'csv-export-form') do %>
