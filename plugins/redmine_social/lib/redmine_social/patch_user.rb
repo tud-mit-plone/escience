@@ -88,8 +88,6 @@
 
           #photos
           has_many :photos, :order => "created_at desc", :dependent => :destroy
-          #albums
-          has_many :albums, :dependent => :destroy
           #avatar
           belongs_to  :avatar, :class_name => "Photo", :foreign_key => "avatar_id", :inverse_of => :user_as_avatar
           #friendship associations
