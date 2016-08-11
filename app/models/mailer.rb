@@ -297,6 +297,15 @@ class Mailer < ActionMailer::Base
       :subject => 'Redmine test'
   end
 
+  def inactive_user_warning(user)
+    set_language_if_valid(user.language)
+    @last_login = user.last_login_on.to_date
+    @cutoff_days = Setting.inactive_user_deletion_days.to_i
+    @cutoff_date = @last_login + @cutoff_days.days
+    mail :to => user.mail,
+      :subject => l(:mail_subject_inactive_user_warning, Setting.app_title)
+  end
+
   # Overrides default deliver! method to prevent from sending an email
   # with no recipient, cc or bcc
   def deliver!(mail = @mail)

@@ -723,6 +723,26 @@ class User < Principal
     Redmine::Utils.random_hex(16)
   end
 
+  def self.delete_inactive_users
+    cutoff_time = Setting.inactive_user_deletion_days.to_i.days.ago.midnight
+    users_to_delete = self.where(type: 'User').where("last_login_on < ?", cutoff_time)
+    users_to_delete.each do |user|
+      user.destroy
+    end
+    Project.delete_orphaned_projects
+  end
+
+  def self.warn_inactive_users_about_deletion
+    date_clauses = Setting.inactive_user_warning_days.split(',').map do |warning_days|
+      start = Setting.inactive_user_deletion_days.to_i.days.ago.midnight - warning_days.to_i.days
+      stop = start + 1.days
+      "(last_login_on BETWEEN '#{start.to_formatted_s(:db)}' AND '#{stop.to_formatted_s(:db)}')"
+    end
+    users = self.where(type: 'User').where(date_clauses.join(" OR "))
+    users.each do |user|
+      Mailer.inactive_user_warning(user).deliver
+    end
+  end
 end
 
 class AnonymousUser < User

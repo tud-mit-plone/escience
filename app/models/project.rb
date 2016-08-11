@@ -720,6 +720,18 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def self.delete_orphaned_projects()
+    orphaned_projects= Project.includes(:members)
+      .where( :members => { :project_id => nil } )
+      .where( :projects => { :is_public => false })
+    orphaned_projects.each do |project|
+      project.children do |child_project|
+        child_project.set_parent(nil)
+      end
+      project.destroy
+    end
+  end
+
   private
 
   # Copies wiki from +project+

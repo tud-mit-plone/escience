@@ -224,3 +224,8 @@ non_working_week_days:
   default:
   - '6'
   - '7'
+inactive_user_deletion_days:
+  format: int
+  default: 365
+inactive_user_warning_days:
+  default: "28,14,7"
