@@ -32,7 +32,7 @@ module ShibbolethLoginExtends
           # Shibboleth login is stateless, we have to cheat a bit: update
           # last login every 24 hours if the user is seen
           elsif user.updated_on < 1.day.ago
-            user.update(user_data)
+            user.update_attributes(user_data)
           end
           if user.last_login_on.nil? || user.last_login_on < 1.day.ago
             user.update_attribute(:last_login_on, Time.now)
