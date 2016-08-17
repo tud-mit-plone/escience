@@ -1755,4 +1755,17 @@ module ApplicationHelper
     elements
   end
 
+  def escience_scope_label
+    current_mode = session[:current_view_of_eScience].to_s.empty? ? '0' : session[:current_view_of_eScience].to_s
+    if current_mode.empty?
+      current_mode = '0'
+    end
+    map = {
+      '0' => l(:label_private),
+      '1' => l(:label_team),
+      '2' => l(:label_community),
+      }
+    map[current_mode]
+  end
+
 end
