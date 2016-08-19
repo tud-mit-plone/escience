@@ -1,7 +1,8 @@
 <div id="titleOfProject"><h1><%= link_to(h(@project.name)+' <i class="icon-beaker"></i>'.html_safe, :action => 'show', :id => @project.id).html_safe unless @project.nil?%></h1></div>
 
 <h2 style="float:left;"><%= @query.new_record? ? l(:label_calendar) : h(@query.name) %> (<%= month_name(@month)%> <%= @year%>)  <i class="icon-calendar"></i></h2>
-<div style="float:right">
+<div class="btn-group btn-group-right" >
+<%= link_to l(:label_appointment_new), params.merge(:new => 1), :class => 'btn' %>
 <% if User.current.allowed_to?({ :controller => 'issues', :action => 'new' }, @project)%>
   <%= link_to l(:label_issue_new), { :controller => 'issues', :action => 'new' }, :param => :project_id, :class => 'btn' %>
 <% elsif @project.nil? && session[:current_view_of_eScience] == "0" && Project.private_scope.count > 0 %>
@@ -10,24 +11,24 @@
 </div>
 <div class="clear"></div>
 
-<%= form_tag({:controller => 'calendars', :action => 'show', :project_id => @project},
-             :method => :get, :id => 'query_form') do %>
+<%= form_tag(params.merge(:project_id => @project),
+             :post => :get, :id => 'query_form') do %>
   <%= hidden_field_tag 'set_filter', '1' %>
-  <fieldset id="filters" class="collapsible">
+  <fieldset class="collapsable">
     <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
-    <div style="display: none;">
+    <div>
       <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
     </div>
-    <div class="selectors" style="display: none;">
+    <div class="selectors">
       <%= label_tag('month', l(:label_month)) %>
       <%= select_month(@month, :prefix => "month", :discard_type => true) %>
       <%= label_tag('year', l(:label_year)) %>
       <%= select_year(@year, :prefix => "year", :discard_type => true) %>
     </div>
-    <%= hidden_field_tag 'hidden_submit', '' %>
-    <div class="btn-group" style="display: none; float:right">
+    <%= hidden_field_tag 'hidden_submit_set_filter', '' %>
+    <div class="btn-group btn-group-right">
       <%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'btn' %>
-      <%= link_to l(:button_apply), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
+      <%= link_to l(:button_apply), "#", :class => 'btn', :onclick =>"$('#hidden_submit_set_filter').attr('name','commit');$('#query_form').submit();" %>
       <%#= submit_tag l(:button_apply) %>
     </div>
   </fieldset>

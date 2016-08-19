@@ -1,8 +1,8 @@
   <% unless @appointment.nil? %>
   <%= form_for(@appointment,:url=>{:controller => 'appointments',:action=>'create', :view => 'calendar'}, :remote => true, :html => {:id => 'issue-form', :multipart => true}) do |f| %>
 
-  <h2 style="margin-bottom:0px;"><%= l(:label_appointment_new) %></h2>
-  <div class="box" style="padding-top: 10px;">
+  <h2><%= l(:label_appointment_new) %></h2>
+  <div class="box">
     <fieldset class="tabular">
       <div id="all_attributes">
         <%= render :partial => 'appointments/form', :locals => { :f => f } %>
@@ -10,7 +10,7 @@
     </fieldset>
 
     <p><%#= render :partial => 'attachments/form', :locals => {:container => @appointment} %></p>
-    
+
     <fieldset>
       <% if @appointment.safe_attribute? 'watcher_user_ids' -%>
       <label><%= l(:label_issue_watchers) %></label><br />
@@ -20,21 +20,19 @@
         </span>
         <span class="search_for_watchers">
         <%= link_to l(:label_search_for_watchers),
-                    {:controller => 'watchers', :action => 'new', :project_id => 3},
-                    :remote => true,
-  				  :method => 'get' %>
+                      {:controller => 'watchers', :action => 'new', :project_id => 3},
+                      :remote => true,
+                      :method => 'get' %>
         </span>
         </p>
       <% end %>
     </fieldset>
   </div>
-  
-  <div class="btn-group" style="float:right">
+
+  <div class="btn-group btn-group-right">
     <%= link_to_function l(:button_cancel), "$('#addEvent').fadeOut();", :class => 'btn' %>
     <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','commit');$('#issue-form').submit();" %>
-    <%= link_to l(:button_create), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
-    <%#= submit_tag l(:button_create) %>
-    <%#= submit_tag l(:button_create_and_continue), :name => 'continue' %>
+    <%= link_to l(:button_create_and_continue), "#top", :class => 'btn', :onclick =>"$('#hidden_submit').attr('name','continue');$('#issue-form').submit();" %>
     <%= javascript_tag "$('#appointment_subject').focus();" %>
   </div>
   <%= hidden_field_tag 'hidden_submit', '' %>

@@ -16,8 +16,8 @@ class AppointmentsController < ApplicationController
       format.html { render :template => 'appointments/index', :layout => !request.xhr? }
     end
   end
-  
-  def show    
+
+  def show
     respond_to do |format|
       format.html {render :template => 'appointments/show'}
     end
@@ -33,7 +33,7 @@ class AppointmentsController < ApplicationController
   end
 
   def edit
-    respond_to do |f| 
+    respond_to do |f|
       f.html {render :action => 'edit'}
     end
   end
@@ -52,12 +52,12 @@ class AppointmentsController < ApplicationController
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))
     @appointment.attributes = params[:appointment]
     unless @appointment.user == User.current
-      @appointment = @appointment.clone 
+      @appointment = @appointment.clone
       @appointment.id = nil
       @appointment.user = User.current
     end
     if @appointment.save
-      flash[:notice] = l(:notice_appointment_successful_create)    
+      flash[:notice] = l(:notice_appointment_successful_create)
       respond_to do |format|
         format.html {
           if params[:continue]
@@ -133,8 +133,8 @@ class AppointmentsController < ApplicationController
         }
       end
     end
-  end 
-  
+  end
+
   def destroy
     if Appointment.find(params[:id]).destroy
       @appointment = Appointment.new
@@ -144,7 +144,7 @@ class AppointmentsController < ApplicationController
         format.api  { render_validation_errors(@appointment) }
         format.js {
           if params[:view] == 'calendar'
-            redirect_to({:controller => 'calendars', :action => 'show_user_calendar', :format => 'js'})
+            redirect_to({:controller => 'calendars', :action => 'show_user_calendar', :status => :see_other, :format => 'js'})
           else
             render :action => 'new'
           end
@@ -156,7 +156,7 @@ class AppointmentsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-  
+
 private
 
   def find_appointment
