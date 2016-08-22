@@ -68,7 +68,6 @@ module RedmineSocialExtends
             @user.safe_attributes = params[:user]
             @user.pref.attributes = params[:pref]
             @user.pref[:no_self_notified] = (params[:no_self_notified] == '1')
-            @user.login = params[:user][:mail]
 
             @user.security_number = User.calc_security_number(params[:security])
 
