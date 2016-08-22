@@ -815,6 +815,7 @@ de:
   pending_friendships_title: Eingegangene Kontaktanfragen
   wait_for_pending_friendship: Ein Mitglied hat Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
   wait_for_pending_friendships: Mehrere Mitglieder haben Ihnen eine Kontaktanfrage zugesandt. Bitte benutzen Sie das Häkchen- bzw. Kreuz-Symbol um diese Anfrage anzunehmen bzw. abzulehnen.
+  no_pending_friendships: Sie haben aktuell keine Kontaktanfragen von anderen Mitgliedern.
   accepted_user_friendships: Angenommene Kontaktanfragen
   pending_user_friendships: Ausstehenende Kontaktanfragen
   denied_user_friendships: Zurückgewiesene Kontaktanfragen

@@ -269,51 +269,17 @@
           def contact_member_search
             others = []
             if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
-              others = []
+              @users = []
             else
-              others = User.find(:all,
+              @users = User.find(:all,
                 :select => "firstname, lastname, id",
                 :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ? AND security_number & ?',
                 "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}",User.searchable_sql()],:limit => 5, :order => 'lastname')
             end
 
-            if !(others.nil? || others.empty?)
-              @projects = []
-              @allusers = []
-              @n_projects = {}
-
-              project_list = Project.visible.find(:all, :order => 'lft')
-              project_list.each do |project|
-                n_users = {}
-                user_projects = project.users_by_role
-                user_projects.each do |user_project|
-                  role = ""
-                  user_project.each do |user_roles|
-                    if user_roles.class.to_s == "Role"
-                      role = user_roles.name
-                    elsif user_roles.class.to_s == "Array"
-                      user_roles.each do |user|
-                        if !(others.detect {|v| v.id == user.id}).nil?
-                          n_users[role] ||= []
-                          n_users[role] << user
-                          @allusers += [[user, role]]
-                        end
-                      end
-                    end
-                  end
-                end
-                if !n_users.empty?
-                  @n_projects[project.name] = n_users
-                end
-              end
-              @allusers.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
-              @n_projects[l(:no_common_project)] = {}
-              @n_projects[l(:no_common_project)][""] = User.find((others - @allusers[0]).flatten.map{|m| m.id} )
-            end
-
             respond_to do |format|
               format.js # user_search.js.erb
-              format.json { render :json => @n_projects.to_json }
+              format.json { render :json => @users.to_json }
             end
           end
 

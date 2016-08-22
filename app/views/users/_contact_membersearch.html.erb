@@ -28,8 +28,8 @@
                         success: function( data ) {
                           $("#ausgabe").html("");
                             //console.log("Blap: "+JSON.parse(ajax.responseText));
-                            response( 
-                              
+                            response(
+
                             );
                           }
                         }).always(function(json){
@@ -38,28 +38,14 @@
                                 if(response == null){
                                   return false;
                                 }
-                                $.each(response, function( prjct,roles){
-                                  console.log(prjct);  
-                                  var $element = $("<fieldset class=\'project\' />");
-                                  $element.append($("<legend>").text(prjct));
-                                  var $tbl = $("<table width=\"100%\">");
-                                  
-                                  $.each(roles, function(role, users){
-                                    for (var i = 0; i < users.length; i++) {
-                                      console.log("ITEM " + users[i]);
-                                      
-                                      if(role != \'\'){
-                                        $tbl.append($("<tr>").append($("<td>").text(users[i].user.firstname+" "+users[i].user.lastname+" ("+role+")"),$("<td width=\"35\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+users[i].user.id+"\' class=\"ui-icon ui-icon-person\"></a>","<a href=\"/users/"+ users[i].user.id+"/friendships\" data-confirm=\"'+l(:are_you_sure_you_want_to_create_a_friendship_with_this_user)+'\" data-remote=\"true\" data-method=\"post\" rel=\"nofollow\" class=\"ui-icon ui-icon-plusthick\"></a>")));
-                                     }else{
-                                        $tbl.append($("<tr>").append($("<td>").text(users[i].user.firstname+" "+users[i].user.lastname),$("<td width=\"35\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+users[i].user.id+"\' class=\"ui-icon ui-icon-person\"></a>","<a href=\"/users/"+ users[i].user.id+"/friendships\" data-confirm=\"'+l(:are_you_sure_you_want_to_create_a_friendship_with_this_user)+'\" data-remote=\"true\" data-method=\"post\" rel=\"nofollow\" class=\"ui-icon ui-icon-plusthick\"></a>")));
-                                     }
-                                   }
-                                  });
-                                  $element.append($tbl);
-                                  $("#ausgabe").append($element);
-                                  addToolTip(".ui-icon.ui-icon-plusthick","'+l(:tooltip_addUser)+'","top");
-                                  addToolTip(".ui-icon.ui-icon-person","'+l(:tooltip_openUser)+'","top");
+                                var $tbl = $("<table width=\"100%\">");
+
+                                $.each(response, function(index, user){
+                                  $tbl.append($("<tr>").append($("<td>").text(user.user.firstname+" "+user.user.lastname),$("<td width=\"35\">").append("<a href=\''+url_for(:controller => "users", :action => "index")+'/"+user.user.id+"\' class=\"ui-icon ui-icon-person\"></a>","<a href=\"/users/"+ user.user.id+"/friendships\" data-confirm=\"'+l(:are_you_sure_you_want_to_create_a_friendship_with_this_user)+'\" data-remote=\"true\" data-method=\"post\" rel=\"nofollow\" class=\"ui-icon ui-icon-plusthick\"></a>")));
                                 });
+                                $("#ausgabe").append($tbl);
+                                addToolTip(".ui-icon.ui-icon-plusthick","'+l(:tooltip_addUser)+'","top");
+                                addToolTip(".ui-icon.ui-icon-person","'+l(:tooltip_openUser)+'","top");
                               }
                             });
                       },

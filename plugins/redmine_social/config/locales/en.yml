@@ -991,7 +991,9 @@ en:
   pending_friendship: Contact request
   pending_friendships: Contact requests
   pending_friendships_title: Pending contact requests
-  wait_for_pending_friendships: Wait for acceptance
+  wait_for_pending_friendship: A member has sent you a contact request.
+  wait_for_pending_friendships: Some members have sent you contact requests.
+  no_pending_friendships: You have currently no contact requests from other members.
   accepted_user_friendships: accepted friendships
   pending_user_friendships: pending friendships
   denied_user_friendships: denied friendships

@@ -5,33 +5,33 @@ class FriendshipsController < ApplicationSocialController
   before_filter :require_current_user, :only => [:accept, :deny, :pending, :destroy]
 
   def index
-    @user = User.find(params[:user_id])    
+    @user = User.find(params[:user_id])
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
     @friendships = @user.friendships.accepted
     @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
-    
+
     respond_to do |format|
       format.html
     end
   end
-  
+
   def deny
-    @user = User.find(params[:user_id])    
+    @user = User.find(params[:user_id])
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
     @friendships = @user.friendships.accepted
     @friendship = @user.friendships.find(params[:id])
     @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
-    
+
     respond_to do |format|
       if @friendship.update_attributes(:friendship_status => FriendshipStatus[:denied]) &&
-         @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:denied]) && 
-         @friendship.reverse.save! && @friendship.save! 
+         @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:denied]) &&
+         @friendship.reverse.save! && @friendship.save!
         flash[:notice] = l(:the_friendship_was_denied)
-        format.html { 
-            if @waiting_friendships.count > 0 
-              redirect_to({:action => "index", :tab => 'pending'}) 
+        format.html {
+            if @waiting_friendships.count > 0
+              redirect_to({:action => "index", :tab => 'pending'})
             else
               redirect_to({:action => "index"})
             end
@@ -42,23 +42,23 @@ class FriendshipsController < ApplicationSocialController
       else
         format.html { redirect_to({ :action => "index"})}
       end
-    end    
+    end
   end
 
   def accept
-    @user = User.find(params[:user_id])    
+    @user = User.find(params[:user_id])
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
     @friendships = @user.friendships.accepted
     @friendship = @user.friendships_not_initiated_by_me.where(:id => params[:id]).first
     @waiting_friendships = @user.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id)
     respond_to do |format|
-      if @friendship.update_attributes(:friendship_status => FriendshipStatus[:accepted]) && 
-          @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:accepted])        
+      if @friendship.update_attributes(:friendship_status => FriendshipStatus[:accepted]) &&
+          @friendship.reverse.update_attributes(:friendship_status => FriendshipStatus[:accepted])
         flash[:notice] = l(:the_friendship_was_accepted)
-        format.html { 
-            if @waiting_friendships.count > 0 
-              redirect_to({:action => "index", :tab => 'pending'}) 
+        format.html {
+            if @waiting_friendships.count > 0
+              redirect_to({:action => "index", :tab => 'pending'})
             else
               redirect_to({:action => "index"})
             end
@@ -73,9 +73,9 @@ class FriendshipsController < ApplicationSocialController
   end
 
   def denied
-    @user = User.find(params[:user_id])    
+    @user = User.find(params[:user_id])
     @friendships = @user.friendships.where("friendship_status_id = ?", FriendshipStatus[:denied].id).paginate(:page => params[:page])
-    
+
     respond_to do |format|
       format.html
     end
@@ -99,16 +99,16 @@ class FriendshipsController < ApplicationSocialController
   end
 
   def accepted
-    @user = User.find(params[:user_id])    
+    @user = User.find(params[:user_id])
     @friend_count = @user.accepted_friendships.count
     @pending_friendships_count = @user.pending_friendships.count
     @friendships = @user.friendships.accepted
-    
+
     respond_to do |format|
       format.html
     end
   end
-  
+
   def pending
     @user = User.find(params[:user_id])
 
@@ -118,9 +118,9 @@ class FriendshipsController < ApplicationSocialController
       format.html
     end
   end
-  
+
   def show
-    @friendship = User.current.friendships.where("user_id = ? AND friend_id = ?", params[:user_id], params[:id]).first    
+    @friendship = User.current.friendships.where("user_id = ? AND friend_id = ?", params[:user_id], params[:id]).first
     respond_to do |format|
       format.html {
 #        render :partial => "users/show",:locals => {:user => @friendship.user, :memberships => @friendship.user.memberships.all(:conditions => Project.visible_condition(@friendship.user))}
@@ -128,20 +128,20 @@ class FriendshipsController < ApplicationSocialController
       }
     end
   end
-  
+
 
   def create
     @user = User.current
     @friendship = Friendship.new(:user_id => @user.id, :friend_id => params[:user_id], :initiator => true )
-    @friendship.friendship_status_id = FriendshipStatus[:pending].id    
+    @friendship.friendship_status_id = FriendshipStatus[:pending].id
     reverse_friendship = Friendship.new(params[:friendship])
-    reverse_friendship.friendship_status_id = FriendshipStatus[:pending].id 
+    reverse_friendship.friendship_status_id = FriendshipStatus[:pending].id
     reverse_friendship.user_id, reverse_friendship.friend_id = @friendship.friend_id, @friendship.user_id
-    
+
     respond_to do |format|
       if @friendship.save && reverse_friendship.save
         #UserNotifier.friendship_request(@friendship).deliver if @friendship.friend.notify_friend_requests?
-        flash[:notice] = l(:friendship_requested, :friend => @friendship.friend) 
+        flash[:notice] = l(:friendship_requested, :friend => @friendship.friend)
         @friend_count = @user.accepted_friendships.count
         @pending_friendships_count = @user.pending_friendships.count
         @friendships = @user.friendships.accepted
@@ -150,21 +150,21 @@ class FriendshipsController < ApplicationSocialController
         format.html {
           redirect_to accepted_user_friendships_path(@user)
         }
-        format.js { render :partial => 'update' }        
+        format.js { render :partial => 'update' }
       else
         flash[:error] = l(:friendship_could_not_be_created)
         format.html { redirect_to user_friendships_path(@user) }
-        format.js { render( :inline => "Friendship request failed." ) }                
+        format.js { render( :inline => "Friendship request failed." ) }
       end
     end
   end
-    
+
   def destroy
     if(User.current.id.to_s == params[:user_id] || User.current.admin?)
 
-      @user = User.find(params[:user_id])    
+      @user = User.find(params[:user_id])
       @friendship = Friendship.find(params[:id])
-      Friendship.transaction do 
+      Friendship.transaction do
         @friendship.destroy
         @friendship.reverse.destroy
       end
@@ -183,12 +183,12 @@ class FriendshipsController < ApplicationSocialController
     end
   end
 
-  private 
+  private
     def back_to_where_you_came
       flash[:notice] ="#{l(:not_allowed)}"
-      
-      if request.referer.nil? 
-        respond_to do |format| 
+
+      if request.referer.nil?
+        respond_to do |format|
           format.html{ redirect_to :controller => "my"}
         end
       else
