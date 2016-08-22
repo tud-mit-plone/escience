@@ -76,6 +76,9 @@ class UserMessagesController < ApplicationController
       @receivers.delete(User.current)
     else
       params.delete :reply
+      if !params[:to].nil?
+        @receivers = [User.find(params[:to])]
+      end
     end
     respond_to do |format|
       format.html # new.html.erb
