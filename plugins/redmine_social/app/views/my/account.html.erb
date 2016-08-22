@@ -16,7 +16,6 @@
   <div class="btn-group" style="float:right;">
     <%= link_to(l(:go_to_profile_page), {:controller => 'users', :action => 'show', :id => @user.id}, :class => 'button') %>
     <%= link_to(l(:button_change_password), {:action => 'password', :sub => 'my_account'}, :class => 'button') if @user.change_password_allowed? %>
-    <%#= submit_tag l(:button_save) %>
   </div>
   <div class="clear"></div>
 
