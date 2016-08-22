@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
     User.current.last_user_activity = Time.now
     users = Rails.cache.fetch("online_users") { [User.current] }
     @online_users = users.collect do |user|
-      user if user.last_user_activity > 5.minutes.ago
+      user if !user == :@stale_state && !user.last_user_activity.nil? && user.last_user_activity > 5.minutes.ago
     end.compact
     unless @online_users.include?(User.current)
       @online_users << User.current
