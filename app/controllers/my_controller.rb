@@ -55,9 +55,7 @@ class MyController < ApplicationController
       @user.pref.attributes = params[:pref]
       @user.pref[:no_self_notified] = (params[:no_self_notified] == '1')
       @user.login = params[:user][:mail]
-      @user.save!
-      if @user.save
-        @user.pref.save
+      if @user.save && @user.pref.save
         @user.notified_project_ids = (@user.mail_notification == 'selected' ? params[:notified_project_ids] : [])
         set_language_if_valid @user.language
         flash[:notice] = l(:notice_account_updated)
