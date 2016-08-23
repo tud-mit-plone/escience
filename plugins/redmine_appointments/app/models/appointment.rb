@@ -19,14 +19,27 @@ class Appointment < ActiveRecord::Base
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
   validates_presence_of :subject, :user, :start_date
   validates_length_of :subject, :maximum => 255
-  
+
   scope :visible, lambda {|*args| { :include => :user,
-                          :conditions => "(#{table_name}.is_private = #{connection.quoted_false} 
-                                                    OR #{table_name}.author_id = #{User.current.id} 
+                          :conditions => "(#{table_name}.is_private = 0
+                                                    OR #{table_name}.author_id = #{User.current.id}
                                                     OR #{User.current.id} IN (
-                                                         SELECT DISTINCT user_id FROM #{Watcher.table_name},#{table_name} 
+                                                         SELECT DISTINCT user_id FROM #{Watcher.table_name},#{table_name}
                                                          WHERE watchable_type = \"Appointment\"
                                                          AND watchable_id = #{table_name}.id))" } }
+
+  scope :own, lambda {|*args| { :conditions => "#{table_name}.author_id = #{User.current.id}" } }
+
+  scope :non_private, lambda {|*args| { :conditions => "#{table_name}.is_private = 0" } }
+
+  scope :watched, lambda {|*args| { :include => :user,
+                                    :conditions => "#{User.current.id} IN (
+                                                         SELECT DISTINCT user_id FROM #{Watcher.table_name},#{table_name}
+                                                         WHERE watchable_type = \"Appointment\"
+                                                         AND watchable_id = #{table_name}.id)" } }
+
+
+
 
   # Cycle values
   CYCLE_DAYLY   = 1
@@ -47,7 +60,7 @@ class Appointment < ActiveRecord::Base
     return @css_classes unless @css_classes.nil?
     @css_classes = 'appointment'
   end
-  
+
   def project
     nil
   end
@@ -58,73 +71,48 @@ class Appointment < ActiveRecord::Base
   def to_s
     "#{subject}"
   end
-  
-  def self.getAllEventsWithCycle(startdt=Date.today,enddt=Date.today)
-    visible_appointments = self.find(:all).select{|a| a.visible? || a.author == User.current}
-    visible_appointments = visible_appointments - self.watched_by(User.current)
 
-    if startdt == enddt
-      appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
-                    AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
-                    AND DATE(start_date) <= ? 
-                    AND due_date IS NULL) OR (DATE(start_date) = ? 
-                    AND cycle > 0)", visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt, startdt ])
-    else
-      appointments = self.find(:all, :conditions => ["(id in (?) AND DATE(start_date) >= ? 
-                    AND DATE(due_date) <= ?) OR (DATE(start_date) >= ? 
-                    AND DATE(start_date) <= ? 
-                    AND due_date IS NULL)",visible_appointments.map{|i| i.id }, startdt, enddt, startdt, enddt ])
-    end    
-    events = appointments
-    appointments = self.find(:all, :conditions => ["id in (?) AND cycle > 0", visible_appointments.map{|i| i.id }])
-    appointments.each do |appointment|
-      begin
-        if appointment[:cycle] == CYCLE_WEEKLY
-          repeated_day = appointment[:start_date]+7.day
-          while (repeated_day < enddt && repeated_day <= (appointment[:due_date] || enddt)) || (enddt == startdt && repeated_day <= (appointment[:due_date] || enddt))
-            event = appointment.clone
-            event[:start_date] = repeated_day
-            events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
-            repeated_day += 7.day
+  def self.getAllEventsWithResolvedCycles(scope, startdt=Date.today,enddt=Date.today)
+    candidates = scope.where("(DATE(#{table_name}.start_date) >= ? AND DATE(#{table_name}.due_date) <= ?)
+                              OR (DATE(#{table_name}.start_date) >= ? AND DATE(#{table_name}.start_date) <= ? AND #{table_name}.due_date IS NULL)",
+                             startdt, enddt, startdt, enddt)
+    events = []
+    candidates.each do |event|
+      if event[:cycle] == 0
+        events += [event]
+      else
+        offset = case event[:cycle]
+                   when CYCLE_DAYLY then 1.day
+                   when CYCLE_WEEKLY then 1.week
+                   when CYCLE_MONTHLY then 1.month
+                   when CYCLE_YEARLY then 1.year
+                 end
+        end_date = event.due_date || event.start_date
+        effective_start_date = event.start_date
+        effective_end_date =
+        effective_end_date = Time.new(effective_start_date.year,
+                                  effective_start_date.month,
+                                  effective_start_date.day,
+                                  (end_date).hour,
+                                  (end_date).min,
+                                  (end_date).sec,
+                                  effective_start_date.utc_offset)
+        effective_end_date = effective_start_date if effective_end_date < effective_start_date
+        while effective_end_date.to_date <= end_date.to_date
+          if effective_start_date.to_date >= startdt && effective_end_date <= enddt
+            effective_event = event.clone
+            effective_event.start_date = effective_start_date
+            effective_event.due_date = effective_end_date
+            events += [effective_event]
           end
-        elsif appointment[:cycle] == CYCLE_MONTHLY
-          repeated_day = appointment[:start_date]+1.month
-          while (repeated_day < enddt && repeated_day <= (appointment[:due_date] || enddt)) || (enddt == startdt && repeated_day <= (appointment[:due_date] || enddt))
-            event = appointment.clone
-            event[:start_date] = repeated_day 
-            events += [event] if (enddt == startdt && repeated_day == startdt) || enddt != startdt
-            repeated_day = repeated_day+1.month
-          end
-        end
-      rescue => e 
-        e.backtrace.map{ |x|   
-          x.match(/^(.+?):(\d+)(|:in `(.+)')$/); 
-          p [$1,$2,$4] 
-        }
-      end
-    end
-    return events
-  end
-  
-  def self.getListOfDaysBetween(startdt=Date.today,enddt=Date.today)
-    appointments = self.find(:all, :conditions => ["cycle = 0"])
-    listOfDaysBetween = {}
-    appointments.each do |appointment|
-      if appointment[:start_date] >= startdt && appointment[:start_date] < enddt && appointment[:start_date] != appointment[:due_date] && !appointment[:due_date].nil?
-        currentDate = appointment[:start_date].to_date.to_time + 1.day
-        while currentDate < appointment[:due_date] && currentDate <= enddt
-          if listOfDaysBetween[currentDate.to_date.to_s].nil?
-            listOfDaysBetween[currentDate.to_date.to_s] = [appointment]
-          else listOfDaysBetween[currentDate.to_date.to_s].is_a?(Array)
-            listOfDaysBetween[currentDate.to_date.to_s] = [listOfDaysBetween[currentDate.to_date.to_s],appointment]
-          end
-          currentDate += 1.day
+          effective_start_date += offset
+          effective_end_date += offset
         end
       end
     end
-    return listOfDaysBetween
+    events
   end
-  
+
   def visible?(user=nil)
     user ||= User.current
     if user.logged?
@@ -132,7 +120,7 @@ class Appointment < ActiveRecord::Base
     else
       !self.is_private?
     end
-  end  
+  end
 
   def clone
     attributes = self.attributes.dup
@@ -155,7 +143,7 @@ class Appointment < ActiveRecord::Base
     # The issue was stale, retry to destroy
     super
   end
-  
+
   safe_attributes 'subject',
     'description',
     'start_date',
@@ -172,8 +160,8 @@ class Appointment < ActiveRecord::Base
     :if => lambda {|appointment, user| user.allowed_to?(:add_issue_notes, appointment)}
 
   safe_attributes 'watcher_user_ids',
-    :if => lambda {|appointment, user| appointment.new_record? && user.allowed_to?(:add_appointment_watchers, appointment)} 
-  
+    :if => lambda {|appointment, user| appointment.new_record? && user.allowed_to?(:add_appointment_watchers, appointment)}
+
   def safe_attributes=(attrs, user=User.current)
     return unless attrs.is_a?(Hash)
 
@@ -184,5 +172,5 @@ class Appointment < ActiveRecord::Base
     # mass-assignment security bypass
     assign_attributes attrs, :without_protection => true
   end
-    
+
 end

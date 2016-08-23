@@ -1,18 +1,8 @@
 module Plugin
 module RedmineAppointmentExtension
 
-  events = Proc.new {
-    today = Date.today
-    visible_issues = Issue.visible
-    amount = visible_issues.empty? ? 0 : Issue.find(:all, :conditions => ["((due_date = ?) OR (start_date = ?)) AND id IN (#{visible_issues.map {|e| e.id}.join(', ')})", today, today]).count
-    amount += Appointment.getAllEventsWithCycle().count
-    #.where('(start_date <= ? AND due_date >= ?) AND ((assigned_to_id IS NULL AND author_id=?) OR assigned_to_id=?)',Date.today.to_s,Date.today.to_s,User.current.id,User.current.id).count
-#    appointments = Appointment.getAllEventsWithCycle
-#    amount += appointments.count
-  }
-
   Redmine::MenuManager.map(:private_menu).delete(:calendar_all)
-  Redmine::MenuManager.map(:private_menu).push :calendar_all, { :controller => 'calendars', :action => 'show_user_calendar', :sub => 'calendar_all'}, :caption => {:value_behind => events, :text => :label_calendar }, :html => {:class => "icon icon-calendar"}
+  Redmine::MenuManager.map(:private_menu).push :calendar_all, { :controller => 'calendars', :action => 'show_user_calendar', :sub => 'calendar_all'}, :caption => {:text => :label_calendar }, :html => {:class => "icon icon-calendar"}
 
   module CalendarsController
     module ClassMethods
@@ -95,18 +85,22 @@ module RedmineAppointmentExtension
             events += new_events unless new_events.nil?
             @show_params [:watched_issues] = true
           end
+          if params.nil? || (params[:show].nil?) || params[:show][:community_appointments]
+            new_events = get_community_appointments_for_calendar()
+            events += new_events unless new_events.nil?
+            @show_params [:community_appointments] = true
+          end
           if params.nil? || (params[:show].nil?) || params[:show][:watched_appointments]
             new_events = get_watched_appointments_for_calendar()
             events += new_events unless new_events.nil?
             @show_params [:watched_appointments] = true
           end
-          @listOfDaysBetween = getListOfDaysBetween(events,@calendar.startdt, @calendar.enddt)
-          @listOfDaysBetween.merge!(Appointment.getListOfDaysBetween(@calendar.startdt,@calendar.enddt))
           if params.nil? || (params[:show].nil?) || params[:show][:private_appointments]
             new_appointments = get_user_appointments()
             events += new_appointments unless new_appointments.nil?
             @show_params [:private_appointments] = true
           end
+          @listOfDaysBetween = getListOfDaysBetween(events, @calendar.startdt, @calendar.enddt)
 
           @calendar.events = events
           @appointment = Appointment.new
@@ -151,13 +145,19 @@ module RedmineAppointmentExtension
           return Issue.watched_by(User.current.id)
         end
 
+        def get_community_appointments_for_calendar()
+          events = Appointment.getAllEventsWithResolvedCycles(Appointment.non_private, @calendar.startdt, @calendar.enddt)
+          return events
+        end
+
         def get_user_appointments()
-          events = Appointment.getAllEventsWithCycle(@calendar.startdt,@calendar.enddt)
+          events = Appointment.getAllEventsWithResolvedCycles(Appointment.own, @calendar.startdt, @calendar.enddt)
           return events
         end
 
         def get_watched_appointments_for_calendar()
-          return Appointment.watched_by(User.current.id)
+          events = Appointment.getAllEventsWithResolvedCycles(Appointment.watched, @calendar.startdt, @calendar.enddt)
+          return events
         end
 
         def getListOfDaysBetween(events, startdt=Date.today,enddt=Date.today)

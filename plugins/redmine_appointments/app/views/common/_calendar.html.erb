@@ -1,10 +1,11 @@
 <% day = calendar.startdt %>
 <%# content_for :sidebar_left do %>
-<div id="calendar_sidebar"style="position:absolute; width:160px; overflow:hidden; margin-left: -180px;top:0;" class="sidebar">
+<div id="calendar_sidebar" style="position:absolute; width:160px; overflow:hidden; margin-left: -180px;top:0;" class="sidebar">
 <%= form_tag(url_for(:controller => 'calendars', :action => 'show_user_calendar'), :method=>'post', :remote => true) do %>
   <div class="headline"><%= l(:label_headline_sidebar) %></div>
   <ul class="selectCalendarOptions" style="margin-top:10px">
   <% unless @show_params.nil? %>
+    <li><%= check_box_tag '[show][community_appointments]', true, (checked = @show_params[:community_appointments]) %><%= label_tag '[show][community_appointments]', l(:label_community_appointments) %></li>
     <li><%= check_box_tag '[show][private_appointments]', true, (checked = @show_params[:private_appointments]) %><%= label_tag '[show][private_appointments]', l(:label_private_appointments) %></li>
     <li><%= check_box_tag '[show][watched_appointments]', true, (checked = @show_params[:watched_appointments]) %><%= label_tag '[show][watched_appointments]', l(:label_watched_appointments)%></li>
     <li><%= check_box_tag '[show][community_issues]', true, (checked = @show_params[:community_issues]) %><%= label_tag '[show][community_issues]', l(:label_community_issue_plural) %></li>
@@ -15,7 +16,7 @@
   <div class="clear" style="padding-bottom:10px;"></div>
 <% end %>
 </div>
-<%#end%> 
+<%#end%>
 <table class="cal" width="100%">
 <thead>
   <tr>
@@ -124,6 +125,10 @@
       $(this).closest('form').submit();
     });
     $('#_show_watched_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_community_appointments').click( function(e){
       $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
       $(this).closest('form').submit();
     });
