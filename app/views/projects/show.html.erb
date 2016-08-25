@@ -142,18 +142,9 @@
 
 <% content_for :sidebar_right do %>
   <ul>
-  <% if params['sub'] == 'overview_all' %>
-    <li><%= link_to l(:label_back), {:controller => 'projects', :action => 'index', 'sub' => 'overview_all'}, :class => 'icon icon-chevron-left' %></li>
-  <% end %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
     <li><%= link_to l(:label_subproject_new), {:controller => 'projects', :action => 'new', :parent_id => @project}, :class => 'icon icon-plus-sign' %></li>
   <% end %>
-	<% if User.current.allowed_to?(:edit_project, nil, :global => true) %>
-		<li><%= link_to(l(:label_project_edit), {:controller => 'projects', :action => 'settings', :show_project => @project.id}, :class => "icon icon-cog")%></li>
-	<% end %>
-	<% if User.current.allowed_to?(:view_time_entries, nil, :global => true) %>
-    <li><%= link_to(l(:label_spent_time), {:controller => 'timelog', :action => 'index', :sub => params[:sub], :project_id => @project.id}, :class => "icon icon-time") %></li>
-	<% end %>
   <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
   </ul>
 <% end %>
