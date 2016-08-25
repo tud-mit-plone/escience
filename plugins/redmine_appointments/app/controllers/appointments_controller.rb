@@ -25,6 +25,7 @@ class AppointmentsController < ApplicationController
 
   def new
     @appointment = Appointment.new
+    @appointment.is_private = 1
     @available_watchers = (@appointment.watcher_users).uniq
     respond_to do |format|
       format.html { render :action => 'new', :layout => !request.xhr? }

@@ -103,7 +103,9 @@ module RedmineAppointmentExtension
           @listOfDaysBetween = getListOfDaysBetween(events, @calendar.startdt, @calendar.enddt)
 
           @calendar.events = events
-          @appointment = Appointment.new
+          @appointment = Appointment.new do |a|
+            a.is_private = 1
+          end
           @available_watchers = (@appointment.watcher_users).uniq
           respond_to do |format|
             format.html { render :controller=> 'calendars',:action => 'show_user_calendar', :layout => false if request.xhr? }
