@@ -73,11 +73,13 @@ class WatchersController < ApplicationController
 
 private
   def find_project
-    if params[:object_type] && params[:object_id]
-      klass = Object.const_get(params[:object_type].camelcase)
-      return false unless klass.respond_to?('watched_by')
-      @watched = klass.find(params[:object_id])
-      @project = @watched.project
+    if params[:object_type]
+      @klass = Object.const_get(params[:object_type].camelcase)
+      if params[:object_id]
+        return false unless @klass.respond_to?('watched_by')
+        @watched = @klass.find(params[:object_id])
+        @project = @watched.project
+      end
     elsif params[:project_id]
       @project = Project.visible.find_by_param(params[:project_id])
     end

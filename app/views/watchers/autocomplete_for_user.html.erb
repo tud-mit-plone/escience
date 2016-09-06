@@ -1,1 +1,6 @@
-<%= principals_check_box_tags 'watcher[user_ids][]', @users %>
+<% @users.each do |user| %>
+  <label class="floating">
+    <%= check_box_tag "#{@klass.name.underscore}[watcher_user_ids][]", user.id, false, :id => nil %>
+    <%= h(user) %>
+  </label>
+<% end %>

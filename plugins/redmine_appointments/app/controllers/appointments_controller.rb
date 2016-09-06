@@ -51,6 +51,7 @@ class AppointmentsController < ApplicationController
     params[:appointment].delete(:due_time)
     @referer = params[:referer]
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))
+    @appointment.watcher_user_ids = params[:appointment][:watcher_user_ids]
     @appointment.attributes = params[:appointment]
     unless @appointment.user == User.current
       @appointment = @appointment.clone
@@ -98,6 +99,7 @@ class AppointmentsController < ApplicationController
     params[:appointment].delete(:start_time)
     params[:appointment].delete(:due_time)
     @appointment.save_attachments(params[:attachments] || (params[:appointment] && params[:appointment][:uploads]))
+    @appointment.watcher_user_ids = params[:appointment][:watcher_user_ids]
     @appointment.attributes = params[:appointment]
     @appointment.user = User.current
     if @appointment.save

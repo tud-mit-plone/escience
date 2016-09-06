@@ -215,6 +215,7 @@ class IssuesController < ApplicationController
     @issue.description = convertHtmlToWiki(params[:issue][:description])
 
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    @issue.watcher_user_ids = params[:issue][:watcher_user_ids]
     @issue.parent_issue_id = params[:parent_id]
     if @issue.save
       call_hook(:controller_issues_new_after_save, { :params => params, :issue => @issue})
@@ -268,6 +269,7 @@ class IssuesController < ApplicationController
       params[:issue][:start_date] = params[:issue][:start_date].empty? ? '':format_date(params[:issue][:start_date])
       params[:issue][:due_date] = params[:issue][:due_date].empty? ? '':format_date(params[:issue][:due_date])
       @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+      @issue.watcher_user_ids = params[:issue][:watcher_user_ids]
       saved = false
     end
     return unless update_issue_from_params

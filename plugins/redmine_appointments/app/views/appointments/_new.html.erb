@@ -16,13 +16,7 @@
       <label><%= l(:label_issue_watchers) %></label><br />
         <p id="watchers_form">
         <span id="watchers_inputs">
-          <%= watchers_checkboxes(@appointment, @available_watchers) %>
-        </span>
-        <span class="search_for_watchers">
-        <%= link_to l(:label_search_for_watchers),
-                      {:controller => 'watchers', :action => 'new', :project_id => 3},
-                      :remote => true,
-                      :method => 'get' %>
+          <%= watchers_checkboxes(@appointment) %>
         </span>
         </p>
       <% end %>

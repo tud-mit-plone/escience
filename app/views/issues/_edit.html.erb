@@ -14,6 +14,19 @@
     <p><%= render :partial => 'attachments/form', :locals => {:container => @issue, :no_form => :true} %></p>
     </div>
 
+    <% unless @issue.project.nil? %>
+    <fieldset>
+      <%# if @issue.safe_attribute? 'watcher_user_ids' -%>
+      <label><%= l(:label_issue_watchers) %></label><br />
+        <p id="watchers_form">
+        <span id="watchers_inputs">
+          <%= watchers_checkboxes(@issue) %>
+        </span>
+        </p>
+      <%# end %>
+    </fieldset>
+    <% end %>
+
     <%= f.hidden_field :lock_version %>
     <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
     <div class="btn-group" style="float:right">

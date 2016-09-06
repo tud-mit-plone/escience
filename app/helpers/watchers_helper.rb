@@ -62,12 +62,13 @@ module WatchersHelper
     content.present? ? content_tag('ul', content) : content
   end
 
-  def watchers_checkboxes(object, users, checked=nil)
-    users.map do |user|
-      c = checked.nil? ? object.watched_by?(user) : checked
-      tag = check_box_tag 'issue[watcher_user_ids][]', user.id, c, :id => nil
-      content_tag 'label', "#{tag} #{h(user)}".html_safe,
-                  :id => "issue_watcher_user_ids_#{user.id}",
+  def watchers_checkboxes(object)
+    return render :partial => "watchers/checkboxes", locals: { object: object }
+    object.watchers.map do |watcher|
+      model_name = object.class.name.underscore
+      tag = check_box_tag "#{model_name}[watcher_user_ids][]", watcher.user.id, true, :id => nil
+      content_tag 'label', "#{tag} #{h(watcher.user)}".html_safe,
+                  :id => "issue_watcher_user_ids_#{watcher.user.id}",
                   :class => "floating"
     end.join.html_safe
   end

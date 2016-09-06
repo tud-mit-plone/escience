@@ -1,0 +1,13 @@
+<p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
+<%= javascript_tag "observeSearchfield('user_search', 'users_for_watcher', '#{ escape_javascript url_for(:controller => 'watchers',
+               :action => 'autocomplete_for_user',
+               :object_type => object.class.name.underscore,
+               :object_id => object) }')" %>
+
+<% object.watchers.each do |watcher| %>
+  <label class="floating">
+    <%= check_box_tag "#{object.class.name.underscore}[watcher_user_ids][]", watcher.user.id, true, :id => nil %>
+    <%= h(watcher.user) %>
+  </label>
+<% end %>
+<div id="users_for_watcher"></div>
