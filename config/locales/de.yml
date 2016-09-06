@@ -1018,11 +1018,11 @@ de:
   text_personalize_account: Hier haben Sie die Möglichkeit Ihre Übersichtsseite anzupassen. Wählen Sie anzuzeigende Elemente aus und verändern Sie deren Reihenfolge.
   text_member_search: Bitte geben Sie das zu suchende Mitglied in das Eingabefeld ein. Es wird automatisch anhand der Eingabe (mindestens 3 Zeichen) das Ergebnis generiert.
   text_message_destroy_confirmation: Sind Sie sicher, dass sie diese Nachricht löschen wollen?
-  text_message_emptytrash_confirmation: Sind Sie sicher, dass sie alle gelöschten Nachrichten dauerhaft entfernen wollen?
+  text_message_emptytrash_confirmation: Sind Sie sicher, dass sie alle archivierten Nachrichten dauerhaft entfernen wollen?
   text_message_emptytrash_done: Ihre alten Nachrichten wurden erfolgreich gelöscht.
   text_message_emptytrash_error: Leider trat beim Löschen Ihrer alten Nachrichten ein Fehler auf.
   text_message_sent_done: Ihre Nachricht wurden erfolgreich versandt.
-  text_message_sent_error_fields: Es wurden nicht alle Felder befüllt. Bitte tuen Sie dies jetzt.
+  text_message_sent_error_fields: Es wurden nicht alle Felder befüllt.
   text_message_archive_confirmation: Möchten Sie diese Nachricht wirklich archivieren?
   text_message_archive_done: Die Nachricht wurde erfolgreich ins Archiv verschoben.
   text_message_delete_done: Die Nachricht wurde erfolgreich gelöscht.

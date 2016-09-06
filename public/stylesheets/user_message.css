@@ -73,11 +73,7 @@ a.link_to_message {
 
 .user_message_links {
   float: right;
-  width: 0px;
-  transition: width 0.5s;
-  -moz-transition: width 0.5s;
-  -webkit-transition: width 0.5s;
-  -o-transition: width 0.5s;
+  width: 26px;
   overflow: hidden;
 }
 
@@ -249,6 +245,7 @@ div.name_element {
 .ui-autocomplete li {
   padding: 2px 10px;
   width: 200px;
+  cursor: pointer;
 }
 
 .ui-autocomplete li a {
@@ -277,6 +274,7 @@ div.name_element {
   width: 11px;
   background-image: url("../images/cancel_name.png");
   background-position-y: 0%;
+  cursor: pointer;
 }
 
 .delete_button:hover {

@@ -74,6 +74,8 @@ en:
           attributes:
             photo_file_size:
               less_than: "Filesize to large %{count}"
+  please_wait: "Please wait..."
+  entry_info: "_START_ to _END_ from _TOTAL_ entries"              
   published_date: "%m/%d/%Y"
   greeting: "Hello %{name}"
   #en: a_few_seconds_ago:  a few seconds ago

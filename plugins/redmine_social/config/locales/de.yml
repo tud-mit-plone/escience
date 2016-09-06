@@ -1462,7 +1462,7 @@ de:
   label_my_document_plural: 'Meine Dokumente'
   label_create: 'Erstellen'
 
-  tooltip_double_click_open_message: 'Doppel-klick zum Öffnen dieser Nachricht'
+  tooltip_double_click_open_message: 'Doppelklick zum Öffnen dieser Nachricht'
   user_message_previous_message: 'Vorherige Nachricht'
   user_message_me: "Ich"
   user_message_hide_receivers: "Empfänger als BCC"
