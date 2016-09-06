@@ -86,11 +86,6 @@
   <% end unless @user_messages.nil? %>
     </tbody>
   </table>
-  <% if !@user_messages.nil? && @user_messages.empty? %>
-    <div class="user_message">
-      <div class="subject"><%= l(:text_user_messages_empty) %></div>
-    </div>
-  <% end %>
 </div>
 <%#= javascript_include_tag("http://cdn.datatables.net/1.10.1/js/jquery.dataTables.min.js") %>
 <%= javascript_tag "
@@ -122,7 +117,7 @@
       "oLanguage": {
         "sProcessing":   "'+l(:please_wait)+'",
           "sLengthMenu":   "",
-          "sZeroRecords":  "'+l(:no_entries)+'",
+          "sZeroRecords":  "'+l(:text_user_messages_empty)+'",
           "sInfo":         "'+l(:entry_info)+'",
           "sInfoEmpty":    "&nbsp;",
           "sInfoFiltered": "",
