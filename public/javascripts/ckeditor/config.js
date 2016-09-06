@@ -24,11 +24,11 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'tools' },
 		{ name: 'others' },
-		{ name: 'insert_coop_text' },
-		{ name: 'insert_page' },
+		// { name: 'insert_coop_text' },
+		// { name: 'insert_page' },
 	];
 	config.height = 220;
-	config.extraPlugins = 'insert_page,insert_coop_text';
+	//config.extraPlugins = 'insert_page,insert_coop_text';
 	config.toolbarGroups;
 
 	// The default plugins included in the basic setup define some buttons that
