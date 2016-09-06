@@ -1300,11 +1300,10 @@ ul.bc_submenu li {
 }
 
 #main .dataTables_info {
-  width: 100%;
   border-top: solid 1px #EAEAEA;
   margin-top: 5px;
   padding-top: 7px;
-  margin-left: 22px;
+  padding-left: 22px;
 }
 
 #main .dataTables_filter input {
