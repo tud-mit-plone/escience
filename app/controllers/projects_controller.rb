@@ -143,13 +143,14 @@ class ProjectsController < ApplicationController
     @project.safe_attributes = params[:project]
     @project.creator = User.current.id
 
-    if Project.find_by_name(params[:project][:name]).nil? && !params[:project][:name].blank? && params[:project][:name].length<51 && validate_parent_id && @project.save!
-      @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
-      # Add current user as a project member
-      @project.members << [Member.new(:user => User.current, :roles => [Role.owner])]
-      @project.issue_categories << Setting.default_project_issue_categories.map do |name|
-        IssueCategory.new(:name => l(name, scope: [:issue_categories]))
-      end
+    @project.set_allowed_parent!(params[:project]['parent_id']) if params[:project].has_key?('parent_id')
+    # Add current user as a project member
+    @project.memberships = [Member.new(:project => @project, :user => User.current, :roles => [Role.owner])]
+    @project.issue_categories << Setting.default_project_issue_categories.map do |name|
+      IssueCategory.new(:name => l(name, scope: [:issue_categories]))
+    end
+
+    begin
       @project.save!
       respond_to do |format|
         format.html {
@@ -161,23 +162,17 @@ class ProjectsController < ApplicationController
         }
         format.api  { render :action => 'show', :status => :created, :location => url_for(:controller => 'projects', :action => 'show', :id => @project.id) }
       end
-    else
+    rescue ActiveRecord::RecordInvalid
       respond_to do |format|
         format.html {
-          if params[:project][:name].length>50
-            flash[:notice] = l(:error_projectname_tolong)
-          elsif Project.find_by_name(params[:project][:name]).nil?
-            flash[:notice] = l(:error_projectname_exists)
-          else
-            flash[:notice] = l(:error_projectname_exists)
-          end
+          flash[:notice] = @project.errors.full_messages.join(', ')
           render :action => 'new'
         }
         format.api  { render_validation_errors(@project) }
       end
     end
-
   end
+
 
   def copy
     @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
