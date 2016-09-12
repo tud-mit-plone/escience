@@ -176,8 +176,17 @@ a.link_to_message {
 }
 
 #new_user_message p {
-  margin: 0px 0px 5px 0px;
+  margin: 0px;
 } 
+
+#new_user_message div.field {
+  margin: 5px 0px 5px 0px;
+} 
+
+#new_user_message #message_history fieldset {
+    background-color: transparent;    
+    border: none;
+}
 
 #new_user_message input[type=text], .ui-widget {
   width: 565px;
@@ -233,6 +242,8 @@ div.name_element {
   border:none !important; 
   width:auto !important;
   height: 25px !important;
+  margin: 0 4px 0 4px;
+  background-color: transparent;
 }
 #user_message_receiver_visible:focus {
   outline: none;

@@ -11,7 +11,7 @@
     </div>
   </div>
   <%#= f.error_messages %>
-  <p>
+  <div class="field">
     <%= f.label l(:label_user_messages_receiver) %><br />
     <div class="ui-widget ui-widget-content" id="recipient_autocomplete">
       <input id="user_message_receiver_visible" />
@@ -23,14 +23,16 @@
       <div class="clear">&nbsp;</div>
     </div>
     <div class="clear"></div>
-  </p>
+  </div>
+  <div class="field">
   <%= hidden_field_tag(:hide_receivers, false) %>
   <%= check_box_tag(:hide_receivers,true,false) %> 
   <%= label_tag(l(:user_message_hide_receivers))%>
-  <p>
+  </div>
+  <div class="field">
     <%= f.label l(:label_user_messages_subject) %><br />
     <%= f.text_field :subject, :value => @user_message_reply_mail.nil? ? '' : "Re: #{@user_message_reply_mail.subject}"%>
-  </p>
+  </div>
   <%if !@user_message_reply_mail.nil? %>
     <fieldset class="collapsable" id='previous_message'>
       <legend onclick="toggleFieldset(this)"><%= l(:user_message_previous_message) %></legend>
@@ -44,7 +46,7 @@
     <% @user_message_reply_mail.get_history.each do |msg| %>
     <div class= <%= msg.user == User.current ? "my_message" :  "their_message" %>> 
       <fieldset class="collapsable">
-        <legend onclick="toggleFieldset(this)"><%= msg.user == User.current ? l(:user_message_me) : "#{msg.user.lastname}, #{msg.user.firstname}" %></legend>
+        <legend onclick="toggleFieldset(this)"><%= msg.user == User.current ? l(:user_message_me) : "#{msg.user.lastname}, #{msg.user.firstname}" %> (<%= format_time(@user_message_reply_mail.created_at.to_s) %>)</legend>
         <div> 
           <%= textilizable msg, :body %>
         </div>
@@ -54,15 +56,15 @@
     </fieldset>
     <%= javascript_tag("$( document ).ready( function() { toggleFieldset($('#message_history').find('legend')[0])});")%>
   <% end %> 
-  <p>
+  <div class="field">
     <%= f.label l(:label_user_messages_body) %><br />
     <%= f.text_area :body, :class => 'ckeditor' %>
-  </p>
-  <p>
+  </div>
+  <div class="field">
     <%#= f.submit l(:label_user_messages_send) %>
     <%= link_to l(:label_user_messages_send), "#top", :class => 'button', :onclick =>"$('#hidden_submit').attr('name','commit');$('form.new_user_message').submit();" %>
     <%= link_to l(:button_cancel), user_messages_path, :class => "icon icon-history", :class => 'button' %>
-  </p>
+  </div>
 <% end %>
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'user_message' %>
