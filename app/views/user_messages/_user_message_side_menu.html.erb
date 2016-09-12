@@ -4,10 +4,10 @@
      <% if @user_message.id && !(@user_message.new_record?) %>
      <li><%= link_to(l(:label_user_messages_reply), {:action => "new",:reply => "#{@user_message.id}"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'new'}") %></li>
      <% end %>
-     <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'index'}") %></li>
-     <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
-     <li><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
-     <li><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
+     <li><%= link_to(l(:label_user_messages_inbox), {:controller => "user_messages", :action => "index"}, :class => "#{'selected' if !(params[:directory]) && params[:action] == 'index'}") %></li>
+     <li><%= link_to(l(:label_user_messages_sentbox), {:controller => "user_messages", :directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
+     <li><%= link_to(l(:label_user_messages_archivebox), {:controller => "user_messages", :directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
+     <li><%= link_to(l(:label_user_messages_deletebox), {:controller => "user_messages", :directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
     <% if !@user_messages.nil? && !@user_messages.empty? && @directory == "trash" %>
       <li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
     <% end %>
