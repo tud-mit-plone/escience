@@ -34,7 +34,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   def handle_unverified_request
     super
-    cookies.delete(:autologin)
+    if cookies[:autologin] && Setting.autologin?
+      cookies.delete(:autologin)
+    end
   end
 
   before_filter :session_expiration, :user_setup, :check_if_login_required, :set_localization
