@@ -42,7 +42,7 @@ module RedmineApp
         require "pry"
          config.console = Pry
     end
-    
+
     config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
 
     # Configure the default encoding used in templates for Ruby 1.9.
@@ -59,7 +59,7 @@ module RedmineApp
 
     config.action_mailer.perform_deliveries = false
 
-    config.session_store :cookie_store, :key => '_redmine_session'
+    config.session_store :cookie_store, :key => '_redmine_session', :secure => true
 
     if File.exists?(File.join(File.dirname(__FILE__), 'additional_environment.rb'))
       instance_eval File.read(File.join(File.dirname(__FILE__), 'additional_environment.rb'))
