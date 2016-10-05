@@ -38,7 +38,6 @@
 *.*DS_Store
 *._*
 /.bundle
-/Gemfile.lock
 /Gemfile.local
 /redmine_development
 app/views/timelog/.fuse_hidden00000d6f00000002

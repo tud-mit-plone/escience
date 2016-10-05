@@ -83,6 +83,7 @@ end
 group :production do
   gem "mysql2", "~> 0.3.10"
   gem "passenger"
+  gem "sentry-raven"
 end
 
 group :development do
