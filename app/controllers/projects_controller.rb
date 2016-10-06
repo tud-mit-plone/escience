@@ -70,6 +70,7 @@ class ProjectsController < ApplicationController
     scope = Project
 
     current_view = session[:current_view_of_eScience].to_s
+    current_view = "0" if current_view.empty?
 
     if(current_view == "0")
       scope = scope.private_scope(User.current)
