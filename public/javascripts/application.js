@@ -377,13 +377,17 @@ function checkFileSize(el, maxSize, message) {
           $(el).parent().find('.editfilename .hiddenname').val(files[i].name);
           if (filename.length > 37) filename = filename.substring(0,37) + "... ";
           $(el).parent().parent().find('legend').html(filename + filesuffix + " ("+ filesize + ")");
-          $(el).parent().parent().addClass('fileselected');          
-          
+          $(el).parent().parent().addClass('fileselected');
+
           var tagField = $(el).parent().parent().find('input.ui-widget-content');
           tagField.focus();
           tagField.focusout(function() {
-            if ($("input[name][name$='attachments[1][meta_information][]']").length > 0)
-            $('.add_attachment').removeClass('disabled');
+            // defer validation to next tick to let the tag widget do its thing
+            setTimeout(function() {
+              if ($("input[name][name$='attachments[1][meta_information][]']").length > 0) {
+                $('.add_attachment').removeClass('disabled');
+              }
+            }, 0);
           });
         } else {
           alert(message);
@@ -395,14 +399,14 @@ function checkFileSize(el, maxSize, message) {
 }
 
 function format_fileSize(size) {
-  var iSize = (size / 1024); 
-  if ((iSize / 1024) > 1) { 
+  var iSize = (size / 1024);
+  if ((iSize / 1024) > 1) {
     iSize = iSize / 1024;
-    return ( iSize.toFixed(2) + " MB"); 
+    return ( iSize.toFixed(2) + " MB");
   } else {
     iSize = iSize.toFixed(2)
-    return iSize + " KB"; 
-  }    
+    return iSize + " KB";
+  }
 }
 
 function showTab(name) {

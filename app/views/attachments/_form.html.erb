@@ -8,7 +8,7 @@
 <% end %>
 <div id="attachments_fields" style="width:100%">
   <fieldset>
-  
+
       <div class="toggleButton">
         <%= link_to_function('', 'toggleFieldsetNew(jQuery(this).parent().parent())', :title => (l(:button_toggle))) %>
       </div>
@@ -38,11 +38,6 @@
   <% if !defined?(no_form) || no_form.nil? %>
     <div class="add_attachment disabled">
       <%= link_to(l(:label_add_file), '#', :onclick => 'upload_attachment(); return false;', :style => 'display:block;') %>
-      <%#= link_to('', '#', :onclick => 'addFileField(\''+ l(:label_fileupload) +'\'); return false;', :style => 'display:block;') %>
-    <!--
-    <%= l(:label_add_another_file) %><br/>
-  (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-    -->
     </div>
   <%end%>
   <div class="explanation"><%= l(:label_star_mandatory) %></div>
