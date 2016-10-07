@@ -294,7 +294,6 @@ class ProjectsController < ApplicationController
 
   def add_attachment
     attachments = Attachment.attach_files(@project, params[:attachments])
-#    p attachments[:errors]
     errors = (attachments[:files].empty? && attachments[:unsaved].empty?) ? [l(:no_file_given)] : []
     attachments[:errors].each do |error|
       error.each do |k,v|
@@ -305,11 +304,10 @@ class ProjectsController < ApplicationController
     if errors.empty?
       respond_to do |format|
         format.js { render :partial => 'update_attachment'}
-        format.json { render :partial => 'update_attachment'}
       end
     else
       respond_to do |format|
-        format.json {
+        format.js {
           render :js => "$.notification({ message:'#{errors.join('\\n')}', type:'error' })";
         }
       end
