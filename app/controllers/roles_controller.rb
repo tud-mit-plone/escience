@@ -66,6 +66,7 @@ class RolesController < ApplicationController
   end
 
   def update
+    params[:role][:permissions] = params[:role][:permissions].map{|s| s.to_sym}
     if request.put? and @role.update_attributes(params[:role])
       flash[:notice] = l(:notice_successful_update)
       redirect_to :action => 'index'
