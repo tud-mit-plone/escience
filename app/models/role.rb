@@ -194,6 +194,7 @@ class Role < ActiveRecord::Base
       + Role.perms([:view_calendar]) \
       + Role.perms([:manage_documents, :view_documents]) \
       + Role.perms([:manage_doodles, :delete_doodles, :create_doodles, :answer_doodles, :view_doodles]) \
+      + Role.perms([:manage_files, :view_files]) \
       + Role.perms([:view_gantt]) \
       + Role.perms([:manage_categories, :view_issues, :add_issues, :edit_issues, :manage_issue_relations,
                     :manage_subtasks, :set_issues_private, :set_own_issues_private, :add_issue_notes,
@@ -213,6 +214,7 @@ class Role < ActiveRecord::Base
       + Role.perms([:view_calendar]) \
       + Role.perms([:manage_documents, :view_documents]) \
       + Role.perms([:manage_doodles, :delete_doodles, :create_doodles, :answer_doodles, :view_doodles]) \
+      + Role.perms([:manage_files, :view_files]) \
       + Role.perms([:view_gantt]) \
       + Role.perms([:view_issues, :add_issues, :edit_issues, :manage_issue_relations, :manage_subtasks,
                     :add_issue_notes, :edit_own_issue_notes, :save_queries, :delete_issue_watchers]) \
