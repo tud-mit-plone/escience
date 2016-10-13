@@ -219,8 +219,8 @@ en:
   mail_body_wiki_content_added: "The '%{id}' wiki page has been added by %{author}."
   mail_subject_wiki_content_updated: "'%{id}' wiki page has been updated"
   mail_body_wiki_content_updated: "The '%{id}' wiki page has been updated by %{author}."
-  mail_subject_inactive_user_warning: "Your account expires soon."
-  mail_body_inactive_user_warning_intro: "You didn't access your account since %{last_account}. Accounts are deleted automatically after %{cutoff_days} days inactivity."
+  mail_subject_inactive_user_warning: "Your eScience account expires soon."
+  mail_body_inactive_user_warning_intro: "You didn't access your eScience account since %{last_account}. Accounts are deleted automatically after %{cutoff_days} days inactivity."
   mail_body_inactive_user_warning_action: "If you want to continue using your account, login at least once before %{cutoff_date}."
   mail_body_inactive_user_warning_info: "Otherwise your account and your private projects will be deleted irrevocably."
 
@@ -1085,7 +1085,7 @@ en:
   text_message_sent_error_fields: Some fields has not been filled.
   text_message_archive_confirmation: Are you sure, that you want to archive this message?
   text_message_archive_done: Message has been archived successfully.
-  text_message_delete_done: Message has been deleted successfully.  
+  text_message_delete_done: Message has been deleted successfully.
   text_personalize_account: Here you have the ability to adjust your overview page. Select to display items and change their order.
   text_select_mail_notifications: Select actions for which email notifications should be sent.
   text_regexp_info: eg. ^[A-Z0-9]+$

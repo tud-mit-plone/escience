@@ -234,8 +234,8 @@ de:
   mail_body_wiki_content_added: "Die Wiki-Seite '%{id}' wurde von %{author} hinzugefügt."
   mail_subject_wiki_content_updated: "Wiki-Seite '%{id}' erfolgreich aktualisiert"
   mail_body_wiki_content_updated: "Die Wiki-Seite '%{id}' wurde von %{author} aktualisiert."
-  mail_subject_inactive_user_warning: "Ihr Konto läuft in Kürze aus."
-  mail_body_inactive_user_warning_intro: "Sie haben Ihr Konto seit dem %{last_login} nicht mehr benutzt. Konten werden nach %{cutoff_days} Tagen Inaktivität automatisch gelöscht."
+  mail_subject_inactive_user_warning: "Ihr eScience-Konto läuft in Kürze aus."
+  mail_body_inactive_user_warning_intro: "Sie haben Ihr eScience-Konto seit dem %{last_login} nicht mehr benutzt. Konten werden nach %{cutoff_days} Tagen Inaktivität automatisch gelöscht."
   mail_body_inactive_user_warning_action: "Wenn Sie Ihr Konto weiterhin verwenden wollen, melden Sie sich vor dem %{cutoff_date} mindestens einmal an."
   mail_body_inactive_user_warning_info: "Andernfalls werden Ihr Konto und Ihre privaten Projekte unwiederbringlich gelöscht."
 
