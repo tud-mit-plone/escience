@@ -734,7 +734,7 @@ class User < Principal
 
   def self.warn_inactive_users_about_deletion
     date_clauses = Setting.inactive_user_warning_days.split(',').map do |warning_days|
-      start = Setting.inactive_user_deletion_days.to_i.days.ago.midnight - warning_days.to_i.days
+      start = Setting.inactive_user_deletion_days.to_i.days.ago.midnight + warning_days.to_i.days
       stop = start + 1.days
       "(last_login_on BETWEEN '#{start.to_formatted_s(:db)}' AND '#{stop.to_formatted_s(:db)}')"
     end
