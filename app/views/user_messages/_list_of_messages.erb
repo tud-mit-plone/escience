@@ -19,7 +19,7 @@
       <div style="display: table-cell; padding-right: 5px;"><%= link_to(l(:user_message_sort_author),'#', :onclick => "$('#list_of_messages').find('th')[2].click();",:remote => true) %></div>
     </div>
   </div>
-  
+
   <table id="list_of_messages" width="100%" cellpadding="0" cellspacing="0">
     <thead><tr><th></th><th></th><th></th></tr></thead>
     <tbody>
@@ -42,19 +42,15 @@
           <% user_message.group_invitations.each do |inv| %>
             <% case inv.friendship_status_id %>
               <% when FriendshipStatus["accepted"].id %>
-                <div class="icon-ok" style="font-size: 20px; top: -15px; left: 155px; opacity: 0.4; position: relative; 
-                                                                writing-mode: tb-rl; -webkit-transform: rotate(-25deg); -moz-transform: rotate(-25deg);
-                                                                -ms-transform: rotate(-25deg); -o-transform: rotate(-25deg); transform: rotate(-25deg);">
+                <div class="icon-ok">
                   <%= l(:accepted)%>
                 </div>
               <%when FriendshipStatus["denied"].id%>
-                <div class="icon-remove" style="font-size: 20px; top: -15px; left: 155px; opacity: 0.4; position: relative; 
-                                                                writing-mode: tb-rl; -webkit-transform: rotate(-25deg); -moz-transform: rotate(-25deg);
-                                                                -ms-transform: rotate(-25deg); -o-transform: rotate(-25deg); transform: rotate(-25deg);">
+                <div class="icon-remove">
                   <%= l(:denied)%>
                 </div>
               <%when FriendshipStatus["pending"].id%>
-                <div class="icon-question" style="font-size: 50px; left: 210px; opacity: 0.4; margin-left: 220px; margin-top: -40px;">
+                <div class="icon-question">
                 </div>
               <%else%>
             <%end%>
@@ -133,7 +129,7 @@
         },
       "order": [[1,"desc"]]
     });
-    $("#recipient_autocomplete").droppable({ 
+    $("#recipient_autocomplete").droppable({
        accept: ".draggable",
        snap: true,
        drop: function(event, ui) {
