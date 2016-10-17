@@ -26,4 +26,5 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<p><%= link_to l(:label_issue_category_new), new_project_issue_category_path(@project), :class => 'button submit' if User.current.allowed_to?(:manage_categories, @project) %></p>
+<div style="float:right; margin: 7px 0;"><%= link_to l(:label_issue_category_new), new_project_issue_category_path(@project), :class => 'btn' if User.current.allowed_to?(:manage_categories, @project) %></div>
+<div class="clear"></div>

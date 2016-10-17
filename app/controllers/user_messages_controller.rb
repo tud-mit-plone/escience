@@ -2,8 +2,11 @@ class UserMessagesController < ApplicationController
 
   EMAIL_REGEX=/(?:[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
+  include ApplicationHelper
+
   before_filter :is_author?, :only => [:update, :show, :destroy, :edit, :archive]
   before_filter :require_login, :only => [:index, :create, :update, :show, :sent_messages, :new, :destroy, :emptytrash, :edit, :archive]
+  before_filter :get_reply_message,  :only => [:new, :create, :show]
 
   # GET /user_messages
   # GET /user_messages.xml
@@ -103,9 +106,11 @@ class UserMessagesController < ApplicationController
       @user_message_reply = notice
     else
       unless params[:user_message]["receiver"].nil?
-        @receiver_arr = params[:user_message]["receiver"].split(",")
-        @receiver_arr.each do |receiver_id|
-          recv = User.find_by_id(receiver_id)
+        sent_users = []
+        @receiver_arr = User.where(:id => params[:user_message]["receiver"].split(",").uniq)
+        send_recv_list = params[:hide_receivers] == 'false'
+
+        @receiver_arr.each do |recv|
           if recv.nil?
             @user_massage = UserMessage.new()
             flash[:notice] = l(:error_receiver_unknown)
@@ -115,26 +120,28 @@ class UserMessagesController < ApplicationController
             end
             return
           end
-          @user_message = UserMessage.new()
-          @user_message.body = params[:user_message]["body"]
-          @user_message.subject = params[:user_message]["subject"]
-          @user_message.user = User.current
-          @user_message.author = User.current
-          @user_message.receiver_id = recv.id
-          @user_message.state = 3
-          @user_message.directory = UserMessage.sent_directory
-          noerror &= @user_message.save
-
-          @user_message_clone = UserMessage.new()
-          @user_message_clone.body = params[:user_message]["body"]
-          @user_message_clone.subject = params[:user_message]["subject"]
-          @user_message_clone.user = User.current
-          @user_message_clone.state = 1
-          @user_message_clone.author = recv.id
-          @user_message_clone.receiver_id = recv.id
-          @user_message_clone.directory = UserMessage.received_directory
-          noerror &= @user_message_clone.save
+          if @user_message.nil? || @user_message.new_record?
+            @user_message = UserMessage.new()
+            @user_message.body = convertHtmlToWiki(params[:user_message]["body"])
+            @user_message.subject = params[:user_message]["subject"]
+            @user_message.user = User.current
+            @user_message.author = User.current.id
+            @user_message.receiver_id = recv.id
+            @user_message.state = 3
+            @user_message.directory = UserMessage.sent_directory
+            @user_message.parent = @user_message_reply_mail
+            noerror &= @user_message.save
+          end
+          noerror &= @user_message.generate_sent_receiver_copy(recv.id, send_recv_list ? @receiver_arr.collect(&:id) : nil)
+          sent_users << recv.id
         end
+
+        if sent_users.length > 1
+          @user_message.receiver_list = sent_users
+          @user_message.receiver_id = nil
+          @user_message.save
+        end
+
       end
     end
     if (!noerror)
@@ -233,6 +240,13 @@ class UserMessagesController < ApplicationController
     end
   end
 
+  def history_messages
+    history = UserMessage.where(:id => params[:id]).where(:author => User.current)
+    respond_to do |format|
+      format.json render :json => history
+    end
+  end
+
   private
 
   def is_author?
@@ -242,6 +256,10 @@ class UserMessagesController < ApplicationController
       return false
     end
     return true
+  end
+
+  def get_reply_message
+    @user_message_reply_mail = UserMessage.where(:id => params[:reply], :author => User.current.id).first
   end
 
     # State:    0 read message

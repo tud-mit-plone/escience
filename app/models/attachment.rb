@@ -45,6 +45,8 @@ class Attachment < ActiveRecord::Base
                                               :joins => "LEFT JOIN #{Document.table_name} ON #{Attachment.table_name}.container_type='Document' AND #{Document.table_name}.id = #{Attachment.table_name}.container_id " +
                                                         "LEFT JOIN #{Project.table_name} ON #{Document.table_name}.project_id = #{Project.table_name}.id"}
 
+  acts_as_searchable :columns => ['filename'], :foreign_column => :meta_information
+
   cattr_accessor :storage_path
   @@storage_path = Redmine::Configuration['attachments_storage_path'] || File.join(Rails.root, "files")
 
@@ -53,6 +55,9 @@ class Attachment < ActiveRecord::Base
 
   before_save :files_to_final_location
   after_destroy :delete_from_disk
+
+  #necessary for search function
+  scope :visible, lambda {|*args| { } }
 
   # Returns an unsaved copy of the attachment
   def copy(attributes=nil)
@@ -167,32 +172,77 @@ class Attachment < ActiveRecord::Base
   end
 
   def thumbnailable?
-    image?
+    image? || image_convertable?
   end
 
   # Returns the full path the attachment thumbnail, or nil
   # if the thumbnail cannot be generated.
   def thumbnail(options={})
-    if thumbnailable? && readable?
-      size = options[:size].to_i
-      if size > 0
-        # Limit the number of thumbnails per image
-        size = (size / 50) * 50
-        # Maximum thumbnail size
-        size = 800 if size > 800
-      else
-        size = Setting.thumbnails_size.to_i
-      end
-      size = 100 unless size > 0
-      target = File.join(self.class.thumbnails_storage_path, "#{id}_#{digest}_#{size}.thumb")
+    size = options[:size].to_i
+    if size > 0
+      # Limit the number of thumbnails per image
+      size = (size / 50) * 50
+      # Maximum thumbnail size
+      size = 800 if size > 800
+    else
+      size = Setting.thumbnails_size.to_i
+    end
 
+    size = 100 unless size > 0
+
+    if image? && readable?
+      target = File.join(self.class.thumbnails_storage_path, "#{id}_#{digest}_#{size}.thumb")
       begin
-        Redmine::Thumbnail.generate(self.diskfile, target, size)
+        return Redmine::Thumbnail.generate(self.diskfile, target, size)
       rescue => e
         logger.error "An error occured while generating thumbnail for #{disk_filename} to #{target}\nException was: #{e.message}" if logger
         return nil
       end
     end
+    if image_convertable? && readable?
+      options[:size] = "#{size}x"
+      options[:render_page] = (!(options[:pages].nil?) && options[:pages].match(/^\d+$/)) ? options[:pages].to_i : nil
+      return render_to_image(options)
+    end
+  end
+
+  def sort
+    self.filename
+  end
+
+  def render_to_image(options=nil)
+    attachment =  options && options[:attachment] ? options[:attachment] : self
+    size = options && options[:size] ? options[:size] : '100x'
+    pages = options && options[:pages] ? options[:pages] : 1
+    output = options && options[:output] ? options[:output] : '/tmp/escience'
+    input = options && options[:input] ? options[:input] : File.join(Rails.root, "files")
+    render_page = options && options[:render_page] ? options[:render_page] : 1
+
+    filename_without_extension = attachment.disk_filename.to_s.match(/(.*)(\.)/)[1]
+    begin
+      max_pages = Docsplit.extract_length(File.join(input,attachment.disk_filename)).to_i
+    rescue => e
+      logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
+      logger.error "#{e.backtrace}"
+      max_pages = 1
+    end
+
+
+    render_page = render_page.to_i > max_pages ? 1 : render_page
+    pages = pages.to_i > max_pages ? 1 : pages
+
+    begin
+      Docsplit.extract_images(File.join(input,attachment.disk_filename),:size => size,:output => output ,:format => [:jpg], :pages => pages)
+    rescue => e
+      logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
+    end
+
+    render_file = "#{File.join(output,"#{filename_without_extension}_#{render_page}.jpg")}"
+    return render_file
+  end
+
+  def image_convertable?
+    !!(self.filename =~ /\.(doc|docx|ppt|xls|html|odf|rtf|swf|svg|wpd|pdf|ods)$/i)
   end
 
   # Deletes all thumbnails

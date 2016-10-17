@@ -1,20 +1,11 @@
-<%= form_for @project,
-            :url => { :action => 'modules', :id => @project },
-            :html => {:id => 'modules-form',
-            :class => "tab_view",
-            :method => :post} do |f| %>
-
-<div class="box">
-  <fieldset>
-    <legend><%= l(:text_select_project_modules) %></legend>
-    
-    <% Redmine::AccessControl.available_project_modules.each do |m| %>
-    <div style="float:left; width:250px; margin-top:5px;"><label><%= check_box_tag 'enabled_module_names[]', m, @project.module_enabled?(m) -%>
-     <%= l_or_humanize(m, :prefix => "project_module_") %></label></div>
-    <% end %>
-    <p><%= check_all_links 'modules-form' %></p>
-    <p><%= submit_tag l(:button_save) %></p>
-  </fieldset>
-</div>
-
+<% unless params[:controller] == 'my' %>
+  <%= form_for @project,
+              :url => {:controller => 'projects', :action => 'modules', :id => @project.id },
+              :html => {:id => 'modules-form',
+              :class => "tab_view",
+              :method => :post} do |f| %>
+    <%= render :partial => 'projects/settings/modules_content' %>
+  <% end %>
+<% else %>
+  <%= render :partial => 'projects/settings/modules_content' %>
 <% end %>

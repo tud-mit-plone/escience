@@ -38,4 +38,5 @@
 <% end %>
 </div>
 
-<p><%= link_to l(:label_version_new), new_project_version_path(@project, :back_url => ''), :class => 'btn' if User.current.allowed_to?(:manage_versions, @project) %></p>
+<div style="float:right; margin: 7px 0;"><%= link_to l(:label_version_new), new_project_version_path(@project, :back_url => ''), :class => 'btn' if User.current.allowed_to?(:manage_versions, @project) %></div>
+<div class="clear"></div>

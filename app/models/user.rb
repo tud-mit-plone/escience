@@ -74,6 +74,8 @@ class User < Principal
     ['none', :label_user_mail_option_none]
   ]
 
+  @@security_hash={:searchable_sql => '1', :account_readable_for_user => '2'}
+
   has_and_belongs_to_many :groups, :after_add => Proc.new {|user, group| group.user_added(user)},
                                    :after_remove => Proc.new {|user, group| group.user_removed(user)}
   has_many :changesets, :dependent => :nullify
@@ -81,11 +83,27 @@ class User < Principal
   has_one :rss_token, :class_name => 'Token', :conditions => "action='feeds'"
   has_one :api_token, :class_name => 'Token', :conditions => "action='api'"
   belongs_to :auth_source
+  #photos
+  has_many :photos, :order => "created_at desc", :dependent => :destroy
+  #avatar
+  belongs_to  :avatar, :class_name => "Photo", :foreign_key => "avatar_id", :inverse_of => :user_as_avatar
+  #friendship associations
+  has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
+  has_many :accepted_friendships, :class_name => "Friendship", :conditions => ['friendship_status_id = ?', 2]
+  has_many :pending_friendships, :class_name => "Friendship", :conditions => ['initiator = ? AND friendship_status_id = ?', false, 1]
+  has_many :friendships_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', true], :dependent => :destroy
+  has_many :friendships_not_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', false], :dependent => :destroy
+  has_many :occurances_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
 
   scope :logged, :conditions => "#{User.table_name}.status <> #{STATUS_ANONYMOUS}"
   scope :status, lambda {|arg| arg.blank? ? {} : {:conditions => {:status => arg.to_i}} }
+  #necessary for search function
+  scope :visible, lambda {|*args| { }  }
 
   acts_as_customizable
+  acts_as_tagger
+  acts_as_taggable_on :skills, :interests
+  acts_as_searchable :columns => ['mail', 'firstname', 'lastname'],:with_tagging => true
 
   attr_accessor :password, :password_confirmation
   attr_accessor :last_before_login_on
@@ -108,6 +126,8 @@ class User < Principal
   validate :validate_password_length
   validates_acceptance_of :confirm, :allow_nil => false, :accept => true
 # validates_confirmation_of :confirm
+  validates :interest_list, length: { maximum: 20 }
+  validates :skill_list, length: { maximum: 20 }
 
   before_create  :set_mail_notification
   before_save    :update_hashed_password
@@ -544,11 +564,22 @@ class User < Principal
     elsif options[:global]
       # Admin users are always authorized
       return true if admin?
+
+      # authorize if user has at least one role that has this permission
+      roles = memberships.collect {|m| m.roles}.flatten.uniq
       roles << (self.logged? ? Role.non_member : Role.anonymous)
       roles.any? {|role|
         role.allowed_to?(action) &&
         (block_given? ? yield(role, self) : true)
       }
+    elsif(context.is_a?(User))
+      if((User.current.id.to_i == context.id.to_i) ||
+        (User.where(:id => context.id).where("security_number & ?",User.account_readable_for_user).to_a.any?) ||
+        (User.current.admin?))
+        return true
+      else
+        return false
+      end
     else
       false
     end
@@ -673,6 +704,43 @@ class User < Principal
     @last_user_activity
   end
 
+  def avatar_photo_url(size = :original)
+    if avatar
+        avatar.photo.url(size)
+    else
+      case size
+        when :thumb
+          Setting.plugin_redmine_social['photo_missing_thumb']
+        else
+          Setting.plugin_redmine_social['photo_missing_medium']
+      end
+    end
+  end
+
+  def selected_security_options()
+    selected_sec_options = []
+    User.security_hash.keys.each do |sec_option|
+      selected_sec_options << sec_option if((self.security_number.to_i & User.security_hash[sec_option].to_i) > 0)
+    end
+    return selected_sec_options
+  end
+
+  def sort
+    self.lastname + self.firstname
+  end
+
+  def can_request_friendship_with(user)
+    !self.eql?(user) && !self.friendship_exists_with?(user)
+  end
+
+  def friendship_exists_with?(friend)
+    Friendship.find(:first, :conditions => ["user_id = ? AND friend_id = ?", self.id, friend.id])
+  end
+
+  def has_reached_daily_friend_request_limit?
+    friendships_initiated_by_me.count(:conditions => ['created_on > ?', Time.now.beginning_of_day]) >= Friendship.daily_request_limit
+  end
+
   def self.online_live_count
     Rails.cache.fetch("online_users").count
   end
@@ -721,6 +789,30 @@ class User < Principal
   # Returns a 128bits random salt as a hex string (32 chars long)
   def self.generate_salt
     Redmine::Utils.random_hex(16)
+  end
+
+  def self.security_hash
+    return @@security_hash
+  end
+
+  def self.calc_security_number(sec_hash)
+    return if User.security_hash.nil?
+    sec_number = 0
+
+    unless sec_hash.nil?
+      User.security_hash.keys.each do |sec_option|
+        sec_number += User.security_hash[sec_option].to_i if sec_hash.include?(sec_option)
+      end
+    end
+    return sec_number
+  end
+
+  def self.method_missing(method_name, *args, &block)
+    if @@security_hash.keys.include?(method_name.to_sym)
+      return @@security_hash[method_name.to_sym].to_i
+    else
+      super
+    end
   end
 
   def self.delete_inactive_users

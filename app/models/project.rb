@@ -67,6 +67,7 @@ class Project < ActiveRecord::Base
   acts_as_event :title => Proc.new {|o| "#{l(:label_project)}: #{o.name}"},
                 :url => Proc.new {|o| {:controller => 'projects', :action => 'show', :id => o}},
                 :author => nil
+  acts_as_invitable
 
   attr_protected :status
 

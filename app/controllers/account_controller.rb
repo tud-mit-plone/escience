@@ -24,6 +24,7 @@ class AccountController < ApplicationController
 
   # prevents login action to be filtered by check_if_login_required application scope filter
   skip_before_filter :check_if_login_required
+  after_filter :set_initial_session_scope, :only => [:login]
 
   # Login request and validation
   def login
@@ -304,5 +305,9 @@ class AccountController < ApplicationController
   def account_pending
     flash[:notice] = l(:notice_account_pending)
     redirect_to signin_path
+  end
+
+  def set_initial_session_scope
+    session[:current_view_of_eScience] = '0'
   end
 end

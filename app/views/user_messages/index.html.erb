@@ -14,20 +14,20 @@
 <div id="list_of_user_messages"><%= render :partial => 'list_of_messages' %></div>
 
 <% content_for :sidebar_right do %>
-  	<ul>
-  	 <li><%= link_to(l(:label_user_messages_new), {:action => "new"}) %></li>
-  	 <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' unless params[:directory]}") %></li>
-  	 <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
-  	 <li class='<%= 'droppable' if @directory != "archive" && @directory != "sent" %>' id="to_archive"><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
-  	 <li class='droppable' id="to_trash"><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
-  	<% if !@user_messages.empty? && @directory == "trash" %>
-    	<li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
-  	<% end %>
-  	</ul>
+    <ul>
+     <li><%= link_to(l(:label_user_messages_new), {:action => "new"}) %></li>
+     <li><%= link_to(l(:label_user_messages_inbox), {:action => "index"}, :class => "#{'selected' unless params[:directory]}") %></li>
+     <li><%= link_to(l(:label_user_messages_sentbox), {:directory => "sent"}, :class => "#{'selected' if params[:directory]=='sent'}") %></li>
+     <li class='<%= 'droppable' if @directory != "archive" && @directory != "sent" %>' id="to_archive"><%= link_to(l(:label_user_messages_archivebox), {:directory => "archive"}, :class => "#{'selected' if params[:directory]=='archive'}") %></li>
+     <li class='droppable' id="to_trash"><%= link_to(l(:label_user_messages_deletebox), {:directory => "trash"}, :class => "#{'selected' if params[:directory]=='trash'}") %></li>
+    <% if !@user_messages.empty? && @directory == "trash" %>
+      <li><%= link_to(l(:label_user_messages_emptytrash), {:controller => "user_messages", :action => "emptytrash"}, :confirm => self.l(:text_message_emptytrash_confirmation)) %></li>
+    <% end %>
+    </ul>
 <% end %>
 
 <%= javascript_tag "
-	$(document).ready(function() {
+  $(document).ready(function() {
     $('.droppable').droppable({ 
        accept: '.draggable',
        snap: false,

@@ -34,6 +34,7 @@ class AppointmentsController < ApplicationController
   end
 
   def edit
+    @available_watchers = User.current.friendships.accepted.map{|f| f.friend}
     respond_to do |f|
       f.html {render :action => 'edit'}
     end

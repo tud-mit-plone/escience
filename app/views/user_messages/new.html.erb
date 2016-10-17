@@ -19,14 +19,14 @@
       <% if !@user_message_reply_mail.nil? %>
         <%= hidden_field_tag("buffer", @user_message_reply_mail.author) %>
         <%= hidden_field_tag("reply", @user_message_reply_mail.id) %>
-      <% end %> 
+      <% end %>
       <div class="clear">&nbsp;</div>
     </div>
     <div class="clear"></div>
   </div>
   <div class="field">
   <%= hidden_field_tag(:hide_receivers, false) %>
-  <%= check_box_tag(:hide_receivers,true,false) %> 
+  <%= check_box_tag(:hide_receivers,true,false) %>
   <%= label_tag(l(:user_message_hide_receivers))%>
   </div>
   <div class="field">
@@ -36,18 +36,18 @@
   <%if !@user_message_reply_mail.nil? %>
     <fieldset class="collapsable" id='previous_message'>
       <legend onclick="toggleFieldset(this)"><%= l(:user_message_previous_message) %></legend>
-      <div> 
+      <div>
         <%= textilizable @user_message_reply_mail, :body %>
       </div>
     </fieldset>
-    
+
     <fieldset class="collapsable" id='message_history'>
     <legend onclick="toggleFieldset(this)"><%= l(:user_message_history) %></legend>
     <% @user_message_reply_mail.get_history.each do |msg| %>
-    <div class= <%= msg.user == User.current ? "my_message" :  "their_message" %>> 
+    <div class= <%= msg.user == User.current ? "my_message" :  "their_message" %>>
       <fieldset class="collapsable">
         <legend onclick="toggleFieldset(this)"><%= msg.user == User.current ? l(:user_message_me) : "#{msg.user.lastname}, #{msg.user.firstname}" %> (<%= format_time(@user_message_reply_mail.created_at.to_s) %>)</legend>
-        <div> 
+        <div>
           <%= textilizable msg, :body %>
         </div>
       </fieldset>
@@ -55,7 +55,7 @@
     <% end %>
     </fieldset>
     <%= javascript_tag("$( document ).ready( function() { toggleFieldset($('#message_history').find('legend')[0])});")%>
-  <% end %> 
+  <% end %>
   <div class="field">
     <%= f.label l(:label_user_messages_body) %><br />
     <%= f.text_area :body, :class => 'ckeditor' %>
@@ -75,7 +75,7 @@
   <%= javascript_include_tag 'ckeditor/ckeditor.js' %>
   <%= javascript_include_tag 'visualsearch/underscore-1.1.5.js' %>
   <%= javascript_include_tag 'visualsearch/backbone-0.5.0.js' %>
-  
+
   <%= javascript_tag("$( document ).ready( function() { setTimeout( function(){toggleFieldset($('#previous_message').find('legend'))}, 700); });")%>
   <%= javascript_tag '
     $( document ).ready( function() {
@@ -83,7 +83,7 @@
     $( "#recipient_autocomplete" ).click(function() {
       user_message_receiver_visible.focus();
     });
-    
+
     $( "#user_message_receiver_visible" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
@@ -123,3 +123,4 @@
 <% end %>
 
 <%= render :partial => "user_message_side_menu"%>
+<%= render :partial => "friendships/contact_list" %>

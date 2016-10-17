@@ -24,8 +24,23 @@ class AttachmentsController < ApplicationController
   accept_api_auth :show, :download, :upload
 
   def show
+    type = detect_content_type(@attachment)
+
     respond_to do |format|
+      format.js {
+        if type == 'application/octetstream' && @attachment.disk_filename.split(".").last == 'pdf' ||
+                type == 'application/pdf'
+          render :render_show
+        elsif type == 'application/vnd.ms-excel' && @attachment.disk_filename.split(".").last == 'xls' ||
+                type == 'application/vnd.oasis.opendocument.spreadsheet'
+          sent_render_to_image({:size => '1000x',:pages => params[:pages]})
+          render :render_show
+        else
+          render :render_show
+        end
+      }
       format.html {
+
         if @attachment.is_diff?
           @diff = File.new(@attachment.diskfile, "rb").read
           @diff_type = params[:type] || User.current.pref[:diff_type] || 'inline'
@@ -39,11 +54,19 @@ class AttachmentsController < ApplicationController
         elsif @attachment.is_text? && @attachment.filesize <= Setting.file_max_size_displayed.to_i.kilobyte
           @content = File.new(@attachment.diskfile, "rb").read
           render :action => 'file'
+        elsif type == 'application/octetstream' && @attachment.disk_filename.split(".").last == 'pdf' ||
+                type == 'application/pdf'
+          render :action => 'render_show'
+        elsif type == 'application/vnd.ms-excel' && @attachment.disk_filename.split(".").last == 'xls' ||
+                type == 'application/vnd.oasis.opendocument.spreadsheet'
+          sent_render_to_image({:size => '1000x',:pages => params[:pages]})
         else
           download
         end
       }
-      format.api
+      format.api {
+        render :render_show
+      }
     end
   end
 
@@ -61,11 +84,12 @@ class AttachmentsController < ApplicationController
   end
 
   def thumbnail
-    if @attachment.thumbnailable? && thumbnail = @attachment.thumbnail(:size => params[:size])
+    thumbnail = @attachment.thumbnail({:size => params[:size], :pages => params[:pages]})
+    if @attachment.thumbnailable? && thumbnail && File.exist?(thumbnail)
       if stale?(:etag => thumbnail)
         send_file thumbnail,
-          :filename => filename_for_content_disposition(@attachment.filename),
-          :type => detect_content_type(@attachment),
+          :filename => thumbnail,
+          :type =>  'image/jpeg',
           :disposition => 'inline'
       end
     else
@@ -108,6 +132,13 @@ class AttachmentsController < ApplicationController
 #      format.js { render :partial => Rails.application.routes.recognize_path(request.referrer)[:controller]+'/update_attachment'}
       format.js { render :partial => 'projects/update_attachment'}
     end
+  end
+
+  def sent_render_to_image(options=nil)
+    render_file = @attachment.render_to_image(options)
+    send_file render_file, :filename =>render_file,
+                :type => 'image/jpeg',
+                :disposition => 'inline'
   end
 
 private

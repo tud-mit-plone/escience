@@ -16,9 +16,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class UsersController < ApplicationController
-  before_filter :require_admin, :except => [:create, :show, :user_search, :contact_member_search, :online_live_count]
+  before_filter :require_admin, :except => [:show, :user_search, :contact_member_search, :online_live_count, :crop_profile_photo, :upload_profile_photo]
   before_filter :require_login, :only => [:user_search, :contact_member_search,:show,:online_live_count]
   before_filter :find_user, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership]
+  before_filter(:only => [:show]){ |controller| controller.require_user_security(params[:id]) }
   accept_api_auth :index, :show, :create, :update, :destroy
 
   helper :sort
@@ -26,6 +27,8 @@ class UsersController < ApplicationController
   helper :custom_fields
   include ActionView::Helpers::JavaScriptHelper
   include CustomFieldsHelper
+
+  layout 'base'
 
   def index
     sort_init 'login', 'asc'
@@ -80,72 +83,21 @@ class UsersController < ApplicationController
   end
 
 
+
   def contact_member_search
     others = []
     if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
-      others = []
+      @users = []
     else
-      others = User.find(:all,
+      @users = User.find(:all,
         :select => "firstname, lastname, id",
-        :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ?',
-        "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}"],:limit => 5, :order => 'lastname')
-
-#      others = User.find_by_sql(["SELECT u.firstname, u.lastname, u.id, p.name
-#                                 FROM users u, projects p, members m
-#                                 WHERE (u.lastname LIKE ? OR u.firstname LIKE ?)
-#                                 AND m.user_id = u.id
-#                                 AND p.status=1
-#                                 AND p.id = m.project_id
-#                                 AND p.id IN (#{User.current.projects.map{|p| "'#{p.id}'"}.join(",")})
-#                                 AND u.id <> ?
-#                                 ","#{params[:q]}%", "#{params[:q]}%",
-#                                 User.current.id])
+        :conditions => ['(lastname LIKE ? OR firstname LIKE ?) AND id <> ? AND security_number & ?',
+        "#{params[:q]}%", "#{params[:q]}%", "#{User.current.id}",User.searchable_sql()],:limit => 5, :order => 'lastname')
     end
-    @projects = []
-    @allusers = []
-    @n_projects = {}
-
-    project_list = Project.visible.find(:all, :order => 'lft')
-    project_list.each do |project|
-      users = []
-      n_users = {}
-      user_projects = project.users_by_role
-      user_projects.each do |user_project|
-        role = ""
-        user_project.each do |user_roles|
-          if user_roles.class.to_s == "Role"
-            role = user_roles.name
-          elsif user_roles.class.to_s == "Array"
-            user_roles.each do |user|
-              if !(others.detect {|v| v.id == user.id}).nil?
-                n_users[role] ||= []
-                n_users[role] << user
-                users += [[user, role]]
-                @allusers += [[user, role]]
-              end
-            end
-          end
-        end
-      end
-      if !users.empty?
-        users.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
-        @projects += [[project.name, users]]
-      end
-      if !n_users.empty?
-        @n_projects[project.name] = n_users
-      end
-    end
-    @allusers.sort! { |a,b| a[0].lastname.downcase <=> b[0].lastname.downcase }
-
-    @n_projects[l(:no_common_project)] = {}
-    @n_projects[l(:no_common_project)][""] = User.find((others - @allusers[0]).flatten.map{|m| m.id} )
-
-    #@projects += [["Noch nicht gekannt", [[User.find((others - @allusers).flatten.map{|m| m.id} ),"nix" ]]]]
 
     respond_to do |format|
-      format.xml { render :xml => @users }
       format.js # user_search.js.erb
-      format.json { render :json => @n_projects.to_json }
+      format.json { render :json => @users.to_json }
     end
   end
 
@@ -225,6 +177,10 @@ class UsersController < ApplicationController
     if params[:user][:password].present? && (@user.auth_source_id.nil? || params[:user][:auth_source_id].blank?)
       @user.password, @user.password_confirmation = params[:user][:password], params[:user][:password_confirmation]
     end
+    #should we do this here?
+    #@user.calc_security_number(params[:security])
+    #
+
     @user.safe_attributes = params[:user]
     # Was the account actived ? (do it before User#save clears the change)
     was_activated = (@user.status_change == [User::STATUS_REGISTERED, User::STATUS_ACTIVE])
@@ -258,8 +214,8 @@ class UsersController < ApplicationController
       respond_to do |format|
 
         format.html {
-         flash[:notice] = @user.errors.full_messages
-         render :action => :edit }
+          flash[:notice] = @user.errors.full_messages
+          render :action => :edit }
         format.api  { render_validation_errors(@user) }
       end
     end
@@ -312,6 +268,68 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json{ render :json => {:success => true, :data => User.online_live_count.to_json }}
     end
+  end
+
+
+  def upload_profile_photo
+    @user = User.find(params[:id])
+    @avatar = Photo.new(params[:photo])
+    @avatar.name = params[:photo][:filename]
+    @avatar.user  = @user
+    if @avatar.save
+      @user.avatar_id  = @avatar.id
+      @user.save!
+
+      @photo = @avatar
+    end
+
+    respond_to do |format|
+      format.html { render :action => 'show', :layout => false if request.xhr? }
+      format.js { render :partial => 'crop_profile_photo' }
+    end
+  end
+
+  def tag_search
+    tags = []
+    if params[:q].nil? || params[:q]== '' || params[:q].split('').length < 3
+      tags
+    else
+      tags = ActsAsTaggableOn::Tag.where("name like ?",params[:q])
+    end
+
+    respond_to do |format|
+      format.xml { render :xml => tags }
+      #format.js # user_search.js.erb
+      #format.json { render :json => @projects }
+    end
+  end
+
+  def crop_profile_photo
+    @user = User.find(params[:id])
+    @avatar = @user.avatar ? @user.avatar : Photo.new(params[:photo])
+    @photo = @avatar
+    unless params[:avatar_id].nil?
+      @user.avatar_id  = params[:avatar_id]
+      @user.save!
+    end
+    return unless request.put?
+    @photo.update_attributes(:crop_x => params[:photo][:crop_x],
+                                              :crop_y => params[:photo][:crop_y],
+                                              :crop_w => params[:photo][:crop_w],
+                                              :crop_h => params[:photo][:crop_h])
+    respond_to do |format|
+      format.html { redirect_to my_account_path }
+      format.js { render :partial => 'users/update_profile_photo' }
+    end
+  end
+
+  def require_user_security(user_id)
+    if((User.current.id.to_i == user_id.to_i) ||
+      (User.where(:id => user_id).where("security_number & ?",User.account_readable_for_user).to_a.any?) ||
+      (User.current.admin?))
+      return true
+    end
+    return render_403
   end
 
   private

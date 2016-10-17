@@ -1,19 +1,15 @@
-<%= labelled_form_for @wiki,
-                   :as => :wiki,
-                   :url => { :controller => 'wikis', :action => 'edit', :id => @project },
-                   :remote => true, :method => 'post' do |f| %>
+<% unless params[:controller] == 'my' %>
+  <%= labelled_form_for @wiki,
+                     :as => :wiki,
+                     :url => { :controller => 'wikis', :action => 'edit', :id => @project },
+                     :html => {:id => 'edit_wiki'},
+                     :remote => true, :method => 'post' do |f| %>
 
-<%= error_messages_for 'wiki' %>
+    <%= error_messages_for 'wiki' %>
+    
+    <%= render :partial => 'projects/settings/wiki_content'%>
 
-<div class="box tabular">
-<p><%= f.text_field :start_page, :size => 60, :required => true %></p>
-<p><em class="info"><%= l(:text_unallowed_characters) %>: , . / ? ; : |</em></p>
-</div>
-
-<div class="contextual">
-<%= link_to(l(:button_delete), {:controller => 'wikis', :action => 'destroy', :id => @project},
-            :class => 'button submit') if @wiki && !@wiki.new_record? %>
-</div>
-
-<%= submit_tag(((@wiki.nil? || @wiki.new_record?) ? l(:button_create) : l(:button_save)), :style => "margin-right:0px;") %>
+  <% end %>
+<% else %>
+  <%= render :partial => 'projects/settings/wiki_content'%>  
 <% end %>
