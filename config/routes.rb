@@ -72,11 +72,40 @@ RedmineApp::Application.routes.draw do
   match 'my/add_block', :controller => 'my', :action => 'add_block', :via => :post
   match 'my/remove_block', :controller => 'my', :action => 'remove_block', :via => :post
   match 'my/order_blocks', :controller => 'my', :action => 'order_blocks', :via => :post
+  match 'my/render_block/:blockname', :controller => 'my', :action => 'render_block', :via => :get, :blockname => /\w+/
+  match 'my/interest_search', :controller => 'my', :action => 'interest_search', :via => :get
+  match 'my/skill_search', :controller => 'my', :action => 'skill_search', :via => :get
 
   match 'metatagssearch', :controller => 'meta_information', :action => 'retrieve_all_tags'
 
   match 'users/online_live_count', :to => 'users#online_live_count', :via => :get
-  resources :users
+
+  resources :users do
+    member do
+      get 'statistics'
+      get 'crop_profile_photo'
+      put 'crop_profile_photo'
+      get 'upload_profile_photo'
+      put 'upload_profile_photo'
+      post 'upload_profile_photo.js' => 'users#upload_profile_photo', :as => :upload_profile_photo, :format => 'js'
+    end
+    resources :friendships do
+      collection do
+        get :accepted
+        get :pending
+        get :denied
+        get :write_message
+      end
+      member do
+        put :accept
+        put :deny
+      end
+    end
+    resources :photos do
+      get 'page/:page', :action => :index, :on => :collection
+    end
+  end
+
   match 'usersearch', :controller => 'users', :action => 'user_search'
   match 'contact_membersearch', :controller => 'users', :action => 'contact_member_search'
   match 'users/:id/memberships/:membership_id', :to => 'users#edit_membership', :via => :put, :as => 'user_membership'
@@ -357,7 +386,30 @@ RedmineApp::Application.routes.draw do
 
   match 'uploads', :to => 'attachments#upload', :via => :post
 
+# automatic insertion for ads model
+  resources :ads
+# automatic insertion for photo_manager model
+  resources :photo_manager
+
   get 'robots.txt', :to => 'welcome#robots'
+
+# automatic insertion for friendship model
+  get '/friendships.xml' => 'friendships#index', :as => :friendships_xml, :format => 'xml'
+  get '/friendships' => 'friendships#index', :as => :friendships
+
+  get 'manage_photos' => 'photos#manage_photos', :as => :manage_photos
+  post 'create_photo.js' => 'photos#create', :as => :create_photo, :format => 'js'
+
+  controller :comments do
+    post '/comments/create', :action => :create_general_comment, :as => 'create_general_comments'
+  end
+
+  resources :group_invitations, :except => [:show, :new, :edit, :update] do
+      member do
+        post 'create', :action => :create
+        post 'selection', :action => :selection
+      end
+  end
 
   Dir.glob File.expand_path("plugins/*", Rails.root) do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")
