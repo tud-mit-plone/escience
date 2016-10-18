@@ -1,14 +1,6 @@
 require 'rails'
 require 'redmine'
 
-Dir::foreach(File.join(File.dirname(__FILE__), 'lib')) do |file|
-  next if /\.{1,2}/ =~ file
-  next unless File.exist?(File.join(File.dirname(__FILE__), 'lib',file,"init.rb"))
-  p "redmine_social requires #{File.join(File.dirname(__FILE__), 'lib',file,"init.rb")}"
-  require File.join(File.dirname(__FILE__), 'lib',file,"init.rb")
-end
-
-require "#{File.join(File.dirname(__FILE__), 'lib','paperclip_processors')}/cropper"
 #require "hpricot"
 
 #require_dependency 'communityengine'
