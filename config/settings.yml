@@ -229,3 +229,34 @@ inactive_user_deletion_days:
   default: 365
 inactive_user_warning_days:
   default: "28,14,7"
+social:
+  serialized: true
+  default:
+    invitation_default_role_id: '3'
+    photo_content_type:
+    - image/jpeg
+    - image/png
+    - image/gif
+    - image/pjpeg
+    - image/x-png
+    - image/jpeg2000
+    photo_max_size: '5'
+    photo_paperclip_options:
+      styles:
+        thumb:
+          geometry: 100x100#
+          processors:
+          - :cropper
+        medium:
+          geometry: 180x180#
+          processors:
+          - :cropper
+        large:
+          geometry: 465>
+          processors:
+          - :cropper
+      path: ":rails_root/public/system/attachments/development/files/:id/:style/:basename.:extension"
+      url: "/system/attachments/development/files/:id/:style/:basename.:extension"
+    photo_missing_thumb: avatar.png
+    photo_missing_medium: avatar.png
+

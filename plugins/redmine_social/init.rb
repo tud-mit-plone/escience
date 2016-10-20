@@ -15,31 +15,6 @@ Redmine::Plugin.register :redmine_social do
   description 'Extend your Redmine with social media'
   version '0.0.1'
 
-  settings(:default => {
-    'invitation_default_role_id' => '3',
-    'photo_content_type' => ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/x-png', 'image/jpeg2000'],
-    'photo_max_size' => '5' ,
-    'photo_paperclip_options' => {
-        "styles" => {
-            "thumb" => {
-              "geometry" => "100x100#",
-              "processors" => [:cropper]
-            },
-            "medium" => {
-              "geometry" => "180x180#",
-              "processors" => [:cropper]
-            },
-            "large" => {
-              "geometry" => "465>",
-              "processors" => [:cropper]
-            }
-        },
-        "path" => ":rails_root/public/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension",
-        "url" => "/system/attachments/#{Rails.env}/files/:id/:style/:basename.:extension"},
-    'photo_missing_thumb' => "avatar.png",
-    'photo_missing_medium' => "avatar.png",
-    :partial =>'settings_redmine_social/settings'})
-
   contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
   menu :private_menu, :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}, :html => {:class => "icon icon-user"}
   menu :private_menu, :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}, :html => {:class => "icon icon-group"}

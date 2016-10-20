@@ -4,9 +4,9 @@ class Photo < ActiveRecord::Base
 
   validates_attachment_presence :photo
   validates_attachment_content_type :photo, :content_type =>
-                            Setting.plugin_redmine_social['photo_content_type'].class == Array ? Setting.plugin_redmine_social['photo_content_type'] :
-                            JSON.parse(Setting.plugin_redmine_social['photo_content_type'])
-  validates_attachment_size :photo, :less_than => Setting.plugin_redmine_social['photo_max_size'].to_i.megabytes
+                            Setting.social['photo_content_type'].class == Array ? Setting.social['photo_content_type'] :
+                            JSON.parse(Setting.social['photo_content_type'])
+  validates_attachment_size :photo, :less_than => Setting.social['photo_max_size'].to_i.megabytes
 
    has_many :comments, :as => :commented, :dependent => :delete_all, :order => "created_on"
 
@@ -28,7 +28,7 @@ class Photo < ActiveRecord::Base
   scope :new_this_week, :order => "photos.created_at DESC", :conditions => ["photos.created_at > ?", 7.days.ago.iso8601]
   attr_accessible :name, :description, :photo, :crop_x, :crop_y, :crop_w, :crop_h, :user_id
 
-  def self.settings_to_symbolize_keys(hash = Setting.plugin_redmine_social['photo_paperclip_options'].to_hash)
+  def self.settings_to_symbolize_keys(hash = Setting.social['photo_paperclip_options'].to_hash)
       n = hash.dup
       hash.each do |k,v|
         n[k] = (self.settings_to_symbolize_keys(v)) if v.class == Hash
@@ -40,7 +40,7 @@ class Photo < ActiveRecord::Base
       return n
   end
 
-  #p "#{JSON.parse(Setting.plugin_redmine_social['photo_paperclip_options'].to_s.gsub("=>",":"))}"
+  #p "#{JSON.parse(Setting.social['photo_paperclip_options'].to_s.gsub("=>",":"))}"
   #p "#{settings_to_symbolize_keys}"
 
   has_attached_file :photo, settings_to_symbolize_keys

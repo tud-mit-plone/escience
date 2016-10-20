@@ -9,24 +9,24 @@ class GroupInvitationsController < ApplicationSocialController
    before_filter :authorized, :only => [:create]
 #   before_filter :user_already_in_group?, :only => [:create]
 
-  #Todo create permission to role for inviting people to groups etc. 
+  #Todo create permission to role for inviting people to groups etc.
   def create
-    if params[:controller_name].nil? 
+    if params[:controller_name].nil?
       send_single_invitation
     elsif params[:controller_name].downcase.singularize == 'project' && !(params[:id].nil?)
       send_members_invitations(params[:membership][:user_ids],params[:membership][:role_ids])
-    else 
+    else
       render_404
     end
-  end  
+  end
 
-  def selection 
+  def selection
     unless params[:true].nil?
       @group_invitation.friendship_status_id = FriendshipStatus[:accepted].id
 
       @group_invitation.role_ids = [@group_invitation.role_ids] if !(@group_invitation.role_ids.class == Array)
-      roles =  @group_invitation.role_ids.any? ? @group_invitation.role_ids : [Setting.plugin_redmine_social['invitation_default_role_id']]
-      
+      roles =  @group_invitation.role_ids.any? ? @group_invitation.role_ids : [Setting.social['invitation_default_role_id']]
+
       m = Member.new(:user_id => @user.id, :project => @group_invitation.group, :role_ids => roles)
       if(m.save)
         @group_invitation.group.members << m
@@ -35,7 +35,7 @@ class GroupInvitationsController < ApplicationSocialController
       else
         flash[:error] = l(:sorry_there_was_an_error)
       end
-    else 
+    else
       @group_invitation.friendship_status_id = FriendshipStatus[:denied].id
       @group_invitation.save!
       flash[:notice] = l(:project_invitation_denied)
@@ -44,13 +44,13 @@ class GroupInvitationsController < ApplicationSocialController
       format.html {render :partial => 'update'}
       format.js {render :partial => 'update'}
     end
-#    redirect_to request.referer   
+#    redirect_to request.referer
   end
 
-  private 
+  private
 
   def require_receiver_user
-    unless (User.current != @group_invitation.user_messages.where(:state => [0,1]).first.author || User.current.admin?) 
+    unless (User.current != @group_invitation.user_messages.where(:state => [0,1]).first.author || User.current.admin?)
       render_403
     end
   end
@@ -61,9 +61,9 @@ class GroupInvitationsController < ApplicationSocialController
 
   def get_model_for_invitation
     GroupInvitation.get_invitation_group.each do |m_name|
-      next if m_name.nil? 
+      next if m_name.nil?
       id= "#{m_name.downcase.singularize}_id"
-      
+
       if(!(params[id.to_sym].nil?))
         @model = m_name.constantize.find(params[id.to_sym])
         @model_name = m_name.downcase.singularize
@@ -78,9 +78,9 @@ class GroupInvitationsController < ApplicationSocialController
     end
   end
 
-  #some more alteration in User.allowed_to? necessary for supporting more than projects as models 
-  def authorized 
-    if @model.nil? 
+  #some more alteration in User.allowed_to? necessary for supporting more than projects as models
+  def authorized
+    if @model.nil?
       get_model_for_invitation
     end
     unless @user.allowed_to?({:controller => params[:controller], :action => params[:action]}, @model)
@@ -89,42 +89,42 @@ class GroupInvitationsController < ApplicationSocialController
   end
 
   def user_already_in_group?
-    raise 
+    raise
   end
 
   def get_user
     if params[:user_id]
       @user = User.find(params[:user_id])
-    else 
+    else
       @user = User.current
     end
     return @user
   end
 
-  def send_members_invitations(new_members,roles) 
+  def send_members_invitations(new_members,roles)
     if !(new_members.class == Array)
       new_members = [new_members]
     end
 
     errors ||= []
     notices ||= []
-    
+
     new_members.each do |recv|
       sender_u_msg, receiver_u_msg = create_invitation_messages({:project_id => params[:id], :receiver_id => recv })
-      if sender_u_msg.nil? || receiver_u_msg.nil? 
+      if sender_u_msg.nil? || receiver_u_msg.nil?
         errors << recv
         next
       end
-            
+
       inv = create_group_invitation(sender_u_msg, receiver_u_msg,roles)
       logger.info inv.errors.full_messages
-      notices << inv.errors.full_messages 
+      notices << inv.errors.full_messages
     end
-    
+
     logger.info errors.join("\n")
 
     flash[:notice] = notices.join("\n")
-  
+
     respond_to do |format|
       flash[:notice] = :project_invitation_sent
       format.html { redirect_to :controller =>  @model_name.pluralize }
@@ -134,19 +134,19 @@ class GroupInvitationsController < ApplicationSocialController
     end
   end
 
-  def send_single_invitation 
+  def send_single_invitation
     sender_u_msg, receiver_u_msg = create_invitation_messages
 
-    if sender_u_msg.nil? || receiver_u_msg.nil? 
+    if sender_u_msg.nil? || receiver_u_msg.nil?
       render_404
     end
 
     inv = create_group_invitation(sender_u_msg, receiver_u_msg)
 
     logger.info inv.errors.full_messages
-    flash[:notice] = inv.errors.full_messages 
+    flash[:notice] = inv.errors.full_messages
 #    redirect_to :controller =>  @model_name.pluralize
-  
+
     respond_to do |format|
       flash[:notice] = l(:project_invitation_sent)
       format.html { redirect_to :controller =>  @model_name.pluralize }
@@ -160,8 +160,8 @@ class GroupInvitationsController < ApplicationSocialController
     inv = GroupInvitation.new()
     inv.user_messages << sender_u_msg
     inv.user_messages << receiver_u_msg
-    
-    inv.group = @model 
+
+    inv.group = @model
     inv.friendship_status_id = FriendshipStatus.where(:name => "pending").first.id
     inv.role_ids = roles
 
@@ -189,12 +189,12 @@ class GroupInvitationsController < ApplicationSocialController
                                                              :receiver_id => receiver_id,
                                                              :state => 3,
                                                              :directory => UserMessage.sent_directory})
-    if sender_u_msg.save 
+    if sender_u_msg.save
       receiver_u_msg = sender_u_msg.generate_sent_receiver_copy()
       receiver_u_msg = nil unless receiver_u_msg.save
     else
-      sender_u_msg = nil 
-    end 
+      sender_u_msg = nil
+    end
 
     return sender_u_msg,receiver_u_msg
   end

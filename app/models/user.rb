@@ -710,9 +710,9 @@ class User < Principal
     else
       case size
         when :thumb
-          Setting.plugin_redmine_social['photo_missing_thumb']
+          Setting.social['photo_missing_thumb']
         else
-          Setting.plugin_redmine_social['photo_missing_medium']
+          Setting.social['photo_missing_medium']
       end
     end
   end
