@@ -58,6 +58,10 @@ Redmine::AccessControl.map do |map|
   map.permission :manage_members, {:projects => :settings, :members => [:index, :show, :create, :update, :destroy, :autocomplete]}, :require => :member
   map.permission :manage_versions, {:projects => :settings, :versions => [:new, :create, :edit, :update, :close_completed, :destroy]}, :require => :member
   map.permission :add_subprojects, {:projects => [:new, :create]}, :require => :member
+  map.permission :group_invitations_create, :group_invitations => [:create], :require => :member
+  map.permission :view_calendar, {:calendar => [:show, :update]}, :read => true
+  map.permission :appointments_add_watchers, :appointments => :add_watchers
+  map.permission :group_invitations_create, :group_invitations => :create
 
   map.project_module :issue_tracking do |map|
     # Issue categories
@@ -197,6 +201,9 @@ Redmine::MenuManager.map :private_menu do |menu|
   menu.push :overview_all, { :controller => 'projects', :action => 'index', :sub => 'overview_all' }, :html => {:class => 'icon icon-beaker'}, :caption => :label_project_plural
   menu.push :issues_all, { :controller => 'issues', :action => 'index', :sub => 'issues_all' }, :caption => :label_issues_plural, :html => {:class => "newmessage icon icon-check"}
   menu.push :user_messages, { :controller => 'user_messages', :action => 'index' }, :html => {:class => "icon icon-comments"}, :caption => {:value_behind => Proc.new {"#{UserMessage.get_number_of_messages}"}, :text => :label_usermessage}
+  contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
+  menu.push :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}, :html => {:class => "icon icon-user"}
+  menu.push :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}, :html => {:class => "icon icon-group"}
  # menu.push :doodle_all, { :controller => 'doodles', :action => 'list', :sub => "doodle_all" }, :caption => :label_my_doodles_plural
  # menu.push :my_members, {:controller => 'my', :action => 'members', :sub => 'my_members'}, :caption => :label_my_members
 end
@@ -241,6 +248,10 @@ Redmine::Search.map do |search|
   search.register :wiki_pages
   search.register :messages
   search.register :projects
+  search.register :users, :sort_function => 'sort', :limit_date_function => 'updated_on', :show_result_partial => 'users/show',
+                          :show_result_partial_locals => Proc.new {|e|  {:user => e, :memberships => e.memberships}}
+  search.register :attachments, :sort_function => 'sort',
+                                :show_result_partial_locals => Proc.new {|e|  {:attachment => e}}
 end
 
 Redmine::WikiFormatting.map do |format|

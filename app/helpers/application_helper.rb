@@ -1768,4 +1768,15 @@ module ApplicationHelper
     map[current_mode]
   end
 
+  DEFAULT_AVATAR_OPTIONS = {:size => 25, :alt => '', :title => '', :class => 'rounded_image'}
+
+  def avatar(user, options = {})
+    scale = options[:scale].nil? ? :thumb : options[:scale]
+    options.delete(:scale)
+    src = user.avatar ? user.avatar_photo_url(scale) : 'avatar.png'
+    options[:size] = "#{options[:size]}x#{options[:size]}"
+    options = DEFAULT_AVATAR_OPTIONS.merge(options)
+    return image_tag src, options
+  end
+
 end
