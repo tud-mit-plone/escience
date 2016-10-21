@@ -6,144 +6,155 @@ en:
       # Use the strftime parameters for formats.
       # When no format has been given, it uses default.
       # You can provide other formats here if you like!
-      default: "%m/%d/%Y"
-      short: "%b %d"
-      long: "%B %d, %Y"
-      jquery: "mm/dd/yy"
-
+      default: '%m/%d/%Y'
+      short: '%b %d'
+      long: '%B %d, %Y'
+      jquery: mm/dd/yy
+      published_date: '%m/%d/%Y'
+      date_ago: '%b %Y'
     day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
     abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-
     # Don't forget the nil at the beginning; there's no such thing as a 0th month
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
     abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
     # Used in date_select and datime_select.
     order:
-      - :year
-      - :month
-      - :day
-
+    - :year
+    - :month
+    - :day
   time:
     formats:
-      default: "%m/%d/%Y %I:%M %p"
-      time: "%I:%M %p"
-      short: "%d %b %H:%M"
-      long: "%B %d, %Y %H:%M"
-    am: "am"
-    pm: "pm"
-
+      default: '%m/%d/%Y %I:%M %p'
+      time: '%I:%M %p'
+      short: '%d %b %H:%M'
+      long: '%B %d, %Y %H:%M'
+      published_date: '%m/%d/%Y'
+      short_published_date: '%m/%d/%y'
+      literal_date: '%B %d, %Y'
+      short_literal_date: '%b %d, %Y'
+      time_ago: '%l:%M%p'
+    am: am
+    pm: pm
   datetime:
     distance_in_words:
-      half_a_minute: "half a minute"
+      half_a_minute: half a minute
       less_than_x_seconds:
-        one:   "less than 1 second"
-        other: "less than %{count} seconds"
+        one: less than 1 second
+        other: less than %{count} seconds
       x_seconds:
-        one:   "1 second"
-        other: "%{count} seconds"
+        one: 1 second
+        other: '%{count} seconds'
       less_than_x_minutes:
-        one:   "less than a minute"
-        other: "less than %{count} minutes"
+        one: less than a minute
+        other: less than %{count} minutes
       x_minutes:
-        one:   "1 minute"
-        other: "%{count} minutes"
+        one: 1 minute
+        other: '%{count} minutes'
       about_x_hours:
-        one:   "about 1 hour"
-        other: "about %{count} hours"
+        one: about 1 hour
+        other: about %{count} hours
       x_hours:
-        one:   "1 hour"
-        other: "%{count} hours"
+        one: 1 hour
+        other: '%{count} hours'
       x_days:
-        one:   "1 day"
-        other: "%{count} days"
+        one: 1 day
+        other: '%{count} days'
       about_x_months:
-        one:   "about 1 month"
-        other: "about %{count} months"
+        one: about 1 month
+        other: about %{count} months
       x_months:
-        one:   "1 month"
-        other: "%{count} months"
+        one: 1 month
+        other: '%{count} months'
       about_x_years:
-        one:   "about 1 year"
-        other: "about %{count} years"
+        one: about 1 year
+        other: about %{count} years
       over_x_years:
-        one:   "over 1 year"
-        other: "over %{count} years"
+        one: over 1 year
+        other: over %{count} years
       almost_x_years:
-        one:   "almost 1 year"
-        other: "almost %{count} years"
-
+        one: almost 1 year
+        other: almost %{count} years
   number:
     format:
-      separator: "."
-      delimiter: ""
+      separator: .
+      delimiter: ''
       precision: 3
-
     human:
       format:
-        delimiter: ""
+        delimiter: ''
         precision: 3
       storage_units:
-        format: "%n %u"
+        format: '%n %u'
         units:
           byte:
-            one: "Byte"
-            other: "Bytes"
-          kb: "KB"
-          mb: "MB"
-          gb: "GB"
-          tb: "TB"
-
-# Used in array.to_sentence.
+            one: Byte
+            other: Bytes
+          kb: KB
+          mb: MB
+          gb: GB
+          tb: TB
   support:
     array:
-      sentence_connector: "and"
+      sentence_connector: and
       skip_last_comma: false
-
   activerecord:
     errors:
       template:
         header:
-          one:    "1 error prohibited this %{model} from being saved"
-          other:  "%{count} errors prohibited this %{model} from being saved"
+          one: 1 error prohibited this %{model} from being saved
+          other: '%{count} errors prohibited this %{model} from being saved'
       messages:
-        inclusion: "is not included in the list"
-        exclusion: "is reserved"
-        invalid: "is invalid"
-        confirmation: "doesn't match confirmation"
-        accepted: "must be accepted"
-        empty: "can't be empty"
-        blank: "can't be blank"
-        too_long: "is too long (maximum is %{count} characters)"
-        too_short: "is too short (minimum is %{count} characters)"
-        wrong_length: "is the wrong length (should be %{count} characters)"
-        taken: "has already been taken"
-        not_a_number: "is not a number"
-        not_a_date: "is not a valid date"
-        greater_than: "must be greater than %{count}"
-        greater_than_or_equal_to: "must be greater than or equal to %{count}"
-        equal_to: "must be equal to %{count}"
-        less_than: "must be less than %{count}"
-        less_than_or_equal_to: "must be less than or equal to %{count}"
-        odd: "must be odd"
-        even: "must be even"
-        greater_than_start_date: "must be greater than start date"
-        not_same_project: "doesn't belong to the same project"
-        circular_dependency: "This relation would create a circular dependency"
-        cant_link_an_issue_with_a_descendant: "An issue cannot be linked to one of its subtasks"
-
+        inclusion: is not included in the list
+        exclusion: is reserved
+        invalid: is invalid
+        confirmation: doesn't match confirmation
+        accepted: must be accepted
+        empty: can't be empty
+        blank: can't be blank
+        too_long: is too long (maximum is %{count} characters)
+        too_short: is too short (minimum is %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
+        taken: has already been taken
+        not_a_number: is not a number
+        not_a_date: is not a valid date
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        equal_to: must be equal to %{count}
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        odd: must be odd
+        even: must be even
+        greater_than_start_date: must be greater than start date
+        not_same_project: doesn't belong to the same project
+        circular_dependency: This relation would create a circular dependency
+        cant_link_an_issue_with_a_descendant: An issue cannot be linked to one of its subtasks
+      models:
+        photo:
+          attributes:
+            photo_file_size:
+              less_than: Filesize to large %{count}
+    models:
+      photo: photo
+    attributes:
+      _all:
+        created_at: created at
+        updated_at: updated at
+      photo:
+        created_at: 'created at: '
+        photo_file_size: Filesize
+      sb_posts:
+        body: Body
   actionview_instancetag_blank_option: Please select
-
   general_text_No: 'No'
   general_text_Yes: 'Yes'
   general_text_no: 'no'
   general_text_yes: 'yes'
-  general_lang_name: 'English'
+  general_lang_name: English
   general_csv_separator: ','
-  general_csv_decimal_separator: '.'
+  general_csv_decimal_separator: .
   general_csv_encoding: ISO-8859-1
   general_pdf_encoding: UTF-8
   general_first_day_of_week: '7'
-
   notice_account_updated: Account was successfully updated.
   notice_account_invalid_creditentials: Invalid user or password
   notice_account_password_updated: Password was successfully updated.
@@ -162,71 +173,67 @@ en:
   notice_locking_conflict: Data has been updated by another user.
   notice_not_authorized: You are not authorized to access this page.
   notice_not_authorized_archived_project: The project you're trying to access has been archived.
-  notice_email_sent: "An email was sent to %{value}"
-  notice_email_error: "An error occurred while sending mail (%{value})"
+  notice_email_sent: An email was sent to %{value}
+  notice_email_error: An error occurred while sending mail (%{value})
   notice_feeds_access_key_reseted: Your RSS access key was reset.
   notice_api_access_key_reseted: Your API access key was reset.
-  notice_failed_to_save_issues: "Failed to save %{count} issue(s) on %{total} selected: %{ids}."
-  notice_failed_to_save_time_entries: "Failed to save %{count} time entrie(s) on %{total} selected: %{ids}."
-  notice_failed_to_save_members: "Failed to save member(s): %{errors}."
-  notice_no_issue_selected: "No issue is selected! Please, check the issues you want to edit."
-  notice_account_pending: "Your account was created and is now pending administrator approval."
+  notice_failed_to_save_issues: 'Failed to save %{count} issue(s) on %{total} selected: %{ids}.'
+  notice_failed_to_save_time_entries: 'Failed to save %{count} time entrie(s) on %{total} selected: %{ids}.'
+  notice_failed_to_save_members: 'Failed to save member(s): %{errors}.'
+  notice_no_issue_selected: No issue is selected! Please, check the issues you want to edit.
+  notice_account_pending: Your account was created and is now pending administrator approval.
   notice_default_data_loaded: Default configuration successfully loaded.
   notice_unable_delete_version: Unable to delete version.
   notice_unable_delete_time_entry: Unable to delete time log entry.
   notice_issue_done_ratios_updated: Issue done ratios updated.
-  notice_gantt_chart_truncated: "The chart was truncated because it exceeds the maximum number of items that can be displayed (%{max})"
-  notice_issue_successful_create: "Issue %{id} created."
-  notice_issue_update_conflict: "The issue has been updated by an other user while you were editing it."
+  notice_gantt_chart_truncated: The chart was truncated because it exceeds the maximum number of items that can be displayed (%{max})
+  notice_issue_successful_create: Issue %{id} created.
+  notice_issue_update_conflict: The issue has been updated by an other user while you were editing it.
   notice_no_search_result: No results found for the search request.
-  notice_account_deleted: "Your account has been permanently deleted."
-  notice_user_successful_create: "User %{id} created."
-
-  error_can_t_load_default_data: "Default configuration could not be loaded: %{value}"
-  error_scm_not_found: "The entry or revision was not found in the repository."
-  error_scm_command_failed: "An error occurred when trying to access the repository: %{value}"
-  error_scm_annotate: "The entry does not exist or cannot be annotated."
-  error_scm_annotate_big_text_file: "The entry cannot be annotated, as it exceeds the maximum text file size."
-  error_issue_not_found_in_project: 'The issue was not found or does not belong to this project'
-  error_no_tracker_in_project: 'No tracker is associated to this project. Please check the Project settings.'
-  error_no_default_issue_status: 'No default issue status is defined. Please check your configuration (Go to "Administration -> Issue statuses").'
+  notice_account_deleted: Your account has been permanently deleted.
+  notice_user_successful_create: User %{id} created.
+  error_can_t_load_default_data: 'Default configuration could not be loaded: %{value}'
+  error_scm_not_found: The entry or revision was not found in the repository.
+  error_scm_command_failed: 'An error occurred when trying to access the repository: %{value}'
+  error_scm_annotate: The entry does not exist or cannot be annotated.
+  error_scm_annotate_big_text_file: The entry cannot be annotated, as it exceeds the maximum text file size.
+  error_issue_not_found_in_project: The issue was not found or does not belong to this project
+  error_no_tracker_in_project: No tracker is associated to this project. Please check the Project settings.
+  error_no_default_issue_status: No default issue status is defined. Please check your configuration (Go to "Administration -> Issue statuses").
   error_can_not_delete_custom_field: Unable to delete custom field
-  error_can_not_delete_tracker: "This tracker contains issues and cannot be deleted."
-  error_can_not_remove_role: "This role is in use and cannot be deleted."
-  error_can_not_reopen_issue_on_closed_version: 'An issue assigned to a closed version cannot be reopened'
+  error_can_not_delete_tracker: This tracker contains issues and cannot be deleted.
+  error_can_not_remove_role: This role is in use and cannot be deleted.
+  error_can_not_reopen_issue_on_closed_version: An issue assigned to a closed version cannot be reopened
   error_can_not_archive_project: This project cannot be archived
-  error_issue_done_ratios_not_updated: "Issue done ratios not updated."
-  error_workflow_copy_source: 'Please select a source tracker or role'
-  error_workflow_copy_target: 'Please select target tracker(s) and role(s)'
-  error_unable_delete_issue_status: 'Unable to delete issue status'
-  error_unable_to_connect: "Unable to connect (%{value})"
-  error_attachment_too_big: "This file cannot be uploaded because it exceeds the maximum allowed file size (%{max_size})"
-  error_session_expired: "Your session has expired. Please login again."
-  warning_attachments_not_saved: "%{count} file(s) could not be saved."
-  warning_attachments_error: "file(s) could not be saved."
-
-  mail_subject_lost_password: "Your %{value} password"
+  error_issue_done_ratios_not_updated: Issue done ratios not updated.
+  error_workflow_copy_source: Please select a source tracker or role
+  error_workflow_copy_target: Please select target tracker(s) and role(s)
+  error_unable_delete_issue_status: Unable to delete issue status
+  error_unable_to_connect: Unable to connect (%{value})
+  error_attachment_too_big: This file cannot be uploaded because it exceeds the maximum allowed file size (%{max_size})
+  error_session_expired: Your session has expired. Please login again.
+  warning_attachments_not_saved: '%{count} file(s) could not be saved.'
+  warning_attachments_error: file(s) could not be saved.
+  mail_subject_lost_password: Your %{value} password
   mail_body_lost_password: 'To change your password, click on the following link:'
-  mail_subject_register: "Your %{value} account activation"
+  mail_subject_register: Your %{value} account activation
   mail_body_register: 'To activate your account, click on the following link:'
-  mail_body_account_information_external: "You can use your %{value} account to log in."
+  mail_body_account_information_external: You can use your %{value} account to log in.
   mail_body_account_information: Your account information
-  mail_subject_account_activation_request: "%{value} account activation request"
-  mail_body_account_activation_request: "A new user (%{value}) has registered. The account is pending your approval:"
-  mail_subject_reminder: "%{count} issue(s) due in the next %{days} days"
-  mail_body_reminder: "%{count} issue(s) that are assigned to you are due in the next %{days} days:"
-  mail_subject_wiki_content_added: "'%{id}' wiki page has been added"
-  mail_body_wiki_content_added: "The '%{id}' wiki page has been added by %{author}."
-  mail_subject_wiki_content_updated: "'%{id}' wiki page has been updated"
-  mail_body_wiki_content_updated: "The '%{id}' wiki page has been updated by %{author}."
-  mail_subject_inactive_user_warning: "Your eScience account expires soon."
-  mail_body_inactive_user_warning_intro: "You didn't access your eScience account since %{last_account}. Accounts are deleted automatically after %{cutoff_days} days inactivity."
-  mail_body_inactive_user_warning_action: "If you want to continue using your account, login at least once before %{cutoff_date}."
-  mail_body_inactive_user_warning_info: "Otherwise your account and your private projects will be deleted irrevocably."
-
+  mail_subject_account_activation_request: '%{value} account activation request'
+  mail_body_account_activation_request: 'A new user (%{value}) has registered. The account is pending your approval:'
+  mail_subject_reminder: '%{count} issue(s) due in the next %{days} days'
+  mail_body_reminder: '%{count} issue(s) that are assigned to you are due in the next %{days} days:'
+  mail_subject_wiki_content_added: '''%{id}'' wiki page has been added'
+  mail_body_wiki_content_added: The '%{id}' wiki page has been added by %{author}.
+  mail_subject_wiki_content_updated: '''%{id}'' wiki page has been updated'
+  mail_body_wiki_content_updated: The '%{id}' wiki page has been updated by %{author}.
+  mail_subject_inactive_user_warning: Your eScience account expires soon.
+  mail_body_inactive_user_warning_intro: You didn't access your eScience account since %{last_account}. Accounts are deleted automatically after %{cutoff_days} days inactivity.
+  mail_body_inactive_user_warning_action: If you want to continue using your account, login at least once before %{cutoff_date}.
+  mail_body_inactive_user_warning_info: Otherwise your account and your private projects will be deleted irrevocably.
   gui_validation_error: 1 error
-  gui_validation_error_plural: "%{count} errors"
-
+  gui_validation_error_plural: '%{count} errors'
   field_name: Name
   field_description: Description
   field_summary: Summary
@@ -235,7 +242,8 @@ en:
   field_salutation_vals:
     male: Mr.
     female: Mrs.
-    '': None
+    ? ''
+    : None
   field_title: Title
   field_title_vals:
     bachelor: B.A.
@@ -269,7 +277,6 @@ en:
   field_max_length: Maximum length
   field_value: Value
   field_category: Category
-  field_title: Title
   field_project: Project
   field_issue: Issue
   field_status: Status
@@ -310,7 +317,7 @@ en:
   field_attr_mail: Email attribute
   field_onthefly: On-the-fly user creation
   field_start_date: Start date
-  field_done_ratio: "% Done"
+  field_done_ratio: '% Done'
   field_auth_source: Authentication mode
   field_hide_mail: Hide my email address
   field_comments: Comment
@@ -342,11 +349,11 @@ en:
   field_group_by: Group results by
   field_sharing: Sharing
   field_parent_issue: Parent task
-  field_member_of_group: "Assignee's group"
-  field_assigned_to_role: "Assignee's role"
+  field_member_of_group: Assignee's group
+  field_assigned_to_role: Assignee's role
   field_text: Text field
   field_visible: Visible
-  field_warn_on_leaving_unsaved: "Warn me when leaving a page with unsaved text"
+  field_warn_on_leaving_unsaved: Warn me when leaving a page with unsaved text
   field_issues_visibility: Issues visibility
   field_is_private: Private
   field_commit_logs_encoding: Commit messages encoding
@@ -360,10 +367,9 @@ en:
   field_ldap_filter: LDAP filter
   field_auth_source_ldap_filter: LDAP filter
   field_core_fields: Standard fields
-  field_timeout: "Timeout (in seconds)"
+  field_timeout: Timeout (in seconds)
   field_board_parent: Parent forum
   field_private_notes: Private notes
-
   setting_app_title: Application title
   setting_app_subtitle: Application subtitle
   setting_welcome_text: Welcome text
@@ -399,7 +405,7 @@ en:
   setting_activity_days_default: Days displayed on project activity
   setting_display_subprojects_issues: Display subprojects issues on main projects by default
   setting_enabled_scm: Enabled SCM
-  setting_mail_handler_body_delimiters: "Truncate emails after one of these lines"
+  setting_mail_handler_body_delimiters: Truncate emails after one of these lines
   setting_mail_handler_api_enabled: Enable WS for incoming emails
   setting_mail_handler_api_key: API key
   setting_sequential_project_identifiers: Generate sequential project identifiers
@@ -431,7 +437,6 @@ en:
   setting_thumbnails_enabled: Display attachment thumbnails
   setting_thumbnails_size: Thumbnails size (in pixels)
   setting_non_working_week_days: Non-working days
-
   permission_add_project: Create project
   permission_add_subprojects: Create subprojects
   permission_edit_project: Edit project
@@ -493,7 +498,6 @@ en:
   permission_export_wiki_pages: Export wiki pages
   permission_manage_subtasks: Manage subtasks
   permission_manage_related_issues: Manage related issues
-
   project_module_issue_tracking: Issue tracking
   project_module_time_tracking: Time tracking
   project_module_news: News
@@ -504,7 +508,6 @@ en:
   project_module_boards: Forums
   project_module_calendar: Calendar
   project_module_gantt: Gantt
-
   label_wiki_dialog_title: Add/change a wiki page
   label_wiki_dialog_text: Please insert the name for the wiki page
   label_coop_text_dialog_title: Add/change a cooperative text document
@@ -550,18 +553,17 @@ en:
   label_project_plural: Projects
   label_myproject_plural: My projects
   label_projects_list: List of projects
-
   label_x_projects:
-    zero:  no projects
-    one:   1 project
-    other: "%{count} projects"
+    zero: no projects
+    one: 1 project
+    other: '%{count} projects'
   label_project_all: All Projects
   label_project_latest: Latest projects
   label_issue: Issue
   label_issue_new: New issue
   label_issue_plural: Issues
   label_issue_view_all: View all issues
-  label_issues_by: "Issues by %{value}"
+  label_issues_by: Issues by %{value}
   label_issue_added: Issue added
   label_issue_updated: Issue updated
   label_issue_note_added: Note added
@@ -651,7 +653,7 @@ en:
   label_register_submit: Register
   label_activity: Activity
   label_overall_activity: Overall activity
-  label_user_activity: "%{value}'s activity"
+  label_user_activity: '%{value}''s activity'
   label_new: New
   label_logged_as: Logged in as
   label_environment: Environment
@@ -661,7 +663,7 @@ en:
   label_auth_source_plural: Authentication modes
   label_subproject_plural: Subprojects
   label_subproject_new: New subproject
-  label_and_its_subprojects: "%{value} and its subprojects"
+  label_and_its_subprojects: '%{value} and its subprojects'
   label_min_max_length: Min - Max length
   label_list: List
   label_date: Date
@@ -672,8 +674,8 @@ en:
   label_text: Long text
   label_attribute: Attribute
   label_attribute_plural: Attributes
-  label_download: "%{count} Download"
-  label_download_plural: "%{count} Downloads"
+  label_download: '%{count} Download'
+  label_download_plural: '%{count} Downloads'
   label_no_data: No data to display
   label_no_activity: No activity for selected criteria
   label_period_of_time: For periode of time
@@ -710,21 +712,21 @@ en:
   label_closed_issues: closed
   label_closed_issues_plural: closed
   label_x_open_issues_abbr_on_total:
-    zero:  0 open / %{total}
-    one:   1 open / %{total}
-    other: "%{count} open / %{total}"
+    zero: 0 open / %{total}
+    one: 1 open / %{total}
+    other: '%{count} open / %{total}'
   label_x_open_issues_abbr:
-    zero:  0 open
-    one:   1 open
-    other: "%{count} open"
+    zero: 0 open
+    one: 1 open
+    other: '%{count} open'
   label_x_closed_issues_abbr:
-    zero:  0 closed
-    one:   1 closed
-    other: "%{count} closed"
+    zero: 0 closed
+    one: 1 closed
+    other: '%{count} closed'
   label_x_issues:
-    zero:  0 issues
-    one:   1 issue
-    other: "%{count} issues"
+    zero: 0 issues
+    one: 1 issue
+    other: '%{count} issues'
   label_total: Total
   label_permissions: Permissions
   label_current_status: Current status
@@ -743,7 +745,7 @@ en:
   label_months_from: months from
   label_gantt: Gantt
   label_internal: Internal
-  label_last_changes: "last %{count} changes"
+  label_last_changes: last %{count} changes
   label_change_view_all: View all changes
   label_personalize_page: Personalize this page
   label_comment: Comment
@@ -751,7 +753,7 @@ en:
   label_x_comments:
     zero: no comments
     one: 1 comment
-    other: "%{count} comments"
+    other: '%{count} comments'
   label_comment_add: Add a comment
   label_comment_added: Comment added
   label_comment_delete: Delete comments
@@ -768,9 +770,8 @@ en:
   label_in_the_next_days: in the next
   label_in_the_past_days: in the past
   label_greater_or_equal: '>='
-  label_less_or_equal: '<='
-
-  notice_issue_error_create: 'Issue creation failed. Please check the input fields'
+  label_less_or_equal: <=
+  notice_issue_error_create: Issue creation failed. Please check the input fields
   label_between: between
   label_in: in
   label_today: today
@@ -778,8 +779,8 @@ en:
   label_yesterday: yesterday
   label_this_week: this week
   label_last_week: last week
-  label_last_n_weeks: "last %{count} weeks"
-  label_last_n_days: "last %{count} days"
+  label_last_n_weeks: last %{count} weeks
+  label_last_n_days: last %{count} days
   label_this_month: this month
   label_last_month: last month
   label_this_year: this year
@@ -797,13 +798,13 @@ en:
   label_repository_new: New repository
   label_repository_plural: Repositories
   label_browse: Browse
-  label_modification: "%{count} change"
-  label_modification_plural: "%{count} changes"
+  label_modification: '%{count} change'
+  label_modification_plural: '%{count} changes'
   label_branch: Branch
   label_tag: Tag
   label_revision: Revision
   label_revision_plural: Revisions
-  label_revision_id: "Revision %{value}"
+  label_revision_id: Revision %{value}
   label_associated_revisions: Associated revisions
   label_added: added
   label_modified: modified
@@ -821,8 +822,8 @@ en:
   label_sort_lower: Move down
   label_sort_lowest: Move to bottom
   label_roadmap: Roadmap
-  label_roadmap_due_in: "Due in %{value}"
-  label_roadmap_overdue: "%{value} late"
+  label_roadmap_due_in: Due in %{value}
+  label_roadmap_overdue: '%{value} late'
   label_roadmap_no_issues: No issues for this version
   label_search: Search
   label_search_plural: Search
@@ -842,8 +843,8 @@ en:
   label_issue_tracking: Issue tracking
   label_spent_time: Spent time
   label_overall_spent_time: Overall spent time
-  label_f_hour: "%{value} hour"
-  label_f_hour_plural: "%{value} hours"
+  label_f_hour: '%{value} hour'
+  label_f_hour_plural: '%{value} hours'
   label_time_tracking: Time tracking
   label_change_plural: Changes
   label_statistics: Statistics
@@ -897,15 +898,15 @@ en:
   label_date_from: From
   label_date_to: To
   label_language_based: Based on user's language
-  label_sort_by: "Sort by %{value}"
+  label_sort_by: Sort by %{value}
   label_send_test_email: Send a test email
   label_feeds_access_key: RSS access key
   label_missing_feeds_access_key: Missing a RSS access key
-  label_feeds_access_key_created_on: "RSS access key created %{value} ago"
+  label_feeds_access_key_created_on: RSS access key created %{value} ago
   label_module_plural: Modules
-  label_added_time_by: "Added by %{author} %{age} ago"
-  label_updated_time_by: "Updated by %{author} %{age} ago"
-  label_updated_time: "Updated %{value} ago"
+  label_added_time_by: Added by %{author} %{age} ago
+  label_updated_time_by: Updated by %{author} %{age} ago
+  label_updated_time: Updated %{value} ago
   label_jump_to_a_project: Jump to a project...
   label_file_plural: Files
   label_changeset_plural: Changesets
@@ -916,17 +917,17 @@ en:
   label_theme: Theme
   label_default: Default
   label_search_titles_only: Search titles only
-  label_user_mail_option_all: "For any event on all my projects"
-  label_user_mail_option_selected: "For any event on the selected projects only..."
-  label_user_mail_option_none: "No events"
-  label_user_mail_option_only_my_events: "Only for things I watch or I'm involved in"
-  label_user_mail_option_only_assigned: "Only for things I am assigned to"
-  label_user_mail_option_only_owner: "Only for things I am the owner of"
-  label_user_mail_no_self_notified: "I don't want to be notified of changes that I make myself"
+  label_user_mail_option_all: For any event on all my projects
+  label_user_mail_option_selected: For any event on the selected projects only...
+  label_user_mail_option_none: No events
+  label_user_mail_option_only_my_events: Only for things I watch or I'm involved in
+  label_user_mail_option_only_assigned: Only for things I am assigned to
+  label_user_mail_option_only_owner: Only for things I am the owner of
+  label_user_mail_no_self_notified: I don't want to be notified of changes that I make myself
   label_registration_activation_by_email: account activation by email
   label_registration_manual_activation: manual account activation
   label_registration_automatic_activation: automatic account activation
-  label_display_per_page: "Per page: %{value}"
+  label_display_per_page: 'Per page: %{value}'
   label_age: Age
   label_change_properties: Change properties
   label_general: General
@@ -971,12 +972,12 @@ en:
   label_display_used_statuses_only: Only display statuses that are used by this tracker
   label_api_access_key: API access key
   label_missing_api_access_key: Missing an API access key
-  label_api_access_key_created_on: "API access key created %{value} ago"
+  label_api_access_key_created_on: API access key created %{value} ago
   label_profile: Profile
   label_subtask_plural: Subtasks
   label_project_copy_notifications: Send email notifications during the project copy
-  label_principal_search: "Search for user or group:"
-  label_user_search: "Search for user:"
+  label_principal_search: 'Search for user or group:'
+  label_user_search: 'Search for user:'
   label_issues_closed_hide: hide finished issues
   label_issues_closed_show: show finished issues
   label_additional_workflow_transitions_for_author: Additional transitions allowed when the user is the author
@@ -987,10 +988,10 @@ en:
   label_git_report_last_commit: Report last commit for files and directories
   label_parent_revision: Parent
   label_child_revision: Child
-  label_export_options: "%{export_format} export options"
+  label_export_options: '%{export_format} export options'
   label_copy_attachments: Copy attachments
   label_copy_subtasks: Copy subtasks
-  label_item_position: "%{position} of %{count}"
+  label_item_position: '%{position} of %{count}'
   label_completed_versions: Completed versions
   label_search_for_watchers: Search for watchers to add
   label_session_expiration: Session expiration
@@ -999,15 +1000,14 @@ en:
   label_fields_permissions: Fields permissions
   label_readonly: Read-only
   label_required: Required
-  label_attribute_of_project: "Project's %{name}"
-  label_attribute_of_author: "Author's %{name}"
-  label_attribute_of_assigned_to: "Assignee's %{name}"
-  label_attribute_of_fixed_version: "Target version's %{name}"
+  label_attribute_of_project: Project's %{name}
+  label_attribute_of_author: Author's %{name}
+  label_attribute_of_assigned_to: Assignee's %{name}
+  label_attribute_of_fixed_version: Target version's %{name}
   label_cross_project_descendants: With subprojects
   label_cross_project_tree: With project tree
   label_cross_project_hierarchy: With project hierarchy
   label_cross_project_system: With all projects
-
   button_login: Login
   button_submit: Submit
   button_save: Save
@@ -1020,7 +1020,7 @@ en:
   button_create_and_continue: Create and continue
   button_test: Test
   button_edit: Edit
-  button_edit_associated_wikipage: "Edit associated Wiki page: %{page_title}"
+  button_edit_associated_wikipage: 'Edit associated Wiki page: %{page_title}'
   button_add: Add
   button_change: Change
   button_apply: Apply
@@ -1060,29 +1060,24 @@ en:
   button_delete_my_account: Delete my account
   button_close: Close
   button_reopen: Reopen
-
   status_active: active
   status_registered: registered
   status_locked: locked
-
   project_status_active: active
   project_status_closed: closed
   project_status_archived: archived
-
   version_status_open: open
   version_status_locked: locked
   version_status_closed: closed
-
   field_active: Active
-
   text_member_search: Please enter the member to search in the input field. The result is generated automatically based on the input (at least 3 characters).
   text_user_messages_empty: There is no message.
   text_message_destroy_confirmation: Are you sure, that you want to delete this message?
   text_message_emptytrash_confirmation: Are you sure, that you want to remove all archived messages permanently?
   text_message_emptytrash_done: Your old messages have been deleted.
   text_message_emptytrash_error: Unfortunately an error occurred while trying to delete the archived messages.
-  text_message_sent_done: Your message has been sent successfully.
-  text_message_sent_error_fields: Some fields has not been filled.
+  text_message_sent_done: Message was send successfully
+  text_message_sent_error_fields: Could not send message
   text_message_archive_confirmation: Are you sure, that you want to archive this message?
   text_message_archive_done: Message has been archived successfully.
   text_message_delete_done: Message has been deleted successfully.
@@ -1091,83 +1086,94 @@ en:
   text_regexp_info: eg. ^[A-Z0-9]+$
   text_min_max_length_info: 0 means no restriction
   text_project_destroy_confirmation: Are you sure you want to delete this project and related data?
-  text_issue_destroy_confirmation: "By deleting this issue you also delete all subissues!\nAre you sure you want to delete this issue and related data?"
-  text_subprojects_destroy_warning: "Its subproject(s): %{value} will be also deleted."
+  text_issue_destroy_confirmation: 'By deleting this issue you also delete all subissues!
+
+    Are you sure you want to delete this issue and related data?'
+  text_subprojects_destroy_warning: 'Its subproject(s): %{value} will be also deleted.'
   text_workflow_edit: Select a role and a tracker to edit the workflow
   text_are_you_sure: Are you sure?
-  text_are_you_sure_with_children: "Delete issue and all child issues?"
-  text_journal_changed: "%{label} changed from %{old} to %{new}"
-  text_journal_changed_no_detail: "%{label} updated"
-  text_journal_set_to: "%{label} set to %{value}"
-  text_journal_deleted: "%{label} deleted (%{old})"
-  text_journal_added: "%{label} %{value} added"
+  text_are_you_sure_with_children: Delete issue and all child issues?
+  text_journal_changed: '%{label} changed from %{old} to %{new}'
+  text_journal_changed_no_detail: '%{label} updated'
+  text_journal_set_to: '%{label} set to %{value}'
+  text_journal_deleted: '%{label} deleted (%{old})'
+  text_journal_added: '%{label} %{value} added'
   text_tip_issue_begin_day: issue beginning this day
   text_tip_issue_end_day: issue ending this day
   text_tip_issue_begin_end_day: issue beginning and ending this day
-  text_project_identifier_info: 'Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.'
-  text_caracters_maximum: "%{count} characters maximum."
-  text_caracters_minimum: "Must be at least %{count} characters long."
-  text_length_between: "Length between %{min} and %{max} characters."
+  text_project_identifier_info: Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.
+  text_caracters_maximum: '%{count} characters maximum.'
+  text_caracters_minimum: Must be at least %{count} characters long.
+  text_length_between: Length between %{min} and %{max} characters.
   text_tracker_no_workflow: No workflow defined for this tracker
   text_unallowed_characters: Unallowed characters
   text_comma_separated: Multiple values allowed (comma separated).
   text_line_separated: Multiple values allowed (one line for each value).
   text_issues_ref_in_commit_messages: Referencing and fixing issues in commit messages
-  text_issue_added: "Issue %{id} has been reported by %{author}."
-  text_issue_updated: "Issue %{id} has been updated by %{author}."
+  text_issue_added: Issue %{id} has been reported by %{author}.
+  text_issue_updated: Issue %{id} has been updated by %{author}.
   text_wiki_destroy_confirmation: Are you sure you want to delete this wiki and all its content?
-  text_issue_category_destroy_question: "Some issues (%{count}) are assigned to this category. What do you want to do?"
+  text_issue_category_destroy_question: Some issues (%{count}) are assigned to this category. What do you want to do?
   text_issue_category_destroy_assignments: Remove category assignments
   text_issue_category_reassign_to: Reassign issues to this category
-  text_user_mail_option: "For unselected projects, you will only receive notifications about things you watch or you're involved in (eg. issues you're the author or assignee)."
-  text_no_configuration_data: "Roles, trackers, issue statuses and workflow have not been configured yet.\nIt is highly recommended to load the default configuration. You will be able to modify it once loaded."
+  text_user_mail_option: For unselected projects, you will only receive notifications about things you watch or you're involved in (eg. issues you're the author or assignee).
+  text_no_configuration_data: 'Roles, trackers, issue statuses and workflow have not been configured yet.
+
+    It is highly recommended to load the default configuration. You will be able to modify it once loaded.'
   text_load_default_configuration: Load the default configuration
-  text_status_changed_by_changeset: "Applied in changeset %{value}."
-  text_time_logged_by_changeset: "Applied in changeset %{value}."
-  text_issues_destroy_confirmation: 'Are you sure you want to delete the selected issue(s)?'
-  text_issues_destroy_descendants_confirmation: "This will also delete %{count} subtask(s)."
-  text_time_entries_destroy_confirmation: 'Are you sure you want to delete the selected time entr(y/ies)?'
+  text_status_changed_by_changeset: Applied in changeset %{value}.
+  text_time_logged_by_changeset: Applied in changeset %{value}.
+  text_issues_destroy_confirmation: Are you sure you want to delete the selected issue(s)?
+  text_issues_destroy_descendants_confirmation: This will also delete %{count} subtask(s).
+  text_time_entries_destroy_confirmation: Are you sure you want to delete the selected time entr(y/ies)?
   text_select_project_modules: 'Select modules to enable for this project:'
   text_default_administrator_account_changed: Default administrator account changed
   text_file_repository_writable: Attachments directory writable
   text_plugin_assets_writable: Plugin assets directory writable
   text_rmagick_available: RMagick available (optional)
-  text_destroy_time_entries_question: "%{hours} hours were reported on the issues you are about to delete. What do you want to do?"
+  text_destroy_time_entries_question: '%{hours} hours were reported on the issues you are about to delete. What do you want to do?'
   text_destroy_time_entries: Delete reported hours
   text_assign_time_entries_to_project: Assign reported hours to the project
   text_reassign_time_entries: 'Reassign reported hours to this issue:'
-  text_user_wrote: "%{value} wrote:"
-  text_enumeration_destroy_question: "%{count} objects are assigned to this value."
+  text_user_wrote: '%{value} wrote:'
+  text_enumeration_destroy_question: '%{count} objects are assigned to this value.'
   text_enumeration_category_reassign_to: 'Reassign them to this value:'
-  text_email_delivery_not_configured: "Email delivery is not configured, and notifications are disabled.\nConfigure your SMTP server in config/configuration.yml and restart the application to enable them."
-  text_repository_usernames_mapping: "Select or update the Redmine user mapped to each username found in the repository log.\nUsers with the same Redmine and repository username or email are automatically mapped."
+  text_email_delivery_not_configured: 'Email delivery is not configured, and notifications are disabled.
+
+    Configure your SMTP server in config/configuration.yml and restart the application to enable them.'
+  text_repository_usernames_mapping: 'Select or update the Redmine user mapped to each username found in the repository log.
+
+    Users with the same Redmine and repository username or email are automatically mapped.'
   text_diff_truncated: '... This diff was truncated because it exceeds the maximum size that can be displayed.'
-  text_custom_field_possible_values_info: 'One line for each value'
-  text_wiki_page_destroy_question: "This page has %{descendants} child page(s) and descendant(s). What do you want to do?"
-  text_wiki_page_nullify_children: "Keep child pages as root pages"
-  text_wiki_page_destroy_children: "Delete child pages and all their descendants"
-  text_wiki_page_reassign_children: "Reassign child pages to this parent page"
-  text_own_membership_delete_confirmation: "You are about to remove some or all of your permissions and may no longer be able to edit this project after that.\nAre you sure you want to continue?"
+  text_custom_field_possible_values_info: One line for each value
+  text_wiki_page_destroy_question: This page has %{descendants} child page(s) and descendant(s). What do you want to do?
+  text_wiki_page_nullify_children: Keep child pages as root pages
+  text_wiki_page_destroy_children: Delete child pages and all their descendants
+  text_wiki_page_reassign_children: Reassign child pages to this parent page
+  text_own_membership_delete_confirmation: 'You are about to remove some or all of your permissions and may no longer be able to edit this project after that.
+
+    Are you sure you want to continue?'
   text_zoom_in: Zoom in
   text_zoom_out: Zoom out
-  text_warn_on_leaving_unsaved: "The current page contains unsaved text that will be lost if you leave this page."
-  text_scm_path_encoding_note: "Default: UTF-8"
+  text_warn_on_leaving_unsaved: The current page contains unsaved text that will be lost if you leave this page.
+  text_scm_path_encoding_note: 'Default: UTF-8'
   text_git_repository_note: Repository is bare and local (e.g. /gitrepo, c:\gitrepo)
   text_mercurial_repository_note: Local repository (e.g. /hgrepo, c:\hgrepo)
   text_scm_command: Command
   text_scm_command_version: Version
   text_scm_config: You can configure your scm commands in config/configuration.yml. Please restart the application after editing it.
   text_scm_command_not_available: Scm command is not available. Please check settings on the administration panel.
-  text_issue_conflict_resolution_overwrite: "Apply my changes anyway (previous notes will be kept but some changes may be overwritten)"
-  text_issue_conflict_resolution_add_notes: "Add my notes and discard my other changes"
-  text_issue_conflict_resolution_cancel: "Discard all my changes and redisplay %{link}"
-  text_account_destroy_confirmation: "Are you sure you want to proceed?\nYour account will be permanently deleted, with no way to reactivate it."
-  text_session_expiration_settings: "Warning: changing these settings may expire the current sessions including yours."
+  text_issue_conflict_resolution_overwrite: Apply my changes anyway (previous notes will be kept but some changes may be overwritten)
+  text_issue_conflict_resolution_add_notes: Add my notes and discard my other changes
+  text_issue_conflict_resolution_cancel: Discard all my changes and redisplay %{link}
+  text_account_destroy_confirmation: 'Are you sure you want to proceed?
+
+    Your account will be permanently deleted, with no way to reactivate it.'
+  text_session_expiration_settings: 'Warning: changing these settings may expire the current sessions including yours.'
   text_project_closed: This project is closed and read-only.
   text_welcome: This platform provides a virtual space where scientists can communicate with each other to generate new knowledge and to develop common resources for research and sharing. In addition to tools for work organization and coordination of activities can be found here extensive knowledge, media and documentation, as well as software and data for scientific experiments. You decide what, with what and whom you are researching. A strong community is always at your side.
   text_headline: The Research Platform TU Dresden
   text_created_on: Angelegt am
-
   default_role_manager: Manager
   default_role_developer: Developer
   default_role_reporter: Reporter
@@ -1189,7 +1195,6 @@ en:
   default_priority_immediate: Immediate
   default_activity_design: Design
   default_activity_development: Development
-
   enumeration_issue_priorities: Issue priorities
   enumeration_doc_categories: Document categories
   enumeration_activities: Activities (time tracking)
@@ -1212,26 +1217,22 @@ en:
   description_date_range_interval: Choose range by selecting start and end date
   description_date_from: Enter start date
   description_date_to: Enter end date
-  text_repository_identifier_info: 'Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.'
-
+  text_repository_identifier_info: Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.
   label_contact_message_email: Your email address
   label_contact_message_name: Your name
   label_contact_message_subject: Subject
   label_contact_message_body: Message (not more than 2000 characters)
   label_contact_message_send_copy_to_sender: Send a copy of the message to me
   contact_message_from: Contact query from %{name}
-  contact_message_subject: "Contact query: %{subject}"
-
+  contact_message_subject: 'Contact query: %{subject}'
   simple_captcha:
-    placeholder: ""
+    placeholder: ''
     label: Please enter the code
     message:
       default: The entered code is incorrect.
       user: The entered code is incorrect.
-
   issue_categories:
     task: Task
-
   tooltip_sidebar_organize: Get an overview of your eScience (your projects, inbox, etc.).
   tooltip_sidebar_projects: Manage your projects, create new, or change the settings.
   tooltip_sidebar_user_messages: Your inbox for internal messages on the eScience platform.
@@ -1251,28 +1252,942 @@ en:
   tooltip_sidebar_files: All files that have been attached to this project, can be found here.
   tooltip_sidebar_settings: To change the settings for this project, click here.
   tooltip_sidebar_doodles: Create a small survey for certain group members.
-
   tooltip_project_message_delete: Delete.
   tooltip_project_message_settings: Settings.
   tooltip_project_message_issues: Issues in this project.
   tooltip_project_message_public: By activating this option your project will be visible for everyone in the community.
-
   tooltip_user_message_archive: Archive this message.
   tooltip_user_message_delete: Delete this message. (It will take be moved to the <i>deleted</i> folder.)
   tooltip_user_message_deleteFin: Delete this message final.
   tooltip_user_message_emptyTrash: Empty the <i>deleted</i> folder. All messages will be permanently removed from this folder.
   tooltip_user_message_newMessage: Create a new message.
-  tooltip_navbar_issues_count: "See the instructions, which have been assigned to you in each project."
+  tooltip_navbar_issues_count: See the instructions, which have been assigned to you in each project.
   tooltip_and: and
   tooltip_navbar_user_messages_count: You received %{count} message(s) from %{persons}.
-  tooltip_navbar_issues_explain: "There is %{position} issue(s) that is asigned to you."
+  tooltip_navbar_issues_explain: There is %{position} issue(s) that is asigned to you.
   tooltip_sidebar_contactlist: Here is a list of your contacts. At this point you can also search for contacts from different projects and add them to your contact list.
   tooltip_navbar_account: Hello %{name}. By clicking here, you can change your account-details.
   tooltip_navbar_logout: To unsubscribe please click here ... Until next time.
   tooltip_navbar_help: You have questions and get stuck? Look here first for answers. If you can't find help please contact us.
-
   tooltip_addUser: Add member to contact list
   tooltip_deleteUser: Remove member to contact list
   tooltip_openUser: Show member informations
   tooltip_sendMessage: Send member a message
-  label_wiki_toc: 'Table of content'
+  label_wiki_toc: Toc
+  authorizations:
+    create:
+      success_existing_user: Successfully added %{provider} authentication
+      success_message: Welcome %{provider} user. You are logged in.
+    failure:
+      notice: Sorry, You didn't authorize
+    destroy:
+      notice: Successfully deleted %{provider} authentication.
+  sessions:
+    new:
+      omniauth:
+        header: 'Sign in with:'
+        button_alt: Sign in with your %{provider} account
+  users:
+    edit_account:
+      omniauth:
+        confirm_remove: Are you sure you want to remove %{provider} authentication option?
+        title_remove: Remove %{provider} authentication option?
+  tags: Tags
+  sitemaps:
+    index:
+      users: Users
+  please_wait: Please wait...
+  entry_info: _START_ to _END_ from _TOTAL_ entries
+  published_date: '%m/%d/%Y'
+  greeting: Hello %{name}
+  a_few_seconds_ago: a few seconds ago
+  about: About
+  about_me: About Me
+  about_site: About %{site}
+  about_you: About You
+  admin_pages: Pages
+  accept: Accept
+  accepted: accepted
+  accepted_friendships:
+    one: 1 Accepted Friendship
+    other: '%{count} Accepted Friendships'
+  accept_this_request: Accept this request
+  account: account
+  account_activation_error: Account activation failed. Your account may already be active. Try logging in or e-mail %{email} for help.
+  account_settings: Account settings
+  actions: Actions
+  activate: Activate
+  activation_email_not_sent_message: Activation e-mail could not be sent. Perhaps that user is already active?
+  activation_email_resent_message: An activation e-mail was resent to the e-mail address you used to sign up.
+  active: active
+  active_users: Active Users
+  activity_from_your_network: Activity from your network
+  ad_was_successfully_created: Ad was successfully created.
+  ad_was_successfully_updated: Ad was successfully updated.
+  add_a_photo: Add a photo
+  add_a_poll: Add a poll
+  add_comment: Add Comment
+  add_from_my_address_book: Add from my address book
+  add_some_friends_to_get_started: Add some friends to get started!
+  add_your_comment: Add Your Comment!
+  added_a_clipping: 'added a clipping:'
+  added_to_a_forum_topic: 'added to a forum topic:'
+  admin: Admin
+  admin_controls: Admin Controls
+  admin_dashboard: Admin dashboard
+  administer_events: Administer events
+  ads: Ads
+  advertise: Advertise
+  advertise_on: Advertise on
+  after_signing_up_youll_receive_an_e_mail_confirmation_message: After signing up, you'll receive an e-mail confirmation message.
+  all_clippings_tagged: All clippings tagged %{tag_name}
+  all_comments: All comments
+  all_photos_tagged: All photos tagged %{tag_name}
+  all_posts_tagged: All posts tagged %{tag_name}
+  all_tags: All tags
+  all_users_tagged: All users tagged %{tag_name}
+  allow_rsvp: Allow RSVPs
+  already_have_an_account: Already have an account?
+  anonymous: Anonymous
+  an_error_occurred: An error occurred
+  are_attending_this_event: are attending this event
+  is_attending_this_event: is attending this event
+  are_you_sure: Are you sure?
+  are_you_sure_you_want_to_delete_this_page: Are you sure you want to delete this page?
+  are_you_sure_you_want_to_delete_this_photo: Are you sure you want to delete this photo?
+  are_you_sure_you_want_to_delete_this_post: Are you sure you want to delete this post?
+  are_you_sure_you_want_to_permanently_delete_this_comment: Are you sure you want to permanently delete this comment?
+  are_you_sure_you_want_to_permanently_delete_this_user: Are you sure you want to permanently delete this user?
+  are_you_sure_you_want_to_create_a_friendship_with_this_user: Are you sure you want to send this member a contact request?
+  assume_id: Assume ID
+  assume_user_id: Assume this user's ID
+  assign_role: Assign role
+  attendees: Attendees
+  audience: Audience
+  author: Author
+  back: Back
+  back_to_all_users: Back to all users
+  back_to_my_photos: Back to my photos
+  back_to_all_statistics: Back to all statistics
+  banner_subtitle_required: 'Banner subtitle (required):'
+  banner_title_required: 'Banner title (required):'
+  begin: begin
+  begin_required: begin (required)
+  bigger_font_size_more_popular_tag: Bigger font size = more popular tag
+  birthday: Birthday
+  birthday_gender: Birthday & Gender
+  blog: Blog
+  body_text: Body Text
+  body_text_required: Body Text (required)
+  bookmarklet: bookmarklet
+  browse_all_members: browse all members
+  browse_content_by_tags: Browse content by tags
+  by: by %{login}
+  by_looking_at_the: by looking at the
+  cache_cleared: The cache was cleared
+  cache_clear_link: Clear the cache
+  cancel: Cancel
+  cancel_and_go_back_to: cancel and go back to
+  cancel_and_go_back_to_all_features: cancel and go back to all features
+  cancel_and_go_back_to_my_clippings: cancel and go back to my clippings
+  cancel_and_go_back_to_my_photos: cancel and go back to my photos
+  cancel_and_go_back_to_my_posts: cancel and go back to my posts
+  cancel_and_go_back_to_pages: cancel and go back to pages
+  cannot_rsvp_for_an_event_that_has_already_happened: Cannot RSVP for an event that has already happened.
+  categories: Categories
+  category: Category
+  category_was_successfully_created: Category was successfully created.
+  check_out_this_story_on: Check out this story on %{site}
+  choices: Choices
+  choose_a_photo_for_your_profile: 'Choose a photo for your profile:'
+  choose_a_photo_to_upload: 'Choose a photo to upload:'
+  choose_your_location: Choose your location
+  click_here: click here
+  click_here_to_retrieve_it: Click here to retrieve it
+  click_here_to_sign_up: Click here to sign up
+  click_here_to_sign_up_for_an_account_and_enter: Click here to sign up for an account and enter
+  click_here_to_upload_one: Click here to upload one!
+  click_here_to_view_as_a_list: Click here to view as a list
+  click_on_an_image_below_to_clip_it: Click on an image below to clip it
+  click_the_activation_link_in_the_e_mail_to_log_in: Click the activation link in the e-mail to log in.
+  click_to_accept_it: Click to accept it!
+  clipping_comments: Clipping Comments
+  clipping_from_user: Clipping from %{user}
+  clipping_was_successfully_created: Clipping was successfully created.
+  clippings: Clippings
+  clippings_are_a_way_to_save_images_you_like_from_around_the_web: Clippings are a way to save images you like from around the Web
+  clippings_let_you_to_save_cool_images_from_around_the_web: Clippings let you to save cool images from around the Web.
+  clone: Clone
+  clippings_tagged: Clippings tagged
+  close_this_message: Close this message
+  comma_separated: (comma separated)
+  comma_separated_keywords_that_describe_you: Comma-separated keywords that describe you.
+  commentable_type: Commentable Type (Post, User, etc.)
+  commentable_id: Commentable ID
+  comment_character_limit: (2000 character limit)
+  comment_could_not_be_deleted: Comment could not be deleted.
+  comment_notifications_off: Comment notifications are currently off
+  comment_save_error: 'Your comment couldn''t be saved: %{error}'
+  comment_was_successfully_created: Comment was successfully created.
+  comment_author_email_required: Required, won't be shown on the site.
+  comment_web_site_label: Web site (include http://)
+  comment_spam_error: Comment was flagged as spam. Make sure you don't include spammy words or links and try again
+  comments: Comments
+  comments_count:
+    one: One comment
+    other: '%{count} comments'
+  comments_deleted: Comments deleted
+  comments_rss: Comments RSS
+  community_tagline: CommunityEngine Rocks!
+  comment_unsubscribe_succeeded: Thanks, you have been unsubscribed from notifications on this comment.
+  compose: Compose
+  compose_message: Compose message
+  confirm_password: Confirm Password
+  country: Country
+  create: Create
+  create_an_account: Create an account
+  create_a_clipping: Create a clipping
+  create_a_post: Create a post
+  create_new_forum: Create new forum
+  create_your_account: Create Your Account
+  created_at: Created at
+  custom_friendly_local: custom, friendly, local
+  dashboard: Dashboard
+  dashboard_friends: Once you start adding friends, you'll be able to track their activity on %{site} here
+  date_title: Date
+  date_created: Date Created
+  date_published: Date Published
+  days_ago:
+    one: one day ago
+    other: '%{count} days ago'
+  deactivate_link: Click here to deactivate your account
+  deactivate_tip: Deactivating your account will remove your profile from the site.
+  deactivate_confirmation: Are you sure you want to deactivate your account?
+  deactivate_completed: Thanks. Your account has been deactivated and you have been logged out.
+  delete: Delete
+  delete_selected: Delete selected
+  delete_selected_mark_as_spam: Mark as spam
+  delete_this_event: Delete this event
+  delete_this_forum: Delete this forum
+  delete_this_photo: Delete this photo
+  delete_this_page: Delete this page
+  delete_this_post: Delete this post?
+  delete_this_topic_forever: Delete this topic forever?
+  delete_this_user: Delete this user
+  deleted_this_user: The member was deleted from your contact list.
+  deny: Deny
+  denied: denied
+  denied_friendships: Denied Friendships
+  description: Description
+  destroy: Destroy
+  dont_have_an_account: Don't have an account?
+  dont_wait_its: Don't wait! It's
+  draft: draft
+  drag_the_bookmarklet: Drag the %{site}-It! bookmarklet to your bookmarks toolbar.
+  drag_this_to_your_bookmarks_toolbar: Drag this to your bookmarks toolbar
+  e_mail: E-mail
+  e_mail_address: E-mail address
+  e_mail_notification: E-mail Notification
+  edit: Edit
+  edit_account: Edit account
+  edit_event: Edit event
+  edit_forum: Edit forum
+  edit_page: Edit page
+  edit_post: Edit post
+  edit_profile: Edit profile
+  edit_rsvp_for: Edit RSVP for
+  edit_this_event: Edit this event
+  edit_this_photo_details: Edit this photo's details
+  edit_topic: Edit topic
+  edit_your_account_settings_instead: Edit your account settings instead?
+  edit_your_user_profile: Edit your user profile?
+  editing_ad: Editing ad
+  editing_category: Editing category
+  editing_clipping: Editing clipping
+  editing_homepage_feature: Editing homepage feature
+  editing_metro_area: Editing Metro Area
+  editing_photo: Editing photo
+  editing_post: Editing post
+  editing_tag: Editing tag
+  email: Email
+  email_addresses: Email Addresses
+  email_signup_thanks: Thanks for signing up! You should receive an e-mail confirmation shortly at %{email}
+  email_this_story_to_friends: E-mail this story to friends
+  email_to_friends: E-mail to friends
+  end: end
+  end_date: End date
+  end_required: end (required)
+  end_time: End time
+  enter_a_message: Enter a message
+  enter_e_mail_addresses: Enter e-mail addresses
+  enter_e_mail_addresses_comma_sep: Enter e-mail addresses (comma-separated)
+  enter_your_email_address: Enter your email address
+  error: Error!
+  estimated_total_for_this_month: Estimated total for this month
+  estimated_writers_costs_this_month: Estimated writers' costs this month
+  event_details: Event Details
+  event_comments: Event Comments
+  event_does_not_allow_rsvp: This event does not allow RSVPs.
+  event_was_successfully_created: Event was successfully created.
+  events: Events
+  every_person_has_something_to_say: Every single person has something to say, something to give, something that will help someone else.  Join in!
+  expert_in: expert in
+  explore_site: Explore %{site}
+  failed: failed
+  faq: FAQ
+  faq_section: FAQ section
+  favorited: favorited
+  favorites: Favorites
+  favorite_this: Favorite this
+  featured_posts: Featured posts
+  featured_writer: Featured writer
+  featured_writers: Featured writers
+  features: Features
+  feel_free_to_embed_images_or_videos: Feel free to embed images or videos.
+  female: Female
+  filename: Filename
+  filter: Filter
+  find_an_expert: Find an Expert
+  find_an_expert_in: Find an Expert in
+  find_experts: Find experts
+  find_out_where_to_be_and_when_to_be_there: Find out where to be, and when to be there.
+  for_more_information_on_tags_check_out_the: For more information on tags check out the
+  forgot_your_password: Forgot your password?
+  forgot_your_username: Forgot your username?
+  forum: Forum
+  forums: Forums
+  post_found:
+    one: 1 Post found
+    other: '%{count} Posts found'
+  frequency: Frequency
+  frequent_asked_questions: Frequent Asked Questions
+  frequently_asked_questions: Frequently Asked Questions
+  friend: friend
+  friends: Friends
+  friendship_could_not_be_created: Friendship could not be created
+  friendship_request_accepted: Friendship request accepted!
+  friendship_request_detail: Friendship request detail
+  friendship_requested: Requested friendship with %{friend}.
+  from: From
+  from2: From
+  gender: Gender
+  general_text_dialog: Enquiry
+  get_help_from_someone_who_knows: Get help from someone who knows
+  get_popular: Get popular.
+  get_started: 'Get started:'
+  get_started_banner: Get started with <a href='/'>%{site}</a> today!
+  invite_some_friends: Invite some friends!
+  tell_us_about_yourself: Tell us about yourself
+  upload_a_profile_photo: Upload a profile photo
+  go: Go
+  go2: Go
+  go_check_your_e_mail: Go check your e-mail!
+  go_to_the_forums: go to the forums
+  go_to_your_clippings_page_to_get_started: Go to your clippings page to get started.
+  go_to_your_profile: Go to your profile
+  has_commented_on_something_that_you_also_commented_on: '%{user} has commented on a %{item} that you also commented on.'
+  has_posted_in_a_thread_you_are_monitoring: '%{user} has posted in a thread you are monitoring.'
+  has_something_to_say_to_you_on: '%{user} has something to say to you on %{site}!'
+  have_an_account: 'Have an account? '
+  have_something_to_contribute: Have something to contribute?
+  his: his
+  her: her
+  help: Help
+  home: Home
+  homepage_banner_download_msg: Download it now and get started
+  homepage_banner_msg: CommunityEngine is the best way to go from zero to hero in no time
+  homepage_banner_signup_prompt: See how it works
+  homepage_features: Homepage Features
+  homepage_feature_created: Homepage feature created
+  hours_ago:
+    one: one hour ago
+    other: '%{count} hours ago'
+  how_do_i_do_that: How do I do that?
+  html: HTML
+  image: Image
+  image_url: Image URL
+  in_the_forums: In the forums
+  in_your_favorites: In your favorites
+  inactive: inactive
+  inbox: Inbox
+  insert: Insert
+  invitation_for_project_subject: I want to invite you to a project.
+  invitation_for_project_message: Do you want to accept the invitation to the project %{project}.
+  invite_a_friend: Invite a friend
+  invite_friend_to_project_first: Do you want to invite <i>
+  invite_friend_to_project_second: </i> to the project <strong>
+  invite_friend_to_project_third: </strong> ?
+  invitation_was_successfully_created: Invitation was successfully created.
+  invite_message: The more people you invite the better %{site} becomes.
+  invite_some_customers: Invite some customers!
+  invite_your_friends_to_join: Invite Your Friends To Join!
+  invited_friends: invited some friends to join!
+  is_great_check_it_out_youll_love_it: is great, check it out you'll love it!
+  items: Items
+  items_tagged: Items tagged
+  joined: joined
+  joined_the_site: joined %{site}
+  just_uploading_one_photo: Just uploading one photo?
+  keywords: Keywords
+  large: Large
+  last: last
+  last_post: Last post
+  left_a_comment: 'left a comment:'
+  links: Links
+  listing_invitations: Listing invitations
+  loading_images: Loading images
+  loading_recent_content: Loading recent content...
+  location: Location
+  log_in: Log in
+  log_in_to_create_a_new_topic: Log in to create a new topic
+  log_in_to_leave_a_comment: Log in to leave a comment
+  log_in_to_reply_to_this_topic: Log in to reply to this topic
+  log_in_to_site: Log in to %{site}
+  log_in_to_vote: Log in to vote
+  log_in_to_your: Log in to your
+  log_out: Log Out
+  log_out_of_your: Log out of your
+  logged_in: 'Logged in:'
+  logged_into_the_site: logged into the site
+  login: Login
+  logins: Logins
+  locked: Locked
+  locked2: (locked)
+  look_for_a_message_from: 'Look for a message from: %{from}'
+  looking_for_most_x: Looking for %{link}
+  most_recent: most recent
+  most_popular: most popular
+  make_moderator: Make moderator
+  make_page_public: Make this page public
+  make_my_profile_public: Make my profile public
+  make_this_my_profile_photo: Make this my profile photo
+  male: Male
+  manage: 'Manage:'
+  manage_my: 'Manage my:'
+  manage_pages: Manage Pages
+  manage_posts: Manage Posts
+  map_it: Map It!
+  medium: Medium
+  megabyte_upload_limit:
+    one: 1 megabyte upload limit
+    other: '%{count} megabytes upload limit'
+  megabyte_upload_limit_per_file:
+    one: 1 megabyte upload limit per file.
+    other: '%{count} megabytes upload limit per file.'
+  member: Member
+  members: Members
+  member_since: Member since
+  message: Message
+  messages_deleted: Messages deleted
+  messages_sent: Messages sent!
+  message_sent: Message sent!
+  read: read
+  unread: unread
+  unread_messages:
+    one: 1 unread message
+    other: '%{count} unread messages'
+  metro_area: Metro Area
+  metro_areas: Metro Areas
+  metro_area_was_successfully_created: MetroArea was successfully created.
+  minutes_ago:
+    one: one minute ago
+    other: '%{count} minutes ago'
+  moderator: Moderator
+  moderators: Moderators
+  monitored_topics: Monitored Topics
+  month: Month
+  more: More
+  more_about_you: More about you
+  most_active_1_month: Most active (1 month)
+  my_account: My Account
+  my_blog: My Blog
+  my_blog_posts: My Blog Posts
+  my_clippings: My Clippings
+  my_details: My Details
+  my_friends: My Friends
+  my_photos: My Photos
+  my_profile: My Profile
+  my_recent_comments: My recent comments
+  my_tags: My tags
+  name: Name
+  navigation_menu_text: Navigation menu text
+  need_some_help_contact_our: Need some help?  Check out our
+  need_to_contact_us: Need to contact us?
+  new_ad: New Ad
+  new_category: New category
+  new_clipping: New clipping
+  new_event: New Event
+  new_forum: New Forum
+  new_homepage_feature: New Homepage Feature
+  new_invitation: New Invitation
+  new_invitation_from: New Invitation from
+  new_metro_area: New Metro Area
+  new_page: New Page
+  new_photo: New photo.
+  new_photos_multiple_uploader: New Photos &raquo; Multiple Uploader
+  new_post: New post
+  new_post_for_category: New %{category}
+  new_post_text: New Post text
+  new_today: New today
+  new_topic: New topic
+  new_yesterday: New yesterday
+  next: next
+  no_activation_email: No activation e-mail?
+  no_comments_found: Sorry, we couldn't find any comments for that %{type}
+  no_clippings_yet: No clippings saved yet.
+  no_images_uploaded_yet: No images uploaded yet.
+  no_messages: no messages
+  no_profile_photo: No profile photo?
+  no_recent_activity: No recent activity
+  no_tags: No tags
+  notify_email_updates: Notify of community news
+  notify_me_of_follow_ups_via_email: Notify me of follow ups via e-mail
+  notify_of_comments: Notify of comments
+  notify_of_friend_requests: Notify of friend requests
+  number_of_attendees: Number of attendees (including you)
+  of: of
+  on_commentable: 'On'
+  optional: optional
+  optional_keywords_describing_this_clipping_separated_by_commas: optional keywords describing this clipping, separated by commas
+  optional_keywords_describing_this_forum_separated_by_commas: optional keywords describing this forum, separated by commas
+  optional_keywords_describing_this_photo_separated_by_commas: optional keywords describing this photo, separated by commas
+  optional_keywords_describing_this_post_separated_by_commas: optional keywords describing this post, separated by commas
+  optional_keywords_describing_this_topic_separated_by_commas: optional keywords describing this topic, separated by commas
+  true: true
+  false: false
+  or: or
+  page: page
+  page_not_found: The page you are trying to view has been moved or no longer exists.
+  page_not_public_warning: This page is not public, you'll need to create an account and log in to access it
+  page_was_successfully_created: Page was successfully created.
+  page_was_successfully_deleted: Page was successfully deleted.
+  page_was_successfully_updated: Page was successfully updated.
+  pages: Pages
+  page_tips: Pages are a good place to put static content that you would rather not post to the blog or the forums.
+  password: Password
+  pending: pending
+  friendships: Contacts
+  you_have_friends:
+    one: You have one contact.
+    other: You have %{count} contacts.
+  pending_friendship: Contact request
+  pending_friendships: Contact requests
+  pending_friendships_title: Pending contact requests
+  wait_for_pending_friendship: A member has sent you a contact request.
+  wait_for_pending_friendships: Some members have sent you contact requests.
+  no_pending_friendships: You have currently no contact requests from other members.
+  accepted_user_friendships: accepted friendships
+  pending_user_friendships: pending friendships
+  denied_user_friendships: denied friendships
+  delete_this_request: delete this request
+  people: People
+  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends: People who sign up using your invitation will automatically be added as your friends.
+  people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on: People who sign up using your invitation will automatically be added as your friends on
+  permanently_delete_this_clipping: Permanently delete this clipping?
+  permanently_delete_this_event: Permanently delete this event?
+  permanently_delete_this_post: Permanently delete this post?
+  photo_comments: Photo Comments
+  photo_description_from_user: '%{photo_description} from %{user}'
+  photo_from_user: Photo from %{user}
+  photo_message: Your profile photo represents you on %{site}. You can change it later.
+  photo_was_successfully_created: Photo was successfully created.
+  photos: Photos
+  plural_photos:
+    one: 1 Photo
+    other: '%{count} Photos'
+  photos_should_be_x_pixels: Photos should be 300x300 pixels.
+  photos_tagged: Photos tagged
+  photo_tip_1: Photos show the world your creativity. Pick your best pics, and give them good titles and descriptions.
+  photo_tip_2: Use tags to organize your photos. Separate tags with commas.
+  please_activate_your_new_account: Please activate your new %{site} account
+  please_log_in: Please log in.
+  please_post_something_at_least: Please post something at least...
+  plural_posts: '%{count} posts'
+  popular: Popular
+  popular_category: Popular %{name}
+  popular_posts: Popular Posts
+  popular_posts_on: Popular Posts on
+  popular_polls: Popular Polls
+  position: Position
+  post: Post
+  posts: Posts
+  post_a_new_topic: Post a new topic
+  post_an_event: Post an event
+  posted_an_event: 'posted an event:'
+  upcoming_events: Upcoming Events
+  past_events: Past Events
+  post_created_for_category: Your '%{category}' post was successfully created.
+  post_comments: Post Comments
+  postal_code: 'Postal code:'
+  posting_tips: Posting Tips
+  post_topic: Post topic
+  posts_photos_and_bookmarks: '%{name} posts, photos and bookmarks'
+  posts_saved_with_draft_status_wont_appear_in_your_blog_until_you_publish_them: Posts saved with 'draft' status won't appear in your blog until you publish them.
+  posts_tagged: Posts tagged
+  pages_saved_with_draft_status_wont_appear_on_the_site_until_you_publish_them: Pages saved with 'draft' status won't appear on the site until you publish them.
+  public: Public
+  preview: Preview
+  previewing_your_post: Previewing your post
+  previous: previous
+  print: Print
+  print_this_story: Print this story
+  profile: Profile
+  profile_comments: Profile Comments
+  profile_photo: Profile Photo
+  profile_photo_change: Change profile photo
+  profile_photo_crop: Crop profile photo
+  profile_privacy: Profile Privacy
+  profile_views: profile views
+  project_invitation_sent: Project invitation was sent.
+  project_invitation_denied: It was noted that you do not wish to participate in the project.
+  project_invitation_accepted: Welcome to the Project  '%{project}'. If you are not already in the view, you can navigate to your group projects by clicking on »Team« in the navigation at the top left.
+  pros: Pros
+  published: Published
+  question: Question
+  re_type_your_password_to_confirm: 'Re-type your password to confirm:'
+  read_more: read more
+  recent: Recent
+  recent_activity: Recent activity
+  recent_blog_posts: Recent Blog Posts
+  recent_photos: Recent Photos
+  recent_posts: Recent Posts
+  recommended_posts: Recommended Posts
+  related_clippings_all_members: Related Clippings (all members)
+  related_photos_all_members: Related Photos (all members)
+  related_posts: Related Posts
+  related_tags: Related Tags
+  remember_me: Remember me
+  remember_you_can_always_change_this_later: Remember, you can always change this later.
+  remove_moderator: Remove moderator
+  remove_this_friend: Remove this friend
+  remove_this_friend_question: Are sure you want to remove this member from your contact list?
+  reply: Reply
+  reply_to_topic: Reply
+  request_friendship: Request contact
+  requested: requested
+  requested_friendship_with: Requested contact with
+  requesting_friendship: Requesting contact
+  required: required
+  required_we_will_send_a_confirmation_e_mail_to_the_address_you_enter: '(Required: We will send a confirmation e-mail to the address you enter.)'
+  required_you_must_be_at_least_years_old_to_sign_up: '(Required: you must be at least %{min_age} years old to sign up.)'
+  required_your_username_must_not_contain_numerals_spaces_or_special_characters: '(Required: Your username must not contain spaces or special characters.)'
+  resend_my_activation_e_mail: Resend my activation e-mail
+  resend_your_activation_e_mail: Resend your activation e-mail
+  reset_my_password: Reset my password
+  retract_rsvp: Retract RSVP
+  rss: RSS
+  rss_feed: RSS feed
+  rsvp_for: RSVP for
+  rsvped_for_an_event: 'RSVPed for an event:'
+  rsvp: RSVP
+  rsvps: RSVPs
+  run: Run
+  save: Save
+  save_and_continue_to_step_three: Save, and continue to step three
+  save_changes: Save Changes
+  save_forum: Save Forum
+  save_page_as: 'Save page as:'
+  save_post_as: 'Save post as:'
+  save_reply: Save reply
+  says: says
+  sb_post_was_deleted: Post '%{title}' was deleted.
+  scrapbook: Scrapbook
+  search: Search
+  search_users: Search Users
+  searching_for: Searching for
+  see_all: SEE ALL
+  see_all_activity: See all activity
+  see_all_events: See all events
+  see_all_recent_posts: See all recent posts
+  see_you_back_here_in_a_short_while: See you back here in a short while.
+  select_images_to_upload: Select Images to Upload
+  select_your_city: Select your city
+  send: Send
+  send_comment_notifications: Send comment notifications?
+  send_me_a_message: Send me a message
+  send_invitations: Send Invitations!
+  send_me_my_username: Send me my username
+  send_this_story_to_friends: Send this message to friends
+  sent_messages: Sent messages
+  sent_you_a_private_message: '%{user} sent you a private message!'
+  service_could_not_be_deleted: Service could not be deleted.
+  share_the_love: Share the love
+  sharethis: ShareThis
+  show: Show
+  show_category: '%{category}'
+  show_this_photo: Show this photo
+  showing: Showing
+  showing_ad: Showing Ad
+  showing_categories: Showing categories
+  showing_metro_area_details: Showing Metro Area Details
+  showing_users: Showing users
+  sign_up: Sign Up!
+  sign_up_for_an_account: Sign up for an account.
+  sign_up_for_a_: Sign up for a
+  sign_up_reason_1: Some reason to sign up
+  sign_up_reason_2: Some reason to sign up
+  singular_posts: '%{count} post'
+  site_members: '%{site} members'
+  skip_this_and_go_to_your_profile: Skip this and go to your profile
+  skip_this_step: Skip this step
+  small_profile: '%{user} doesn''t have much here yet. Stay tuned.'
+  sorry_there_was_an_error: Sorry, there was an error.
+  sorry_there_was_an_error_requesting_friendship: Sorry, there was an error requesting friendship.
+  sorry_there_was_an_error_uploading_the_photo: Sorry, there was an error uploading the photo.
+  sorry_we_dont_recognize_that_email_address: Sorry. That e-mail address is not associated with an active account. Are you sure you typed it correctly? Have you signed up and activated your account?
+  spread_the_word: Spread the word
+  start_date: Start date
+  start_time: Start time
+  started_a_topic: 'started a topic:'
+  state: State
+  statistics: Statistics
+  stats: Stats
+  status: Status
+  sticky: Sticky
+  subject: Subject
+  subscribe_to: Subscribe to
+  subscribe_events_instructions: Keep up to date with events using your favorite software (Outlook, Lightning / Thunderbird, Sunbird, iCal, etc.) or online service (Google Calendar, AirSet, iScrybe, etc.).
+  tag_does_not_exists: The tag %{tag} does not exist
+  tag_name: Tag name
+  tag_yourself: Tag yourself
+  taggings: Taggings
+  tag_was_successfully_updated: Tag was successfully updated
+  tag_was_successfully_deleted: Tag was successfully deleted
+  tags_are_comma_separated_keywords_that_describe_you: Tags are comma-separated keywords that describe you.
+  tags_are_keywords_you_use_to_organize_your_clippings_separate_multiple_tags_with_commas: Tags are keywords you use to organize your clippings. Separate multiple tags with commas.
+  tags_are_keywords_you_use_to_organize_your_photos: Tags are keywords you use to organize your photos. Separate multiple tags with commas.
+  tags_are_one_word_descriptors_users_assign_to_blog_posts_pictures_and_clippings_on: Tags are one-word descriptors user assign to blog posts, pictures and clippings on
+  tagged: tagged
+  tags_page: tags page
+  thanks_for_activating_your_account: Thanks for activating your account!
+  thanks_youre_now_logged_in: Thanks! You're now logged in.
+  the_comment_was_deleted: The comment was deleted.
+  the_community_team: The %{community} team
+  the_friendship_was_accepted: The friendship was accepted.
+  the_friendship_was_denied: The friendship was denied.
+  the_more_people_you_invite_the_better: The more people you invite, the better
+  the_service_was_deleted: The service was deleted.
+  the_slideshow_is_disabled: The slideshow is disabled.
+  the_team: The %{site} Team <%{email}>
+  the_user_was_activated: The user was activated
+  the_user_was_deactivated: The user was deactivated
+  the_user_was_deleted: The user was deleted.
+  their: their
+  this_forum_is_still_getting_started: This forum is still getting started ... here are some blog posts to get you thinking ...
+  this_friendship_is_pending: This Friendship is pending.
+  this_is_your_dashboard: This is your dashboard.
+  this_month_best: This month's Best
+  this_story_is_awesome: This story is awesome!
+  this_topic_is_locked: This topic is locked.
+  private_user_profile_message: This user's profile is not public. You'll need to create an account and log in to access it.
+  thumb: Thumb
+  time_constrained: Time constrained
+  tips: 'Tips:'
+  title: Title
+  title_required: Title (required)
+  to: To
+  to_accept: to accept
+  to_get_recommended_content_on_your_dashboard: to start getting recommended content on your dashboard.
+  to_get_started_with_clippings_first: 'To get started with clippings, first '
+  to_start_adding_friends: To start adding friends, you can
+  to_you: You
+  toggle: Toggle
+  top_pros: Top Pros
+  top_writers: Top Writers
+  topic: Topics
+  topics: Topics
+  topic_deleted: Topic '%{topic}' was deleted.
+  topic_locked: Topic locked
+  total_users: Total users
+  total_votes: Total votes
+  type_a_username: Type a username
+  type_your_password: 'Type your password:'
+  uh_oh_we_couldnt_log_you_in_with_the_username_and_password_you_entered_try_again: Uh oh. We couldn't log you in with the username and password you entered. Try again?
+  un_favorite_this: Un-favorite this
+  unactivated_users: Unactivated users
+  uncategorized: Uncategorized
+  update: Update
+  update_rsvp: Update RSVP
+  update_profile_and_tag_yourself: Update your profile and tag yourself
+  update_your_profile: update your profile
+  updated_at: Updated at
+  updated_their_profile: updated their profile
+  upload_an_image_for_your_post: Upload an image for your post
+  upload_and_continue_to_step_two: Upload, and continue to step two
+  uploaded_a_photo: 'uploaded a photo:'
+  uploaded_by: uploaded by
+  url: Url
+  user_e_mail: 'User e-mail:'
+  username: Username
+  user: User
+  user_information: '%{site} User information'
+  users_blog: '%{user}''s Blog'
+  user_clippings: '%{user}''s Clippings'
+  user_login: User login
+  users_online: Users online
+  users_photos: '%{user}''s Photos'
+  users_profile: '%{user}''s profile'
+  users_tagged: Users tagged
+  user_vendor_offer: <p>Describe the product or service you offer:<ul><li> Tell people what you do</li><li> Explain why you love your work</li><li> How can people contact you? What's your Web site?</li></ul></p>
+  user_bio_help: <p>Your bio is first thing people see on your profile. Some ideas:<ul><li> Describe your sense of style</li><li> Explain what you love about life.</li><li> What's the last thing you purchased for a friend?</li></ul></p>
+  vendor_avatar_hint: 'You may want to use your company logo, or a photo of one of your products. '
+  view: View
+  view_count: Views
+  view_all_my_clippings: View all my clippings
+  view_all_my_friend_requests: View all my friend requests
+  view_all_my_photos: View all my photos
+  view_comment: View Comment
+  view_my_blog: View my blog
+  voice: voice
+  voices: Voices
+  vote: Vote
+  vote_now: Vote now!
+  votes: votes
+  waiting_for: Waiting for
+  walkthrough_complete: You've completed the %{site} walk-through. Now you can continue exploring!
+  want_to_be_popular: Want to be popular?
+  want_to_list_your_services_on: Want to list your services on
+  want_to_post_in_this_category: Want to post in this category?
+  want_to_upload_multiple_files_at_once: Want to upload multiple files at once?
+  watch_topic: Watch topic
+  watching_topic: Watching topic
+  we_just_sent_an_e_mail_to: 'We just sent an e-mail to: %{email}'
+  we_need_you: We need you
+  welcome_message: Welcome! %{login_link} or %{signup_link}
+  what_are_tags: What are "Tags"?
+  what_is_site: What is %{site}
+  what_is_popular: What's Popular
+  whats_fresh: What's fresh
+  whats_hot: What's Hot
+  whats_popular: What's Popular
+  when: When
+  where: Where
+  when_checked_this_page_will_be_visible_to_anyone: When checked, this page will be visible to anyone.
+  when_checked_users_will_be_able_to_rsvp_for_this_event: When checked, logged in users will be able to RSVP for this event.
+  when_checked_your_profile_will_be_visible_to_anyone: When checked, your profile will be visible to anyone.
+  when_unchecked_this_page_will_only_be_visible_to_people_who_are_logged_in_to: When unchecked, this page will only be visible to people who are logged in to
+  when_unchecked_your_profile_will_only_be_visible_to_people_who_are_logged_in_to: When unchecked, your profile will only be visible to people who are logged in to
+  when_you_see_an_image_you_like_on_the_web: When you see an image you like on the Web, click the bookmarklet to save it to %{site}
+  why_sign_up: Why Sign up?
+  would_like_to_be_friends_with_you_on: '%{user} would like to be friends with you on %{site}!'
+  would_like_you_to_join: '%{user} would like you to join %{site}!'
+  write_a_blog_post: Write a blog post!
+  write_a_message: 'Write a message:'
+  write_new_post: Write a '%{category}' post
+  wrote_a_post: 'wrote a post:'
+  yesterday: Yesterday
+  you_are_editing_your_account: You are editing your account.
+  you_are_editing_your_profile: You're editing your profile.
+  you_can_browse_all_content_and_users_on: You can browse all content and users on
+  you_cant_delete_that_user: You can't delete that user.
+  you_can_select_up_to_5_files_at_a_time: You can select up to 5 files at a time.
+  you_could_tag_yourself: You could tag yourself
+  you_have_added_clippings:
+    one: You have added 1 clipping.
+    other: You have added %{count} clippings.
+  you_have: You have
+  you_have_already_rsvped_for_this_event: You have already RSVPed for this event.
+  you_have_already_voted: You have already voted.
+  you_have_created: You have created
+  you_have_left_comments:
+    one: You have left 1 comment.
+    other: You have left %{count} comments.
+  you_have_no_clippings_use_the_bookmarklet_on_the_right_to_add_some: You have no clippings. Use the bookmarklet on the right to add some.
+  you_have_no_network_activity_yet: You have no network activity yet.
+  you_have_pending_friendship_requests: You have pending friendship requests.
+  you_have_uploaded_photos:
+    one: You have uploaded 1 photo.
+    other: You have uploaded %{count} photos.
+  you_have_written_blog_posts:
+    one: You have written 1 blog post.
+    other: You have written %{count} blog posts.
+  you_last_logged_in_on: You last logged in on
+  you_must_vote_to_see_the_results: You must vote to see the resuts.
+  your_about_text_goes_here: Your About Text Goes Here
+  your_account_has_been_activated: Your %{site} account has been activated!
+  your_faq_text_goes_here: Your FAQ text goes here.
+  your_changes_were_saved: Your changes were saved.
+  your_password_reset_instructions_have_been_emailed_to_you: Instructions to reset your password have been emailed to you.
+  your_post_was_deleted: Your post was deleted.
+  your_post_was_successfully_created: Your post was successfully created.
+  your_profile_photo: 'Your profile photo:'
+  your_rsvp_has_been_retracted: Your RSVP has been retracted.
+  your_rsvp_was_successfully_created: Your RSVP was successfully created.
+  your_rsvp_was_successfully_updated: Your RSVP was successfully updated.
+  your_username_was_emailed_to_you: Your username was emailed to you.
+  youve_been_logged_out_hope_you_come_back_soon: You've been logged out. Hope you come back soon!
+  zippostal_code: 'ZIP/Postal code:'
+  photo_manager: Photo manager
+  album: Album
+  albums: Albums
+  album_added_photos: Photos added to album
+  album_updated: Album updated
+  album_comments: Album comments
+  delete_album_and_photos: Delete album and its associated photos?
+  album_was_successfully_created: Album was successfully created
+  view_more: View more
+  assign_album: Assign album
+  new_album: New album
+  created_an_album: Created an album
+  add_photos: Add photos
+  view_my_album: View my album
+  photos_of_this_album: Photos from this album
+  not_assigned_photos: Photos not assigned to an album
+  create_and_add_photos: Create and add photos to this album
+  edit_and_add_photos: Edit and add photos to this album
+  create_album: Create album
+  edit_album: Edit album
+  cancel_and_go_back_to_photo_manager: Cancel and go back to photo manager
+  back_to_photo_manager: Back to photo manager
+  group_invitation_send_project_invitation: Send invitation
+  group invitation: Invitation
+  group_invitation_one_sender_one_receiver_needed: You need a reciever for an invitation
+  group_invitation_for: Invitation to
+  label_cancel: Decline
+  label_accept: Accept
+  label_user_permissions: Permission for users
+  label_user_message: Platfrom message
+  label_from: from
+  no_entries: No entries
+  contact_list: 'Contact list '
+  notice_user_successful_added: user added successfully
+  change_profile_photo: change your profile picture
+  label_contact_captcha: What is the name of the platform?
+  text_my_interest: My science fields
+  label_my_interest_add: Add science field
+  text_my_skill: My skills
+  label_my_skill_add: Add skill
+  label_album_plural: Pictures
+  label_dashurl: Favorite Website
+  label_add_album: Add Album
+  label_add_file: Add file
+  label_my_organisation: My organisation
+  label_my_project_plural: My projects
+  label_my_issues_plural: My issues
+  label_issues_plural: Issues
+  label_my_album_plural: My photo albums
+  label_my_wiki: My wiki
+  label_my_file_plural: My files
+  button_invite: Send Invite
+  no_common_project: No common project
+  searchable_sql: Can I be searched?
+  account_readable_for_user: Can other users see my account?
+  no_name: No name given
+  label_album_delete: Delete album
+  label_project_private: My
+  label_my_document_plural: My documents
+  label_create: Create
+  tooltip_double_click_open_message: Double click to open this message
+  path_to_project: Path to the project %{name}
+  label_newest_project: latest project
+  user_message_previous_message: Previous message
+  user_message_me: Me
+  user_message_hide_receivers: Recipients as BCC
+  user_message_history: History
+  user_message_sort: Sorting
+  user_message_sort_content: Content
+  user_message_sort_date: Date
+  user_message_sort_author: Author
+  go_to_profile_page: Go to profile page
+  privacy_settings: Privacy settings
+
