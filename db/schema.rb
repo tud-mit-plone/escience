@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160624085100) do
+ActiveRecord::Schema.define(:version => 20161024105024097) do
 
   create_table "ads", :force => true do |t|
     t.string   "name"
