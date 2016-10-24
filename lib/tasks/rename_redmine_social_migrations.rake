@@ -9,7 +9,7 @@ namespace :redmine do
       index = old_version.split("-")[0]
       new_version = new_version_prefix + index.to_s.rjust(3, "0")
       print "#{old_version} -> #{new_version}\n"
-      connection.exec_update("UPDATE schema_migrations SET version = '#{new_version}' WHERE version = '#{old_version}'")
+      connection.exec_update("UPDATE schema_migrations SET version = '#{new_version}' WHERE version = '#{old_version}'", "update schema migration version", [])
     end
   end
 end
