@@ -29,56 +29,6 @@ platforms :mri, :mingw do
   end
 end
 
-=begin
-# Database gems
-platforms :mri, :mingw do
-  group :postgresql do
-    #gem "pg", ">= 0.11.0"
-  end
-
-  group :sqlite do
-    gem "sqlite3"
-  end
-end
-
-platforms :mri_18, :mingw_18 do
-  group :mysql do
-    gem "mysql"
-  end
-end
-
-if RUBY_VERSION =~ /^1/
-  platforms :mri_19, :mingw_19 do
-    group :mysql do
-      gem "mysql2", "~> 0.3.11"
-    end
-  end
-end
-
-if RUBY_VERSION =~ /^2/
-  platforms :mri_20, :mingw_20 do
-    group :mysql do
-      gem "mysql2", "~> 0.3.11"
-    end
-  end
-end
-
-platforms :jruby do
-  gem "jruby-openssl"
-
-  group :mysql do
-    gem "activerecord-jdbcmysql-adapter"
-  end
-
-  group :postgresql do
-    gem "activerecord-jdbcpostgresql-adapter"
-  end
-
-  group :sqlite do
-    gem "activerecord-jdbcsqlite3-adapter"
-  end
-end
-=end
 
 group :production do
   gem "mysql2", "~> 0.3.10"
