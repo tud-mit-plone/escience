@@ -5,6 +5,7 @@
 *.orig
 *.svn
 *.swp
+*~
 /changed_files
 /backup
 /nbproject
