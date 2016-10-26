@@ -65,3 +65,35 @@
 <% end %>
 
 <% html_title(l(:label_calendar)) -%>
+
+<div id="addEvent">
+  <div class="background_hider" onclick="$('#addEvent').fadeOut();"></div>
+  <div class="content"><%= render :partial=> 'appointments/new' %></div>
+</div>
+<%= javascript_tag "
+  $.extend($.fn.disableTextSelect = function() {
+    return this.each(function(){
+      if($.browser.mozilla){
+        $(this).css('MozUserSelect','none');
+      }else if($.browser.msie){
+        $(this).bind('selectstart',function(){return false;});
+      }else{
+        $(this).mousedown(function(){return false;});
+      }
+    });
+  });
+  $(function() {
+    $('.td_box').dblclick(function () {
+      $('#appointment_start_date').val($(this).find('.day-num').attr('title'));
+      $('#appointment_due_time').parent().removeClass('cycle');
+      $('#appointment_cycle').val(0).attr('selected',true);
+      $('#addEvent').fadeIn();
+      $('#appointment_subject').focus();
+    });
+    $('.noSelect').disableTextSelect();
+  });
+  "
+%>
+<%= javascript_tag "$(function() {$('#addEvent').show()});" if params[:new] %><% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'appointments', :plugin => 'redmine_appointments' %>
+<% end %>

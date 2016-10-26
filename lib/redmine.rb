@@ -62,6 +62,7 @@ Redmine::AccessControl.map do |map|
   map.permission :view_calendar, {:calendar => [:show, :update]}, :read => true
   map.permission :appointments_add_watchers, :appointments => :add_watchers
   map.permission :group_invitations_create, :group_invitations => :create
+  map.permission :appointments_create, :calendars => :show_user_calendar, :require => :loggedin
 
   map.project_module :issue_tracking do |map|
     # Issue categories
@@ -204,8 +205,7 @@ Redmine::MenuManager.map :private_menu do |menu|
   contacts = Proc.new {"#{User.current.friendships.where("initiator = ? AND friendship_status_id = ?", false, FriendshipStatus[:pending].id).count}"}
   menu.push :user_contacts, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index', :tab => 'pending'}, :caption => {:value_behind => contacts, :text => :friendships}, :if => Proc.new{"#{contacts.call}".to_i > 0}, :html => {:class => "icon icon-user"}
   menu.push :user_contacts2, {:controller => 'my', :action => 'render_block', :blockname => 'friendships', :blockaction => 'index'}, :caption => :friendships, :if => Proc.new{"#{contacts.call}".to_i == 0}, :html => {:class => "icon icon-group"}
- # menu.push :doodle_all, { :controller => 'doodles', :action => 'list', :sub => "doodle_all" }, :caption => :label_my_doodles_plural
- # menu.push :my_members, {:controller => 'my', :action => 'members', :sub => 'my_members'}, :caption => :label_my_members
+  menu.push :calendar_all, { :controller => 'calendars', :action => 'show_user_calendar', :sub => 'calendar_all'}, :caption => {:text => :label_calendar }, :html => {:class => "icon icon-calendar"}
 end
 
 Redmine::MenuManager.map :project_menu do |menu|
@@ -238,6 +238,7 @@ Redmine::Activity.map do |activity|
   activity.register :wiki_edits, :class_name => 'WikiContent::Version', :default => false
   activity.register :messages, :default => false
   activity.register :time_entries, :default => false
+  activity.register :appointments, :default => false, :class_name => 'Appointment'
 end
 
 Redmine::Search.map do |search|

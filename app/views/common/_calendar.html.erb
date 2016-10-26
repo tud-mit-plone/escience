@@ -1,4 +1,22 @@
 <% day = calendar.startdt %>
+<%# content_for :sidebar_left do %>
+<div id="calendar_sidebar" style="position:absolute; width:160px; overflow:hidden; margin-left: -180px;top:0;" class="sidebar">
+<%= form_tag(url_for(:controller => 'calendars', :action => 'show_user_calendar'), :method=>'post', :remote => true) do %>
+  <div class="headline"><%= l(:label_headline_sidebar) %></div>
+  <ul class="selectCalendarOptions" style="margin-top:10px">
+  <% unless @show_params.nil? %>
+    <li><%= check_box_tag '[show][community_appointments]', true, (checked = @show_params[:community_appointments]) %><%= label_tag '[show][community_appointments]', l(:label_community_appointments) %></li>
+    <li><%= check_box_tag '[show][private_appointments]', true, (checked = @show_params[:private_appointments]) %><%= label_tag '[show][private_appointments]', l(:label_private_appointments) %></li>
+    <li><%= check_box_tag '[show][watched_appointments]', true, (checked = @show_params[:watched_appointments]) %><%= label_tag '[show][watched_appointments]', l(:label_watched_appointments)%></li>
+    <li><%= check_box_tag '[show][community_issues]', true, (checked = @show_params[:community_issues]) %><%= label_tag '[show][community_issues]', l(:label_community_issue_plural) %></li>
+    <li><%= check_box_tag '[show][private_issues]', true, (checked = @show_params[:private_issues]) %><%= label_tag '[show][private_issues]', l(:label_private_issue_plural) %></li>
+    <li><%= check_box_tag '[show][watched_issues]', true, (checked = @show_params[:watched_issues]) %><%= label_tag '[show][watched_issues]', l(:label_watched_issue_plural)%></li>
+  <%end%>
+  </ul>
+  <div class="clear" style="padding-bottom:10px;"></div>
+<% end %>
+</div>
+<%#end%>
 <table class="cal" width="100%">
 <thead>
   <tr>
@@ -18,21 +36,36 @@
         <p><%= (day+(11-day.cwday)%7).cweek %></p>
       </td>
 <%  end %>
-    <td class="<%= 'today' if Date.today == day %><%= ' event' if !calendar.events_on(day).empty? %>
-    <% unless @listOfDaysBetween.nil? %><%= ' weekend' if weekend %>
-    <%= ' e_'+@listOfDaysBetween[day.to_date.to_s][:id].to_s if @listOfDaysBetween[day.to_date.to_s] %>" valign="top" id="day_<%= day.day%>"<%end%>>
+    <td class="
+      <%= 'today' if Date.today == day %>
+      <%= ' event' if !(calendar.events_on(day).empty?) %>
+      <% unless @listOfDaysBetween.nil? || @listOfDaysBetween[day.to_date.to_s].nil? || @listOfDaysBetween[day.to_date.to_s].empty? %>
+      <%= ' weekend' if weekend %><% @listOfDaysBetween[day.to_date.to_s].each do |d| %>
+        <%="e_#{d[:id].to_s} " unless d.class == Array%>
+      <% end %>" valign="top" id="day_<%= day.day%>
+      <%end%>"
+      >
       <div class="td_box noSelect">
         <p class="day-num" title="<%=format_date(day)%>"><%= day.day %></p>
-        <%= calendar.events_on(day) %>
-        <% calendar.events_on(day).each do |i| %>
-          <div style="float:left">        
-            <% if (calendar.events_on(day).size < 0) %>
-              <p class="linkToInfo <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="float:left; clear:left;"><%= link_to_issue(i,{:subject => false, :link_text => h(i.project).truncate(14)}) %></p>
-           <% else %>
-              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 8) %>"><%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %></div>
-           <% end %>
-           <% if i.is_a? Issue %>
-             <div class="infobox" id="info_<%= i.id %>"><%= render_issue_tooltip i %></div>
+          <% calendar.events_on(day).each do |i| %>
+          <div style="float:left">
+            <% if (calendar.events_on(day).size < 5) %>
+              <div class="linkToInfo <%= i.css_classes if defined?(i.css_classes) %>" id="<%= "#{i.id}_#{day}" %>">
+                <% if i.is_a? Issue %>
+                  <%= link_to_issue(i,{:subject => false, :link_text => h(i.subject).truncate(15)}) %>
+                <% elsif i.is_a? Appointment %>
+                  <%= link_to_appointment(i,{:subject => false, :link_text => h(i.subject).truncate(15)}) %>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="linkToInfo box <%= i.css_classes %> <%= 'starting' if format_date(day) == format_date(i.start_date) %> <%= 'ending' if (format_date(day) == format_date(i.due_date) || i.due_date.nil?) %>" id="linkToInfo_<%= i.id %>_<%= day %>" style="background-color: #B<%= i.project.nil? ? "7AdFd" : ('FF'.to_i(16)-i.project.to_s().length*2).to_s(16) %>;<%= ' width:10px; height:10px;' if (calendar.events_on(day).size > 12) %>" onclick="self.location.href='<%= url_for(:controller => getControllerName(i), :action => 'show', :id => i) %>'">
+                <%= link_to_issue(i,{:subject => false, :link_text => ' ', :title => false}) %>
+              </div>
+            <% end %>
+            <% if i.is_a? Issue %>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 5 %>"><%= render_issue_tooltip i %></div>
+            <% elsif i.is_a? Appointment %>
+              <div class="infobox" id="info_<%= i.id %>" style="<%= 'margin:10px 0 0 20px !important' if calendar.events_on(day).size < 5 %>"><%= render_appointment_tooltip i %></div>
             <% end %>
           </div>
         <% end %>
@@ -46,23 +79,59 @@
 </table>
 
 <%= javascript_tag "
-  var $ = jQuery.noConflict();
 	$(function() {
+    $('#calendar_sidebar').css('top',$('#sidebar_left').offset().top+$('#sidebar_left').height()+10);
 	  visiblity = 'visible';
+	  e_visiblity = true;
 		$('.linkToInfo').each(function(obj) {
 		  $(this).hover(function() {
+		    $('.infobox').css('visibility','hidden');
 		    infobox = $(this).parent().find('.infobox');
 		    infobox.css('visibility','visible');
+		    id = $(this).attr('id').split('_')[0];
+		    $('.e_'+id).addClass('hoveredEvent')
 		    infobox.hover( function () {
 		      visiblity = 'visible';
+		      e_visiblity = true;
 		    }, function () {
 		      $(this).css('visibility','hidden');
+		      $('.e_'+e_id).removeClass('hoveredEvent')
 		    });
-		  }, function () {  
+		  }, function () {
 		    visiblity = 'hidden';
+		    e_visiblity = false;
 		    id = $(this).attr('id');
-		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity)\", 1);
+		    e_id = $(this).attr('id').split('_')[0];
+		    setTimeout(\"$('#'+id).parent().find('.infobox').css('visibility',visiblity); if (!e_visiblity) $('.e_'+e_id).removeClass('hoveredEvent')\", 1);
 		  });
 		});
   });
   "%>
+  <%= javascript_tag "
+    $('#_show_private_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_private_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_community_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_watched_issues').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_watched_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+    $('#_show_community_appointments').click( function(e){
+      $('#checkbox_trigger').val( e.value ); // capture on check or uncheck
+      $(this).closest('form').submit();
+    });
+"
+  %>
+

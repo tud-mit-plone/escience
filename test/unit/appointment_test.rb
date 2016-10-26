@@ -1,8 +1,6 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
 
 class AppointmentTest < ActiveSupport::TestCase
-  self.fixture_path = "#{Rails.root}/plugins/redmine_appointments/test/fixtures/"
-
   fixtures :users, :appointments
 
   def setup

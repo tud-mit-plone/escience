@@ -1,6 +1,0 @@
-<%= render :parent %>
-<% message = flash[:error] || flash[:notice] || flash[:warning]
-   if message
-     type = flash.keys[0].to_s %>
-     $.notification({ message:"<%= message%>", type:"<%= type %>" });
-<% end %>

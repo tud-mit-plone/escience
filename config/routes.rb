@@ -411,6 +411,11 @@ RedmineApp::Application.routes.draw do
       end
   end
 
+  resources :appointments
+  match 'appointments/:id', :to => 'appointments#destroy', :via => :delete
+  match 'calendar', :to => 'calendars#show_user_calendar', :via => [:get, :post]
+  match 'get_events_on_current_day', :controller => 'calendars', :action => 'get_events_on_current_day'
+
   Dir.glob File.expand_path("plugins/*", Rails.root) do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")
     if File.exists?(file)
