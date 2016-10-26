@@ -151,6 +151,14 @@ Redmine::AccessControl.map do |map|
   map.project_module :gantt do |map|
     map.permission :view_gantt, {:gantts => [:show, :update]}, :read => true
   end
+
+  map.project_module :doodles do |map|
+    map.permission :manage_doodles, {:doodles => [:lock, :edit, :update]}, :require => :member
+    map.permission :delete_doodles, {:doodles => [:destroy]}, :require => :member
+    map.permission :create_doodles, {:doodles => [:new, :create, :preview]}, :require => :member
+    map.permission :answer_doodles, {:doodle_answers => [:create, :update]}, :require => :loggedin
+    map.permission :view_doodles, {:doodles => [:index, :show]}
+  end
 end
 
 Redmine::MenuManager.map :top_menu do |menu|
@@ -224,6 +232,7 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :boards, { :controller => 'boards', :action => 'index', :id => nil }, :html => {:class => "icon icon-group"}, :param => :project_id,
               :if => Proc.new { |p| p.boards.any? }, :caption => :label_board_plural
   menu.push :files, { :controller => 'files', :action => 'index' }, :html => {:class => "icon icon-folder-open-alt"}, :caption => :label_file_plural, :param => :project_id
+  menu.push :doodles, {:controller => 'doodles', :action => 'index'}, :html => {:class => "icon icon-bar-chart"}, :caption => :label_doodle_plural, :param => :project_id
   menu.push :repository, { :controller => 'repositories', :action => 'show', :repository_id => nil, :path => nil, :rev => nil }, :html => {:class => "icon icon-check"},
               :if => Proc.new { |p| p.repository && !p.repository.new_record? }
   menu.push :settings, { :controller => 'projects', :action => 'settings' }, :html => {:class => "icon icon-cog"}, :last => true
@@ -239,6 +248,7 @@ Redmine::Activity.map do |activity|
   activity.register :messages, :default => false
   activity.register :time_entries, :default => false
   activity.register :appointments, :default => false, :class_name => 'Appointment'
+  activity.register :doodles, :default => false, :class_name => ['Doodle', 'DoodleAnswersEdits']
 end
 
 Redmine::Search.map do |search|
@@ -253,6 +263,7 @@ Redmine::Search.map do |search|
                           :show_result_partial_locals => Proc.new {|e|  {:user => e, :memberships => e.memberships}}
   search.register :attachments, :sort_function => 'sort',
                                 :show_result_partial_locals => Proc.new {|e|  {:attachment => e}}
+  search.register :doodles
 end
 
 Redmine::WikiFormatting.map do |format|

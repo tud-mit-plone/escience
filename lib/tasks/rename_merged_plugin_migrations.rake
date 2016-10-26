@@ -5,6 +5,7 @@ namespace :redmine do
     new_version_prefixes = {
       "redmine_social" => "20161024105024",
       "redmine_appointments" => "20161026095742",
+      "redmine_doodles" => "20161026150841",
     }
     new_version_prefixes.each do |plugin_name, new_version_prefix|
       rows = connection.exec_query("SELECT version FROM schema_migrations WHERE version LIKE '%-#{plugin_name}'")

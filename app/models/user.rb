@@ -94,6 +94,7 @@ class User < Principal
   has_many :friendships_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', true], :dependent => :destroy
   has_many :friendships_not_initiated_by_me, :class_name => "Friendship", :foreign_key => "user_id", :conditions => ['initiator = ?', false], :dependent => :destroy
   has_many :occurances_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
+  has_and_belongs_to_many :should_answer, :class_name => 'Doodle', :join_table => "#{table_name_prefix}users_should_answer_doodles#{table_name_suffix}", :conditions => ["doodles.expiry_date >= ?", Time.now]
 
   scope :logged, :conditions => "#{User.table_name}.status <> #{STATUS_ANONYMOUS}"
   scope :status, lambda {|arg| arg.blank? ? {} : {:conditions => {:status => arg.to_i}} }
@@ -834,6 +835,14 @@ class User < Principal
     users.each do |user|
       Mailer.inactive_user_warning(user).deliver
     end
+  end
+
+  def open_answers
+    open_answers = Array.new
+    self.should_answer.each do |doodle|
+      open_answers << doodle unless doodle.user_has_answered?
+    end
+    return open_answers
   end
 end
 

@@ -416,6 +416,18 @@ RedmineApp::Application.routes.draw do
   match 'calendar', :to => 'calendars#show_user_calendar', :via => [:get, :post]
   match 'get_events_on_current_day', :controller => 'calendars', :action => 'get_events_on_current_day'
 
+  match 'doodles', :controller => 'doodles', :action => 'list'
+  shallow do
+    resources :projects, :only => [] do
+      resources :doodles do
+        post :preview
+        get :member
+        post :lock
+        resources :doodle_answers
+      end
+    end
+  end
+
   Dir.glob File.expand_path("plugins/*", Rails.root) do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")
     if File.exists?(file)
