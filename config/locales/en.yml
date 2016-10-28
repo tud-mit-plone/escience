@@ -2236,3 +2236,7 @@ en:
   project_module_doodles: Surveys
   text_doodle_answered: '{{author}} answered the survey.'
   text_doodle_with_requested_answer: '{{author}} requests that you answer this survey.'
+  label_shibboleth_login: Shibboleth Login
+  shibboleth_settings:
+    enabled: Enable Shibboleth authentication
+    shibboleth_path: 'Path:'

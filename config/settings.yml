@@ -259,4 +259,8 @@ social:
       url: "/system/attachments/development/files/:id/:style/:basename.:extension"
     photo_missing_thumb: avatar.png
     photo_missing_medium: avatar.png
-
+shibboleth_login:
+  serialized: true
+  default:
+    enabled: false
+    shibboleth_path: "/Shibboleth.sso"

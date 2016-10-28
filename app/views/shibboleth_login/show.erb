@@ -1,0 +1,18 @@
+<h2><%= t :label_shibboleth_login %></h2>
+<%= form_tag({:controller => 'shibboleth_login', :action => 'update'}, method: :put) do  %>
+<p>
+<label>
+<%= check_box_tag 'settings[enabled]', 'true', @settings['enabled'] %>
+<%= t :enabled, scope: 'shibboleth_settings' %>
+</label>
+</p>
+
+<p>
+<label>
+<%= t :shibboleth_path, scope: 'shibboleth_settings' %><br>
+<%= text_field_tag 'settings[shibboleth_path]', @settings['shibboleth_path'] %>
+</label>
+</p>
+<p><%= submit_tag l(:button_save) %> </p>
+
+<% end %>

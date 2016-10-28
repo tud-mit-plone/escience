@@ -1,6 +1,3 @@
-
-
-
 # Redmine - project management software
 # Copyright (C) 2006-2012  Jean-Philippe Lang
 #
@@ -28,7 +25,10 @@ class AccountController < ApplicationController
 
   # Login request and validation
   def login
-    if request.get?
+    if shibboleth_enabled?
+      return_to = Rack::Utils.escape(request.env["HTTP_REFERER"] || url_for(controller: 'my', action: 'page'))
+      redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Login?target=#{return_to}"
+    elsif request.get?
       logout_user
     else
       authenticate_user
@@ -40,12 +40,21 @@ class AccountController < ApplicationController
 
   # Log out current user and redirect to welcome page
   def logout
-    logout_user
-    redirect_to home_url
+    if shibboleth_enabled?
+      return_to = Rack::Utils.escape(home_url)
+      redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Logout?return=#{return_to}"
+    else
+      logout_user
+      redirect_to home_url
+    end
   end
 
   # Lets user choose a new password
   def lost_password
+    if shibboleth_enabled?
+      render_404
+      return
+    end
     redirect_to(home_url) && return unless Setting.lost_password?
     if params[:token]
       @token = Token.find_by_action_and_value("recovery", params[:token].to_s)
@@ -96,6 +105,10 @@ class AccountController < ApplicationController
 
   # User self-registration
   def register
+    if shibboleth_enabled?
+      render_404
+      return
+    end
     redirect_to(home_url) && return unless Setting.self_registration? || session[:auth_source_registration]
     if request.get?
       session[:auth_source_registration] = nil
@@ -139,6 +152,10 @@ class AccountController < ApplicationController
 
   # Token based account activation
   def activate
+    if shibboleth_enabled?
+      render_404
+      return
+    end
     redirect_to(home_url) && return unless Setting.self_registration? && params[:token]
     token = Token.find_by_action_and_value('register', params[:token])
     redirect_to(home_url) && return unless token and !token.expired?
@@ -309,5 +326,9 @@ class AccountController < ApplicationController
 
   def set_initial_session_scope
     session[:current_view_of_eScience] = '0'
+  end
+
+  def shibboleth_enabled?
+    Setting.shibboleth_login['enabled']
   end
 end

@@ -2077,3 +2077,7 @@ de:
   project_module_doodles: Umfragentool
   text_doodle_answered: '{{author}} hat die Umfrage beantwortet.'
   text_doodle_with_requested_answer: '{{author}} bittet Sie, diese Umfrage zu beantworten.'
+  label_shibboleth_login: Shibboleth-Anmeldung
+  shibboleth_settings:
+    enabled: Aktiviere Shibboleth-Authentifikation
+    shibboleth_path: 'Pfad:'

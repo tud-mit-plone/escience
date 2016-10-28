@@ -428,6 +428,9 @@ RedmineApp::Application.routes.draw do
     end
   end
 
+  # resource :shibboleth_login
+  resource :shibboleth_login, only: [:show, :update],  :controller => 'shibboleth_login'
+
   Dir.glob File.expand_path("plugins/*", Rails.root) do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")
     if File.exists?(file)

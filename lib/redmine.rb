@@ -167,7 +167,6 @@ Redmine::MenuManager.map :top_menu do |menu|
   menu.push :help, "/static/hilfe.html", :if => Proc.new { User.current.logged? }
   menu.push :news, { :controller => 'welcome', :action => 'news' }, :caption => :label_news_anonym, :if => Proc.new { !User.current.logged? }
   menu.push :events, { :controller => 'welcome', :action => 'events' }, :caption => :label_events, :if => Proc.new { !User.current.logged? }
-  #menu.push :administration, { :controller => 'admin', :action => 'index' }, :if => Proc.new { User.current.admin? }, :last => true
 end
 
 Redmine::MenuManager.map :account_menu do |menu|
@@ -201,6 +200,7 @@ Redmine::MenuManager.map :admin_menu do |menu|
   menu.push :settings, {:controller => 'settings'}, :html => {:class => 'icon icon-cog'}
   menu.push :ldap_authentication, {:controller => 'auth_sources', :action => 'index'},
             :html => {:class => 'server_authentication icon-credit-card icon'}
+  menu.push :shibboleth_login, {:controller => 'shibboleth_login', :action => 'show'}, :html => {:class => "icon icon-credit-card"}
   menu.push :plugins, {:controller => 'admin', :action => 'plugins'}, :html => {:class => 'icon icon-puzzle-piece'}, :last => true
   menu.push :info, {:controller => 'admin', :action => 'info'}, :html => {:class => 'icon icon-info'}, :caption => :label_information_plural, :last => true
 end
