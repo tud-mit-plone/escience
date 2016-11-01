@@ -22,7 +22,7 @@ class Attachment < ActiveRecord::Base
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
   has_many :meta_information, :foreign_key => :attachment_id
 
-  validates_presence_of :filename, :author, :meta_information
+  validates_presence_of :filename, :author
   validates_length_of :filename, :maximum => 255
   validates_length_of :disk_filename, :maximum => 255
   validates_length_of :description, :maximum => 255

@@ -7,6 +7,7 @@ module ObjectHelpers
     user.mail = "#{@generated_user_login}@example.com" if user.mail.blank?
     user.firstname = "Bob" if user.firstname.blank?
     user.lastname = "Doe" if user.lastname.blank?
+    user.confirm = true
     yield user if block_given?
     user.save!
     user
