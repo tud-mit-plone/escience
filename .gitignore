@@ -53,4 +53,5 @@ plugins/redmine_reddrop/
 /.byebug_history
 *.kdev4
 /Passengerfile.json
+/.idea/
 
