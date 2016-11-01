@@ -56,6 +56,7 @@ group :test do
   gem 'flay'
   # for rolling back each modification during a test
   gem 'database_cleaner'
+  gem "byebug"
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
