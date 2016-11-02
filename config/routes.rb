@@ -386,8 +386,6 @@ RedmineApp::Application.routes.draw do
 
   match 'uploads', :to => 'attachments#upload', :via => :post
 
-# automatic insertion for ads model
-  resources :ads
 # automatic insertion for photo_manager model
   resources :photo_manager
 

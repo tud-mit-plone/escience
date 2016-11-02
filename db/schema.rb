@@ -13,20 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20161026150841005) do
 
-  create_table "ads", :force => true do |t|
-    t.string   "name"
-    t.text     "html"
-    t.integer  "frequency"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "location"
-    t.boolean  "published",        :default => false
-    t.boolean  "time_constrained", :default => false
-    t.string   "audience",         :default => "all"
-  end
-
   create_table "appointments", :force => true do |t|
     t.integer  "author_id"
     t.string   "subject"
