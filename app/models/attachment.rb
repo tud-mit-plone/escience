@@ -200,7 +200,7 @@ class Attachment < ActiveRecord::Base
       end
     end
     if image_convertable? && readable?
-      options[:size] = "#{size}x"
+      options[:size] = "#{size}x#{size}"
       options[:render_page] = (!(options[:pages].nil?) && options[:pages].match(/^\d+$/)) ? options[:pages].to_i : nil
       return render_to_image(options)
     end
@@ -214,13 +214,13 @@ class Attachment < ActiveRecord::Base
     attachment =  options && options[:attachment] ? options[:attachment] : self
     size = options && options[:size] ? options[:size] : '100x'
     pages = options && options[:pages] ? options[:pages] : 1
-    output = options && options[:output] ? options[:output] : '/tmp/escience'
-    input = options && options[:input] ? options[:input] : File.join(Rails.root, "files")
+    output = options && options[:output] ? options[:output] : self.class.thumbnails_storage_path
+    input = options && options[:input] ? options[:input] : Attachment.storage_path
     render_page = options && options[:render_page] ? options[:render_page] : 1
 
     filename_without_extension = attachment.disk_filename.to_s.match(/(.*)(\.)/)[1]
     begin
-      max_pages = Docsplit.extract_length(File.join(input,attachment.disk_filename)).to_i
+      max_pages = Docsplit.extract_length(File.join(input, attachment.disk_filename)).to_i
     rescue => e
       logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
       logger.error "#{e.backtrace}"
@@ -232,12 +232,12 @@ class Attachment < ActiveRecord::Base
     pages = pages.to_i > max_pages ? 1 : pages
 
     begin
-      Docsplit.extract_images(File.join(input,attachment.disk_filename),:size => size,:output => output ,:format => [:jpg], :pages => pages)
+      Docsplit.extract_images(File.join(input, attachment.disk_filename),:size => size,:output => output ,:format => [:jpg], :pages => pages)
     rescue => e
       logger.error "An error occured while generating thumbnail for attachment#id: #{attachment.id}\nException was: #{e.message}" if logger
     end
 
-    render_file = "#{File.join(output,"#{filename_without_extension}_#{render_page}.jpg")}"
+    render_file = File.join(output,"#{filename_without_extension}_#{render_page}.jpg")
     return render_file
   end
 

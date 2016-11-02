@@ -35,18 +35,12 @@ class AttachmentTest < ActiveSupport::TestCase
   end
 
   def setup
-    # track all changes during the test to rollback
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.start
-    set_tmp_attachments_directory
-    # storage of rendered images (get removed while teardown)
     @temp_render_storage = Dir.mktmpdir
+    @container = issues(:issues_001)
+    @author = users(:users_002)
   end
 
   def teardown
-    # rollback any changes during the test
-    DatabaseCleaner.clean
-
     # remove temporary render storage
     FileUtils.remove_entry_secure @temp_render_storage if File.exists?(@temp_render_storage)
   end
@@ -59,14 +53,15 @@ class AttachmentTest < ActiveSupport::TestCase
     a = Attachment.new(:container => Issue.find(1),
                        :file => uploaded_test_file("testfile.txt", "text/plain"),
                        :author => User.find(1))
+    expected_size = File.size(File.join(self.fixture_path, 'files', 'testfile.txt'))
     assert a.save
     assert_equal 'testfile.txt', a.filename
-    assert_equal 59, a.filesize
+    assert_equal expected_size, a.filesize
     assert_equal 'text/plain', a.content_type
     assert_equal 0, a.downloads
-    assert_equal '1478adae0d4eb06d35897518540e25d6', a.digest
+    assert_equal 'f94d862ca1e4363e760431025673826c', a.digest
     assert File.exist?(a.diskfile)
-    assert_equal 59, File.size(a.diskfile)
+    assert_equal expected_size, File.size(a.diskfile)
   end
 
   def test_size_should_be_validated_for_new_file
@@ -98,15 +93,16 @@ class AttachmentTest < ActiveSupport::TestCase
     a = Attachment.new(:container => Issue.find(1),
                        :file => uploaded_test_file("testfile.txt", "text/plain"),
                        :author => User.find(1))
+    expected_size = File.size(File.join(self.fixture_path, 'files', 'testfile.txt'))
     assert a.save
     assert_equal 'testfile.txt', a.filename
-    assert_equal 59, a.filesize
+    assert_equal expected_size, a.filesize
     assert_equal 'text/plain', a.content_type
     assert_equal 0, a.downloads
-    assert_equal '1478adae0d4eb06d35897518540e25d6', a.digest
+    assert_equal 'f94d862ca1e4363e760431025673826c', a.digest
     diskfile = a.diskfile
     assert File.exist?(diskfile)
-    assert_equal 59, File.size(a.diskfile)
+    assert_equal expected_size, File.size(a.diskfile)
     assert a.destroy
     assert !File.exist?(diskfile)
   end
@@ -191,15 +187,15 @@ class AttachmentTest < ActiveSupport::TestCase
             'description' => 'test', 'meta_information' => ["information"]
           })
       end
-
+      expected_size = File.size(File.join(self.fixture_path, 'files', 'testfile.txt'))
       attachment = Attachment.first(:order => 'id DESC')
       assert_equal issue, attachment.container
       assert_equal 'testfile.txt', attachment.filename
-      assert_equal 59, attachment.filesize
+      assert_equal expected_size, attachment.filesize
       assert_equal 'test', attachment.description
       assert_equal 'text/plain', attachment.content_type
       assert File.exists?(attachment.diskfile)
-      assert_equal 59, File.size(attachment.diskfile)
+      assert_equal expected_size, File.size(attachment.diskfile)
     end
 
     should "add unsaved files to the object as unsaved attachments" do
