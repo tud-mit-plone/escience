@@ -8,7 +8,9 @@ rvm:
 - 2.1
 
 before_script:
-  - bundle exec rails db:create db:migrate
+- cp config/configuration.yml.example config/configuration.yml
+- cp config/database.yml.example config/database.yml
+- bundle exec rake db:create db:migrate
 
 script:
-  - bundle exec rake test
+- bundle exec rake test
