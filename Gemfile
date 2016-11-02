@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.19'
+gem 'rake'
 gem "jquery-rails", "~> 2.0.2"
 gem "i18n", "~> 0.6.0"
 gem "coderay", "~> 1.0.6"
@@ -40,7 +41,6 @@ group :development do
   gem "rdoc", ">= 2.4.2"
   gem "yard"
   gem "sqlite3"
-  gem "byebug"
 end
 
 group :test do
@@ -56,7 +56,6 @@ group :test do
   gem 'flay'
   # for rolling back each modification during a test
   gem 'database_cleaner'
-  gem "byebug"
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
@@ -73,6 +72,7 @@ end
 
 group :development, :test do
     gem 'railroady'
+    gem "byebug"
 end
 
 gem "thin"

@@ -1,0 +1,14 @@
+language: ruby
+
+before_install:
+- sudo apt-get -qq update
+- sudo apt-get install -y libmysqlclient-dev imagemagick libpng-dev libjpeg-dev libmagickwand-dev graphicsmagick
+
+rvm:
+- 2.1
+
+before_script:
+  - bundle exec rails db:create db:migrate
+
+script:
+  - bundle exec rake test

@@ -239,6 +239,7 @@ DEPENDENCIES
   rack-openid
   railroady
   rails (= 3.2.19)
+  rake
   rdoc (>= 2.4.2)
   render_parent (>= 0.0.4)
   rghost
