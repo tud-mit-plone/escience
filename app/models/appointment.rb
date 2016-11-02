@@ -3,9 +3,15 @@ class Appointment < ActiveRecord::Base
   include Redmine::SafeAttributes
   include Redmine::Utils::DateCalculation
 
-  belongs_to :user, :class_name => 'User', :foreign_key => 'author_id'
+  # Cycle values
+  CYCLE_DAYLY   = 1
+  CYCLE_WEEKLY  = 2
+  CYCLE_MONTHLY = 3
+  CYCLE_YEARLY  = 4
 
+  belongs_to :user, :class_name => 'User', :foreign_key => 'author_id'
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+
   acts_as_watchable
   acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed
   acts_as_searchable :columns => ['subject', "#{table_name}.description", "#{Journal.table_name}.notes"],
@@ -16,9 +22,12 @@ class Appointment < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'appointments', :action => 'show', :id => o.id}}
   acts_as_activity_provider :find_options => {:include => [:author]},
                             :author_key => :author_id, :type => "appointments"
+
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
+
   validates_presence_of :subject, :user, :start_date
   validates_length_of :subject, :maximum => 255
+  validates_inclusion_of :cycle, :in => 0..CYCLE_YEARLY
 
   scope :visible, lambda {|*args| { :include => :user,
                           :conditions => "(#{table_name}.is_private = 0
@@ -37,16 +46,6 @@ class Appointment < ActiveRecord::Base
                                                          SELECT DISTINCT user_id FROM #{Watcher.table_name},#{table_name}
                                                          WHERE watchable_type = \"Appointment\"
                                                          AND watchable_id = #{table_name}.id)" } }
-
-
-
-
-  # Cycle values
-  CYCLE_DAYLY   = 1
-  CYCLE_WEEKLY  = 2
-  CYCLE_MONTHLY = 3
-  CYCLE_YEARLY  = 4
-
   def initialize(attributes=nil, *args)
     super
     if new_record?
@@ -72,10 +71,10 @@ class Appointment < ActiveRecord::Base
     "#{subject}"
   end
 
-  def self.getAllEventsWithResolvedCycles(scope, startdt=Date.today,enddt=Date.today)
+  def self.getAllEventsWithResolvedCycles(scope, startdt=DateTime.today,enddt=DateTime.today)
     candidates = scope.where("(DATE(#{table_name}.start_date) >= ? AND DATE(#{table_name}.due_date) <= ?)
                               OR (DATE(#{table_name}.start_date) >= ? AND DATE(#{table_name}.start_date) <= ? AND #{table_name}.due_date IS NULL)",
-                             startdt, enddt, startdt, enddt)
+                             startdt.to_date, enddt.to_date, startdt.to_date, enddt.to_date)
     events = []
     candidates.each do |event|
       if event[:cycle] == 0
@@ -87,18 +86,17 @@ class Appointment < ActiveRecord::Base
                    when CYCLE_MONTHLY then 1.month
                    when CYCLE_YEARLY then 1.year
                  end
-        end_date = event.due_date || event.start_date
+        end_datetime = event.due_date || enddt.to_datetime
         effective_start_date = event.start_date
-        effective_end_date =
         effective_end_date = Time.new(effective_start_date.year,
                                   effective_start_date.month,
                                   effective_start_date.day,
-                                  (end_date).hour,
-                                  (end_date).min,
-                                  (end_date).sec,
+                                  (end_datetime).hour,
+                                  (end_datetime).min,
+                                  (end_datetime).sec,
                                   effective_start_date.utc_offset)
         effective_end_date = effective_start_date if effective_end_date < effective_start_date
-        while effective_end_date.to_date <= end_date.to_date
+        while effective_end_date.to_date <= end_datetime.to_date
           if effective_start_date.to_date >= startdt && effective_end_date <= enddt
             effective_event = event.clone
             effective_event.start_date = effective_start_date
@@ -154,23 +152,12 @@ class Appointment < ActiveRecord::Base
     'notes',
     'category_id',
     'watcher_user_ids',
-    :if => lambda {|appointment, user| appointment.new_record? || user.allowed_to?(:edit_appointment, appointment) }
+    :if => lambda {|appointment, user| appointment.new_record? || user.admin? || appointment.user == user }
 
   safe_attributes 'notes',
     :if => lambda {|appointment, user| user.allowed_to?(:add_issue_notes, appointment)}
 
   safe_attributes 'watcher_user_ids',
     :if => lambda {|appointment, user| appointment.new_record? && user.allowed_to?(:add_appointment_watchers, appointment)}
-
-  def safe_attributes=(attrs, user=User.current)
-    return unless attrs.is_a?(Hash)
-
-    attrs = attrs.dup
-    attrs = delete_unsafe_attributes(attrs, user)
-    return if attrs.empty?
-
-    # mass-assignment security bypass
-    assign_attributes attrs, :without_protection => true
-  end
 
 end
