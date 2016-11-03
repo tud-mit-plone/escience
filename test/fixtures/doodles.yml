@@ -1,13 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
-  title: MyString
+  title: Icecream flavors
   project_id: 1
-  options: MyText
+  options: ["Vanilla", "Chocolate"]
   expiry_date: 2009-10-06 00:26:26
-two:
-  id: 2
-  title: MyString
-  project_id: 1
-  options: MyText
-  expiry_date: 2009-10-06 00:26:26
+  locked: false

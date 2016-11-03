@@ -1,6 +1,4 @@
 class DoodleAnswersEdits < ActiveRecord::Base
-  unloadable
-
   belongs_to :doodle_answers
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   
@@ -9,6 +7,7 @@ class DoodleAnswersEdits < ActiveRecord::Base
                 :datetime => :edited_on,
                 :description => nil,
                 :type => "doodle-answers"
+
   acts_as_activity_provider :find_options => {:include => [{:doodle_answers => {:doodle => :project}}, :author]},
                             :author_key => :author_id,
                             :type => "doodles",

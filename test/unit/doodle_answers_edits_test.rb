@@ -1,13 +1,29 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
-class DoodleAnswersControllerTest < ActionController::TestCase
-  self.fixture_path= File.join(File.dirname(__FILE__),'../fixtures')
-  
-  fixtures :doodle_answers_edits
+class DoodleAnswersEditsTest < ActiveSupport::TestCase
 
-  # Replace this with your real tests.
-  def test_truth
-    p "yay TEST"
-    assert true
+  fixtures :users, :projects, :roles, :members, :member_roles,
+           :doodles, :doodle_answers, :doodle_answers_edits
+
+  def setup
+    @user = User.find(1)
+    @answer = DoodleAnswers.find(1)
+  end
+
+  def test_create
+    answer_edit = DoodleAnswersEdits.new(:author => @user,
+                                    :doodle_answers => @answer,
+                                    :edited_on => DateTime.new(2015, 10, 4, 12, 00))
+    assert answer_edit.save!
+  end
+
+  def test_project
+    answer_edit = DoodleAnswersEdits.find(1)
+    assert_equal answer_edit.doodle_answers.doodle.project, answer_edit.project
+  end
+
+  def test_created_on
+    answer_edit = DoodleAnswersEdits.find(1)
+    assert_equal answer_edit.edited_on, answer_edit.created_on
   end
 end

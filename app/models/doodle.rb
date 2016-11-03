@@ -1,13 +1,11 @@
 class Doodle < ActiveRecord::Base
-  unloadable
-  
   serialize :options, Array
   
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   has_and_belongs_to_many :should_answer, :class_name => 'User', :join_table => "#{table_name_prefix}users_should_answer_doodles#{table_name_suffix}"
-  has_many :comments, :as => :commented, :dependent => :delete_all, :order => "created_on"
-  has_many :responses, :class_name => 'DoodleAnswers', :dependent => :delete_all, :order => "updated_on", :include => [:author]
+  has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on"
+  has_many :responses, :class_name => 'DoodleAnswers', :dependent => :destroy, :order => "updated_on", :include => [:author]
   
   acts_as_watchable
   acts_as_event :title => Proc.new {|o| "#{l(:label_doodle)} ##{o.id}: #{o.title}"},
@@ -27,22 +25,7 @@ class Doodle < ActiveRecord::Base
                                           :conditions => Project.allowed_to_condition(args.shift || User.current, :view_messages, *args) } }
   
   def results
-    old_answers = responses.map(&:answers)[0]
-    new_answers = responses.map(&:answers)[1]
-    answers = nil
-    if( !(old_answers.nil?) && !(new_answers.nil?) && !(old_answers.length == new_answers.length))
-      temp = Array.new(new_answers.length, false)
-      temp2 = old_answers.length < new_answers.length ? old_answers : new_answers
-      temp2.each_with_index do |el,i|
-        temp[i] = old_answers[i]
-      end
-      answers = [temp,new_answers]
-      responses.map(&:answers)[0] = temp
-    else
-      answers = responses.map(&:answers)
-    end
-    @results ||= responses.empty? ? Array.new(options.length, 0) : answers.transpose.map { |x| x.select { |v| v }.length }
-#    @results ||= responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
+    responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
   end
   
   def active?
@@ -50,7 +33,7 @@ class Doodle < ActiveRecord::Base
   end
   
   def winning_columns
-    @winning_columns ||= self.results.max == 0 ? [] : self.results.each_with_index.collect {|v,i| i if v == self.results.max}.compact
+    self.results.max == 0 ? [] : self.results.each_with_index.collect {|v,i| i if v == self.results.max}.compact
   end
   
   def previewfy
@@ -68,11 +51,11 @@ class Doodle < ActiveRecord::Base
   end
     
   def users_missing_answer
-    @users_missing_answer ||= should_answer - responses.collect(&:author)
+    should_answer - responses.collect(&:author)
   end
   
   def should_answer_recipients
-    @should_answer_recipients ||= should_answer.collect(&:mail)
+    should_answer.collect(&:mail)
   end
   
   private
