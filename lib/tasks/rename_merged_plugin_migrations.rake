@@ -17,5 +17,13 @@ namespace :redmine do
         connection.exec_update("UPDATE schema_migrations SET version = '#{new_version}' WHERE version = '#{old_version}'", "update schema migration version", [])
       end
     end
+    
+    rows = connection.exec_query("SELECT version FROM schema_migrations WHERE length(version) = 17")
+    rows.each do |row|
+      old_version = row["version"]
+      new_version = "#{old_version[0..11]}#{old_version[15..16]}"
+      print "#{old_version} -> #{new_version}\n"
+      connection.exec_update("UPDATE schema_migrations SET version = '#{new_version}' WHERE version = '#{old_version}'", "update schema migration version", [])
+    end
   end
 end
