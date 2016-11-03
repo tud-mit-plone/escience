@@ -10,7 +10,7 @@ rvm:
 before_script:
 - cp config/configuration.yml.example config/configuration.yml
 - cp config/database.yml.example config/database.yml
-- bundle exec rake db:create db:migrate db:test:load
+- bundle exec rake db:create db:migrate db:test:load RAILS_ENV=development
 
 script:
 - bundle exec rake test
