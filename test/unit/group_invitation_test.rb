@@ -1,19 +1,7 @@
-require File.expand_path('../../../../../test/test_helper', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 class GroupInvitationTest < ActiveSupport::TestCase
-  fixtures :users
-  
-  def setup
-    # track all changes during the test to rollback
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.start
-  end
-  
-  def teardown
-    # rollback any changes during the test
-    DatabaseCleaner.clean
-  end
-
+  fixtures :users, :friendship_statuses
   
   test "group invitation must have required fields" do
     group_invitation = GroupInvitation.new()
@@ -67,14 +55,14 @@ class GroupInvitationTest < ActiveSupport::TestCase
     from_user = users(:users_002)
     to_user = users(:users_003)
     group_invitation = create_group_invitation(from_user, to_user, "test_group")
-    
-    assert_equal group_invitation.answer, 1
+
+    assert_equal group_invitation.answer, FriendshipStatus[:pending].id
     
     group_invitation.friendship_status_id = FriendshipStatus.where(:name => "accepted").first.id    
-    assert_equal group_invitation.answer, 2
+    assert_equal group_invitation.answer, FriendshipStatus[:accepted].id
     
     group_invitation.friendship_status_id = FriendshipStatus.where(:name => "denied").first.id    
-    assert_equal group_invitation.answer, 3
+    assert_equal group_invitation.answer, FriendshipStatus[:denied].id
   end
   
   
