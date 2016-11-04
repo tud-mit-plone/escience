@@ -1,0 +1,6 @@
+friendship_status_pending:
+  name: pending
+friendship_status_accepted:
+  name: accepted
+friendship_status_denied:
+  name: denied

@@ -1,5 +1,4 @@
 class Friendship < ActiveRecord::Base
-  unloadable
   @@daily_request_limit = 12
   cattr_accessor :daily_request_limit
 
@@ -12,6 +11,7 @@ class Friendship < ActiveRecord::Base
   validates_presence_of   :friend
   validates_uniqueness_of :friend_id, :scope => :user_id
   validate :cannot_request_if_daily_limit_reached
+  validate :both_users_cant_be_initiators
   validates_each :user_id do |record, attr, value|
     record.errors.add attr, 'can not be same as friend' if record.user_id.eql?(record.friend_id)
   end
@@ -37,7 +37,7 @@ class Friendship < ActiveRecord::Base
   attr_protected :friendship_status_id
   
   def reverse
-    Friendship.find(:first, :conditions => ['user_id = ? and friend_id = ?', self.friend_id, self.user_id])
+    Friendship.where(user_id: friend_id, friend_id: user_id).first
   end
 
   def denied?
@@ -49,11 +49,12 @@ class Friendship < ActiveRecord::Base
   end
   
   def accepted?
-    friendship_status.eql?(FriendshipStatus[:accepted])    
+    friendship_status.eql?(FriendshipStatus[:accepted])
   end
   
   def self.friends?(user, friend)
-    find(:first, :conditions => ["user_id = ? AND friend_id = ? AND friendship_status_id = ?", user.id, friend.id, FriendshipStatus[:accepted].id ])
+    Friendship.where(user_id: user.id, friend_id: friend.id, friendship_status_id: FriendshipStatus[:accepted].id).any?
+    # find(:conditions => ["user_id = ? AND friend_id = ? AND friendship_status_id = ?", user.id, friend.id, FriendshipStatus[:accepted].id ]).first
   end
   
   def notify_requester
@@ -63,5 +64,11 @@ class Friendship < ActiveRecord::Base
   private
   def set_pending
     friendship_status_id = FriendshipStatus[:pending].id
-  end  
+  end
+
+  def both_users_cant_be_initiators
+    if initiator && Friendship.where(user_id: friend.id, friend_id: user.id, initiator: true).any?
+      errors.add(:initiator, "corresponding friendships can't be both initiators")
+    end
+  end
 end

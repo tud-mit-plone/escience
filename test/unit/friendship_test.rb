@@ -1,18 +1,7 @@
-require File.expand_path('../../../../../test/test_helper', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 class FriendshipTest < ActiveSupport::TestCase
-  fixtures :users
-  
-  def setup
-    # track all changes during the test to rollback
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.start
-  end
-  
-  def teardown
-    # rollback any changes during the test
-    DatabaseCleaner.clean
-  end
+  fixtures :users, :friendship_statuses
   
   test "friendship must have required fields" do
     friendship = Friendship.new
@@ -46,14 +35,14 @@ class FriendshipTest < ActiveSupport::TestCase
   end
   
   test "friends? returns true if a friendship is accepted" do
-    friendship = Friendship.create(
+    friendship = Friendship.create!(
       :friendship_status => FriendshipStatus[:accepted],
       :user => users(:users_002),
       :friend => users(:users_003),
       :initiator => true
     )
     #corresponding reverse friendship
-    Friendship.create(
+    Friendship.create!(
       :friendship_status => FriendshipStatus[:accepted],
       :user => users(:users_003),
       :friend => users(:users_002),
@@ -68,14 +57,14 @@ class FriendshipTest < ActiveSupport::TestCase
     assert !(Friendship.friends? users(:users_002), users(:users_003))
     assert !(Friendship.friends? users(:users_003), users(:users_002))
     
-    friendship = Friendship.create(
+    friendship = Friendship.create!(
       :friendship_status => FriendshipStatus[:pending],
       :user => users(:users_002),
       :friend => users(:users_003),
       :initiator => true
     )
     #corresponding reverse friendship
-    Friendship.create(
+    Friendship.create!(
       :friendship_status => FriendshipStatus[:pending],
       :user => users(:users_003),
       :friend => users(:users_002),
@@ -150,7 +139,7 @@ class FriendshipTest < ActiveSupport::TestCase
   end
   
   test "corresponding friendships can't be both initiators" do
-    friendship = Friendship.create(
+    friendship = Friendship.new(
       :friendship_status => FriendshipStatus[:pending],
       :user => users(:users_002),
       :friend => users(:users_003),
@@ -162,7 +151,8 @@ class FriendshipTest < ActiveSupport::TestCase
       :friend => users(:users_002),
       :initiator => true
     )
-    
+
+    assert friendship.save
     assert !reverse.save
     assert !reverse.errors[:initiator].empty?
   end
