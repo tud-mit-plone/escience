@@ -282,6 +282,7 @@ class MailHandlerTest < ActiveSupport::TestCase
 
   def test_add_issue_by_created_user
     Setting.default_language = 'en'
+    Role.non_member.add_permission!(:add_issues)
     assert_difference 'User.count' do
       issue = submit_email(
                 'ticket_by_unknown_user.eml',
@@ -326,7 +327,7 @@ class MailHandlerTest < ActiveSupport::TestCase
   end
 
   def test_add_issue_with_localized_attributes
-    User.find_by_mail('jsmith@somenet.foo').update_attribute 'language', 'fr'
+    User.find_by_mail('jsmith@somenet.foo').update_attribute 'language', 'de'
     issue = submit_email(
               'ticket_with_localized_attributes.eml',
               :allow_override => 'tracker,category,priority'

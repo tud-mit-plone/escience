@@ -414,6 +414,7 @@ class MailHandler < ActionMailer::Base
     password_length = [Setting.password_min_length.to_i, 10].max
     user.password = Redmine::Utils.random_hex(password_length / 2 + 1)
     user.language = Setting.default_language
+    user.confirm = true
 
     unless user.valid?
       user.login = "user#{Redmine::Utils.random_hex(6)}" unless user.errors[:login].blank?
@@ -434,6 +435,7 @@ class MailHandler < ActionMailer::Base
     end
     if addr.present?
       user = self.class.new_user_from_attributes(addr, name)
+      user.confirm = true
       if user.save
         user
       else

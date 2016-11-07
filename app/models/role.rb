@@ -132,7 +132,7 @@ class Role < ActiveRecord::Base
 
   # Return true if the role is a project member role
   def member?
-    self.builtin? != Role::BUILTIN_ANONYMOUS && self.builtin != Role::BUILTIN_NON_MEMBER
+    ![Role::BUILTIN_ANONYMOUS, Role::BUILTIN_NON_MEMBER].include?(self.builtin)
   end
 
   # Return true if role is allowed to do the specified action
