@@ -185,7 +185,7 @@ class Role < ActiveRecord::Base
     when BUILTIN_ANONYMOUS
       []
     when BUILTIN_NON_MEMBER
-      Role.perms(:add_project)
+      Role.perms([:add_project, :view_issues])
     when BUILTIN_OWNER
       Role.perms([:add_project, :manage_members, :add_subprojects, :view_calendar, :edit_project,
                   :select_project_modules, :manage_versions, :group_invitations_create]) \
@@ -252,6 +252,13 @@ private
       raise "Unable to create the #{name} role." if role.new_record?
     end
     role
+  end
+
+  def self.create_system_roles
+    self.anonymous
+    self.non_member
+    self.member
+    self.owner
   end
 
   def self.perms(what=nil)

@@ -131,7 +131,7 @@ class Issue < ActiveRecord::Base
           false
         end
       else
-        !self.is_private?
+        false
       end
     end
   end

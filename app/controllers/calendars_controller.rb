@@ -29,7 +29,7 @@ class CalendarsController < ApplicationController
   include QueriesHelper
   helper :sort
   include SortHelper
-  helper Appointment::AppointmentsHelper
+  helper :appointments
 
   def show
     if params[:year] and params[:year].to_i > 1900

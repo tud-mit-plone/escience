@@ -160,12 +160,9 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_visible_scope_for_anonymous
-    # Anonymous user should see issues of public projects only
+    # Anonymous user should see issues no issues
     issues = Issue.visible(User.anonymous).all
-    assert issues.any?
-    assert_nil issues.detect {|issue| !issue.project.is_public?}
-    assert_nil issues.detect {|issue| issue.is_private?}
-    assert_visibility_match User.anonymous, issues
+    assert !issues.any?
   end
 
   def test_visible_scope_for_anonymous_without_view_issues_permissions
@@ -201,16 +198,6 @@ class IssueTest < ActiveSupport::TestCase
     assert_visibility_match user, issues
   end
 
-  def test_visible_scope_for_non_member_with_own_issues_visibility
-    Role.non_member.update_attribute :issues_visibility, 'own'
-    Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 9, :subject => 'Issue by non member')
-    user = User.find(9)
-
-    issues = Issue.visible(user).all
-    assert issues.any?
-    assert_nil issues.detect {|issue| issue.author != user}
-    assert_visibility_match user, issues
-  end
 
   def test_visible_scope_for_non_member_without_view_issues_permissions
     # Non member user should not see issues without permission
@@ -713,20 +700,15 @@ class IssueTest < ActiveSupport::TestCase
     member.save!
     assert_equal [], issue.required_attribute_names(user.reload)
 
+    # required + readonly => required
     WorkflowPermission.create!(:old_status_id => 1, :tracker_id => 1,
                                :role_id => 2, :field_name => 'due_date',
                                :rule => 'required')
-    assert_equal %w(due_date), issue.required_attribute_names(user)
-
-    member.role_ids = [1, 2, 3]
-    member.save!
-    assert_equal [], issue.required_attribute_names(user.reload)
-
     WorkflowPermission.create!(:old_status_id => 1, :tracker_id => 1,
                                :role_id => 2, :field_name => 'due_date',
                                :rule => 'readonly')
-    # required + readonly => required
     assert_equal %w(due_date), issue.required_attribute_names(user)
+
   end
 
   def test_read_only_attribute_names_for_multiple_roles_should_intersect_rules
@@ -754,6 +736,10 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_copy
+    # Only visible subtask are copied. Use admin to make all visible
+    User.current = User.find(1)
+    assert User.current.admin?
+
     issue = Issue.new.copy_from(1)
     assert issue.copy?
     assert issue.save
@@ -788,6 +774,10 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_copy_should_copy_subtasks
+    # Only visible subtask are copied. Use admin to make all visible
+    User.current = User.find(1)
+    assert User.current.admin?
+
     issue = Issue.generate_with_descendants!
 
     copy = issue.reload.copy
@@ -803,6 +793,10 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_copy_should_copy_subtasks_to_target_project
+    # Only visible subtask are copied. Use admin to make all visible
+    User.current = User.find(1)
+    assert User.current.admin?
+
     issue = Issue.generate_with_descendants!
 
     copy = issue.copy(:project_id => 3)
@@ -813,6 +807,10 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_copy_should_not_copy_subtasks_twice_when_saving_twice
+    # Only visible subtask are copied. Use admin to make all visible
+    User.current = User.find(1)
+    assert User.current.admin?
+
     issue = Issue.generate_with_descendants!
 
     copy = issue.reload.copy
@@ -1753,53 +1751,52 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   test "#by_tracker" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_tracker(Project.find(1))
     assert_equal 3, groups.size
     assert_equal 7, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_version" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_version(Project.find(1))
     assert_equal 3, groups.size
     assert_equal 3, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_priority" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_priority(Project.find(1))
     assert_equal 4, groups.size
     assert_equal 7, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_category" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_category(Project.find(1))
     assert_equal 2, groups.size
     assert_equal 3, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_assigned_to" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_assigned_to(Project.find(1))
     assert_equal 2, groups.size
     assert_equal 2, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_author" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_author(Project.find(1))
     assert_equal 4, groups.size
     assert_equal 7, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   test "#by_subproject" do
-    User.current = User.anonymous
+    User.current = User.find(2)
     groups = Issue.by_subproject(Project.find(1))
-    # Private descendant not visible
-    assert_equal 1, groups.size
-    assert_equal 2, groups.inject(0) {|sum, group| sum + group['total'].to_i}
+    assert_equal 2, groups.size
+    assert_equal 6, groups.inject(0) {|sum, group| sum + group['total'].to_i}
   end
 
   def test_recently_updated_scope
@@ -1886,6 +1883,6 @@ class IssueTest < ActiveSupport::TestCase
     issue = Issue.new(:priority => IssuePriority.find(8))
     classes = issue.css_classes.split(' ')
     assert_include 'priority-8', classes
-    assert_include 'priority-highest', classes
+    assert_not_include 'priority-highest', classes
   end
 end
