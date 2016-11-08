@@ -138,6 +138,38 @@ class ProjectTest < ActiveSupport::TestCase
     assert_kind_of Issue, Project.find(1).issues.open.first
   end
 
+  def test_private_scope
+    User.current = User.anonymous
+    assert_equal(0, Project.private_scope.all.count)
+    User.current = User.find(2)
+    assert_equal(0, Project.private_scope.all.count)
+    new_project = Project.create! :name => "My own",
+                                  :identifier => "own"
+    member = Member.create! :user => User.current,
+                            :project => new_project,
+                            :roles => [Role.owner]
+    new_project.members << member
+    new_project.save!
+    assert_equal(1, Project.private_scope.all.count)
+    assert_equal(new_project, Project.private_scope.first)
+  end
+
+  def test_group_scope
+    User.current = User.anonymous
+    assert_equal(0, Project.group_scope.all.count)
+    User.current = User.find(2)
+    assert_equal(2, Project.group_scope.all.count)
+    assert_nil(Project.group_scope.all.detect {|p| !p.users.include?(User.current)})
+  end
+
+  def test_community_scope
+    User.current = User.anonymous
+    assert_equal(0, Project.community_scope.all.count)
+    User.current = User.find(2)
+    assert_equal(4, Project.community_scope.all.count)
+    assert_nil Project.community_scope.all.detect {|p| !p.is_public}
+  end
+
   def test_archive
     user = @ecookbook.members.first.user
     @ecookbook.archive
