@@ -27,7 +27,7 @@ class AccountController < ApplicationController
   def login
     if shibboleth_enabled?
       return_to = Rack::Utils.escape(request.env["HTTP_REFERER"] || url_for(controller: 'my', action: 'page'))
-      redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Login?target=#{return_to}"
+      redirect_to "#{Setting.shibboleth_login['shibboleth_path']}/Login?target=#{return_to}"
     elsif request.get?
       logout_user
     else
@@ -42,7 +42,7 @@ class AccountController < ApplicationController
   def logout
     if shibboleth_enabled?
       return_to = Rack::Utils.escape(home_url)
-      redirect_to "#{Setting.plugin_shibboleth_login['shibboleth_path']}/Logout?return=#{return_to}"
+      redirect_to "#{Setting.shibboleth_login['shibboleth_path']}/Logout?return=#{return_to}"
     else
       logout_user
       redirect_to home_url
