@@ -378,8 +378,8 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   def test_allowed_parents_with_add_subprojects_permission
-    Role.find(1).remove_permission!(:add_project)
-    Role.find(1).add_permission!(:add_subprojects)
+    Role.all.each {|r| r.remove_permission!(:add_project)}
+    Role.all.each {|r| r.add_permission!(:add_subprojects)}
     User.current = User.find(2)
     # new project
     assert !Project.new.allowed_parents.include?(nil)
