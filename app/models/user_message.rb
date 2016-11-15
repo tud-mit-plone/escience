@@ -69,16 +69,7 @@ class UserMessage < ActiveRecord::Base
   end
 
   def send_mails
-    send = false
-    if self.author.class == user
-      send = self.user == self.author
-    else
-      send = self.user_id == self.author
-    end
-
-    if send
-      Mailer.user_message_sent(self).deliver
-    end
+    Mailer.user_message_sent(self).deliver
   end
 
   def get_history
