@@ -50,7 +50,7 @@ class MemberTest < ActiveSupport::TestCase
 
   def test_update
     assert_equal "eCookbook", @jsmith.project.name
-    assert_equal "Manager", @jsmith.roles.first.name
+    assert_equal "Owner", @jsmith.roles.first.name
     assert_equal "jsmith", @jsmith.user.login
 
     @jsmith.mail_notification = !@jsmith.mail_notification
@@ -73,13 +73,14 @@ class MemberTest < ActiveSupport::TestCase
     user = User.new(:firstname => "new1", :lastname => "user1", :mail => "test_validate@somenet.foo")
     user.login = "test_validate"
     user.password, user.password_confirmation = "password", "password"
+    user.confirm = true
     assert user.save
 
     set_language_if_valid 'fr'
     member = Member.new(:project_id => 1, :user_id => user.id, :role_ids => [])
     assert !member.save
     assert_include I18n.translate('activerecord.errors.messages.empty'), member.errors[:role]
-    str = "R\xc3\xb4le doit \xc3\xaatre renseign\xc3\xa9(e)"
+    str = "Role can't be empty"
     str.force_encoding('UTF-8') if str.respond_to?(:force_encoding)
     assert_equal str, [member.errors.full_messages].flatten.join
   end
@@ -88,6 +89,7 @@ class MemberTest < ActiveSupport::TestCase
     user = User.new(:firstname => "new1", :lastname => "user1", :mail => "test_validate@somenet.foo")
     user.login = "test_validate_member_role"
     user.password, user.password_confirmation = "password", "password"
+    user.confirm = true
     assert user.save
     member = Member.new(:project_id => 1, :user_id => user.id, :role_ids => [5])
     assert !member.save
