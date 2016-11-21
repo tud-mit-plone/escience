@@ -84,7 +84,7 @@ class NewsTest < ActiveSupport::TestCase
 
   def test_attachments_should_not_be_deletable_without_manage_news_permission
     manager = User.find(2)
-    Role.find_by_name('Manager').remove_permission!(:manage_news)
+    Role.find_by_name('Owner').remove_permission!(:manage_news)
     assert !News.find(1).attachments_deletable?(manager)
   end
 end
