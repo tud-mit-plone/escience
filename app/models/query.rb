@@ -159,6 +159,7 @@ class Query < ActiveRecord::Base
 
   scope :visible, lambda {|*args|
     user = args.shift || User.current
+    return {:conditions => ["0=1"]} if user.anonymous?
     base = Project.allowed_to_condition(user, :view_issues, *args)
     user_id = user.logged? ? user.id : 0
     {
