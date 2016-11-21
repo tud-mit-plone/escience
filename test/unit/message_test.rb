@@ -161,6 +161,7 @@ class MessageTest < ActiveSupport::TestCase
   def test_destroyable_by
     message = Message.find(6)
     author = message.author
+    author.roles_for_project(message.project).first.add_permission!(:delete_own_messages)
     assert message.destroyable_by?(author)
 
     author.roles_for_project(message.project).first.remove_permission!(:delete_own_messages)
