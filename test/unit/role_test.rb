@@ -25,7 +25,7 @@ class RoleTest < ActiveSupport::TestCase
   end
 
   def test_givable_scope
-    assert_equal Role.all.reject(&:builtin?).sort, Role.givable.all
+    assert_equal Role.all.reject{|r| [Role.anonymous, Role.non_member].include? r}.sort, Role.givable.all
   end
 
   def test_builtin_scope
@@ -56,11 +56,6 @@ class RoleTest < ActiveSupport::TestCase
     assert_equal 90, target.workflow_rules.size
   end
 
-  def test_permissions_should_be_unserialized_with_its_coder
-    Role::PermissionsAttributeCoder.expects(:load).once
-    Role.find(1).permissions
-  end
-
   def test_add_permission
     role = Role.find(1)
     size = role.permissions.size
@@ -81,14 +76,15 @@ class RoleTest < ActiveSupport::TestCase
   end
 
   def test_name
-    I18n.locale = 'fr'
-    assert_equal 'Manager', Role.find(1).name
-    assert_equal 'Anonyme', Role.anonymous.name
-    assert_equal 'Non membre', Role.non_member.name
+    I18n.locale = 'de'
+    assert_equal 'Besitzer', Role.owner.name
+    assert_equal 'Anonym', Role.anonymous.name
+    assert_equal 'Mitglied', Role.member.name
+    assert_equal 'Nichtmitglied', Role.non_member.name
   end
 
   def test_find_all_givable
-    assert_equal Role.all.reject(&:builtin?).sort, Role.find_all_givable
+    assert_equal Role.all.reject{|r| [Role.anonymous, Role.non_member].include? r}.sort, Role.find_all_givable
   end
 
   context "#anonymous" do
