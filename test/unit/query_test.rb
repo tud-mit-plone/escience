@@ -28,6 +28,10 @@ class QueryTest < ActiveSupport::TestCase
            :projects_trackers,
            :custom_fields_trackers
 
+  def setup
+    User.current = User.generate!
+  end
+
   def test_custom_fields_for_all_projects_should_be_available_in_global_queries
     query = Query.new(:project => nil, :name => '_')
     assert query.available_filters.has_key?('cf_1')
@@ -500,7 +504,7 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   def test_range_for_this_week_with_week_starting_on_monday
-    I18n.locale = :fr
+    I18n.locale = :de
     assert_equal '1', I18n.t(:general_first_day_of_week)
 
     Date.stubs(:today).returns(Date.parse('2011-04-29'))
@@ -749,6 +753,7 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   def test_query_should_preload_spent_hours
+    User.current = User.generate!
     q = Query.new(:name => '_', :column_names => [:subject, :spent_hours])
     assert q.has_column?(:spent_hours)
     issues = q.issues
@@ -966,12 +971,10 @@ class QueryTest < ActiveSupport::TestCase
     assert_equal 'Assignee', q.label_for('assigned_to_id')
   end
 
-  def test_label_for_fr
-    set_language_if_valid 'fr'
+  def test_label_for_de
+    set_language_if_valid 'de'
     q = Query.new
-    s = "Assign\xc3\xa9 \xc3\xa0"
-    s.force_encoding('UTF-8') if s.respond_to?(:force_encoding)
-    assert_equal s, q.label_for('assigned_to_id')
+    assert_equal "Zugewiesen", q.label_for('assigned_to_id')
   end
 
   def test_editable_by
@@ -1006,7 +1009,9 @@ class QueryTest < ActiveSupport::TestCase
 
   def test_visible_scope
     query_ids = Query.visible(User.anonymous).map(&:id)
-
+    assert_empty query_ids, 'a query was visible for the anonymous user'
+    test_user = User.generate!
+    query_ids = Query.visible(test_user).map(&:id)
     assert query_ids.include?(1), 'public query on public project was not visible'
     assert query_ids.include?(4), 'public query for all projects was not visible'
     assert !query_ids.include?(2), 'private query on public project was visible'
@@ -1077,9 +1082,8 @@ class QueryTest < ActiveSupport::TestCase
       end
 
       should "have a list of the Roles as values" do
-        assert @query.available_filters["assigned_to_role"][:values].include?(['Manager','1'])
-        assert @query.available_filters["assigned_to_role"][:values].include?(['Developer','2'])
-        assert @query.available_filters["assigned_to_role"][:values].include?(['Reporter','3'])
+        assert @query.available_filters["assigned_to_role"][:values].include?(['Owner','1'])
+        assert @query.available_filters["assigned_to_role"][:values].include?(['Member','2'])
       end
 
       should "not include the built in Roles as values" do
@@ -1154,38 +1158,40 @@ class QueryTest < ActiveSupport::TestCase
 
     context "with 'assigned_to_role' filter" do
       setup do
-        @manager_role = Role.find_by_name('Manager')
-        @developer_role = Role.find_by_name('Developer')
+        @owner_role = Role.find_by_name('Owner')
+        @member_role = Role.find_by_name('Member')
 
         @project = Project.generate!
-        @manager = User.generate!
-        @developer = User.generate!
+        @owner = User.generate!
+        @member = User.generate!
         @boss = User.generate!
         @guest = User.generate!
-        User.add_to_project(@manager, @project, @manager_role)
-        User.add_to_project(@developer, @project, @developer_role)
-        User.add_to_project(@boss, @project, [@manager_role, @developer_role])
+        User.add_to_project(@owner, @project, @owner_role)
+        User.add_to_project(@member, @project, @member_role)
+        User.add_to_project(@boss, @project, [@owner_role, @member_role])
         
-        @issue1 = Issue.generate!(:project => @project, :assigned_to_id => @manager.id)
-        @issue2 = Issue.generate!(:project => @project, :assigned_to_id => @developer.id)
+        @issue1 = Issue.generate!(:project => @project, :assigned_to_id => @owner.id)
+        @issue2 = Issue.generate!(:project => @project, :assigned_to_id => @member.id)
         @issue3 = Issue.generate!(:project => @project, :assigned_to_id => @boss.id)
         @issue4 = Issue.generate!(:project => @project, :assigned_to_id => @guest.id)
         @issue5 = Issue.generate!(:project => @project)
+
+        User.current = @member
       end
 
       should "search assigned to for users with the Role" do
         @query = Query.new(:name => '_', :project => @project)
-        @query.add_filter('assigned_to_role', '=', [@manager_role.id.to_s])
+        @query.add_filter('assigned_to_role', '=', [@owner_role.id.to_s])
 
         assert_query_result [@issue1, @issue3], @query
       end
 
       should "search assigned to for users with the Role on the issue project" do
         other_project = Project.generate!
-        User.add_to_project(@developer, other_project, @manager_role)
+        User.add_to_project(@member, other_project, @owner_role)
         
         @query = Query.new(:name => '_', :project => @project)
-        @query.add_filter('assigned_to_role', '=', [@manager_role.id.to_s])
+        @query.add_filter('assigned_to_role', '=', [@owner_role.id.to_s])
 
         assert_query_result [@issue1, @issue3], @query
       end
@@ -1200,7 +1206,7 @@ class QueryTest < ActiveSupport::TestCase
 
       should "search assigned to for users without the Role" do
         @query = Query.new(:name => '_', :project => @project)
-        @query.add_filter('assigned_to_role', '!', [@manager_role.id.to_s])
+        @query.add_filter('assigned_to_role', '!', [@owner_role.id.to_s])
 
         assert_query_result [@issue2, @issue4, @issue5], @query
       end
