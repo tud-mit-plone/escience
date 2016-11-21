@@ -1130,9 +1130,10 @@ de:
   label_additional_workflow_transitions_for_author: Zusätzliche Berechtigungen wenn der Benutzer der Autor ist
   label_bulk_edit_selected_time_entries: Ausgewählte Zeitaufwände bearbeiten
   text_time_entries_destroy_confirmation: Sind Sie sicher, dass Sie die ausgewählten Zeitaufwände löschen möchten?
-  label_role_anonymous: Anonymous
+  label_role_anonymous: Anonym
   label_role_non_member: Nichtmitglied
   label_role_owner: Besitzer
+  label_role_member: Mitglied
   label_issue_note_added: Notiz hinzugefügt
   label_issue_status_updated: Status aktualisiert
   label_issue_priority_updated: Priorität aktualisiert
