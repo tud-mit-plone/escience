@@ -181,7 +181,7 @@ class Query < ActiveRecord::Base
         when :integer
           add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^[+-]?\d+$/) }
         when :float
-          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+(\.\d*)?$/) }
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^[+-]?\d+(\.\d*)?$/) }
         when :date, :date_past
           case operator_for(field)
           when "=", ">=", "<=", "><"
@@ -219,7 +219,7 @@ class Query < ActiveRecord::Base
   end
 
   def trackers
-    @trackers ||= project.nil? ? Tracker.find(:all, :order => 'position') : project.rolled_up_trackers
+    @trackers ||= project.nil? ? Tracker.all(:order => 'position') : project.rolled_up_trackers
   end
 
   # Returns a hash of localized labels for all filter operators
@@ -229,11 +229,11 @@ class Query < ActiveRecord::Base
 
   def available_filters
     return @available_filters if @available_filters
-	trackers = project.nil? ? Tracker.find(:all, :order => 'position') : project.rolled_up_trackers
+    trackers = project.nil? ? Tracker.all(:order => 'position') : project.rolled_up_trackers
     @available_filters = {
       "status_id" => {
         :type => :list_status, :order => 0,
-        :values => IssueStatus.find(:all, :order => 'position').collect{|s| [s.name, s.id.to_s] }
+        :values => IssueStatus.all(:order => 'position').collect{|s| [s.name, s.id.to_s] }
        },
       "tracker_id" => {
         :type => :list, :order => 2, :values => trackers.collect{|s| [s.name, s.id.to_s] }
@@ -348,11 +348,10 @@ class Query < ActiveRecord::Base
         }
       end
       add_custom_fields_filters(
-                   IssueCustomField.find(:all,
-                                         :conditions => {
-                                            :is_filter => true,
-                                            :is_for_all => true
-                                         }))
+                   IssueCustomField.all(:conditions => {
+                                           :is_filter => true,
+                                           :is_for_all => true
+                                        }))
     end
     add_associations_custom_fields_filters :project, :author, :assigned_to, :fixed_version
     if User.current.allowed_to?(:set_issues_private, nil, :global => true) ||
