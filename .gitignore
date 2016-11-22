@@ -21,6 +21,7 @@
 /coverage
 /db/*.db
 /db/*.sqlite3
+/db/*.sqlite
 /files/*
 /lib/redmine/scm/adapters/mercurial/redminehelper.pyc
 /lib/redmine/scm/adapters/mercurial/redminehelper.pyo
