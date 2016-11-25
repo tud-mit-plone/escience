@@ -24,6 +24,7 @@ class UserPreferenceTest < ActiveSupport::TestCase
     user = User.new(:firstname => "new", :lastname => "user", :mail => "newuser@somenet.foo")
     user.login = "newuser"
     user.password, user.password_confirmation = "password", "password"
+    user.confirm = true
     assert user.save
 
     assert_kind_of UserPreference, user.pref
@@ -45,6 +46,7 @@ class UserPreferenceTest < ActiveSupport::TestCase
     user = User.new(:firstname => "new", :lastname => "user", :mail => "newuser@somenet.foo")
     user.login = "newuser"
     user.password, user.password_confirmation = "password", "password"
+    user.confirm = true
     assert user.save
     assert_nil user.preference
     up = UserPreference.new(:user => user)
