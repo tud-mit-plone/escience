@@ -134,6 +134,14 @@ Redmine::AccessControl.map do |map|
     map.permission :protect_wiki_pages, {:wiki => :protect}, :require => :member
   end
 
+  map.project_module :repository do |map|
+    map.permission :manage_repository, {:repositories => [:new, :create, :edit, :update, :committers, :destroy]}, :require => :member
+    map.permission :browse_repository, {:repositories => [:show, :browse, :entry, :raw, :annotate, :changes, :diff, :stats, :graph]}, :read => true
+    map.permission :view_changesets, {:repositories => [:show, :revisions, :revision]}, :read => true
+    map.permission :commit_access, {}
+    map.permission :manage_related_issues, {:repositories => [:add_related_issue, :remove_related_issue]}
+  end
+
   map.project_module :boards do |map|
     map.permission :manage_boards, {:boards => [:new, :create, :edit, :update, :destroy]}, :require => :member
     map.permission :view_messages, {:boards => [:index, :show], :messages => [:show]}, :public => true, :read => true

@@ -43,6 +43,13 @@ class SearchTest < ActiveSupport::TestCase
     User.current = nil
 
     r = Issue.search(@issue_keyword).first
+    assert_empty r
+    r = Changeset.search(@changeset_keyword).first
+    assert_empty r
+
+    Role.anonymous.add_permission! :view_changesets
+    Role.anonymous.add_permission! :view_issues
+    r = Issue.search(@issue_keyword).first
     assert r.include?(@issue)
     r = Changeset.search(@changeset_keyword).first
     assert r.include?(@changeset)
@@ -70,6 +77,9 @@ class SearchTest < ActiveSupport::TestCase
     r = Issue.search(@issue_keyword).first
     assert r.include?(@issue)
     r = Changeset.search(@changeset_keyword).first
+    assert_empty r
+    Role.non_member.add_permission! :view_changesets
+    r = Changeset.search(@changeset_keyword).first
     assert r.include?(@changeset)
 
     # Removes the :view_changesets permission from Non member role
@@ -94,6 +104,13 @@ class SearchTest < ActiveSupport::TestCase
 
     r = Issue.search(@issue_keyword).first
     assert r.include?(@issue)
+    r = Changeset.search(@changeset_keyword).first
+    assert_empty r
+    r = Changeset.search(@changeset_keyword).first
+    @project.members.select {|m| m.user == User.current}.first.roles.first.add_permission! :view_changesets
+    @project.reload
+    User.current.reload
+    assert User.current.allowed_to?(:view_changesets, @project)
     r = Changeset.search(@changeset_keyword).first
     assert r.include?(@changeset)
 
