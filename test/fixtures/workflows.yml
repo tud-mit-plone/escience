@@ -202,14 +202,7 @@ WorkflowTransitions_035:
   id: 35
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_061: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 1
-  id: 61
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_116: 
+WorkflowTransitions_116:
   new_status_id: 1
   role_id: 1
   old_status_id: 6
@@ -223,14 +216,7 @@ WorkflowTransitions_142:
   id: 142
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_250: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 2
-  id: 250
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_224: 
+WorkflowTransitions_224:
   new_status_id: 5
   role_id: 2
   old_status_id: 3
@@ -244,14 +230,7 @@ WorkflowTransitions_036:
   id: 36
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_062: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 1
-  id: 62
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_117: 
+WorkflowTransitions_117:
   new_status_id: 2
   role_id: 1
   old_status_id: 6
@@ -265,42 +244,14 @@ WorkflowTransitions_143:
   id: 143
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_170: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 4
-  id: 170
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_251: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 3
-  id: 251
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_225: 
+WorkflowTransitions_225:
   new_status_id: 6
   role_id: 2
   old_status_id: 3
   id: 225
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_063: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 1
-  id: 63
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_090: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 6
-  id: 90
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_118: 
+WorkflowTransitions_118:
   new_status_id: 3
   role_id: 1
   old_status_id: 6
@@ -314,14 +265,7 @@ WorkflowTransitions_144:
   id: 144
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_252: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 3
-  id: 252
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_226: 
+WorkflowTransitions_226:
   new_status_id: 1
   role_id: 2
   old_status_id: 4
@@ -335,14 +279,7 @@ WorkflowTransitions_038:
   id: 38
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_064: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 1
-  id: 64
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_091: 
+WorkflowTransitions_091:
   new_status_id: 2
   role_id: 1
   old_status_id: 1
@@ -363,21 +300,7 @@ WorkflowTransitions_145:
   id: 145
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_171: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 5
-  id: 171
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_253: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 3
-  id: 253
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_227: 
+WorkflowTransitions_227:
   new_status_id: 2
   role_id: 2
   old_status_id: 4
@@ -391,14 +314,7 @@ WorkflowTransitions_039:
   id: 39
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_065: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 1
-  id: 65
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_092: 
+WorkflowTransitions_092:
   new_status_id: 3
   role_id: 1
   old_status_id: 1
@@ -412,35 +328,14 @@ WorkflowTransitions_146:
   id: 146
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_172: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 5
-  id: 172
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_254: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 3
-  id: 254
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_228: 
+WorkflowTransitions_228:
   new_status_id: 3
   role_id: 2
   old_status_id: 4
   id: 228
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_066: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 2
-  id: 66
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_093: 
+WorkflowTransitions_093:
   new_status_id: 4
   role_id: 1
   old_status_id: 1
@@ -454,63 +349,21 @@ WorkflowTransitions_147:
   id: 147
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_173: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 5
-  id: 173
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_255: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 3
-  id: 255
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_229: 
+WorkflowTransitions_229:
   new_status_id: 5
   role_id: 2
   old_status_id: 4
   id: 229
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_067: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 2
-  id: 67
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_148: 
+WorkflowTransitions_148:
   new_status_id: 3
   role_id: 2
   old_status_id: 6
   id: 148
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_174: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 5
-  id: 174
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_256: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 4
-  id: 256
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_068: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 2
-  id: 68
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_094: 
+WorkflowTransitions_094:
   new_status_id: 5
   role_id: 1
   old_status_id: 1
@@ -524,98 +377,35 @@ WorkflowTransitions_149:
   id: 149
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_175: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 5
-  id: 175
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_257: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 4
-  id: 257
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_069: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 2
-  id: 69
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_095: 
+WorkflowTransitions_095:
   new_status_id: 6
   role_id: 1
   old_status_id: 1
   id: 95
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_176: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 6
-  id: 176
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_258: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 4
-  id: 258
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_096: 
+WorkflowTransitions_096:
   new_status_id: 1
   role_id: 1
   old_status_id: 2
   id: 96
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_177: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 6
-  id: 177
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_259: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 4
-  id: 259
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_097: 
+WorkflowTransitions_097:
   new_status_id: 3
   role_id: 1
   old_status_id: 2
   id: 97
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_178: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 6
-  id: 178
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_098: 
+WorkflowTransitions_098:
   new_status_id: 4
   role_id: 1
   old_status_id: 2
   id: 98
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_179: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 6
-  id: 179
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_099: 
+WorkflowTransitions_099:
   new_status_id: 5
   role_id: 1
   old_status_id: 2
@@ -818,14 +608,7 @@ WorkflowTransitions_214:
   id: 214
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_241: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 1
-  id: 241
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_027: 
+WorkflowTransitions_027:
   new_status_id: 2
   role_id: 1
   old_status_id: 6
@@ -839,14 +622,7 @@ WorkflowTransitions_053:
   id: 53
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_080: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 4
-  id: 80
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_108: 
+WorkflowTransitions_108:
   new_status_id: 3
   role_id: 1
   old_status_id: 4
@@ -860,49 +636,21 @@ WorkflowTransitions_134:
   id: 134
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_160: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 2
-  id: 160
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_215: 
+WorkflowTransitions_215:
   new_status_id: 6
   role_id: 2
   old_status_id: 1
   id: 215
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_242: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 1
-  id: 242
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_028: 
-  new_status_id: 3
-  role_id: 1
-  old_status_id: 6
-  id: 28
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_054: 
+WorkflowTransitions_054:
   new_status_id: 4
   role_id: 2
   old_status_id: 5
   id: 54
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_081: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 5
-  id: 81
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_109: 
+WorkflowTransitions_109:
   new_status_id: 5
   role_id: 1
   old_status_id: 4
@@ -916,28 +664,14 @@ WorkflowTransitions_135:
   id: 135
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_161: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 3
-  id: 161
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_216: 
+WorkflowTransitions_216:
   new_status_id: 1
   role_id: 2
   old_status_id: 2
   id: 216
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_243: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 1
-  id: 243
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_029: 
+WorkflowTransitions_029:
   new_status_id: 4
   role_id: 1
   old_status_id: 6
@@ -951,49 +685,21 @@ WorkflowTransitions_055:
   id: 55
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_082: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 5
-  id: 82
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_136: 
+WorkflowTransitions_136:
   new_status_id: 1
   role_id: 2
   old_status_id: 4
   id: 136
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_162: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 3
-  id: 162
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_217: 
+WorkflowTransitions_217:
   new_status_id: 3
   role_id: 2
   old_status_id: 2
   id: 217
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_270: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 6
-  id: 270
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_244: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 1
-  id: 244
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_056: 
+WorkflowTransitions_056:
   new_status_id: 1
   role_id: 2
   old_status_id: 6
@@ -1007,14 +713,7 @@ WorkflowTransitions_137:
   id: 137
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_163: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 3
-  id: 163
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_190: 
+WorkflowTransitions_190:
   new_status_id: 6
   role_id: 1
   old_status_id: 2
@@ -1028,42 +727,21 @@ WorkflowTransitions_218:
   id: 218
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_245: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 1
-  id: 245
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_057: 
+WorkflowTransitions_057:
   new_status_id: 2
   role_id: 2
   old_status_id: 6
   id: 57
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_083: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 5
-  id: 83
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_138: 
+WorkflowTransitions_138:
   new_status_id: 3
   role_id: 2
   old_status_id: 4
   id: 138
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_164: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 3
-  id: 164
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_191: 
+WorkflowTransitions_191:
   new_status_id: 1
   role_id: 1
   old_status_id: 3
@@ -1077,161 +755,56 @@ WorkflowTransitions_219:
   id: 219
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_246: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 2
-  id: 246
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_058: 
+WorkflowTransitions_058:
   new_status_id: 3
   role_id: 2
   old_status_id: 6
   id: 58
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_084: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 5
-  id: 84
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_139: 
+WorkflowTransitions_139:
   new_status_id: 5
   role_id: 2
   old_status_id: 4
   id: 139
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_165: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 3
-  id: 165
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_192: 
+WorkflowTransitions_192:
   new_status_id: 2
   role_id: 1
   old_status_id: 3
   id: 192
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_247: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 2
-  id: 247
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_059: 
+WorkflowTransitions_059:
   new_status_id: 4
   role_id: 2
   old_status_id: 6
   id: 59
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_085: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 5
-  id: 85
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_166: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 4
-  id: 166
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_248: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 2
-  id: 248
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_086: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 6
-  id: 86
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_167: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 4
-  id: 167
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_193: 
+WorkflowTransitions_193:
   new_status_id: 4
   role_id: 1
   old_status_id: 3
   id: 193
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_249: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 2
-  id: 249
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_087: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 6
-  id: 87
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_168: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 4
-  id: 168
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_194: 
+WorkflowTransitions_194:
   new_status_id: 5
   role_id: 1
   old_status_id: 3
   id: 194
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_088: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 6
-  id: 88
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_169: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 4
-  id: 169
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_195: 
+WorkflowTransitions_195:
   new_status_id: 6
   role_id: 1
   old_status_id: 3
   id: 195
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_089: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 6
-  id: 89
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_196: 
+WorkflowTransitions_196:
   new_status_id: 1
   role_id: 1
   old_status_id: 4
@@ -1406,14 +979,7 @@ WorkflowTransitions_231:
   id: 231
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_070: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 2
-  id: 70
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_124: 
+WorkflowTransitions_124:
   new_status_id: 5
   role_id: 2
   old_status_id: 1
@@ -1462,14 +1028,7 @@ WorkflowTransitions_125:
   id: 125
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_151: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 1
-  id: 151
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_206: 
+WorkflowTransitions_206:
   new_status_id: 1
   role_id: 1
   old_status_id: 6
@@ -1490,14 +1049,7 @@ WorkflowTransitions_044:
   id: 44
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_071: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 3
-  id: 71
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_233: 
+WorkflowTransitions_233:
   new_status_id: 3
   role_id: 2
   old_status_id: 5
@@ -1511,14 +1063,7 @@ WorkflowTransitions_126:
   id: 126
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_152: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 1
-  id: 152
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_207: 
+WorkflowTransitions_207:
   new_status_id: 2
   role_id: 1
   old_status_id: 6
@@ -1539,14 +1084,7 @@ WorkflowTransitions_045:
   id: 45
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_260: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 4
-  id: 260
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_234: 
+WorkflowTransitions_234:
   new_status_id: 4
   role_id: 2
   old_status_id: 5
@@ -1560,21 +1098,7 @@ WorkflowTransitions_127:
   id: 127
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_153: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 1
-  id: 153
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_180: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 6
-  id: 180
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_208: 
+WorkflowTransitions_208:
   new_status_id: 3
   role_id: 1
   old_status_id: 6
@@ -1588,35 +1112,14 @@ WorkflowTransitions_046:
   id: 46
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_072: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 3
-  id: 72
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_261: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 5
-  id: 261
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_235: 
+WorkflowTransitions_235:
   new_status_id: 6
   role_id: 2
   old_status_id: 5
   id: 235
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_154: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 1
-  id: 154
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_181: 
+WorkflowTransitions_181:
   new_status_id: 2
   role_id: 1
   old_status_id: 1
@@ -1637,70 +1140,35 @@ WorkflowTransitions_047:
   id: 47
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_073: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 3
-  id: 73
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_128: 
+WorkflowTransitions_128:
   new_status_id: 4
   role_id: 2
   old_status_id: 2
   id: 128
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_262: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 5
-  id: 262
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_236: 
+WorkflowTransitions_236:
   new_status_id: 1
   role_id: 2
   old_status_id: 6
   id: 236
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_155: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 1
-  id: 155
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_048: 
+WorkflowTransitions_048:
   new_status_id: 3
   role_id: 2
   old_status_id: 4
   id: 48
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_074: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 3
-  id: 74
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_129: 
+WorkflowTransitions_129:
   new_status_id: 5
   role_id: 2
   old_status_id: 2
   id: 129
   tracker_id: 2
   type: WorkflowTransition
-WorkflowTransitions_263: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 5
-  id: 263
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_237: 
+WorkflowTransitions_237:
   new_status_id: 2
   role_id: 2
   old_status_id: 6
@@ -1721,28 +1189,7 @@ WorkflowTransitions_049:
   id: 49
   tracker_id: 1
   type: WorkflowTransition
-WorkflowTransitions_075: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 3
-  id: 75
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_156: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 2
-  id: 156
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_264: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 5
-  id: 264
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_238: 
+WorkflowTransitions_238:
   new_status_id: 3
   role_id: 2
   old_status_id: 6
@@ -1756,126 +1203,42 @@ WorkflowTransitions_183:
   id: 183
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_076: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 4
-  id: 76
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_157: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 2
-  id: 157
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_265: 
-  new_status_id: 6
-  role_id: 3
-  old_status_id: 5
-  id: 265
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_239: 
+WorkflowTransitions_239:
   new_status_id: 4
   role_id: 2
   old_status_id: 6
   id: 239
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_077: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 4
-  id: 77
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_158: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 2
-  id: 158
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_184: 
+WorkflowTransitions_184:
   new_status_id: 5
   role_id: 1
   old_status_id: 1
   id: 184
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_266: 
-  new_status_id: 1
-  role_id: 3
-  old_status_id: 6
-  id: 266
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_078: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 4
-  id: 78
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_159: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 2
-  id: 159
-  tracker_id: 2
-  type: WorkflowTransition
-WorkflowTransitions_185: 
+WorkflowTransitions_185:
   new_status_id: 6
   role_id: 1
   old_status_id: 1
   id: 185
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_267: 
-  new_status_id: 2
-  role_id: 3
-  old_status_id: 6
-  id: 267
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_079: 
-  new_status_id: 5
-  role_id: 3
-  old_status_id: 4
-  id: 79
-  tracker_id: 1
-  type: WorkflowTransition
-WorkflowTransitions_186: 
+WorkflowTransitions_186:
   new_status_id: 1
   role_id: 1
   old_status_id: 2
   id: 186
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_268: 
-  new_status_id: 3
-  role_id: 3
-  old_status_id: 6
-  id: 268
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_187: 
+WorkflowTransitions_187:
   new_status_id: 3
   role_id: 1
   old_status_id: 2
   id: 187
   tracker_id: 3
   type: WorkflowTransition
-WorkflowTransitions_269: 
-  new_status_id: 4
-  role_id: 3
-  old_status_id: 6
-  id: 269
-  tracker_id: 3
-  type: WorkflowTransition
-WorkflowTransitions_188: 
+WorkflowTransitions_188:
   new_status_id: 4
   role_id: 1
   old_status_id: 2
