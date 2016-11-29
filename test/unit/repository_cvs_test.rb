@@ -50,10 +50,8 @@ class RepositoryCvsTest < ActiveSupport::TestCase
                    repo.errors.full_messages
   end
 
-  def test_blank_module_error_message_fr
-    set_language_if_valid 'fr'
-    str = "Module doit \xc3\xaatre renseign\xc3\xa9(e)"
-    str.force_encoding('UTF-8') if str.respond_to?(:force_encoding)
+  def test_blank_module_error_message_de
+    set_language_if_valid 'de'
     repo = Repository::Cvs.new(
                           :project       => @project,
                           :identifier    => 'test',
@@ -63,6 +61,7 @@ class RepositoryCvsTest < ActiveSupport::TestCase
                           :root_url      => REPOSITORY_PATH
                         )
     assert !repo.save
+    str = "Modul muss ausgefüllt werden"
     assert_include str, repo.errors.full_messages
   end
 
@@ -79,10 +78,8 @@ class RepositoryCvsTest < ActiveSupport::TestCase
                    repo.errors.full_messages
   end
 
-  def test_blank_cvsroot_error_message_fr
-    set_language_if_valid 'fr'
-    str = "CVSROOT doit \xc3\xaatre renseign\xc3\xa9(e)"
-    str.force_encoding('UTF-8') if str.respond_to?(:force_encoding)
+  def test_blank_cvsroot_error_message_de
+    set_language_if_valid 'de'
     repo = Repository::Cvs.new(
                           :project       => @project,
                           :identifier    => 'test',
@@ -92,6 +89,7 @@ class RepositoryCvsTest < ActiveSupport::TestCase
                           :root_url      => ''
                         )
     assert !repo.save
+    str = "CVSROOT muss ausgefüllt werden"
     assert_include str, repo.errors.full_messages
   end
 
