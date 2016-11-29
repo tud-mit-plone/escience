@@ -45,10 +45,8 @@ class RepositoryFilesystemTest < ActiveSupport::TestCase
                    repo.errors.full_messages
   end
 
-  def test_blank_root_directory_error_message_fr
-    set_language_if_valid 'fr'
-    str = "R\xc3\xa9pertoire racine doit \xc3\xaatre renseign\xc3\xa9(e)"
-    str.force_encoding('UTF-8') if str.respond_to?(:force_encoding)
+  def test_blank_root_directory_error_message_de
+    set_language_if_valid 'de'
     repo = Repository::Filesystem.new(
                           :project      => @project,
                           :url          => "",
@@ -56,6 +54,7 @@ class RepositoryFilesystemTest < ActiveSupport::TestCase
                           :path_encoding => ''
                         )
     assert !repo.save
+    str = "Wurzelverzeichnis muss ausgefüllt werden"
     assert_include str, repo.errors.full_messages
   end
 
