@@ -111,7 +111,11 @@ class Issue < ActiveRecord::Base
           '1=0'
         end
       else
-        "(#{table_name}.is_private = #{connection.quoted_false})"
+        if Role.anonymous.allowed_to?(:view_issues)
+          "(#{table_name}.is_private = #{connection.quoted_false})"
+        else
+          '1=0'
+        end
       end
     end
   end
