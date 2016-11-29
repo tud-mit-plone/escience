@@ -185,7 +185,16 @@ class Role < ActiveRecord::Base
     when BUILTIN_ANONYMOUS
       []
     when BUILTIN_NON_MEMBER
-      Role.perms([:add_project, :view_issues])
+      Role.perms([:add_project])
+      + Role.perms([:view_calendar]) \
+      + Role.perms([:view_calendar]) \
+      + Role.perms([:view_documents]) \
+      + Role.perms([:view_doodles]) \
+      + Role.perms([:view_files]) \
+      + Role.perms([:view_gantt]) \
+      + Role.perms([:view_issues]) \
+      + Role.perms([:view_time_entries]) \
+      + Role.perms([:view_wiki_pages])
     when BUILTIN_OWNER
       Role.perms([:add_project, :manage_members, :add_subprojects, :view_calendar, :edit_project,
                   :select_project_modules, :manage_versions, :group_invitations_create]) \

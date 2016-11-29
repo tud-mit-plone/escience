@@ -112,15 +112,23 @@ role_002:
   - :protect_wiki_pages
   issues_visibility: default
 role_004:
-    id: 4
-    name: Non member
-    position: 3
-    assignable: true
-    builtin: 1
-    permissions:
-    - :add_project
-    - :view_issues
-    issues_visibility: default
+  id: 4
+  name: Non member
+  position: 3
+  assignable: true
+  builtin: 1
+  permissions:
+  - :add_project
+  - :view_calendar
+  - :view_documents
+  - :view_doodles
+  - :view_files
+  - :view_gantt
+  - :view_issues
+  - :view_time_entries
+  - :view_wiki_pages
+  - :view_wiki_edits
+  issues_visibility: default
 role_005:
   id: 5
   name: Anonymous
