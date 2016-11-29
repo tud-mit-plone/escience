@@ -16,6 +16,7 @@ users_004:
   auth_source_id: 
   mail_notification: all
   login: rhill
+  confirm: true
   type: User
 users_001: 
   created_on: 2006-07-19 19:12:21 +02:00
@@ -34,8 +35,9 @@ users_001:
   auth_source_id: 
   mail_notification: all
   login: admin
+  confirm: true
   type: User
-users_002: 
+users_002:
   created_on: 2006-07-19 19:32:09 +02:00
   status: 1
   last_login_on: 2006-07-19 22:42:15 +02:00
@@ -52,6 +54,7 @@ users_002:
   auth_source_id: 
   mail_notification: all
   login: jsmith
+  confirm: true
   type: User
 users_003: 
   created_on: 2006-07-19 19:33:19 +02:00
@@ -70,6 +73,7 @@ users_003:
   auth_source_id: 
   mail_notification: all
   login: dlopper
+  confirm: true
   type: User
 users_005: 
   id: 5
@@ -87,6 +91,7 @@ users_005:
   auth_source_id: 
   mail_notification: all
   login: dlopper2
+  confirm: true
   type: User
 users_006: 
   id: 6
@@ -119,6 +124,7 @@ users_007:
   auth_source_id: 
   mail_notification: only_my_events
   login: someone
+  confirm: true
   type: User
 users_008: 
   id: 8
@@ -137,6 +143,7 @@ users_008:
   auth_source_id: 
   mail_notification: only_my_events
   login: miscuser8
+  confirm: true
   type: User
 users_009: 
   id: 9
@@ -153,6 +160,7 @@ users_009:
   auth_source_id: 
   mail_notification: only_my_events
   login: miscuser9
+  confirm: true
   type: User
 groups_010: 
   id: 10
