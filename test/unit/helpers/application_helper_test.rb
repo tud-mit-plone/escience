@@ -32,6 +32,7 @@ class ApplicationHelperTest < ActionView::TestCase
   def setup
     super
     set_tmp_attachments_directory
+    User.current = User.find(1)
   end
 
   context "#link_to_if_authorized" do
@@ -849,11 +850,11 @@ RAW
 
     expected =  '<ul class="toc">' +
                   '<li><a href="#Title">Title</a>' +
-                    '<ul>' +
+                    '<ul class="sub_toc level_2">' +
                       '<li><a href="#Subtitle-with-a-Wiki-link">Subtitle with a Wiki link</a></li>' +
                       '<li><a href="#Subtitle-with-another-Wiki-link">Subtitle with another Wiki link</a></li>' +
                       '<li><a href="#Subtitle-with-red-text">Subtitle with red text</a>' +
-                        '<ul>' +
+                        '<ul class="sub_toc level_3">' +
                           '<li><a href="#Subtitle-with-some-modifiers">Subtitle with some modifiers</a></li>' +
                           '<li><a href="#Subtitle-with-inline-code">Subtitle with inline code</a></li>' +
                         '</ul>' +
@@ -861,9 +862,9 @@ RAW
                     '</ul>' +
                   '</li>' +
                   '<li><a href="#Another-title">Another title</a>' +
-                    '<ul>' +
+                    '<ul class="sub_toc level_2">' +
                       '<li>' +
-                        '<ul>' +
+                        '<ul class="sub_toc level_3">' +
                           '<li><a href="#An-Internet-link-inside-subtitle">An Internet link inside subtitle</a></li>' +
                         '</ul>' +
                       '</li>' +
@@ -889,7 +890,7 @@ RAW
 
     expected =  '<ul class="toc">' +
                   '<li><a href="#Title">Title</a>' +
-                    '<ul>' +
+                    '<ul class="sub_toc level_2">' +
                       '<li><a href="#Subtitle">Subtitle</a></li>' +
                       '<li><a href="#Subtitle-2">Subtitle</a></li>'
                     '</ul>'
@@ -950,14 +951,14 @@ RAW
 
     # heading that contains inline code
     assert_match Regexp.new('<div class="contextual" title="Edit this section">' +
-      '<a href="/projects/1/wiki/Test/edit\?section=4"><img alt="Edit" src="/images/edit.png(\?\d+)?" /></a></div>' +
+      '<a href="/projects/1/wiki/Test/edit\?section=4"><i class="icon icon-pencil"></i></a></div>' +
       '<a name="Subtitle-with-inline-code"></a>' +
       '<h2 >Subtitle with <code>inline code</code><a href="#Subtitle-with-inline-code" class="wiki-anchor">&para;</a></h2>'),
       result
 
     # last heading
     assert_match Regexp.new('<div class="contextual" title="Edit this section">' +
-      '<a href="/projects/1/wiki/Test/edit\?section=5"><img alt="Edit" src="/images/edit.png(\?\d+)?" /></a></div>' +
+      '<a href="/projects/1/wiki/Test/edit\?section=5"><i class="icon icon-pencil"></i></a></div>' +
       '<a name="Subtitle-after-pre-tag"></a>' +
       '<h2 >Subtitle after pre tag<a href="#Subtitle-after-pre-tag" class="wiki-anchor">&para;</a></h2>'),
       result
@@ -987,24 +988,14 @@ RAW
 
   def test_avatar_enabled
     with_settings :gravatar_enabled => '1' do
-      assert avatar(User.find_by_mail('jsmith@somenet.foo')).include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
-      assert avatar('jsmith <jsmith@somenet.foo>').include?(Digest::MD5.hexdigest('jsmith@somenet.foo'))
-      # Default size is 50
-      assert avatar('jsmith <jsmith@somenet.foo>').include?('size=50')
-      assert avatar('jsmith <jsmith@somenet.foo>', :size => 24).include?('size=24')
+      assert avatar(User.find_by_mail('jsmith@somenet.foo')).include?("/images/avatar.png?")
+      assert avatar('jsmith <jsmith@somenet.foo>').include?("/images/avatar.png?")
+      assert avatar('jsmith <jsmith@somenet.foo>', :size => 24).include?('width="24"')
+      assert avatar('jsmith <jsmith@somenet.foo>', :size => 24).include?('height="24"')
       # Non-avatar options should be considered html options
       assert avatar('jsmith <jsmith@somenet.foo>', :title => 'John Smith').include?('title="John Smith"')
-      # The default class of the img tag should be gravatar
-      assert avatar('jsmith <jsmith@somenet.foo>').include?('class="gravatar"')
-      assert !avatar('jsmith <jsmith@somenet.foo>', :class => 'picture').include?('class="gravatar"')
       assert_nil avatar('jsmith')
       assert_nil avatar(nil)
-    end
-  end
-
-  def test_avatar_disabled
-    with_settings :gravatar_enabled => '0' do
-      assert_equal '', avatar(User.find_by_mail('jsmith@somenet.foo'))
     end
   end
 
