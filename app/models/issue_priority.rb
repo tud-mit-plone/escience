@@ -36,7 +36,7 @@ class IssuePriority < Enumeration
   end
 
   def css_classes
-    "priority-#{id}"# priority-#{position_name}"
+    "priority-#{id} priority-#{position_name}"
   end
 
   # Clears position_name for all priorities
