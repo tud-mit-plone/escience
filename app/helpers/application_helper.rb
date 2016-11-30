@@ -1771,6 +1771,13 @@ module ApplicationHelper
   DEFAULT_AVATAR_OPTIONS = {:size => 25, :alt => '', :title => '', :class => 'rounded_image'}
 
   def avatar(user, options = {})
+    if user.class == String
+      if user.to_s =~ %r{<(.+?)>}
+        user = $1
+      end
+      user = User.where(:mail => user).first
+    end
+    return nil if user.nil?
     scale = options[:scale].nil? ? :thumb : options[:scale]
     options.delete(:scale)
     src = user.avatar ? user.avatar_photo_url(scale) : 'avatar.png'
