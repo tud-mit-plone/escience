@@ -1043,12 +1043,12 @@ module ApplicationHelper
                                         :title => "#{truncate(issue.subject, :length => 100)} (#{issue.status.name})")
             end
           when 'document'
-            if document = Document.visible.find_by_id(oid)
+            if document = ::Document.visible.find_by_id(oid)
               link = link_to h(document.title), {:only_path => only_path, :controller => 'documents', :action => 'show', :id => document},
                                                 :class => 'document'
             end
           when 'version'
-            if version = Version.visible.find_by_id(oid)
+            if version = ::Version.visible.find_by_id(oid)
               link = link_to h(version.name), {:only_path => only_path, :controller => 'versions', :action => 'show', :id => version},
                                               :class => 'version'
             end
