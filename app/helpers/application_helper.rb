@@ -1286,7 +1286,9 @@ module ApplicationHelper
         started = false
         headings.each do |level, anchor, item|
           if level > current
-            out << '<ul class="sub_toc level_'+level.to_s+'"><li>' * (level - current)
+            (current + 1).upto(level) do |step|
+              out << ('<ul class="sub_toc level_' + step.to_s + '"><li>')
+            end
           elsif level < current
             out << "</li></ul>\n" * (current - level) + "</li><li>"
           elsif started
