@@ -1593,23 +1593,6 @@ module ApplicationHelper
     !!ActionMailer::Base.perform_deliveries
   end
 
-  # Returns the avatar image tag for the given +user+ if avatars are enabled
-  # +user+ can be a User or a string that will be scanned for an email address (eg. 'joe <joe@foo.bar>')
-  def avatar(user, options = { })
-    if Setting.gravatar_enabled?
-      options.merge!({:ssl => (request && request.ssl?), :default => Setting.gravatar_default})
-      email = nil
-      if user.respond_to?(:mail)
-        email = user.mail
-      elsif user.to_s =~ %r{<(.+?)>}
-        email = $1
-      end
-      return gravatar(email.to_s.downcase, options) unless email.blank? rescue nil
-    else
-      ''
-    end
-  end
-
   def sanitize_anchor_name(anchor)
     if ''.respond_to?(:encoding) || RUBY_PLATFORM == 'java'
       anchor.gsub(%r{[^\p{Word}\s\-]}, '').gsub(%r{\s+(\-+\s*)?}, '-')
@@ -1770,6 +1753,8 @@ module ApplicationHelper
 
   DEFAULT_AVATAR_OPTIONS = {:size => 25, :alt => '', :title => '', :class => 'rounded_image'}
 
+  # Returns the avatar image tag for the given +user+ if avatars are enabled
+  # +user+ can be a User or a string that will be scanned for an email address (eg. 'joe <joe@foo.bar>')
   def avatar(user, options = {})
     if user.class == String
       if user.to_s =~ %r{<(.+?)>}
