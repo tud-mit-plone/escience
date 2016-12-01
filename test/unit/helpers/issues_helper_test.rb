@@ -42,7 +42,7 @@ class IssuesHelperTest < ActionView::TestCase
   end
 
   def test_issue_heading
-    assert_equal "Bug #1", issue_heading(Issue.find(1))
+    assert_equal "Can&#x27;t print recipes", issue_heading(Issue.find(1))
   end
 
   def test_issues_destroy_confirmation_message_with_one_root_issue
