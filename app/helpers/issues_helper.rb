@@ -198,7 +198,7 @@ module IssuesHelper
 
   def issues_destroy_confirmation_message(issues)
     issues = [issues] unless issues.is_a?(Array)
-    message = l(:text_issue_destroy_confirmation)
+    message = l(:text_issues_destroy_confirmation)
     descendant_count = issues.inject(0) {|memo, i| memo += (i.right - i.left - 1)/2}
     if descendant_count > 0
       issues.each do |issue|
