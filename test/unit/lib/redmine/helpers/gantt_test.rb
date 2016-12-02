@@ -95,7 +95,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
     end
 
     should "count the number of issues on versions, including cross-project" do
-      version = Version.generate!
+      version = ::Version.generate!
       @project.versions << version
       @project.issues << Issue.generate!(:project => @project, :fixed_version => version)
       assert_equal 3, @gantt.number_of_rows_on_project(@project)
@@ -109,7 +109,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today + 7), :sharing => 'none')
+      @version = ::Version.generate!(:effective_date => (today + 7), :sharing => 'none')
       @project.versions << @version
       @issue = Issue.generate!(:fixed_version => @version,
                                :subject => "gantt#line_for_project",
@@ -146,7 +146,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
       context "without assigned issues" do
         setup do
-          @version = Version.generate!(:effective_date => (today + 14),
+          @version = ::Version.generate!(:effective_date => (today + 14),
                                        :sharing => 'none',
                                        :name => 'empty_version')
           @project.versions << @version
@@ -174,7 +174,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
         setup do
           p = Project.generate!
           p.enabled_module_names = [:issue_tracking]
-          @shared_version = Version.generate!(:sharing => 'system')
+          @shared_version = ::Version.generate!(:sharing => 'system')
           p.versions << @shared_version
           # Reassign the issue to a shared version of another project
           @issue = Issue.generate!(:fixed_version => @shared_version,
@@ -236,7 +236,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today + 7))
+      @version = ::Version.generate!(:effective_date => (today + 7))
       @project.versions << @version
       @issue = Issue.generate!(:fixed_version => @version,
                                :subject => "gantt#line_for_project",
@@ -316,7 +316,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
       should "style overdue projects" do
         @project.enabled_module_names = [:issue_tracking]
-        @project.versions << Version.generate!(:effective_date => (today - 1))
+        @project.versions << ::Version.generate!(:effective_date => (today - 1))
         assert @project.reload.overdue?, "Need an overdue project for this test"
         @output_buffer = @gantt.subject_for_project(@project, {:format => :html})
         assert_select 'div span.project-overdue'
@@ -332,7 +332,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today - 1))
+      @version = ::Version.generate!(:effective_date => (today - 1))
       @project.versions << @version
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#line_for_project",
@@ -436,7 +436,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today - 1))
+      @version = ::Version.generate!(:effective_date => (today - 1))
       @project.versions << @version
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#subject_for_version",
@@ -489,7 +489,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today + 7))
+      @version = ::Version.generate!(:effective_date => (today + 7))
       @project.versions << @version
       @project.issues << Issue.generate!(:fixed_version => @version,
                                          :subject => "gantt#line_for_project",
@@ -619,7 +619,8 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
       should "include a link to the issue" do
         @output_buffer = @gantt.subject_for_issue(@issue, {:format => :html})
-        assert_select 'a[href=?]', Regexp.escape("/issues/#{@issue.to_param}"), :text => /#{@tracker.name} ##{@issue.id}/
+        byebug
+        assert_select 'a[href=?]', Regexp.escape("/issues/#{@issue.to_param}")
       end
 
       should "style overdue issues" do
@@ -638,7 +639,7 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
       @project.enabled_module_names = [:issue_tracking]
       @tracker = Tracker.generate!
       @project.trackers << @tracker
-      @version = Version.generate!(:effective_date => (today + 7))
+      @version = ::Version.generate!(:effective_date => (today + 7))
       @project.versions << @version
       @issue = Issue.generate!(:fixed_version => @version,
                                :subject => "gantt#line_for_project",
