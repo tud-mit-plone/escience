@@ -50,7 +50,8 @@ group :test do
   platforms = [:mri_19]
   platforms << :jruby if defined?(JRUBY_VERSION) && JRUBY_VERSION >= "1.7"
   gem "test-unit", :platforms => platforms
-  gem 'minitest', '3.5.0'
+  gem 'minitest', '4.7.5'
+  gem 'minitest-reporters'
   gem "mocha", "~>0.13.3", :require => false
   gem 'cane', '~> 2.6.2'
   gem 'flay'

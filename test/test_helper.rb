@@ -30,6 +30,9 @@ require 'awesome_nested_set/version'
 require 'mocha/setup'
 require 'mocha/integration/test_unit'
 
+require 'minitest/reporters'
+MiniTest::Reporters.use!
+
 class ActiveSupport::TestCase
   include ActionDispatch::TestProcess
   
