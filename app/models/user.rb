@@ -676,7 +676,7 @@ class User < Principal
   # Returns the anonymous user.  If the anonymous user does not exist, it is created.  There can be only
   # one anonymous user per database.
   def self.anonymous
-    anonymous_user = AnonymousUser.find(:first)
+    anonymous_user = AnonymousUser.unscoped.first
     if anonymous_user.nil?
       anonymous_user = AnonymousUser.create(:lastname => 'Anonymous', :firstname => '', :mail => '', :login => '', :confirm => true, :status => 0)
       raise 'Unable to create the anonymous user.' if anonymous_user.new_record?
@@ -736,7 +736,7 @@ class User < Principal
   end
 
   def friendship_exists_with?(friend)
-    Friendship.find(:first, :conditions => ["user_id = ? AND friend_id = ?", self.id, friend.id])
+    Friendship.where("user_id = ? AND friend_id = ?", self.id, friend.id).first
   end
 
   def has_reached_daily_friend_request_limit?
@@ -852,7 +852,7 @@ class AnonymousUser < User
 
   def validate_anonymous_uniqueness
     # There should be only one AnonymousUser in the database
-    errors.add :base, 'An anonymous user already exists.' if AnonymousUser.find(:first)
+    errors.add :base, 'An anonymous user already exists.' if AnonymousUser.unscoped.first
   end
 
   def available_custom_fields

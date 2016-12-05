@@ -619,7 +619,6 @@ class Redmine::Helpers::GanttHelperTest < ActionView::TestCase
 
       should "include a link to the issue" do
         @output_buffer = @gantt.subject_for_issue(@issue, {:format => :html})
-        byebug
         assert_select 'a[href=?]', Regexp.escape("/issues/#{@issue.to_param}")
       end
 
