@@ -231,7 +231,7 @@ Redmine::MenuManager.map :project_menu do |menu|
               :if => Proc.new { |p| p.shared_versions.any? }
   menu.push :issues, { :controller => 'issues', :action => 'index' }, :html => {:class => "icon icon-check"}, :param => :project_id, :caption => :label_issue_plural
 #  menu.push :new_issue, { :controller => 'issues', :action => 'new' }, :param => :project_id, :caption => :label_issue_new, :html => { :accesskey => Redmine::AccessKeys.key_for(:new_issue) }
-  #menu.push :gantt, { :controller => 'gantts', :action => 'show' }, :param => :project_id, :caption => :label_gantt
+  menu.push :gantt, { :controller => 'gantts', :action => 'show' }, :param => :project_id, :caption => :label_gantt
 #  menu.push :calendar, { :controller => 'calendars', :action => 'show' }, :html => {:class => "icon icon-calendar"}, :param => :project_id, :caption => :label_calendar
   menu.push :news, { :controller => 'news', :action => 'index' }, :html => {:class => "icon icon-bullhorn"}, :param => :project_id, :caption => :label_news_plural
   menu.push :documents, { :controller => 'documents', :action => 'index' }, :html => {:class => "icon icon-book"}, :param => :project_id, :caption => :label_document_plural
