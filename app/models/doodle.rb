@@ -22,7 +22,7 @@ class Doodle < ActiveRecord::Base
 
   # Nicht sicher, welche Einstellung für den Scope notwendig - Anpassung wegen acts_as_activity_provider -> find_events-Funktion durchgeführt
   scope :visible, lambda {|*args| { :include => :project,
-                                          :conditions => Project.allowed_to_condition(args.shift || User.current, :view_messages, *args) } }
+                                          :conditions => Project.allowed_to_condition(args.shift || User.current, :view_doodles, *args) } }
   
   def results
     responses.empty? ? Array.new(options.length, 0) : responses.map(&:answers).transpose.map { |x| x.select { |v| v }.length }
