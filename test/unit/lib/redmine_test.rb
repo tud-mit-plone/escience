@@ -39,16 +39,16 @@ class RedmineTest < ActiveSupport::TestCase
   def test_top_menu
     assert_number_of_items_in_menu :top_menu, 5
     assert_menu_contains_item_named :top_menu, :home
-    assert_menu_contains_item_named :top_menu, :my_page
-    assert_menu_contains_item_named :top_menu, :projects
-    assert_menu_contains_item_named :top_menu, :administration
+    assert_menu_contains_item_named :top_menu, :my
     assert_menu_contains_item_named :top_menu, :help
+    assert_menu_contains_item_named :top_menu, :news
+    assert_menu_contains_item_named :top_menu, :events
   end
 
   def test_account_menu
     assert_number_of_items_in_menu :account_menu, 4
     assert_menu_contains_item_named :account_menu, :login
-    assert_menu_contains_item_named :account_menu, :register
+    assert_menu_contains_item_named :account_menu, :help
     assert_menu_contains_item_named :account_menu, :my_account
     assert_menu_contains_item_named :account_menu, :logout
   end
@@ -62,13 +62,13 @@ class RedmineTest < ActiveSupport::TestCase
   end
 
   def test_project_menu
-    assert_number_of_items_in_menu :project_menu, 14
+    assert_number_of_items_in_menu :project_menu, 12
     assert_menu_contains_item_named :project_menu, :overview
-    assert_menu_contains_item_named :project_menu, :activity
+    # assert_menu_contains_item_named :project_menu, :activity
     assert_menu_contains_item_named :project_menu, :roadmap
     assert_menu_contains_item_named :project_menu, :issues
-    assert_menu_contains_item_named :project_menu, :new_issue
-    assert_menu_contains_item_named :project_menu, :calendar
+    # assert_menu_contains_item_named :project_menu, :new_issue
+    # assert_menu_contains_item_named :project_menu, :calendar
     assert_menu_contains_item_named :project_menu, :gantt
     assert_menu_contains_item_named :project_menu, :news
     assert_menu_contains_item_named :project_menu, :documents
@@ -77,10 +77,7 @@ class RedmineTest < ActiveSupport::TestCase
     assert_menu_contains_item_named :project_menu, :files
     assert_menu_contains_item_named :project_menu, :repository
     assert_menu_contains_item_named :project_menu, :settings
+    assert_menu_contains_item_named :project_menu, :doodles
   end
 
-  def test_new_issue_should_have_root_as_a_parent
-    new_issue = get_menu_item(:project_menu, :new_issue)
-    assert_equal :root, new_issue.parent.name
-  end
 end
