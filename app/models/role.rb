@@ -185,7 +185,7 @@ class Role < ActiveRecord::Base
     when BUILTIN_ANONYMOUS
       []
     when BUILTIN_NON_MEMBER
-      Role.perms([:add_project])
+      Role.perms([:add_project]) \
       + Role.perms([:view_calendar]) \
       + Role.perms([:view_calendar]) \
       + Role.perms([:view_documents]) \
