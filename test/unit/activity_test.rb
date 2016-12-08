@@ -26,7 +26,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   def test_activity_without_subprojects
-    events = find_events(User.anonymous, :project => @project)
+    events = find_events(User.find(9), :project => @project)
     assert_not_nil events
 
     assert events.include?(Issue.find(1))
@@ -36,7 +36,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   def test_activity_with_subprojects
-    events = find_events(User.anonymous, :project => @project, :with_subprojects => 1)
+    events = find_events(User.find(9), :project => @project, :with_subprojects => 1)
     assert_not_nil events
 
     assert events.include?(Issue.find(1))
@@ -46,10 +46,12 @@ class ActivityTest < ActiveSupport::TestCase
 
   def test_global_activity_anonymous
     events = find_events(User.anonymous)
-    assert_not_nil events
+    assert_empty events
+  end
 
+  def test_global_activity_member
+    events = find_events(User.find(9))
     assert events.include?(Issue.find(1))
-    assert events.include?(Message.find(5))
     # Issue of a private project
     assert !events.include?(Issue.find(4))
     # Private issue and comment
@@ -57,7 +59,7 @@ class ActivityTest < ActiveSupport::TestCase
     assert !events.include?(Journal.find(5))
   end
 
-  def test_global_activity_logged_user
+  def test_global_activity_manager
     events = find_events(User.find(2)) # manager
     assert_not_nil events
 
@@ -76,7 +78,7 @@ class ActivityTest < ActiveSupport::TestCase
   end
 
   def test_files_activity
-    f = Redmine::Activity::Fetcher.new(User.anonymous, :project => Project.find(1))
+    f = Redmine::Activity::Fetcher.new(User.find(9), :project => Project.find(1))
     f.scope = ['files']
     events = f.events
 

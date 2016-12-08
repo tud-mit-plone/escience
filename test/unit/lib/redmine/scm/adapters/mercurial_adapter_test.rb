@@ -36,7 +36,8 @@ begin
       assert_equal true, adapter_class.client_version_above?([0, 9, 5])
 
       system "hg clone \"#{REPOSITORY_ARCHIVE_PATH}\"",
-             :chdir =>  Rails.root.join('tmp/test').to_s
+             :chdir =>  Rails.root.join('tmp/test').to_s,
+             :out => "/dev/null"
 
       @adapter = Redmine::Scm::Adapters::MercurialAdapter.new(
                             REPOSITORY_PATH,

@@ -27,9 +27,11 @@ begin
     REPOSITORY_URL = "file://#{REPOSITORY_PATH}"
 
     def setup
-      system "svnadmin create  \"#{REPOSITORY_PATH}\""
+      system "svnadmin create  \"#{REPOSITORY_PATH}\"",
+             :out => "/dev/null"
       system "svnadmin load  \"#{REPOSITORY_PATH}\"",
-             :in => REPOSITORY_ARCHIVE_PATH
+             :in => REPOSITORY_ARCHIVE_PATH,
+             :out => "/dev/null"
 
       @adapter = Redmine::Scm::Adapters::SubversionAdapter.new(REPOSITORY_URL)
     end

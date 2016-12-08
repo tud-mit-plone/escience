@@ -1883,6 +1883,6 @@ class IssueTest < ActiveSupport::TestCase
     issue = Issue.new(:priority => IssuePriority.find(8))
     classes = issue.css_classes.split(' ')
     assert_include 'priority-8', classes
-    assert_not_include 'priority-highest', classes
+    assert_include 'priority-highest', classes
   end
 end
