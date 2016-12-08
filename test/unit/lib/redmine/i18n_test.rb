@@ -43,18 +43,6 @@ class Redmine::I18nTest < ActiveSupport::TestCase
     assert_equal today.strftime('%d %m %Y'), format_date(today)
   end
 
-  def test_date_format_default_with_user_locale
-    set_language_if_valid 'es'
-    today = now = Time.parse('2011-02-20 14:00:00')
-    Setting.date_format = '%d %B %Y'
-    User.current.language = 'fr'
-    s1 = "20 f\xc3\xa9vrier 2011"
-    s1.force_encoding("UTF-8") if s1.respond_to?(:force_encoding)
-    assert_equal s1, format_date(today)
-    User.current.language = nil
-    assert_equal '20 Febrero 2011', format_date(today)
-  end
-
   def test_date_and_time_for_each_language
     Setting.date_format = ''
     valid_languages.each do |lang|
@@ -105,31 +93,16 @@ class Redmine::I18nTest < ActiveSupport::TestCase
     now = Time.parse('2011-02-20 15:45:22')
     with_settings :time_format => '' do
       with_settings :date_format => '' do
-        assert_equal '02/20/2011 03:45 pm', format_time(now)
-        assert_equal '03:45 pm', format_time(now, false)
+        assert_equal '02/20/2011 03:45 PM', format_time(now)
+        assert_equal '03:45 PM', format_time(now, false)
       end
       with_settings :date_format => '%Y-%m-%d' do
-        assert_equal '2011-02-20 03:45 pm', format_time(now)
-        assert_equal '03:45 pm', format_time(now, false)
+        assert_equal '2011-02-20 03:45 PM', format_time(now)
+        assert_equal '03:45 PM', format_time(now, false)
       end
     end
   end
 
-  def test_time_format_default_with_user_locale
-    set_language_if_valid 'en'
-    User.current.language = 'fr'
-    now = Time.parse('2011-02-20 15:45:22')
-    with_settings :time_format => '' do
-      with_settings :date_format => '' do
-        assert_equal '20/02/2011 15:45', format_time(now)
-        assert_equal '15:45', format_time(now, false)
-      end
-      with_settings :date_format => '%Y-%m-%d' do
-        assert_equal '2011-02-20 15:45', format_time(now)
-        assert_equal '15:45', format_time(now, false)
-      end
-    end
-  end
 
   def test_time_format
     set_language_if_valid 'en'
@@ -160,15 +133,15 @@ class Redmine::I18nTest < ActiveSupport::TestCase
   end
 
   def test_day_name
-    set_language_if_valid 'fr'
-    assert_equal 'dimanche', day_name(0)
-    assert_equal 'jeudi', day_name(4)
+    set_language_if_valid 'de'
+    assert_equal 'Sonntag', day_name(0)
+    assert_equal 'Donnerstag', day_name(4)
   end
 
   def test_day_letter
-    set_language_if_valid 'fr'
-    assert_equal 'd', day_letter(0)
-    assert_equal 'j', day_letter(4)
+    set_language_if_valid 'de'
+    assert_equal 'S', day_letter(0)
+    assert_equal 'D', day_letter(4)
   end
 
   def test_number_to_currency_for_each_language
@@ -181,8 +154,6 @@ class Redmine::I18nTest < ActiveSupport::TestCase
   end
 
   def test_number_to_currency_default
-    set_language_if_valid 'bs'
-    assert_equal "KM -1000,20", number_to_currency(-1000.2)
     set_language_if_valid 'de'
     euro_sign = "\xe2\x82\xac"
     euro_sign.force_encoding('UTF-8') if euro_sign.respond_to?(:force_encoding)
@@ -194,22 +165,10 @@ class Redmine::I18nTest < ActiveSupport::TestCase
     assert valid_languages.first.is_a?(Symbol)
   end
 
-  def test_locales_validness
-    lang_files_count = Dir["#{Rails.root}/config/locales/*.yml"].size
-    assert_equal lang_files_count, valid_languages.size
-    valid_languages.each do |lang|
-      assert set_language_if_valid(lang)
-    end
-    set_language_if_valid('en')
-  end
-
   def test_valid_language
-    to_test = {'fr' => :fr,
-               'Fr' => :fr,
-               'zh' => :zh,
-               'zh-tw' => :"zh-TW",
-               'zh-TW' => :"zh-TW",
-               'zh-ZZ' => nil }
+    to_test = {'en' => :en,
+               'de' => :de,
+               'De' => :de,}
     to_test.each {|lang, expected| assert_equal expected, find_language(lang)}
   end
 
@@ -217,42 +176,21 @@ class Redmine::I18nTest < ActiveSupport::TestCase
     ::I18n.backend.store_translations(:en, {:untranslated => "Untranslated string"})
     ::I18n.locale = 'en'
     assert_equal "Untranslated string", l(:untranslated)
-    ::I18n.locale = 'fr'
+    ::I18n.locale = 'de'
     assert_equal "Untranslated string", l(:untranslated)
 
-    ::I18n.backend.store_translations(:fr, {:untranslated => "Pas de traduction"})
+    ::I18n.backend.store_translations(:de, {:untranslated => "Nicht übersetzter Text"})
     ::I18n.locale = 'en'
     assert_equal "Untranslated string", l(:untranslated)
-    ::I18n.locale = 'fr'
-    assert_equal "Pas de traduction", l(:untranslated)
+    ::I18n.locale = 'de'
+    assert_equal "Nicht übersetzter Text", l(:untranslated)
   end
 
   def test_utf8
-    set_language_if_valid 'ja'
-    str_ja_yes  = "\xe3\x81\xaf\xe3\x81\x84"
-    i18n_ja_yes = l(:general_text_Yes)
-    if str_ja_yes.respond_to?(:force_encoding)
-      str_ja_yes.force_encoding('UTF-8')
-      assert_equal "UTF-8", i18n_ja_yes.encoding.to_s
-    end
-    assert_equal str_ja_yes, i18n_ja_yes
-  end
-
-  def test_traditional_chinese_locale
-    set_language_if_valid 'zh-TW'
-    str_tw = "Traditional Chinese (\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87)"
-    if str_tw.respond_to?(:force_encoding)
-      str_tw.force_encoding('UTF-8')
-    end
-    assert_equal str_tw, l(:general_lang_name)
-  end
-
-  def test_french_locale
-    set_language_if_valid 'fr'
-    str_fr = "Fran\xc3\xa7ais"
-    if str_fr.respond_to?(:force_encoding)
-      str_fr.force_encoding('UTF-8')
-    end
-    assert_equal str_fr, l(:general_lang_name)
+    set_language_if_valid 'de'
+    str_de_dialog  = "Rückfrage"
+    str_i18n_de_dialog = l(:general_text_dialog)
+    assert_equal "UTF-8", str_i18n_de_dialog.encoding.to_s
+    assert_equal str_de_dialog, str_i18n_de_dialog
   end
 end
