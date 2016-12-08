@@ -3,6 +3,7 @@ language: ruby
 before_install:
 - sudo apt-get -qq update
 - sudo apt-get install -y libmysqlclient-dev imagemagick libpng-dev libjpeg-dev libmagickwand-dev graphicsmagick
+- sudo apt-get install -y bzr cvs mercurial subversion
 
 rvm:
 - 2.1

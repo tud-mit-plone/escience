@@ -28,6 +28,8 @@ For development setups the recommended database system is **[SQLite](https://www
 
 For image processing needs, eScience requires several other libraries and their development headers. On Debian the libraries are packaged in `imagemagick libpng-dev libjpeg-dev libmagickwand-dev graphicsmagick`.
 
+To integrate with source code managment systems, additional packages have to be present: `bzr cvs mercurial subversion`.
+
 ## Installation
 
 First initialize the Ruby environment:
