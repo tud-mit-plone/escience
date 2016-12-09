@@ -35,6 +35,7 @@ class Redmine::WikiFormatting::MacrosTest < ActionView::TestCase
   def setup
     super
     @project = nil
+    User.current = User.find(2)
   end
 
   def teardown
@@ -239,7 +240,6 @@ class Redmine::WikiFormatting::MacrosTest < ActionView::TestCase
     @project = Project.find(1)
     # child pages of the current wiki page
     assert_equal expected, textilizable("{{child_pages(parent=1)}}", :object => WikiPage.find(2).content)
-    # child pages of another page
     assert_equal expected, textilizable("{{child_pages(Another_page, parent=1)}}", :object => WikiPage.find(1).content)
 
     @project = Project.find(2)
