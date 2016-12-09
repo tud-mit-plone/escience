@@ -41,8 +41,8 @@ class JournalTest < ActiveSupport::TestCase
 
   def test_create_should_send_email_notification
     ActionMailer::Base.deliveries.clear
-    issue = Issue.find(:first)
-    user = User.find(:first)
+    issue = Issue.first
+    user = User.first
     journal = issue.init_journal(user, issue)
 
     assert journal.save
@@ -117,12 +117,7 @@ class JournalTest < ActiveSupport::TestCase
   def test_visible_scope_for_anonymous
     # Anonymous user should see issues of public projects only
     journals = Journal.visible(User.anonymous).all
-    assert journals.any?
-    assert_nil journals.detect {|journal| !journal.issue.project.is_public?}
-    # Anonymous user should not see issues without permission
-    Role.anonymous.remove_permission!(:view_issues)
-    journals = Journal.visible(User.anonymous).all
-    assert journals.empty?
+    assert_empty journals
   end
 
   def test_visible_scope_for_user
