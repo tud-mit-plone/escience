@@ -70,7 +70,7 @@ class ActivityTest < ActiveSupport::TestCase
 
   def test_user_activity
     user = User.find(2)
-    events = Redmine::Activity::Fetcher.new(User.anonymous, :author => user).events(nil, nil, :limit => 10)
+    events = Redmine::Activity::Fetcher.new(User.find(9), :author => user).events(nil, nil, :limit => 10)
 
     assert(events.size > 0)
     assert(events.size <= 10)
