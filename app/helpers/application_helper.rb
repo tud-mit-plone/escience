@@ -482,8 +482,7 @@ module ApplicationHelper
   def render_page_hierarchy(pages, node=nil, options={})
     content = ''
     if pages[node]
-      add = node.nil? ? "<ul class=\"main_level\">\n" : "<ul class=\"pages-hierarchy\">\n"
-      content <<  add
+      content << "<ul class=\"pages-hierarchy\">\n"
       pages[node].each do |page|
         content << "<li>"
         content << link_to(h(page.pretty_title), {:controller => 'wiki', :action => 'show', :project_id => page.project, :id => page.title, :version => nil},
