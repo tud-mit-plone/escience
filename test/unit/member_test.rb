@@ -153,10 +153,9 @@ class MemberTest < ActiveSupport::TestCase
 
       context "by updating roles" do
         should "prune watchers" do
-          Role.find(2).remove_permission! :view_wiki_pages
           member = Member.first(:order => 'id desc')
-          assert_difference 'Watcher.count', -2 do
-            member.role_ids = [2]
+          assert_difference 'Watcher.count', -4 do
+            member.role_ids = []
             member.save
           end
           assert !Message.find(7).watched_by?(@user)
@@ -181,9 +180,8 @@ class MemberTest < ActiveSupport::TestCase
 
       context "by updating roles" do
         should "prune watchers" do
-          Role.find(2).remove_permission! :view_wiki_pages
-          assert_difference 'Watcher.count', -2 do
-            @member.role_ids = [2]
+          assert_difference 'Watcher.count', -4 do
+            @member.role_ids = []
             @member.save
           end
         end
