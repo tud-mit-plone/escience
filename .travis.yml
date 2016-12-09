@@ -14,4 +14,4 @@ before_script:
 - bundle exec rake db:create db:migrate db:test:load RAILS_ENV=development
 
 script:
-- bundle exec rake test
+- bundle exec rake test:units
