@@ -187,7 +187,7 @@ class Role < ActiveRecord::Base
     when BUILTIN_NON_MEMBER
       Role.perms([:add_project]) \
       + Role.perms([:view_calendar]) \
-      + Role.perms([:view_calendar]) \
+      + Role.perms([:view_messages]) \
       + Role.perms([:view_documents]) \
       + Role.perms([:view_doodles]) \
       + Role.perms([:view_files]) \
@@ -198,7 +198,7 @@ class Role < ActiveRecord::Base
     when BUILTIN_OWNER
       Role.perms([:add_project, :manage_members, :add_subprojects, :view_calendar, :edit_project,
                   :select_project_modules, :manage_versions, :group_invitations_create]) \
-      + Role.perms([:manage_boards, :edit_messages, :delete_messages, :add_messages,
+      + Role.perms([:manage_boards, :view_messages, :edit_messages, :delete_messages, :add_messages,
                     :edit_own_messages, :delete_own_messages]) \
       + Role.perms([:view_calendar]) \
       + Role.perms([:manage_documents, :view_documents]) \
@@ -219,7 +219,7 @@ class Role < ActiveRecord::Base
                     :protect_wiki_pages])
     when BUILTIN_MEMBER
       Role.perms([:view_calendar]) \
-      + Role.perms([:add_messages, :edit_own_messages]) \
+      + Role.perms([:view_messages, :add_messages, :edit_own_messages]) \
       + Role.perms([:view_calendar]) \
       + Role.perms([:manage_documents, :view_documents]) \
       + Role.perms([:manage_doodles, :delete_doodles, :create_doodles, :answer_doodles, :view_doodles]) \

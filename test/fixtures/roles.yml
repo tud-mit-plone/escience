@@ -16,6 +16,7 @@ role_001:
   - :manage_versions
   - :group_invitations_create
   - :manage_boards
+  - :view_messages
   - :edit_messages
   - :delete_messages
   - :add_messages
@@ -77,6 +78,7 @@ role_002:
   builtin: 4
   permissions:
   - :view_calendar
+  - :view_messages
   - :add_messages
   - :edit_own_messages
   - :view_calendar
@@ -120,6 +122,7 @@ role_004:
   permissions:
   - :add_project
   - :view_calendar
+  - :view_messages
   - :view_documents
   - :view_doodles
   - :view_files
