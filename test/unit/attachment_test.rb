@@ -43,6 +43,7 @@ class AttachmentTest < ActiveSupport::TestCase
   def teardown
     # remove temporary render storage
     FileUtils.remove_entry_secure @temp_render_storage if File.exists?(@temp_render_storage)
+    set_tmp_attachments_directory
   end
 
   def test_container_for_new_attachment_should_be_nil
