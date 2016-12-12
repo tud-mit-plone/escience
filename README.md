@@ -26,7 +26,7 @@ For development setups the recommended database system is **[SQLite](https://www
 
 ### Other
 
-For image processing needs, eScience requires several other libraries and their development headers. On Debian the libraries are packaged in `imagemagick libpng-dev libjpeg-dev libmagickwand-dev graphicsmagick`.
+For image processing needs, eScience requires several other libraries and their development headers. On Debian the libraries are packaged in `imagemagick libpng-dev libjpeg-dev libmagickwand-dev graphicsmagick poppler-utils poppler-data`.
 
 To integrate with source code managment systems, additional packages have to be present: `bzr cvs mercurial subversion`.
 
