@@ -31,7 +31,7 @@ require 'mocha/setup'
 require 'mocha/integration/test_unit'
 
 require 'minitest/reporters'
-MiniTest::Reporters.use!
+MiniTest::Reporters.use! [Minitest::Reporters::JUnitReporter.new, Minitest::Reporters::ProgressReporter.new]
 
 class ActiveSupport::TestCase
   include ActionDispatch::TestProcess
