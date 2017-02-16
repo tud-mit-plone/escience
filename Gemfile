@@ -109,4 +109,6 @@ gem 'rqrcode_png'
 gem 'pismo'
 gem 'sys-proctable'
 gem 'simplecov', :require => false, :group => :test
+gem 'simplecov-json', :require => false, :group => :test
+gem 'simplecov-rcov', :require => false, :group => :test
 gem "galetahub-simple_captcha", :require => "simple_captcha"

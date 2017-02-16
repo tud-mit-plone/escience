@@ -185,6 +185,11 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    simplecov-json (0.2)
+      json
+      simplecov
+    simplecov-rcov (0.2.3)
+      simplecov (>= 0.4.1)
     slop (3.6.0)
     sprockets (2.2.3)
       hike (~> 1.2)
@@ -260,6 +265,8 @@ DEPENDENCIES
   sentry-raven
   shoulda (~> 2.11)
   simplecov
+  simplecov-json
+  simplecov-rcov
   sprockets
   sqlite3
   sys-proctable
@@ -271,4 +278,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.12.5
+   1.13.6

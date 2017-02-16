@@ -17,7 +17,17 @@
 #require 'shoulda'
 #require 'minitest'
 require 'simplecov'
+require 'simplecov-json'
+require 'simplecov-rcov'
+
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::JSONFormatter,
+  SimpleCov::Formatter::RcovFormatter
+]
+
 SimpleCov.start 'rails'
+
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'rails/test_help'
