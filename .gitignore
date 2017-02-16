@@ -56,4 +56,5 @@ plugins/redmine_reddrop/
 *.kdev4
 /Passengerfile.json
 /.idea/
+test/reports
 
