@@ -97,7 +97,35 @@ class MyControllerTest < ActionController::TestCase
     assert_equal "0100562500", user.custom_value_for(4).value
     # ignored
     assert !user.admin?
+
+    # FIXME merge both versions
     assert user.groups.empty?
+    user = users(:users_002)
+
+    # ensure user has accepted Terms & Privacy
+    #user.confirm = true
+
+    user_hash = user.attributes
+    user_hash[:firstname] = 'Joe'
+
+    post :account,
+         :user => user_hash,
+         :pref => {:hide_mail => false},
+         :my_interest => 'Soccer, Computer',
+         :my_skill => 'Java, Testing',
+         :enabled_module_names => ['time_tracking']
+
+    assert_redirected_to my_account_path(:sub => 'my_account')
+
+    #reload user to refresh the user attributes
+    user.reload
+
+    assert_equal user, assigns(:user)
+    assert_equal "Joe", user.firstname
+    assert_equal "Soccer", user.interest_list[0]
+    assert_equal "Computer", user.interest_list[1]
+    assert_equal "Java", user.skill_list[0]
+    assert_equal "Testing", user.skill_list[1]
   end
 
   def test_my_account_should_show_destroy_link
@@ -272,35 +300,6 @@ class MyControllerTest < ActionController::TestCase
     # get :render_block, :blockname => nil
     # assert_redirected_to '/my?user_id='+uid.to_s
   # end
-
-  test "update account" do
-    user = users(:users_002)
-
-    # ensure user has accepted Terms & Privacy
-    #user.confirm = true
-
-    user_hash = user.attributes
-    user_hash[:firstname] = 'Joe'
-
-    post :account,
-      :user => user_hash,
-      :pref => {:hide_mail => false},
-      :my_interest => 'Soccer, Computer',
-      :my_skill => 'Java, Testing',
-      :enabled_module_names => ['time_tracking']
-
-    assert_redirected_to my_account_path(:sub => 'my_account')
-
-    #reload user to refresh the user attributes
-    user.reload
-
-    assert_equal user, assigns(:user)
-    assert_equal "Joe", user.firstname
-    assert_equal "Soccer", user.interest_list[0]
-    assert_equal "Computer", user.interest_list[1]
-    assert_equal "Java", user.skill_list[0]
-    assert_equal "Testing", user.skill_list[1]
-  end
 
   private
 

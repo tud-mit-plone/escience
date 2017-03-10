@@ -1,5 +1,5 @@
-require File.expand_path('../../../../../test/test_helper', __FILE__)
-#SimpleCov.start
+require File.expand_path('../../test_helper', __FILE__)
+
 class PhotosControllerTest < ActionController::TestCase
   self.fixture_path = "#{Rails.root}/plugins/redmine_social/test/fixtures/"
 

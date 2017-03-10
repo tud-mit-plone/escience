@@ -1,4 +1,4 @@
-require File.expand_path('../../../../../test/test_helper', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 class AdsControllerTest < ActionController::TestCase
   DUMMY_AD_HTML = "<strong>Buy the new Foo now!</strong>"
