@@ -204,6 +204,7 @@ class AccountController < ApplicationController
           user.login = registration['nickname'] unless registration['nickname'].nil?
           user.mail = registration['email'] unless registration['email'].nil?
           user.firstname, user.lastname = registration['fullname'].split(' ') unless registration['fullname'].nil?
+          user.confirm = true
           user.random_password
           user.register
 

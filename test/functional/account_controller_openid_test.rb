@@ -37,6 +37,7 @@ class AccountControllerOpenidTest < ActionController::TestCase
       existing_user = User.new(:firstname => 'Cool',
                                :lastname => 'User',
                                :mail => 'user@somedomain.com',
+                               :confirm => true,
                                :identity_url => 'http://openid.example.com/good_user')
       existing_user.login = 'cool_user'
       assert existing_user.save!
@@ -56,6 +57,7 @@ class AccountControllerOpenidTest < ActionController::TestCase
       existing_user = User.new(:firstname => 'Cool',
                                :lastname => 'User',
                                :mail => 'user@somedomain.com',
+                               :confirm => true,
                                :identity_url => 'http://openid.example.com/good_user',
                                :status => User::STATUS_REGISTERED)
       existing_user.login = 'cool_user'
@@ -105,7 +107,7 @@ class AccountControllerOpenidTest < ActionController::TestCase
   
     def test_login_with_openid_with_new_user_with_conflict_should_register
       Setting.self_registration = '3'
-      existing_user = User.new(:firstname => 'Cool', :lastname => 'User', :mail => 'user@somedomain.com')
+      existing_user = User.new(:firstname => 'Cool', :lastname => 'User', :confirm => true, :mail => 'user@somedomain.com')
       existing_user.login = 'cool_user'
       assert existing_user.save!
   
@@ -136,11 +138,12 @@ class AccountControllerOpenidTest < ActionController::TestCase
 
       assert_difference 'User.count' do
         post :register, :user => {
-          :login => 'good_blank_user',
+          :login => 'user@somedomain.com',
           :password => '',
           :password_confirmation => '',
           :firstname => 'Cool',
           :lastname => 'User',
+          :confirm => true,
           :mail => 'user@somedomain.com',
           :identity_url => 'http://openid.example.com/good_blank_user'
         }
