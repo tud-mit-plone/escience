@@ -28,7 +28,6 @@ end
 require 'paperclip_processors/cropper'
 
 Redmine::Scm::Base.add "Subversion"
-Redmine::Scm::Base.add "Darcs"
 Redmine::Scm::Base.add "Mercurial"
 Redmine::Scm::Base.add "Cvs"
 Redmine::Scm::Base.add "Bazaar"
