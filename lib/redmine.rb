@@ -58,7 +58,7 @@ Redmine::AccessControl.map do |map|
   map.permission :manage_versions, {:projects => :settings, :versions => [:new, :create, :edit, :update, :close_completed, :destroy]}, :require => :member
   map.permission :add_subprojects, {:projects => [:new, :create]}, :require => :member
   map.permission :group_invitations_create, :group_invitations => [:create], :require => :member
-  map.permission :view_calendar, {:calendar => [:show, :update]}, :read => true
+  map.permission :view_calendar, {:calendars => [:show, :update]}, :read => true
   map.permission :appointments_add_watchers, :appointments => :add_watchers
   map.permission :group_invitations_create, :group_invitations => :create
   map.permission :appointments_create, :calendars => :show_user_calendar, :require => :loggedin

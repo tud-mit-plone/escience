@@ -9,6 +9,10 @@ class CalendarsControllerTest < ActionController::TestCase
            :members,
            :enabled_modules
 
+  def setup
+    @request.session[:user_id] = 2
+  end
+
   def test_calendar
     get :show, :project_id => 1
     assert_response :success
@@ -23,14 +27,10 @@ class CalendarsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:calendar)
   end
 
-  context "GET :show" do
-    should "run custom queries" do
-      @query = Query.create!(:name => 'Calendar', :is_public => true)
-
-      get :show, :query_id => @query.id
-      assert_response :success
-    end
-
+  def  test_run_custom_queries
+    @query = Query.create!(:name => 'Calendar', :is_public => true)
+    get :show, :query_id => @query.id
+    assert_response :success
   end
 
   def test_week_number_calculation
@@ -40,20 +40,22 @@ class CalendarsControllerTest < ActionController::TestCase
     assert_response :success
 
     assert_tag :tag => 'tr',
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'week-number'}, :content => '53'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'odd'}, :content => '27'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '2'}
+               :descendant => {:tag => 'td',
+                               :attributes => {:class => 'week-number'},
+                               :child => {:tag => 'td', :content => 53},},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '27'},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '2'}
 
     assert_tag :tag => 'tr',
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'week-number'}, :content => '1'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'odd'}, :content => '3'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '9'}
+               :descendant => {:tag => 'td',
+                               :attributes => {:class => 'week-number'},
+                               :child => {:tag => 'td', :content => 53},},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '3'},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '9'}
 
 
     Setting.start_of_week = 1
@@ -61,20 +63,21 @@ class CalendarsControllerTest < ActionController::TestCase
     assert_response :success
 
     assert_tag :tag => 'tr',
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'week-number'}, :content => '53'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '28'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '3'}
+               :descendant => {:tag => 'td',
+                               :attributes => {:class => 'week-number'},
+                               :child => {:tag => 'td', :content => 53},},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '28'},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '3'}
 
     assert_tag :tag => 'tr',
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'week-number'}, :content => '1'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '4'},
-      :descendant => {:tag => 'td',
-                      :attributes => {:class => 'even'}, :content => '10'}
-
+               :descendant => {:tag => 'td',
+                               :attributes => {:class => 'week-number'},
+                               :child => {:tag => 'td', :content => 53},},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '4'},
+               :descendant => {:tag => 'p',
+                               :attributes => {:class => 'day-num'}, :content => '10'}
   end
 end
