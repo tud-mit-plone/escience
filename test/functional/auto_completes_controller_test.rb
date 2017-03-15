@@ -12,6 +12,10 @@ class AutoCompletesControllerTest < ActionController::TestCase
            :workflows,
            :journals, :journal_details
 
+  def setup
+    @request.session[:user_id] = 2
+  end
+
   def test_issues_should_not_be_case_sensitive
     get :issues, :project_id => 'ecookbook', :q => 'ReCiPe'
     assert_response :success
