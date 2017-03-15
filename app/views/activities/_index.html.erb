@@ -1,7 +1,7 @@
 <div id="activity">
 <a href="#" onclick="console.log($('#filter'));$('#filter').toggleClass('active');return false;" class="button"><%= l(:description_filter) %></a>
 <div id="filter" style="background-color: #FAFAFA">
-  <%= form_tag(project_path(@project)+activity_path('js'), :method => :get, :remote => true) do %>
+  <%= form_tag(params, :method => :get) do %>
     <div style="padding: 5px; width:240px">
       <table>
         <tr>
@@ -59,10 +59,10 @@
 
 <hr style="color: #DDD; background-color: #DDD; border:none; height: 1px">
 <div style="float:left;">
-  <%= link_to "\xc2\xab " + l(:label_previous), project_path(@project)+activity_path('js',:from=>(@date_to - @days - 1)), :remote => true,:update => 'activity', :class => "button",:title => l(:label_date_from_to, :start => format_date(@date_to - 2*@days), :end => format_date(@date_to - @days - 1)), :style => 'margin-left: 0px !important' %>
+  <%= link_to "\xc2\xab " + l(:label_previous), params.merge(:from=>(@date_to - @days - 1)), :class => "button", :style => 'margin-left: 0px !important'%>
 </div>
 <div style="float:right;">
-  <%= link_to(l(:label_next) + " \xc2\xbb", project_path(@project)+activity_path('js',:from=>(@date_to + @days - 1)), :remote => true,:update => 'activity', :class => "button",:title => l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to + @days - 1))) unless @date_to >= Date.today %>
+  <%= link_to l(:label_next) + " \xc2\xbb", params.merge(:from=>(@date_to + @days - 1)), :class => "button" unless @date_to >= Date.today %>
 </div>
 <div class="clear" style="padding-bottom:10px;"></div>
 

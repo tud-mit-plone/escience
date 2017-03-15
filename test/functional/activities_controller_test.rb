@@ -12,45 +12,59 @@ class ActivitiesControllerTest < ActionController::TestCase
            :workflows,
            :journals, :journal_details
 
-
   def test_project_index
+    @request.session[:user_id] = 1
     get :index, :id => 1, :with_subprojects => 0
     assert_response :success
     assert_template 'index'
     assert_not_nil assigns(:events_by_day)
 
-    assert_tag :tag => "h3",
-               :content => /#{2.days.ago.to_date.day}/,
-               :sibling => { :tag => "dl",
-                 :child => { :tag => "dt",
-                   :attributes => { :class => /issue-edit/ },
-                   :child => { :tag => "a",
-                     :content => /(#{IssueStatus.find(2).name})/,
+    assert_tag :tag => "td",
+               :descendant => {
+                   :tag => "span",
+                   :attributes => {:class => /day/},
+                   :content => /#{3.day.ago.to_date.day}/
+               },
+               :sibling => {
+                   :tag => "td",
+                   :descendant => {
+                       :tag => "dt",
+                       :attributes => { :class => /issue-edit/ },
+                       :child => { :tag => "a",
+                                   :content => /Can&#x27;t print recipes/,
+                       }
                    }
-                 }
                }
   end
 
   def test_project_index_with_invalid_project_id_should_respond_404
+    @request.session[:user_id] = 1
     get :index, :id => 299
     assert_response 404
   end
 
   def test_previous_project_index
+    @request.session[:user_id] = 1
     get :index, :id => 1, :from => 3.days.ago.to_date
     assert_response :success
     assert_template 'index'
     assert_not_nil assigns(:events_by_day)
 
-    assert_tag :tag => "h3",
-               :content => /#{3.day.ago.to_date.day}/,
-               :sibling => { :tag => "dl",
-                 :child => { :tag => "dt",
-                   :attributes => { :class => /issue/ },
-                   :child => { :tag => "a",
-                     :content => /Can&#x27;t print recipes/,
+    assert_tag :tag => "td",
+               :descendant => {
+                   :tag => "span",
+                   :attributes => {:class => /day/},
+                   :content => /#{3.day.ago.to_date.day}/
+               },
+               :sibling => {
+                   :tag => "td",
+                   :descendant => {
+                       :tag => "dt",
+                       :attributes => { :class => /issue/ },
+                       :child => { :tag => "a",
+                                   :content => /Can&#x27;t print recipes/,
+                       }
                    }
-                 }
                }
   end
 
@@ -63,16 +77,23 @@ class ActivitiesControllerTest < ActionController::TestCase
 
     i5 = Issue.find(5)
     d5 = User.find(1).time_to_date(i5.created_on)
-    assert_tag :tag => "h3",
-               :content => /#{d5.day}/,
-               :sibling => { :tag => "dl",
-                 :child => { :tag => "dt",
-                   :attributes => { :class => /issue/ },
-                   :child => { :tag => "a",
-                     :content => /Subproject issue/,
-                   }
-                 }
-               }
+    assert_tag :tag => "td",
+               :descendant => {
+                   :tag => "span",
+                   :attributes => {:class => /day/},
+                   :content => /#{d5.day}/
+               },
+              :sibling => {
+                  :tag => "td",
+                  :descendant => {
+                      :tag => "dt",
+                      :attributes => { :class => /issue/ },
+                      :child => { :tag => "a",
+                                  :content => /Subproject issue/,
+                      }
+                  }
+
+              }
   end
 
   def test_user_index
@@ -87,24 +108,32 @@ class ActivitiesControllerTest < ActionController::TestCase
     i1 = Issue.find(1)
     d1 = User.find(1).time_to_date(i1.created_on)
 
-    assert_tag :tag => "h3",
-               :content => /#{d1.day}/,
-               :sibling => { :tag => "dl",
-                 :child => { :tag => "dt",
-                   :attributes => { :class => /issue/ },
-                   :child => { :tag => "a",
-                     :content => /Can&#x27;t print recipes/,
+    assert_tag :tag => "td",
+               :descendant => {
+                   :tag => "span",
+                   :attributes => {:class => /day/},
+                   :content => /#{d1.day}/
+               },
+               :sibling => {
+                   :tag => "td",
+                   :descendant => {
+                       :tag => "dt",
+                       :attributes => { :class => /issue/ },
+                       :child => { :tag => "a",
+                                   :content => /Can&#x27;t print recipes/,
+                       }
                    }
-                 }
                }
   end
 
   def test_user_index_with_invalid_user_id_should_respond_404
+    @request.session[:user_id] = 1
     get :index, :user_id => 299
     assert_response 404
   end
 
   def test_index_atom_feed
+    @request.session[:user_id] = 1
     get :index, :format => 'atom', :with_subprojects => 0
     assert_response :success
     assert_template 'common/feed'
@@ -120,6 +149,7 @@ class ActivitiesControllerTest < ActionController::TestCase
   end
 
   def test_index_atom_feed_with_explicit_selection
+    @request.session[:user_id] = 1
     get :index, :format => 'atom', :with_subprojects => 0,
       :show_changesets => 1,
       :show_documents => 1,
@@ -144,6 +174,7 @@ class ActivitiesControllerTest < ActionController::TestCase
   end
 
   def test_index_atom_feed_with_one_item_type
+    @request.session[:user_id] = 1
     get :index, :format => 'atom', :show_issues => '1'
     assert_response :success
     assert_template 'common/feed'
@@ -154,6 +185,7 @@ class ActivitiesControllerTest < ActionController::TestCase
     journal = Journal.create!(:journalized => Issue.find(2), :notes => 'Private notes with searchkeyword', :private_notes => true)
     @request.session[:user_id] = 2
 
+    Role.find(1).add_permission! :view_private_notes
     get :index
     assert_response :success
     assert_include journal, assigns(:events_by_day).values.flatten

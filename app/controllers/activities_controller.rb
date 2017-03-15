@@ -30,12 +30,6 @@ class ActivitiesController < ApplicationController
             @events_by_day
             render :layout => false if request.xhr?
           }
-          format.js {
-            @events_by_day
-            @id = 'activity'
-            @partial = 'index'
-            render :partial => 'update'
-          }          
           format.atom {
             title = l(:label_activity)
             if @author
@@ -43,7 +37,7 @@ class ActivitiesController < ApplicationController
             elsif @activity.scope.size == 1
               title = l("label_#{@activity.scope.first.singularize}_plural")
             end
-            render_feed(events, :title => "#{@project || Setting.app_title}: #{title}")
+            render_feed(events.values.flatten, :title => "#{@project || Setting.app_title}: #{title}")
           }
         end
       end
