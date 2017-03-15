@@ -1,8 +1,7 @@
 class AppointmentsController < ApplicationController
   unloadable
-#  before_filter :authorize
-  before_filter :find_appointment, :only => [:show, :edit, :update]
-
+  before_filter :require_login
+  before_filter :find_appointment, :only => [:show, :edit, :update, :destroy]
   helper :journals
   helper :watchers
   include WatchersHelper
@@ -123,7 +122,7 @@ class AppointmentsController < ApplicationController
       end
       return
     else
-      flash[:error] = l(:notice_appointment_fail_create)
+      flash[:error] = @appointment.errors.full_messages.join(', ')
       render_attachment_warning_if_needed(@appointment)
       respond_to do |format|
         format.html { render :action => 'new' }
@@ -140,7 +139,7 @@ class AppointmentsController < ApplicationController
   end
 
   def destroy
-    if Appointment.find(params[:id]).destroy
+    if @appointment.destroy
       @appointment = Appointment.new
       @available_watchers = (@appointment.watcher_users).uniq
       respond_to do |format|

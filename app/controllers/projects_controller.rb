@@ -21,8 +21,6 @@ class ProjectsController < ApplicationController
   menu_item :settings, :only => :settings
 
   before_filter :find_project, :except => [ :index, :list, :new, :create, :copy ]
-  before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :add_attachment]
-  before_filter :require_login, :only => [:show]
   before_filter :authorize_global, :only => [:new, :create]
   before_filter :require_admin, :only => [ :copy, :unarchive, :destroy ]
   accept_rss_auth :index

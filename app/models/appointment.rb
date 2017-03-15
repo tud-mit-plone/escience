@@ -28,6 +28,7 @@ class Appointment < ActiveRecord::Base
   validates_presence_of :subject, :user, :start_date
   validates_length_of :subject, :maximum => 255
   validates_inclusion_of :cycle, :in => 0..CYCLE_YEARLY
+  validate :due_date_after_start_date
 
   scope :visible, lambda {|*args| { :include => :user,
                           :conditions => "(#{table_name}.is_private = 0
@@ -69,6 +70,12 @@ class Appointment < ActiveRecord::Base
 
   def to_s
     "#{subject}"
+  end
+
+  def due_date_after_start_date
+    if due_date.present? && due_date < start_date
+      errors.add(:due_date, l(:error_appointment_due_date_has_to_be_after_start_date))
+    end
   end
 
   def self.getAllEventsWithResolvedCycles(scope, startdt=DateTime.today,enddt=DateTime.today)

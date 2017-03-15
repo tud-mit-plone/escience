@@ -2210,6 +2210,7 @@ en:
   label_headline_sidebar: Calendar types
   notice_appointment_successful_create: Appointment saved
   notice_appointment_fail_create: There is an error in your appointment.
+  error_appointment_due_date_has_to_be_after_start_date: has to be after start date
   doodle_inactive: Survey is inactive
   doodle_ends: Survey ends on
   doodle_update_successful: Survey successfully updated

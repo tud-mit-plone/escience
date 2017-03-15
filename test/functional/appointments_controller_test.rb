@@ -15,6 +15,8 @@ class AppointmentsControllerTest < ActionController::TestCase
   end
 
   test "filter find_appointment" do
+    user = users(:users_002)
+    @request.session[:user_id] = user.id
     #wrong appointment id
     get :show, :id => 1000050
     assert_response :missing
@@ -41,7 +43,7 @@ class AppointmentsControllerTest < ActionController::TestCase
       :start_date => Date.new(2014,11), :is_private => true, :cycle => 0)
     assert appointment1.save!
     get :show, :id => appointment1.id
-    assert_response :redirect
+    assert_response :forbidden
 
     #user is logged in
     @request.session[:user_id] = user.id
@@ -62,6 +64,8 @@ class AppointmentsControllerTest < ActionController::TestCase
   end
 
   test "index" do
+    user = users(:users_002)
+    @request.session[:user_id] = user.id
     get :index
     assert_response :success
     assert_template :index
@@ -87,8 +91,9 @@ class AppointmentsControllerTest < ActionController::TestCase
     post :create, :appointment =>{:subject => 'test',
       :start_date => '12/01/2014', :start_time => Time.new.strftime("%H:%M:%S"),
       :due_date => '11/01/2014', :due_time => Time.new.strftime("%H:%M:%S")}
-    assert_equal @controller.l(:notice_appointment_fail_create), flash[:notice]
-    assert_redirected_to new_appointment_path
+    assert_response :success
+    assert_template :new
+    assert flash[:error]
   end
 
   test "update appointment-cycle if logged in" do
@@ -109,16 +114,17 @@ class AppointmentsControllerTest < ActionController::TestCase
     put :update, :id => appointment.id, :appointment =>{:subject => 'test',
       :start_date => '11/14/2014', :start_time => '16:35:38',
       :due_date => '12/14/2014', :due_time => '16:35:38', :cycle => 1}
-    assert_not_equal 1, assigns(:appointment).cycle
+    appointment.reload
+    assert_not_equal 1, appointment.cycle
   end
 
   test "destroy appointment if logged in" do
-    appointmentscount = (Appointment.getAllEventsWithCycle(Date.new(2014,11), Date.new(2015,1))).count - 1
-    user = users(:users_003)
-    @request.session[:user_id] = user.id
-    appointment = appointments(:appointments_003)
-    delete :destroy, :id => appointment.id
-    assert_equal appointmentscount, Appointment.getAllEventsWithCycle(Date.new(2014,11), Date.new(2015,1)).count
+    assert_difference "Appointment.count", -1 do
+      user = users(:users_003)
+      @request.session[:user_id] = user.id
+      appointment = appointments(:appointments_003)
+      delete :destroy, :id => appointment.id
+    end
   end
 
   test "destroy private appointment as wrong user" do
@@ -129,11 +135,9 @@ class AppointmentsControllerTest < ActionController::TestCase
     
     current_user = users(:users_003)
     @request.session[:user_id] = current_user
-    assert_difference '(Appointment.getListOfDaysBetween(Date.new(2014,11), Date.new(2015,1))).count', 0 do
+    assert_no_difference 'Appointment.count' do
       delete :destroy, :id => appointment.id
     end
   end
-
-  #TODO 2 Buttens werden fürs anlegen angezeigt
 
 end

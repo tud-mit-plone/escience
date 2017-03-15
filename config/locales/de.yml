@@ -2051,6 +2051,7 @@ de:
   label_added_by: Angelegt von
   notice_appointment_successful_create: Termin gespeichert
   notice_appointment_fail_create: Es scheinen Fehler in Ihrem Termin zu sein.
+  error_appointment_due_date_has_to_be_after_start_date: muss nach Beginn liegen
   doodle_inactive: Die Umfrage ist inaktiv
   doodle_ends: Umfrage endet am
   doodle_update_successful: Die Umfrage wurde erfolgreich aktualisiert
