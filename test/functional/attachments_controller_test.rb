@@ -41,6 +41,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_diff
+    @request.session[:user_id] = 2
     ['inline', 'sbs'].each do |dt|
       # 060719210727_changeset_utf8.diff
       get :show, :id => 14, :type => dt
@@ -58,6 +59,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_diff_replcace_cannot_convert_content
+    @request.session[:user_id] = 2
     with_settings :repositories_encodings => 'UTF-8' do
       ['inline', 'sbs'].each do |dt|
         # 060719210727_changeset_iso8859-1.diff
@@ -77,6 +79,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_diff_latin_1
+    @request.session[:user_id] = 2
     with_settings :repositories_encodings => 'UTF-8,ISO-8859-1' do
       ['inline', 'sbs'].each do |dt|
         # 060719210727_changeset_iso8859-1.diff
@@ -123,6 +126,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     assert a.save
     assert_equal 'hg-export.diff', a.filename
 
+    @request.session[:user_id] = 2
     get :show, :id => a.id, :type => 'inline'
     assert_response :success
     assert_template 'diff'
@@ -131,6 +135,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_text_file
+    @request.session[:user_id] = 2
     get :show, :id => 4
     assert_response :success
     assert_template 'file'
@@ -149,6 +154,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     str_japanese = "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"
     str_japanese.force_encoding('UTF-8') if str_japanese.respond_to?(:force_encoding)
 
+    @request.session[:user_id] = 2
     get :show, :id => a.id
     assert_response :success
     assert_template 'file'
@@ -168,6 +174,7 @@ class AttachmentsControllerTest < ActionController::TestCase
       assert a.save
       assert_equal 'iso8859-1.txt', a.filename
 
+      @request.session[:user_id] = 2
       get :show, :id => a.id
       assert_response :success
       assert_template 'file'
@@ -188,6 +195,7 @@ class AttachmentsControllerTest < ActionController::TestCase
       assert a.save
       assert_equal 'iso8859-1.txt', a.filename
 
+      @request.session[:user_id] = 2
       get :show, :id => a.id
       assert_response :success
       assert_template 'file'
@@ -203,6 +211,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     Setting.file_max_size_displayed = 512
     Attachment.find(4).update_attribute :filesize, 754.kilobyte
 
+    @request.session[:user_id] = 2
     get :show, :id => 4
     assert_response :success
     assert_equal 'application/x-ruby', @response.content_type
@@ -210,6 +219,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_other
+    @request.session[:user_id] = 2
     get :show, :id => 6
     assert_response :success
     assert_equal 'application/octet-stream', @response.content_type
@@ -218,7 +228,7 @@ class AttachmentsControllerTest < ActionController::TestCase
 
   def test_show_file_from_private_issue_without_permission
     get :show, :id => 15
-    assert_redirected_to '/login?back_url=http%3A%2F%2Ftest.host%2Fattachments%2F15'
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fattachments%2F15'
     set_tmp_attachments_directory
   end
 
@@ -240,11 +250,13 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_show_invalid_should_respond_with_404
+    @request.session[:user_id] = 2
     get :show, :id => 999
     assert_response 404
   end
 
   def test_download_text_file
+    @request.session[:user_id] = 2
     get :download, :id => 4
     assert_response :success
     assert_equal 'application/x-ruby', @response.content_type
@@ -253,13 +265,14 @@ class AttachmentsControllerTest < ActionController::TestCase
 
   def test_download_version_file_with_issue_tracking_disabled
     Project.find(1).disable_module! :issue_tracking
+    @request.session[:user_id] = 2
     get :download, :id => 9
     assert_response :success
   end
 
   def test_download_should_assign_content_type_if_blank
     Attachment.find(4).update_attribute(:content_type, '')
-
+    @request.session[:user_id] = 2
     get :download, :id => 4
     assert_response :success
     assert_equal 'text/x-ruby', @response.content_type
@@ -274,7 +287,7 @@ class AttachmentsControllerTest < ActionController::TestCase
 
   def test_download_should_be_denied_without_permission
     get :download, :id => 7
-    assert_redirected_to '/login?back_url=http%3A%2F%2Ftest.host%2Fattachments%2Fdownload%2F7'
+    assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fattachments%2Fdownload%2F7'
     set_tmp_attachments_directory
   end
 
@@ -285,7 +298,7 @@ class AttachmentsControllerTest < ActionController::TestCase
 
       get :thumbnail, :id => 16
       assert_response :success
-      assert_equal 'image/png', response.content_type
+      assert_equal 'image/jpeg', response.content_type
     end
 
     def test_thumbnail_should_not_exceed_maximum_size
@@ -319,7 +332,7 @@ class AttachmentsControllerTest < ActionController::TestCase
 
     def test_thumbnail_should_be_denied_without_permission
       get :thumbnail, :id => 16
-      assert_redirected_to '/login?back_url=http%3A%2F%2Ftest.host%2Fattachments%2Fthumbnail%2F16'
+      assert_redirected_to '/?back_url=http%3A%2F%2Ftest.host%2Fattachments%2Fthumbnail%2F16'
     end
   else
     puts '(ImageMagick convert not available)'
@@ -382,6 +395,8 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   test "thumbnail responds image with right size" do
+    set_tmp_attachments_directory
+
     container = issues(:issues_001)
     author = users(:users_002)
     file = uploaded_test_file("simons_cat.jpg", "image/jpeg")
@@ -398,6 +413,8 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   test "thumbnail responds thumbnail only if not cached" do
+    set_tmp_attachments_directory
+
     container = issues(:issues_001)
     author = users(:users_002)
     file = uploaded_test_file("simons_cat.jpg", "image/jpeg")
@@ -419,6 +436,8 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   test "show responds the right form for the content type" do
+    set_tmp_attachments_directory
+
     container = issues(:issues_001)
     author = users(:users_002)
     @request.session[:user_id] = author.id
