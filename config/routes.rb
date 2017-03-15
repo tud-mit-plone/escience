@@ -101,9 +101,10 @@ RedmineApp::Application.routes.draw do
         put :deny
       end
     end
-    resources :photos do
-      get 'page/:page', :action => :index, :on => :collection
-    end
+  end
+
+  resources :photos do
+    get 'page/:page', :action => :index, :on => :collection
   end
 
   match 'usersearch', :controller => 'users', :action => 'user_search'

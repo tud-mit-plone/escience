@@ -82,28 +82,6 @@ class CommentsControllerTest < ActionController::TestCase
     assert_equal user_1, comment.author
   end
 
-  test "create comment for album" do
-    user_1 = users(:users_002)
-    @request.session[:user_id] = user_1.id
-
-    #album = albums(:albums_003)
-    album = Album.find_by_id(1)
-
-    # ensure no comments exist for news
-    Comment.destroy_all
-
-    assert_difference 'album.comments.count' do
-      post :create_general_comment, :album_id => album.id, :id => album.id, :comment => { :comments => 'This is a test comment for album' }
-    end
-    assert_redirected_to album_path(album)
-
-    comment = album.comments.last
-    assert_not_nil comment
-    assert_equal 'This is a test comment for album', comment.comments
-    assert_equal user_1, comment.author
-  end
-
-
   test "create comment for photo" do
     user_1 = users(:users_002)
     @request.session[:user_id] = user_1.id
@@ -135,20 +113,6 @@ class CommentsControllerTest < ActionController::TestCase
       post :create_general_comment, :news_id => news.id, :id => news.id, :comment => { :comments => '' }
       assert_response :redirect
       assert_redirected_to news_path(news)
-    end
-  end
-
-  test "empty comment should not be added for album" do
-    user_1 = users(:users_002)
-    @request.session[:user_id] = user_1.id
-
-    #album = albums(:albums_003)
-    album = Album.find_by_id(1)
-
-    assert_no_difference 'Comment.count' do
-      post :create_general_comment, :album_id => album.id, :id => album.id, :comment => { :comments => '' }
-      assert_response :redirect
-      assert_redirected_to album_path(album)
     end
   end
 
